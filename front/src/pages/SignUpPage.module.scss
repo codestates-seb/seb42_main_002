@@ -1,93 +1,108 @@
-.container{
-    border: 1px solid black;
-    padding: 20px;
-    width: 400px;
-    color: var(--button-primary-color);
-    font-size: 12px;
-    font-weight: bold;
-    label{
-        display: block;
-        width: 100%;
-        margin-bottom: 5px;
-    }
-    input{
-        height: 30px;
-        width: 100%;
-        border: none;
-        border-bottom: 2px solid black;
-        margin-bottom: 10px;
-        padding: 2px;
-        padding-left: 25px;
-        border-color:var(--text-primary-color);
-        &:focus{
-            border: none;
-            outline-color: var(--text-primary-color);
-        }
-    }
-    p{
-        margin-bottom: 5px;
-    }
-}
-.input_container{
-    position: relative;
-    margin-bottom: 10px;
+.container {
+  border: 0.0625rem solid black;
+  padding: 1.25rem;
+  width: 37.5rem;
+  color: var(--button-primary-color);
+  font-size: 0.75rem;
+  font-weight: bold;
+  label {
+    display: block;
     width: 100%;
-}
-.icon{
-    position: absolute;
-    top: 24px;
-    left: 3px;
-    color:var(--text-primary-color);
-    width: 18px;
-    height: 18px;
+    margin-bottom: 0.3125rem;
+  }
+  input {
+    height: 1.875rem;
+    width: 100%;
+    border: none;
+    border-bottom: 0.125rem solid black;
+    margin-bottom: 0.625rem;
+    padding: 0.125rem;
+    padding-left: 1.5625rem;
+    border-color: var(--text-primary-color);
+    &:focus {
+      border: none;
+      outline-color: var(--text-primary-color);
+    }
+  }
+  p {
+    margin-bottom: 0.3125rem;
+  }
 }
 
-.male_icon{
-    color: #253C63;
-    width: 18px;
-    height: 18px;
-}
-.female_icon{
-    color: #932F42;
-    width: 18px;
-    height: 18px;
-}
-.ambiguous_icon{
-    color: var(--text-primary-color);
-    width: 18px;
-    height: 18px;
+.input_container {
+  position: relative;
+  margin-bottom: 0.625rem;
+  width: 100%;
 }
 
-.button_Container{
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    margin-bottom: 20px;
-    border: 2px solid var(--text-primary-color);
-    border-radius: 4px;
-    font-size: 14px;
-    button{
-        flex: 1;
-        background-color: white;
-        padding: 10px;
-        border-right: 2px solid var(--text-primary-color);
-        color: var(--text-primary-color);
-    }
-    button:last-child{
-        border-right: none;
-    }
+.icon {
+  position: absolute;
+  top: 1.5rem;
+  left: 0.1875rem;
+  color: var(--text-primary-color);
+  width: 1.125rem;
+  height: 1.125rem;
 }
-.signUp_Btn{
-    margin-top: 5px;
-    width: 100%;
-    background-color: var(--button-primary-color);
-    color: white;
-    font-size: 20px;
-    padding: 15px;
+
+.male_icon {
+  color: #253c63;
+  width: 1.125rem;
+  height: 1.125rem;
 }
-body{
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+
+.female_icon {
+  color: #932f42;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.ambiguous_icon {
+  color: var(--text-primary-color);
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.button_Container {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  border: 0.125rem solid var(--text-primary-color);
+  border-right: none;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.not_clicked {
+  flex: 1;
+  background-color: white;
+  padding: 0.625rem;
+  border-right: 0.125rem solid var(--text-primary-color);
+  color: var(--text-primary-color);
+}
+
+.clicked {
+  flex: 1;
+  background-color: #c7bcb0;
+  padding: 0.625rem;
+  border-right: 0.125rem solid var(--text-primary-color);
+  color: var(--text-primary-color);
+}
+
+.signUp_Btn {
+  margin-top: 0.3125rem;
+  width: 100%;
+  color: white;
+  font-size: 1.25rem;
+  padding: 0.9375rem;
+  background-image: url(./Btn.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
