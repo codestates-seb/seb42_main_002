@@ -1,21 +1,34 @@
 .container {
-  border: 0.0625rem solid black;
-  padding: 1.25rem;
+  padding: 2rem;
   width: 37.5rem;
   color: var(--button-primary-color);
   font-size: 0.75rem;
   font-weight: bold;
-  label {
+  margin-bottom: 1.875rem;
+  box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.1);
+  p {
+    margin-bottom: 0.3125rem;
+  }
+}
+.login_container {
+  padding: 3rem 2rem;
+  width: 37.5rem;
+  color: var(--button-primary-color);
+  font-size: 0.75rem;
+  font-weight: bold;
+  margin-bottom: 1.875rem;
+  box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.1);
+  .inputform_lable {
     display: block;
     width: 100%;
     margin-bottom: 0.3125rem;
   }
-  input {
+  .inputform_input {
     height: 1.875rem;
     width: 100%;
     border: none;
     border-bottom: 0.125rem solid black;
-    margin-bottom: 0.625rem;
+    margin-bottom: 2rem;
     padding: 0.125rem;
     padding-left: 1.5625rem;
     border-color: var(--text-primary-color);
@@ -24,8 +37,26 @@
       outline-color: var(--text-primary-color);
     }
   }
-  p {
-    margin-bottom: 0.3125rem;
+}
+
+.inputform_lable {
+  display: block;
+  width: 100%;
+  margin-bottom: 0.3125rem;
+}
+
+.inputform_input {
+  height: 1.875rem;
+  width: 100%;
+  border: none;
+  border-bottom: 0.125rem solid black;
+  margin-bottom: 0.625rem;
+  padding: 0.125rem;
+  padding-left: 1.5625rem;
+  border-color: var(--text-primary-color);
+  &:focus {
+    border: none;
+    outline-color: var(--text-primary-color);
   }
 }
 

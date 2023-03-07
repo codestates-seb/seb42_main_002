@@ -9,7 +9,7 @@ import { FaTransgender } from 'react-icons/fa';
 import { useState } from 'react';
 
 export default function SignUpPage() {
-  const [isBtnClick, setIsBtnClick] = useState([false, true, false]);
+  const [isBtnClick, setIsBtnClick] = useState([false, false, false]);
 
   const isBtnClickHandler = (el: number) => {
     const isBtnClickData = [...isBtnClick].map((ele, index) => {
@@ -24,16 +24,12 @@ export default function SignUpPage() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.input_container}>
-        <label htmlFor="email">이메일</label>
-        <input id="email" />
+      <InputForm htmlfor="email" labelInner="이메일">
         <MdOutlineAttachEmail className={styles.icon} />
-      </div>
-      <div className={styles.input_container}>
-        <label htmlFor="alias">별명</label>
-        <input id="alias" />
+      </InputForm>
+      <InputForm htmlfor="alias" labelInner="별명">
         <BsPencil className={styles.icon} />
-      </div>
+      </InputForm>
       <p>성별</p>
       <div className={styles.button_Container}>
         <button
@@ -67,22 +63,46 @@ export default function SignUpPage() {
           <FaTransgender className={styles.ambiguous_icon} /> 기타
         </button>
       </div>
-      <div className={styles.input_container}>
-        <label htmlFor="birthDate">생년월일</label>
-        <input id="birthDate" />
+      <InputForm
+        htmlfor="birthDate"
+        labelInner="생년월일"
+        placeholder="1989-12-24"
+      >
         <BsCalendar2Date className={styles.icon} />
-      </div>
-      <div className={styles.input_container}>
-        <label htmlFor="passWord">비밀번호</label>
-        <input id="passWord" />
+      </InputForm>
+      <InputForm htmlfor="passWord" labelInner="비밀번호">
         <AiOutlineLock className={styles.icon} />
-      </div>
-      <div className={styles.input_container}>
-        <label htmlFor="passWordCheck">비밀번호 확인</label>
-        <input id="passWordCheck" />
+      </InputForm>
+      <InputForm htmlfor="passWordCheck" labelInner="비밀번호 확인">
         <AiOutlineLock className={styles.icon} />
-      </div>
+      </InputForm>
       <button className={styles.signUp_Btn}>회원가입</button>
+    </div>
+  );
+}
+
+export function InputForm({
+  children,
+  htmlfor,
+  labelInner,
+  placeholder,
+}: {
+  children: JSX.Element;
+  htmlfor: string;
+  labelInner: string;
+  placeholder?: string;
+}) {
+  return (
+    <div className={styles.input_container}>
+      <label htmlFor={htmlfor} className={styles.inputform_lable}>
+        {labelInner}
+      </label>
+      <input
+        id={htmlfor}
+        placeholder={placeholder}
+        className={styles.inputform_input}
+      />
+      {children}
     </div>
   );
 }
