@@ -1,4 +1,4 @@
-package letter.entity;
+package com.mainproject.back.letter.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
