@@ -1,0 +1,93 @@
+.container{
+    border: 1px solid black;
+    padding: 20px;
+    width: 400px;
+    color: var(--button-primary-color);
+    font-size: 12px;
+    font-weight: bold;
+    label{
+        display: block;
+        width: 100%;
+        margin-bottom: 5px;
+    }
+    input{
+        height: 30px;
+        width: 100%;
+        border: none;
+        border-bottom: 2px solid black;
+        margin-bottom: 10px;
+        padding: 2px;
+        padding-left: 25px;
+        border-color:var(--text-primary-color);
+        &:focus{
+            border: none;
+            outline-color: var(--text-primary-color);
+        }
+    }
+    p{
+        margin-bottom: 5px;
+    }
+}
+.input_container{
+    position: relative;
+    margin-bottom: 10px;
+    width: 100%;
+}
+.icon{
+    position: absolute;
+    top: 24px;
+    left: 3px;
+    color:var(--text-primary-color);
+    width: 18px;
+    height: 18px;
+}
+
+.male_icon{
+    color: #253C63;
+    width: 18px;
+    height: 18px;
+}
+.female_icon{
+    color: #932F42;
+    width: 18px;
+    height: 18px;
+}
+.ambiguous_icon{
+    color: var(--text-primary-color);
+    width: 18px;
+    height: 18px;
+}
+
+.button_Container{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    border: 2px solid var(--text-primary-color);
+    border-radius: 4px;
+    font-size: 14px;
+    button{
+        flex: 1;
+        background-color: white;
+        padding: 10px;
+        border-right: 2px solid var(--text-primary-color);
+        color: var(--text-primary-color);
+    }
+    button:last-child{
+        border-right: none;
+    }
+}
+.signUp_Btn{
+    margin-top: 5px;
+    width: 100%;
+    background-color: var(--button-primary-color);
+    color: white;
+    font-size: 20px;
+    padding: 15px;
+}
+body{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
