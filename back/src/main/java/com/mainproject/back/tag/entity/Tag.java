@@ -21,7 +21,7 @@ public class Tag {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int tagId;
+  private Long tagId;
 
   @Column
   private String name;
