@@ -1,6 +1,6 @@
-package com.mainproject.back.tag.entity;
+package com.mainproject.back.language.entity;
 
-import com.mainproject.back.member.tag.MemberTag;
+import com.mainproject.back.member.language.MemberLanguage;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -17,15 +17,17 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Tag {
+public class Language {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int tagId;
+  private int languageId;
 
+  @OneToMany
   @Column
-  private String name;
+  private String nation;
 
-  @OneToMany(mappedBy = "tag")
-  private List<MemberTag> memberTags = new ArrayList<>();
+  @OneToMany(mappedBy = "language")
+  private List<MemberLanguage> memberLanguages = new ArrayList<>();
+
 }
