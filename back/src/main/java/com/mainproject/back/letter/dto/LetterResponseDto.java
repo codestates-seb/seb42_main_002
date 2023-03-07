@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Builder
@@ -11,7 +12,9 @@ import lombok.Getter;
 public class LetterResponseDto {
 
   private long letterId;
+  @Setter
   private String sender;
+  @Setter
   private String receiver;
   private String title;
   private String body;
@@ -19,5 +22,5 @@ public class LetterResponseDto {
   private LocalDateTime createdAt;
 
   // TODO 편지 읽기 가능한 시간
-  //  private LocalDateTime availableAt;
+    private LocalDateTime availableAt;
 }

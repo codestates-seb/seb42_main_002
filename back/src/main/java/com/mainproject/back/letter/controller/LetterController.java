@@ -7,10 +7,14 @@ import com.mainproject.back.letter.mapper.LetterMapper;
 import com.mainproject.back.letter.service.LetterService;
 import com.mainproject.back.util.UriCreator;
 import java.net.URI;
-import javax.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,16 +30,30 @@ public class LetterController {
   private final LetterMapper letterMapper;
 
   @PostMapping("/{receiver-id}")
-  public ResponseEntity postLetter(@PathParam("receiver-id") long receiverId, @RequestBody
+  public ResponseEntity postLetter(@PathVariable("receiver-id") long receiverId, @RequestBody
   LetterPostDto letterPostDto) {
     letterPostDto.setReceiverId(receiverId);
-    // TODO member id from principal
+    // TODO get member id from principal
     letterPostDto.setMemberId(1L);
     Letter letter = letterMapper.LetterPostDtoToLetter(letterPostDto);
     Letter savedLetter = letterService.createLetter(letter);
     LetterResponseDto letterResponseDto = letterMapper.LetterToLetterResponseDto(savedLetter);
-    // TODO ResponseDto 변환
     URI uri = UriCreator.createUri("/letter", savedLetter.getLetterId());
     return ResponseEntity.created(uri).body(letterResponseDto);
+  }
+
+  @GetMapping("/{letter-id}")
+  public ResponseEntity getLetter(@PathVariable("letter-id") long letterId) {
+    Letter findLetter = letterService.findLetter(letterId);
+    LetterResponseDto letterResponseDto = letterMapper.LetterToLetterResponseDto(findLetter);
+    return ResponseEntity.ok().body(letterResponseDto);
+  }
+
+  @GetMapping("/{receiver-id}")
+  public ResponseEntity getLettersByMember(@PathVariable("receiver-id") long receiverId,
+      @PageableDefault(sort = "createdAt") Pageable pageable) {
+    Page<Letter> letterPage = letterService.findLetterByMember(receiverId, pageable);
+    // TODO letter Page Response Dto 변환
+    return ResponseEntity.ok().body(letterPage);
   }
 }

@@ -2,6 +2,7 @@ package com.mainproject.back.letter.entity;
 
 import com.mainproject.back.audit.Auditable;
 import com.mainproject.back.member.entity.Member;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,9 +33,13 @@ public class Letter extends Auditable {
   private String body;
 
   @Column(nullable = false)
-  private String available_at;
+  private LocalDateTime availableAt;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member_id")
   private Member member;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "receiver_id")
+  private Member receiver;
 }

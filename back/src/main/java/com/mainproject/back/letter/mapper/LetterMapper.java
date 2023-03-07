@@ -11,5 +11,26 @@ public interface LetterMapper {
 
   Letter LetterPostDtoToLetter(LetterPostDto letterPostDto);
 
-  LetterResponseDto LetterToLetterResponseDto(Letter letter);
+  default LetterResponseDto LetterToLetterResponseDto(Letter letter) {
+    if (letter == null) {
+      return null;
+    }
+    LetterResponseDto responseDto = LetterResponseDto.builder().letterId(letter.getLetterId())
+        .title(letter.getTitle())
+        .body(letter.getBody())
+        .createdAt(letter.getCreatedAt())
+        .availableAt(letter.getAvailableAt())
+        .build();
+    if (letter.getMember() == null) {
+      responseDto.setSender(null);
+    } else {
+      responseDto.setSender(letter.getMember().getName());
+    }
+    if (letter.getReceiver() == null) {
+      responseDto.setReceiver(null);
+    } else {
+      responseDto.setReceiver(letter.getReceiver().getName());
+    }
+    return responseDto;
+  }
 }
