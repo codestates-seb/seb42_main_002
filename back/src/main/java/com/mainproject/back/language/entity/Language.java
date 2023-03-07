@@ -33,5 +33,4 @@ public class Language {
 
   @OneToMany(mappedBy = "language", cascade = CascadeType.ALL)
   private List<MemberLanguage> memberLanguages = new ArrayList<>();
-
 }
