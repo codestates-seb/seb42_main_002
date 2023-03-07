@@ -1,6 +1,8 @@
 package com.mainproject.back.member.entity;
 
 import com.mainproject.back.follow.entity.Follow;
+import com.mainproject.back.member.language.MemberLanguage;
+import com.mainproject.back.member.tag.MemberTag;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -39,9 +41,17 @@ public class Member {
   @Column(nullable = false)
   private MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
 
-  @OneToMany(mappedBy = "member")
-  private List<Follow> follows = new ArrayList<>();
+  @OneToMany(mappedBy = "follower")
+  private List<Follow> followers = new ArrayList<>();
 
+  @OneToMany(mappedBy = "following")
+  private List<Follow> followings = new ArrayList<>();
+
+  @OneToMany(mappedBy = "member")
+  private List<MemberTag> memberTags = new ArrayList<>();
+
+  @OneToMany(mappedBy = "member")
+  private List<MemberLanguage> memberLanguages = new ArrayList<>();
 
   public enum MemberStatus {
     MEMBER_ACTIVE("활동중"),

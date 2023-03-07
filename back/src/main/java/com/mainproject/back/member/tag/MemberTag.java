@@ -24,10 +24,10 @@ public class MemberTag {
 
   @ManyToOne
   @JoinColumn(name = "MEMBER_ID")
-  private Member memberId;
+  private Member member;
 
   @ManyToOne
   @JoinColumn(name = "TAG_ID")
-  private Tag tagId;
+  private Tag tag;
 
 }
