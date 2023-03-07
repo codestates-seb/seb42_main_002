@@ -26,7 +26,7 @@ public class MemberLanguage {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int memberLanguageId;
+  private Long memberLanguageId;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member_id")

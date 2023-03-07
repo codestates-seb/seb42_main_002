@@ -25,7 +25,7 @@ public class Follow extends Auditable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int followId;
+  private Long followId;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "follower_id")

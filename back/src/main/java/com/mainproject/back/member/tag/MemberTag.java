@@ -25,7 +25,7 @@ public class MemberTag {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int memberTagId;
+  private Long memberTagId;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member_id")
