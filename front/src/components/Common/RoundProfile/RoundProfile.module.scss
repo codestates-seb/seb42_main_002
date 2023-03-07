@@ -1,0 +1,31 @@
+$border-color: var(--border-color);
+
+.round_profile {
+  position: relative;
+}
+
+.nation {
+  width: 1.25rem;
+  height: 0.75rem;
+  position: absolute;
+  border: 2px solid $border-color;
+  border-radius: 2px;
+  background-color: #fff;
+  background-image: url('../../../assets/img/spr_flags.svg');
+  background-size: 20rem 12.5rem;
+  background-position: -3.75rem 0;
+  background-repeat: no-repeat;
+}
+
+.profile {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid $border-color;
+  & img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+}
