@@ -1,6 +1,10 @@
 package com.mainproject.back.letter.entity;
 
+import com.mainproject.back.audit.Auditable;
+import com.mainproject.back.member.entity.Member;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,15 +14,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Setter
+public class Letter extends Auditable {
 
-public class Letter {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private String letterId;
+  private Long letterId;
 
   @Column(nullable = false)
   private String title;
@@ -30,6 +34,7 @@ public class Letter {
   @Column(nullable = false)
   private String available_at;
 
-//  @OneToMany(mappedBy = "member")
-//  private Member member;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "member_id")
+  private Member member;
 }

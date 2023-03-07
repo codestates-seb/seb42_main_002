@@ -1,13 +1,13 @@
 spring:
   datasource:
-    url: {DATABASEURL}
-    password: {DATABASE_PASSWORD}
-    username: {DATABASE_ID}
+    url: jdbc:mysql://localhost:3306/MPT
+    password: 1234
+    username: root
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MySQL5Dialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     #ddl-auto: none
     properties:
       hibernate:
@@ -16,6 +16,7 @@ spring:
         format_sql: true
         default_batch_fetch_size: 100
     database: mysql
+    generate-ddl: true
   #      open-in-view: false
 logging:
   level:

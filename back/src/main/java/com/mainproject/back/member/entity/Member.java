@@ -1,5 +1,6 @@
 package com.mainproject.back.member.entity;
 
+import com.mainproject.back.audit.Auditable;
 import com.mainproject.back.follow.entity.Follow;
 import com.mainproject.back.member.language.MemberLanguage;
 import com.mainproject.back.member.tag.MemberTag;
@@ -13,15 +14,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@Setter
-@NoArgsConstructor
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Member {
+public class Member extends Auditable {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int memberId;
@@ -53,17 +59,14 @@ public class Member {
   @OneToMany(mappedBy = "member")
   private List<MemberLanguage> memberLanguages = new ArrayList<>();
 
+  @RequiredArgsConstructor
   public enum MemberStatus {
     MEMBER_ACTIVE("활동중"),
     MEMBER_SLEEP("휴면 상태"),
     MEMBER_QUIT("탈퇴 상태");
 
     @Getter
-    private String status;
-
-    MemberStatus(String status) {
-      this.status = status;
-    }
+    private final String status;
   }
 
   public enum MemberRole {
