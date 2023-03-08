@@ -71,3 +71,12 @@ button {
   /* shadow */
   --default-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
+
+.blind {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+}
