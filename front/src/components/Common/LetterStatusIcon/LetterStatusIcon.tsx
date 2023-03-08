@@ -1,6 +1,6 @@
 import { ReactComponent as Receive } from '../../../assets/img/letter_receive.svg';
 import { ReactComponent as Send } from '../../../assets/img/letter_send.svg';
-import { LETTER_STATUS } from '../../../utils/enums/letter.enum';
+import { LETTER_STATUS } from '../../../utils/enums';
 
 import styles from './LetterStatusIcon.module.scss';
 
