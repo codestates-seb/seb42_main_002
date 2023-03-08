@@ -1,6 +1,8 @@
 package com.mainproject.back.vocabulary.service;
 
+import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.vocabulary.entity.Vocabulary;
+import com.mainproject.back.vocabulary.exception.VocabExceptionCode;
 import com.mainproject.back.vocabulary.repository.VocabRepository;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -28,6 +30,8 @@ public class VocabService {
 
     Optional.ofNullable(vocab.getWord())
         .ifPresent(findVocab::setWord);
+    Optional.ofNullable(vocab.getLangCode())
+        .ifPresent(findVocab::setLangCode);
     Optional.ofNullable(vocab.getMeaning())
         .ifPresent(findVocab::setMeaning);
 
@@ -37,7 +41,7 @@ public class VocabService {
   public Vocabulary findVerifiedVocab(long vocabId) {
     Optional<Vocabulary> optionalVocab = vocabRepository.findById(vocabId);
     Vocabulary findVocab = optionalVocab
-        .orElseThrow(() -> new NoSuchElementException());
+        .orElseThrow(() -> new BusinessLogicException(VocabExceptionCode.VOCAB_NOT_FOUND));
     return findVocab;
   }
 

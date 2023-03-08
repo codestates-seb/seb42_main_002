@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
@@ -25,23 +26,18 @@ import lombok.Setter;
 public class Vocabulary extends Auditable {
 
   @Id
-  @Setter
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-//  @Column(name = "vocab_id", nullable = false)
   private Long vocabId;
 
-  @Setter
   @Column(nullable = false)
   private String word;
 
-  @Setter
   @Column(nullable = false)
   private String meaning;
 
   @Column(nullable = false)
   private String langCode;
 
-  @Setter
   @ManyToOne
   @JoinColumn(name = "member_id")
   private Member member;
