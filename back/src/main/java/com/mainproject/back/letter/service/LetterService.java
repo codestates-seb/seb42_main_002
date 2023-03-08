@@ -28,16 +28,20 @@ public class LetterService {
     return savedLetter;
   }
 
+  @Transactional
   public Letter findLetter(long letterId) {
     Optional<Letter> letterOptional = letterRepository.findById(letterId);
-    return letterOptional.orElseThrow(
+    Letter letter = letterOptional.orElseThrow(
         () -> new BusinessLogicException(LetterExceptionCode.LETTER_NOT_FOUND));
+    if(!letter.getIsRead()) letter.setIsRead(true);
+    Letter savedLetter = letterRepository.save(letter);
+    return savedLetter;
   }
 
   public Page<Letter> findLetterByMember(long receiverId, Pageable pageable) {
     // TODO get memberId from principal
     long memberId = 1L;
-    Page<Letter> letterPage = letterRepository.findLettersByMemberOrReceiver(memberId, receiverId, pageable);
+    Page<Letter> letterPage = letterRepository.findLettersByMember(memberId, receiverId, pageable);
     return letterPage;
   }
 }

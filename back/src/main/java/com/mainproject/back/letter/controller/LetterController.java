@@ -32,6 +32,8 @@ public class LetterController {
   @PostMapping("/{receiver-id}")
   public ResponseEntity postLetter(@PathVariable("receiver-id") long receiverId, @RequestBody
   LetterPostDto letterPostDto) {
+    log.info("## post letter: {}", receiverId);
+    log.info("## letter post dto: {}", letterPostDto.getTitle());
     letterPostDto.setReceiverId(receiverId);
     // TODO get member id from principal
     letterPostDto.setMemberId(1L);

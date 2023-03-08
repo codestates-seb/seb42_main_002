@@ -5,21 +5,26 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import com.mainproject.back.letter.entity.Letter;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.Matchers.*;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Transactional
+@AutoConfigureTestDatabase(replace = Replace.NONE)
 public class LetterRepositoryTest {
 
   @Autowired
   private LetterRepository letterRepository;
+
+  @AfterEach
+  public void cleanup() {
+    letterRepository.deleteAll();
+  }
 
   @Test
   public void createLetterTest() {

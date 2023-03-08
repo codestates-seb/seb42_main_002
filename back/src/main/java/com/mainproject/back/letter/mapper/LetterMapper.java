@@ -21,10 +21,10 @@ public interface LetterMapper {
         .createdAt(letter.getCreatedAt())
         .availableAt(letter.getAvailableAt())
         .build();
-    if (letter.getMember() == null) {
+    if (letter.getSender() == null) {
       responseDto.setSender(null);
     } else {
-      responseDto.setSender(letter.getMember().getName());
+      responseDto.setSender(letter.getSender().getName());
     }
     if (letter.getReceiver() == null) {
       responseDto.setReceiver(null);

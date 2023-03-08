@@ -1,5 +1,6 @@
 package com.mainproject.back.letter.dto;
 
+import java.util.ArrayList;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +17,6 @@ public class LetterPostDto {
   private long receiverId;
   private String title;
   private String body;
-  private String pic;
+  private ArrayList<String> pic;
 
 }

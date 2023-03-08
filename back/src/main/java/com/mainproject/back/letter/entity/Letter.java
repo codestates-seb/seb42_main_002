@@ -3,16 +3,17 @@ package com.mainproject.back.letter.entity;
 import com.mainproject.back.audit.Auditable;
 import com.mainproject.back.member.entity.Member;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.Setter;
 
 @Entity
 @Builder
@@ -32,12 +33,21 @@ public class Letter extends Auditable {
   @Lob
   private String body;
 
+  @Column
+  @Setter
+  @Default
+  private Boolean isRead = false;
+
+  @Column
+  @ElementCollection(fetch = FetchType.LAZY)
+  private List<String> pic;
+
   @Column(nullable = false)
   private LocalDateTime availableAt;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "member_id")
-  private Member member;
+  @JoinColumn(name = "sender_id")
+  private Member sender;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "receiver_id")
