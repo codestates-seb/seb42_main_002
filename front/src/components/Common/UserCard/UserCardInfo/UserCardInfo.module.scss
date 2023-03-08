@@ -1,0 +1,24 @@
+$main-font-size: 0.875rem;
+$sub-font-size: 0.625rem;
+
+.user_info {
+  display: flex;
+  flex-direction: column;
+}
+.user {
+  margin-bottom: 0.625rem;
+
+  & .name {
+    font-size: $main-font-size;
+    font-weight: 700;
+    color: var(--text-primary-color);
+  }
+  & .location {
+    font-size: $sub-font-size;
+    color: var(--text-primary-color);
+  }
+}
+.interaction_date {
+  font-size: $sub-font-size;
+  color: var(--text-secondary-color);
+}
