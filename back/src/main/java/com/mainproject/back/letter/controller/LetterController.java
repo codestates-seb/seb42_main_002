@@ -61,9 +61,8 @@ public class LetterController {
   }
 
   @GetMapping("/received")
-  public ResponseEntity getMembersByLetters(@PageableDefault(sort = "lastLetter.createdAt") Pageable pageable){
-
-
+  public ResponseEntity getMembersByLetters(@PageableDefault Pageable pageable){
+    letterService.findMembersByLetter(pageable);
     return ResponseEntity.ok().build();
   }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import com.mainproject.back.audit.Auditable;
 import com.mainproject.back.follow.entity.Follow;
+import com.mainproject.back.letter.entity.Letter;
 import com.mainproject.back.member.language.MemberLanguage;
 import com.mainproject.back.member.tag.MemberTag;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -69,6 +71,13 @@ public class Member extends Auditable {
 
   @OneToMany(mappedBy = "member")
   private List<MemberLanguage> memberLanguages = new ArrayList<>();
+
+  @OneToMany(mappedBy = "sender")
+  @Default
+  private List<Letter> sendLetters = new ArrayList<>();
+  @OneToMany(mappedBy = "receiver")
+  @Default
+  private List<Letter> receivedLetters = new ArrayList<>();
 
   @RequiredArgsConstructor
   public enum MemberStatus {

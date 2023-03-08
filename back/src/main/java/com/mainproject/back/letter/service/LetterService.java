@@ -1,6 +1,8 @@
 package com.mainproject.back.letter.service;
 
 import com.mainproject.back.exception.BusinessLogicException;
+import com.mainproject.back.letter.dto.LetterSimpleDto;
+import com.mainproject.back.letter.dto.LetterSimpleDto.LetterStatus;
 import com.mainproject.back.letter.entity.Letter;
 import com.mainproject.back.letter.entity.Nations;
 import com.mainproject.back.letter.exception.LetterExceptionCode;
@@ -10,7 +12,9 @@ import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.service.MemberService;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -55,7 +59,8 @@ public class LetterService {
   public Page<Letter> findLetterByMember(long receiverId, Pageable pageable) {
     // TODO get memberId from principal
     long memberId = 1L;
-    Page<Letter> letterPage = letterRepository.findLettersByMemberAndTarget(memberId, receiverId, pageable);
+    Page<Letter> letterPage = letterRepository.findLettersByMemberAndTarget(memberId, receiverId,
+        pageable);
     return letterPage;
   }
 
@@ -69,10 +74,8 @@ public class LetterService {
     return LocalDateTime.now();
   }
 
-  public void findMembersByLetter(Pageable pageable){
+  public void findMembersByLetter(Pageable pageable) {
     long memberId = 1L;
     // TODO get memberId from principal
-    ArrayList<Letter> sentLetters = letterRepository.findSentLettersByMember(memberId);
-    ArrayList<Letter> receivedLetters = letterRepository.findReceivedLettersByMember(memberId);
   }
 }

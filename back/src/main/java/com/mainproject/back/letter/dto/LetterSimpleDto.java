@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 public class LetterSimpleDto {
 
   private LetterStatus status;
-  private LocalDateTime localDateTime;
+  private LocalDateTime createdAt;
   private boolean isRead;
 
   @Getter
