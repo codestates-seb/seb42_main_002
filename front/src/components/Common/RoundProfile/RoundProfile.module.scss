@@ -2,12 +2,15 @@ $border-color: var(--border-color);
 
 .round_profile {
   position: relative;
+  box-shadow: var(--default-box-shadow);
 }
 
 .nation {
   width: 1.25rem;
   height: 0.75rem;
   position: absolute;
+  top: 0;
+  left: -0.35rem;
   border: 2px solid $border-color;
   border-radius: 2px;
   background-color: #fff;
