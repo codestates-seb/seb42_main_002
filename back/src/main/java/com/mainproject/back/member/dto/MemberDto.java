@@ -12,11 +12,13 @@ import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.lang.Nullable;
 
 public class MemberDto {
 
   @Getter
+  @Setter
   @AllArgsConstructor
   @JsonInclude(Include.NON_NULL)
   public static class Post {
@@ -39,6 +41,9 @@ public class MemberDto {
     private Member.Gender gender;
     @Nullable
     private String profile;
+
+    @Nullable
+    private Member.MemberStatus memberStatus;
   }
 
   @Getter
@@ -53,6 +58,11 @@ public class MemberDto {
     private String profile;
     private List<MemberLanguage> language;
     private List<MemberTag> tag;
+    private Member.MemberStatus memberStatus;
+
+    public String getMemberStatus() {
+      return memberStatus.getStatus();
+    }
   }
   @Getter
   @Builder
@@ -64,5 +74,7 @@ public class MemberDto {
     private String profile;
     private List<MemberLanguage> language;
     private List<MemberTag> tag;
+
+    private Member.MemberStatus memberStatus;
   }
 }
