@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface LetterRepository extends JpaRepository<Letter, Long> {
 
-  @Query("select l from Letter l join l.sender s join l.receiver r where s.memberId = :memberId and r.memberId = :targetId or s.memberId = :targetId and r.memberId = :memberId")
+  @Query("select l from Letter l join l.sender s join l.receiver r where s.memberId = :memberId and r.memberId = :targetId")
   Page<Letter> findLettersByMember(@Param("memberId") long memberId, @Param("targetId") long targetId, Pageable pageable);
 
   // 읽지 않은 받은 편지 개수
