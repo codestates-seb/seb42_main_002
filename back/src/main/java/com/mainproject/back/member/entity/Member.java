@@ -1,5 +1,7 @@
 package com.mainproject.back.member.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import com.mainproject.back.audit.Auditable;
 import com.mainproject.back.follow.entity.Follow;
 import com.mainproject.back.member.language.MemberLanguage;
@@ -13,6 +15,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -30,21 +33,29 @@ public class Member extends Auditable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long memberId;
+  private long memberId;
   @Column(nullable = false)
   private String name;
-
-  @Column
-  private String introduce;
-
-  @Column(nullable = false, unique = true, updatable = false)
+  @Column(nullable = false, updatable = false)
   private String email;
-
+  @JsonProperty(access = Access.WRITE_ONLY)
   @Column(nullable = false, length = 30)
   private String password;
-
+  @Column(nullable = false)
+  private String birthday;
+  @Column
+  @Lob
+  private String introduce;
+  @Column
+  private String location;
   @Enumerated(value = EnumType.STRING)
   @Column(nullable = false)
+  private Gender gender = Gender.OTHER;
+  @Column
+  private String profile;
+
+  @Enumerated(value = EnumType.STRING)
+  @Column(nullable = true)
   private MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
 
   @OneToMany(mappedBy = "follower")
@@ -74,4 +85,13 @@ public class Member extends Auditable {
     ROLE_ADMIN
   }
 
+  @RequiredArgsConstructor
+  public enum Gender {
+    MALE("남"),
+    FEMALE("여"),
+
+    OTHER("기타");
+    @Getter
+    private final String choseGender;
+  }
 }
