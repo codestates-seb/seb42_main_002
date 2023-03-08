@@ -4,6 +4,7 @@ $sub-font-size: 0.625rem;
 .user_info {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 }
 .user {
   margin-bottom: 0.625rem;
@@ -12,6 +13,7 @@ $sub-font-size: 0.625rem;
     font-size: $main-font-size;
     font-weight: 700;
     color: var(--text-primary-color);
+    margin-bottom: 0.25rem;
   }
   & .location {
     font-size: $sub-font-size;

@@ -6,6 +6,7 @@ import styles from './LetterStatusIcon.module.scss';
 
 type LetterStatusIconProps = {
   status: LETTER_STATUS;
+  onClick: () => void;
 };
 
 const LetterStatusIcon = () => {

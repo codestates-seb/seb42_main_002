@@ -65,4 +65,9 @@ button {
   --default-color: #f0f0f0;
   --danger-color: #932f42;
   --success-color: #2f9381;
+  --border-color: #505050;
+  --alert-color: #be0000;
+
+  /* shadow */
+  --default-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
