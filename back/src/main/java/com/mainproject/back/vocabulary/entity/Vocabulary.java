@@ -1,6 +1,6 @@
 package com.mainproject.back.vocabulary.entity;
 
-
+import com.mainproject.back.audit.Auditable;
 import com.mainproject.back.member.entity.Member;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,24 +15,28 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "vocabulary")
 @Entity
-public class Vocabulary {
+public class Vocabulary extends Auditable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "vocab_id", nullable = false)
   private Long vocabId;
 
   @Column(nullable = false)
   private String word;
+
   @Column(nullable = false)
   private String meaning;
+
+  @Column(nullable = false)
+  private String langCode;
 
   @ManyToOne
   @JoinColumn(name = "member_id")
