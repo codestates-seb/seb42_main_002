@@ -48,6 +48,7 @@ public class LetterController {
   public ResponseEntity getLetter(@PathVariable("letter-id") long letterId) {
     Letter findLetter = letterService.findLetter(letterId);
     LetterResponseDto letterResponseDto = letterMapper.LetterToLetterResponseDto(findLetter);
+
     return ResponseEntity.ok().body(letterResponseDto);
   }
 
