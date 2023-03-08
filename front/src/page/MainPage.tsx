@@ -1,5 +1,5 @@
 import React from 'react';
-import LifeQuotes from '../components/Main/LifeQuotes';
+import LifeQuotes from '../components/Main/LifeQuotes/LifeQuotes';
 import MainLetter from '../components/Main/MainLetters/MainLetter';
 import MainSection from '../components/Main/MainSection';
 import MainVoca from '../components/Main/MainVoca/MainVoca';
