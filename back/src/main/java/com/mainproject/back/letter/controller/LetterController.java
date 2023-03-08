@@ -1,5 +1,6 @@
 package com.mainproject.back.letter.controller;
 
+import com.mainproject.back.letter.dto.LetterListDto;
 import com.mainproject.back.letter.dto.LetterPostDto;
 import com.mainproject.back.letter.dto.LetterResponseDto;
 import com.mainproject.back.letter.entity.Letter;
@@ -36,7 +37,7 @@ public class LetterController {
     log.info("## letter post dto: {}", letterPostDto.getTitle());
     letterPostDto.setReceiverId(receiverId);
     // TODO get member id from principal
-    letterPostDto.setMemberId(1L);
+    letterPostDto.setSenderId(1L);
     Letter letter = letterMapper.LetterPostDtoToLetter(letterPostDto);
     Letter savedLetter = letterService.createLetter(letter);
     LetterResponseDto letterResponseDto = letterMapper.LetterToLetterResponseDto(savedLetter);
@@ -51,11 +52,18 @@ public class LetterController {
     return ResponseEntity.ok().body(letterResponseDto);
   }
 
-  @GetMapping("/{receiver-id}")
+  @GetMapping("/members/{receiver-id}")
   public ResponseEntity getLettersByMember(@PathVariable("receiver-id") long receiverId,
       @PageableDefault(sort = "createdAt") Pageable pageable) {
     Page<Letter> letterPage = letterService.findLetterByMember(receiverId, pageable);
-    // TODO letter Page Response Dto 변환
-    return ResponseEntity.ok().body(letterPage);
+    Page<LetterListDto> letterListDtoPage = letterMapper.pageLetterToPageLetterListDtoPage(letterPage);
+    return ResponseEntity.ok().body(letterListDtoPage);
+  }
+
+  @GetMapping("/received")
+  public ResponseEntity getMembersByLetters(@PageableDefault(sort = "lastLetter.createdAt") Pageable pageable){
+
+
+    return ResponseEntity.ok().build();
   }
 }
