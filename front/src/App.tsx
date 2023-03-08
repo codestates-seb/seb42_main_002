@@ -1,9 +1,13 @@
-import AddTagPage from './TAG/AddTagPage';
+import AddLanguageTag from '../src/components/Tag/AddLanguageTag';
+import AddHobbyTag from '../src/components/Tag/AddHobbyTag';
 
 function App() {
-  return <div>
-    <AddTagPage/>
-  </div>;
+  return (
+    <div>
+      <AddLanguageTag />
+      <AddHobbyTag />
+    </div>
+  );
 }
 
 export default App;

@@ -1,6 +1,8 @@
 .container {
   width: 400px;
   padding: 16px;
+  background-color: white;
+  margin-bottom: 3rem;
 }
 .input_container {
   position: relative;
@@ -18,6 +20,7 @@
 }
 .cancelIcon {
   cursor: pointer;
+  margin-bottom: 1.5rem;
 }
 .search_icon {
   position: absolute;
@@ -32,6 +35,7 @@
   flex-wrap: wrap;
   justify-content: space-between;
   width: 100%;
+  cursor: default;
 }
 .tag {
   display: flex;
@@ -41,9 +45,27 @@
   width: 49%;
   margin-bottom: 10px;
   border-radius: 4px;
-  justify-content: space-around;
+  justify-content: center;
   font-weight: 700;
   color: var(--text-primary-color);
+  .name {
+    font-size: 14px;
+  }
+  .englishName {
+    font-size: 10px;
+  }
+}
+.tagClick {
+  display: flex;
+  align-items: center;
+  background-color: var(--active-color);
+  padding: 16px;
+  width: 49%;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  justify-content: center;
+  font-weight: 700;
+  color: #ffffff;
   .name {
     font-size: 14px;
   }
@@ -55,4 +77,14 @@ body {
   display: flex;
   justify-content: center;
   width: 100%;
+  background-color: bisque;
+}
+
+.hobby_tag_title {
+  font-size: 1.5rem;
+  margin-bottom: 0.8rem;
+}
+.back_Icon {
+  cursor: pointer;
+  margin-bottom: 1.5rem;
 }

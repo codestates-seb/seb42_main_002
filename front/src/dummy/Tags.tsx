@@ -1,8 +1,4 @@
-import styles from './AddTagPage.module.scss';
-import { ReactComponent as CancelIcon } from './CancelIcon.svg';
-import { BsSearch } from 'react-icons/bs';
-
-const tags = [
+export const countryTags = [
   { name: '日本語', englishName: 'Japanese' },
   { name: 'English', englishName: 'English' },
   { name: '中文', englishName: 'Chinese' },
@@ -34,33 +30,29 @@ const tags = [
   { name: 'Nederlands', englishName: 'Dutch' },
   { name: 'Eesti', englishName: 'Estonian' },
 ];
-console.log(tags.length);
 
-export default function AddTagPage() {
-  return (
-    <div className={styles.container}>
-      <CancelIcon
-        onClick={() => {
-          console.log('취소버튼클릭');
-        }}
-        className={styles.cancelIcon}
-      />
-      <div className={styles.input_container}>
-        <input type="text" placeholder="검색" />
-        <BsSearch className={styles.search_icon} />
-      </div>
-      <div className={styles.tag_container}>
-        {tags.map((el) => {
-          return (
-            <>
-              <div className={styles.tag}>
-                <span className={styles.name}>{el.name}</span>
-                <span className={styles.englishName}>{el.englishName}</span>
-              </div>
-            </>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
+export const hobbyTags = [
+  { id: 0, name: '음악' },
+  { id: 1, name: '댄스' },
+  { id: 2, name: '외국어' },
+  { id: 3, name: '컴퓨터' },
+  { id: 4, name: '게임' },
+  { id: 5, name: '스포츠' },
+  { id: 6, name: '요리' },
+  { id: 7, name: '디자인' },
+  { id: 8, name: '음악' },
+  { id: 9, name: '댄스' },
+  { id: 10, name: '음악' },
+  { id: 11, name: '댄스' },
+  { id: 12, name: '음악' },
+  { id: 13, name: '댄스' },
+  { id: 14, name: '음악' },
+  { id: 15, name: '댄스' },
+  { id: 16, name: '음악' },
+  { id: 17, name: '댄스' },
+  { id: 18, name: '음악' },
+  { id: 19, name: '댄스' },
+  { id: 20, name: '음악' },
+  { id: 21, name: '댄스' },
+  { id: 22, name: '음악' },
+];
