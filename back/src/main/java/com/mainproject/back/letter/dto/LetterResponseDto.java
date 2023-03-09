@@ -1,6 +1,7 @@
 package com.mainproject.back.letter.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +19,7 @@ public class LetterResponseDto {
   private String receiver;
   private String title;
   private String body;
-  private String pic;
+  private List<String> pic;
   private LocalDateTime createdAt;
   private LocalDateTime availableAt;
 }

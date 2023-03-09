@@ -52,17 +52,14 @@ public class LetterController {
     return ResponseEntity.ok().body(letterResponseDto);
   }
 
-  @GetMapping("/members/{receiver-id}")
-  public ResponseEntity getLettersByMember(@PathVariable("receiver-id") long receiverId,
-      @PageableDefault(sort = "createdAt") Pageable pageable) {
-    Page<Letter> letterPage = letterService.findLetterByMember(receiverId, pageable);
+  @GetMapping("/members/{member-id}")
+  public ResponseEntity getLettersByMember(@PathVariable("member-id") long targetId, @PageableDefault Pageable pageable) {
+    log.info("## 특정 멤버와 주고 받은 편지 리스트 : {}", targetId);
+    Page<Letter> letterPage = letterService.findLetterByMember(targetId, pageable);
     Page<LetterListDto> letterListDtoPage = letterMapper.pageLetterToPageLetterListDtoPage(letterPage);
     return ResponseEntity.ok().body(letterListDtoPage);
   }
 
-  @GetMapping("/received")
-  public ResponseEntity getMembersByLetters(@PageableDefault Pageable pageable){
-    letterService.findMembersByLetter(pageable);
-    return ResponseEntity.ok().build();
-  }
+
+
 }

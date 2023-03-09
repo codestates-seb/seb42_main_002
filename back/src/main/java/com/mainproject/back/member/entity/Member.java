@@ -7,6 +7,7 @@ import com.mainproject.back.follow.entity.Follow;
 import com.mainproject.back.letter.entity.Letter;
 import com.mainproject.back.member.language.MemberLanguage;
 import com.mainproject.back.member.tag.MemberTag;
+import com.mainproject.back.vocabulary.entity.Vocabulary;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -71,13 +72,9 @@ public class Member extends Auditable {
 
   @OneToMany(mappedBy = "member")
   private List<MemberLanguage> memberLanguages = new ArrayList<>();
-
-  @OneToMany(mappedBy = "sender")
+  @OneToMany(mappedBy = "member")
   @Default
-  private List<Letter> sendLetters = new ArrayList<>();
-  @OneToMany(mappedBy = "receiver")
-  @Default
-  private List<Letter> receivedLetters = new ArrayList<>();
+  private List<Vocabulary> vocabularies = new ArrayList<>();
 
   @RequiredArgsConstructor
   public enum MemberStatus {

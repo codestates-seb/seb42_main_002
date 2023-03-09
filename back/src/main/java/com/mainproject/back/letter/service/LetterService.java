@@ -56,10 +56,10 @@ public class LetterService {
     return savedLetter;
   }
 
-  public Page<Letter> findLetterByMember(long receiverId, Pageable pageable) {
+  public Page<Letter> findLetterByMember(long targetId, Pageable pageable) {
     // TODO get memberId from principal
     long memberId = 1L;
-    Page<Letter> letterPage = letterRepository.findLettersByMemberAndTarget(memberId, receiverId,
+    Page<Letter> letterPage = letterRepository.findLettersByMemberAndTarget(memberId, targetId,
         pageable);
     return letterPage;
   }
