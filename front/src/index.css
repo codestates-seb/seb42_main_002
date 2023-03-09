@@ -71,8 +71,18 @@ button {
   --alert-color: #be0000;
   --white: #fff;
 
-  /* shadow */
   --default-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+
+  --border-radius-sm: 0.25rem;
+  --border-radius-md: 0.5rem;
+  --border-radius-lg: 1rem;
+  --font-size-xxs: 0.625rem; /* 10px */
+  --font-size-xs: 0.75rem; /* 12px */
+  --font-size-xs: 0.875rem; /* 14px */
+  --font-size-md: 1rem; /* 16px */
+  --font-size-lg: 1.125rem; /* 18px */
+  --font-size-xl: 1.25rem; /* 20px */
+  --font-size-xxl: 1.25rem; /* 24px */
 }
 
 .blind {
