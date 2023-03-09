@@ -4,6 +4,7 @@ import com.mainproject.back.helper.UriCreator;
 import com.mainproject.back.member.dto.MemberDto;
 import com.mainproject.back.member.dto.MemberDto.Patch;
 import com.mainproject.back.member.entity.Member;
+import com.mainproject.back.member.entity.Member.MemberStatus;
 import com.mainproject.back.member.mapper.MemberMapper;
 import com.mainproject.back.member.service.MemberService;
 import java.net.URI;
@@ -39,9 +40,11 @@ public class MemberController {
 
   @PostMapping
   public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post requestBody) {
+    requestBody.setMemberStatus(MemberStatus.MEMBER_ACTIVE);
     Member member = mapper.memberPostToMember(requestBody);
 
     Member createdMember = memberService.createMember(member);
+
 
     URI location = UriCreator.createUri(MEMBER_DEFAULT_URL, createdMember.getMemberId());
 
