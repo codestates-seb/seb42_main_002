@@ -65,6 +65,7 @@ public interface LetterMapper {
             .name(letter.getReceiver().getName()).build())
         .receiver(MemberSimpleDto.builder().memberId(letter.getSender().getMemberId())
             .name(letter.getReceiver().getName()).build())
+        .isRead(letter.getIsRead())
         .availableAt(letter.getAvailableAt())
         .createdAt(letter.getCreatedAt())
         .pic(letter.getPic());

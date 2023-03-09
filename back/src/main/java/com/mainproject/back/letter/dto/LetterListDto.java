@@ -17,6 +17,7 @@ public class LetterListDto {
   private MemberSimpleDto receiver;
   private String title;
   private String body;
+  private Boolean isRead;
   private LocalDateTime availableAt;
   private LocalDateTime createdAt;
   private List<String> pic;

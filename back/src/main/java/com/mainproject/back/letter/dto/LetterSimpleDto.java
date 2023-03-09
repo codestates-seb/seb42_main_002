@@ -13,7 +13,7 @@ public class LetterSimpleDto {
 
   private LetterStatus status;
   private LocalDateTime createdAt;
-  private boolean isRead;
+  private Boolean isRead;
 
   @Getter
   @RequiredArgsConstructor

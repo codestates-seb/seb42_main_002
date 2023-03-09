@@ -5,6 +5,7 @@ import com.mainproject.back.member.entity.Member;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -57,4 +58,19 @@ public class Letter extends Auditable {
   @JoinColumn(name = "receiver_id")
   @Setter
   private Member receiver;
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(sender, receiver);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof Letter) {
+      Letter letter = (Letter) obj;
+      return letter.getSender().getMemberId() == sender.getMemberId()
+          && letter.getReceiver().getMemberId() == receiver.getMemberId();
+    }
+    return false;
+  }
 }

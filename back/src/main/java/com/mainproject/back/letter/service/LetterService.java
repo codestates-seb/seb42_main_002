@@ -1,6 +1,7 @@
 package com.mainproject.back.letter.service;
 
 import com.mainproject.back.exception.BusinessLogicException;
+import com.mainproject.back.letter.dto.LetterCountDto;
 import com.mainproject.back.letter.dto.LetterSimpleDto;
 import com.mainproject.back.letter.dto.LetterSimpleDto.LetterStatus;
 import com.mainproject.back.letter.entity.Letter;
@@ -8,17 +9,23 @@ import com.mainproject.back.letter.entity.Nations;
 import com.mainproject.back.letter.exception.LetterExceptionCode;
 import com.mainproject.back.letter.repository.LetterRepository;
 import com.mainproject.back.member.dto.MemberLetterDto;
+import com.mainproject.back.member.dto.MemberSimpleDto;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.service.MemberService;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,7 +63,7 @@ public class LetterService {
     return savedLetter;
   }
 
-  public Page<Letter> findLetterByMember(long targetId, Pageable pageable) {
+  public Page<Letter> findLettersByMemberAndTarget(long targetId, Pageable pageable) {
     // TODO get memberId from principal
     long memberId = 1L;
     Page<Letter> letterPage = letterRepository.findLettersByMemberAndTarget(memberId, targetId,
@@ -74,8 +81,41 @@ public class LetterService {
     return LocalDateTime.now();
   }
 
-  public void findMembersByLetter(Pageable pageable) {
-    long memberId = 1L;
+  public Page<MemberLetterDto> findMembersByLetter(Pageable pageable) {
     // TODO get memberId from principal
+    long memberId = 1L;
+    Set<Letter> sentLetter = letterRepository.findSentLettersByMember(memberId);
+    Set<Letter> receivedLetter = letterRepository.findReceivedLettersByMember(memberId);
+    Set<MemberLetterDto> memberLetterDtoSet = sentLetter.stream().map(letter -> {
+      Member receiver = letter.getReceiver();
+      return MemberLetterDto.builder().memberId(receiver.getMemberId())
+          .name(receiver.getName())
+          .profile(receiver.getProfile())
+          .location(receiver.getLocation())
+          .lastLetter(LetterSimpleDto.builder().isRead(letter.getIsRead()).status(LetterStatus.SENT)
+              .createdAt(letter.getCreatedAt()).build())
+          .build();
+    }).collect(Collectors.toSet());
+    memberLetterDtoSet.addAll(receivedLetter.stream().map(letter -> {
+      Member sender = letter.getSender();
+      return MemberLetterDto.builder().memberId(sender.getMemberId())
+          .name(sender.getName())
+          .profile(sender.getProfile())
+          .location(sender.getLocation())
+          .lastLetter(
+              LetterSimpleDto.builder().isRead(letter.getIsRead()).status(LetterStatus.RECEIVED)
+                  .createdAt(letter.getCreatedAt()).build())
+          .build();
+    }).collect(Collectors.toSet()));
+    Page<MemberLetterDto> memberLetterDtoPage = new PageImpl<>(new ArrayList<>(memberLetterDtoSet),
+        pageable, memberLetterDtoSet.size());
+    return memberLetterDtoPage;
+  }
+
+  public LetterCountDto getArrivedLettersCount() {
+    // TODO get memberId from principal
+    long memberId = 1L;
+    Long count = letterRepository.countByIsReadAndReceiver(memberId);
+    return new LetterCountDto(count);
   }
 }
