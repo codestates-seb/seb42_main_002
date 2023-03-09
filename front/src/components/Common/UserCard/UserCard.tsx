@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+
 import RoundProfile from '../RoundProfile/RoundProfile';
 import UserCardInfo from './UserCardInfo/UserCardInfo';
 
@@ -20,8 +22,9 @@ const UserCard = ({
   children,
   date,
 }: UserCardProps) => {
+  const navigate = useNavigate();
   const onClickHandler = (): void => {
-    console.log('임시 클릭 핸들러');
+    navigate(`/letters/${memberId}`);
   };
 
   return (

@@ -6,6 +6,7 @@ import BaseLayout from './components/Layouts/BaseLayout';
 import MainPage from './pages/MainPage';
 import MyProfilePage from './pages/MyProfilePage';
 import LetterListPage from './pages/LetterListPage';
+import UserLetterListPage from './pages/UserLetterListPage';
 
 function App() {
   return (
@@ -21,6 +22,10 @@ function App() {
             <Route element={<BaseLayout isAuth />}>
               <Route path="/main" element={<MainPage />} />
               <Route path="/letters" element={<LetterListPage />} />
+              <Route
+                path="/letters/:memberId"
+                element={<UserLetterListPage />}
+              />
               <Route path="/followings" element={<MainPage />} />
               <Route path="/voca" element={<MainPage />} />
               <Route path="/my-profile" element={<MyProfilePage />} />
