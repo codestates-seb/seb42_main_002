@@ -1,13 +1,11 @@
 package com.mainproject.back.member.service;
 
+
 import com.mainproject.back.member.entity.Member;
-import com.mainproject.back.member.language.MemberLanguage;
+
 import com.mainproject.back.member.repository.MemberRepository;
-import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -30,17 +28,17 @@ public class MemberService {
     Member findMember = findVerifiedMember(member.getMemberId());
 
     Optional.ofNullable(member.getName())
-        .ifPresent(name -> Member.builder().name(name));
+        .ifPresent(name -> Member.builder().name(name).build());
     Optional.ofNullable(member.getPassword())
-        .ifPresent(password -> Member.builder().password(password));
+        .ifPresent(password -> Member.builder().password(password).build());
     Optional.ofNullable(member.getMemberLanguages())
-            .ifPresent(memberLanguages -> Member.builder().memberLanguages(memberLanguages));
+            .ifPresent(memberLanguages -> Member.builder().memberLanguages(memberLanguages).build());
     Optional.ofNullable(member.getMemberTags())
-        .ifPresent(memberTags -> Member.builder().memberTags(memberTags));
+        .ifPresent(memberTags -> Member.builder().memberTags(memberTags).build());
     Optional.ofNullable(member.getIntroduce())
-            .ifPresent(introduce -> Member.builder().introduce(introduce));
+            .ifPresent(introduce -> Member.builder().introduce(introduce).build());
     Optional.ofNullable(member.getMemberStatus())
-        .ifPresent(memberStatus -> Member.builder().memberStatus(memberStatus));
+        .ifPresent(memberStatus -> Member.builder().memberStatus(memberStatus).build());
 
     return memberRepository.save(findMember);
   }

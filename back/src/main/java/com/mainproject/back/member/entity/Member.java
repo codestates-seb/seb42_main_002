@@ -58,7 +58,7 @@ public class Member extends Auditable {
   private String profile;
 
   @Enumerated(value = EnumType.STRING)
-  @Column(nullable = true)
+  @Column(nullable = false)
   private MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
 
   @OneToMany(mappedBy = "follower")
