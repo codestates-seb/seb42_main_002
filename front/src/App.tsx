@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import AuthProvider from './context/auth-context';
+import AuthProvider from './context/AuthContext';
 import NoneLayout from './components/Layouts/NoneLayout';
 import Intro from './components/Intro/Intro';
 import BaseLayout from './components/Layouts/BaseLayout';

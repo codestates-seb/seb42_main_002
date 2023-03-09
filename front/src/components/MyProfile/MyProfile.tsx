@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
-import { useAuth } from '../../context/auth-context';
+import { useAuth } from '../../context/AuthContext';
 import useModals from '../../hooks/useModals';
 import PageTitle from '../Common/PageTitle/PageTitle';
 import MyProfileImage from './MyProfileImage';
