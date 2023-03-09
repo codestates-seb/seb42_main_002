@@ -60,6 +60,8 @@ button {
   --button-secondary-color: #8c8783;
   --text-primary-color: #505050;
   --text-secondary-color: #969696;
+  --title-primary-color: #716152;
+  --title-secondary-color: #8c8783;
   --light-color: #e8e8e8;
   --active-color: #c6a47f;
   --default-color: #f0f0f0;
@@ -67,6 +69,7 @@ button {
   --success-color: #2f9381;
   --border-color: #505050;
   --alert-color: #be0000;
+  --white: #fff;
 
   /* shadow */
   --default-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
