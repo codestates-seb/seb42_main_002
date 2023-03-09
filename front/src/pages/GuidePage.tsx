@@ -3,10 +3,51 @@ import { FiMail } from 'react-icons/fi';
 import Button from '../components/Common/Button/Button';
 import ButtonGroup from '../components/Common/Button/ButtonGroup';
 import Label from '../components/Common/Label/Label';
+import AlertModal, {
+  AlertModalProps,
+} from '../components/Common/Modal/AlertModal';
+import FullPageModal, {
+  FullPageModalProps,
+} from '../components/Common/Modal/FullPageModal';
 import GuideBox from '../components/Guide/GuideBox';
 import GuideSection from '../components/Guide/GuideSection';
+import useModals from '../hooks/useModals';
 
 const GuidePage = () => {
+  const { openModal } = useModals();
+
+  const ConfirmAlertModal = ({ onSubmit, onClose }: AlertModalProps) => {
+    return (
+      <AlertModal onSubmit={onSubmit} onClose={onClose} title="타이틀">
+        Alert 모달
+      </AlertModal>
+    );
+  };
+
+  const CustomPullPageModal = ({ onSubmit, onClose }: FullPageModalProps) => {
+    return (
+      <FullPageModal onSubmit={onSubmit} onClose={onClose} labelSubmit="수정">
+        Pull Page 모달
+      </FullPageModal>
+    );
+  };
+
+  const onClickAlertModalHandler = () => {
+    openModal(ConfirmAlertModal, {
+      onSubmit: () => {
+        console.log('Alert 모달');
+      },
+    });
+  };
+
+  const onClickPullPageModalHandler = () => {
+    openModal(CustomPullPageModal, {
+      onSubmit: () => {
+        console.log('Pull Page 모달');
+      },
+    });
+  };
+
   return (
     <>
       <GuideSection>
@@ -45,13 +86,13 @@ const GuidePage = () => {
         <GuideBox>
           <h4>icon</h4>
           <ButtonGroup gap="sm">
-            <Button size="md" variant="primary" icon={<FiMail />}>
+            <Button size="sm" variant="primary" icon={<FiMail />}>
               Primary
             </Button>
-            <Button size="md" variant="secondary" icon={<FiMail />}>
+            <Button size="sm" variant="secondary" icon={<FiMail />}>
               Secondary
             </Button>
-            <Button size="md" variant="dashed" icon={<FiMail />}>
+            <Button size="sm" variant="dashed" icon={<FiMail />}>
               Dashed
             </Button>
           </ButtonGroup>
@@ -76,13 +117,13 @@ const GuidePage = () => {
         <GuideBox>
           <h4>full size</h4>
           <ButtonGroup gap="sm">
-            <Button size="lg" variant="primary" full>
+            <Button size="md" variant="primary" full>
               Primary
             </Button>
-            <Button size="lg" variant="secondary" full>
+            <Button size="md" variant="secondary" full>
               Secondary
             </Button>
-            <Button size="lg" variant="dashed" full>
+            <Button size="md" variant="dashed" full>
               Dashed
             </Button>
           </ButtonGroup>
@@ -90,29 +131,29 @@ const GuidePage = () => {
         <GuideBox>
           <h4>full size - nowrap</h4>
           <ButtonGroup gap="sm" wrap="nowrap">
-            <Button size="lg" variant="primary" full>
+            <Button size="md" variant="primary" full>
               Primary
             </Button>
-            <Button size="lg" variant="secondary" full>
+            <Button size="md" variant="secondary" full>
               Secondary
             </Button>
-            <Button size="lg" variant="dashed" full>
+            <Button size="md" variant="dashed" full>
               Dashed
             </Button>
           </ButtonGroup>
           <ButtonGroup gap="sm" wrap="nowrap">
-            <Button size="lg" variant="primary" full>
+            <Button size="md" variant="primary" full>
               Primary
             </Button>
-            <Button size="lg" variant="secondary" full>
+            <Button size="md" variant="secondary" full>
               Secondary
             </Button>
           </ButtonGroup>
           <ButtonGroup gap="sm" wrap="nowrap">
-            <Button size="lg" variant="primary" full>
+            <Button size="md" variant="primary" full>
               Primary
             </Button>
-            <Button size="lg" variant="secondary">
+            <Button size="md" variant="secondary">
               Secondary
             </Button>
           </ButtonGroup>
@@ -120,35 +161,35 @@ const GuidePage = () => {
         <GuideBox>
           <h4>gap size (sm / md / lg)</h4>
           <ButtonGroup gap="sm">
-            <Button size="lg" variant="primary">
+            <Button size="sm" variant="primary">
               Primary
             </Button>
-            <Button size="lg" variant="secondary">
+            <Button size="sm" variant="secondary">
               Secondary
             </Button>
-            <Button size="lg" variant="dashed">
+            <Button size="sm" variant="dashed">
               Dashed
             </Button>
           </ButtonGroup>
           <ButtonGroup gap="md">
-            <Button size="lg" variant="primary">
+            <Button size="sm" variant="primary">
               Primary
             </Button>
-            <Button size="lg" variant="secondary">
+            <Button size="sm" variant="secondary">
               Secondary
             </Button>
-            <Button size="lg" variant="dashed">
+            <Button size="sm" variant="dashed">
               Dashed
             </Button>
           </ButtonGroup>
           <ButtonGroup gap="lg">
-            <Button size="lg" variant="primary">
+            <Button size="sm" variant="primary">
               Primary
             </Button>
-            <Button size="lg" variant="secondary">
+            <Button size="sm" variant="secondary">
               Secondary
             </Button>
-            <Button size="lg" variant="dashed">
+            <Button size="sm" variant="dashed">
               Dashed
             </Button>
           </ButtonGroup>
@@ -171,6 +212,27 @@ const GuidePage = () => {
             <Label>음악</Label>
             <Button size="sm" variant="dashed">
               + 태그 추가
+            </Button>
+          </ButtonGroup>
+        </GuideBox>
+      </GuideSection>
+      <GuideSection>
+        <h3>Modal</h3>
+        <GuideBox>
+          <ButtonGroup gap="sm">
+            <Button
+              size="sm"
+              variant="dashed"
+              onClick={onClickAlertModalHandler}
+            >
+              Alert
+            </Button>
+            <Button
+              size="sm"
+              variant="dashed"
+              onClick={onClickPullPageModalHandler}
+            >
+              Full Page
             </Button>
           </ButtonGroup>
         </GuideBox>

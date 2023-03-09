@@ -20,7 +20,7 @@ const AuthContext = createContext<AuthContextProps>({
 });
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [user, setUser] = useLocalStorage('user', null);
+  const [user, setUser] = useLocalStorage('user', '');
   const navigate = useNavigate();
 
   const login = (data: SignInData) => {
