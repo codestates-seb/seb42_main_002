@@ -5,7 +5,7 @@ import styles from './UserCard.module.scss';
 
 type UserCardProps = {
   name: string;
-  id: string | number; // 아직 미정
+  memberId: string | number; // 아직 미정
   location: string; // 2자리 국가코드
   profile: string | null;
   children?: React.ReactNode;
@@ -14,7 +14,7 @@ type UserCardProps = {
 
 const UserCard = ({
   name,
-  id,
+  memberId,
   location,
   profile,
   children,
