@@ -1,5 +1,7 @@
 package com.mainproject.back.init;
 
+import com.mainproject.back.language.entity.Language;
+import com.mainproject.back.language.repository.LanguageRepository;
 import com.mainproject.back.tag.entity.Tag;
 import com.mainproject.back.tag.repository.TagRepository;
 import java.util.List;
@@ -10,13 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-public class TagInit {
+public class InitDB {
 
   private final Init init;
 
   @PostConstruct
   public void initTag() {
     init.initTag();
+    init.initLanguage();
   }
 
 }
@@ -26,6 +29,7 @@ public class TagInit {
 class Init {
 
   private final TagRepository tagRepository;
+  private final LanguageRepository languageRepository;
 
   @Transactional
   public void initTag() {
@@ -67,6 +71,18 @@ class Init {
         Tag.builder().name("스포츠").build()
     );
     tagRepository.saveAll(tags);
+  }
+
+  @Transactional
+  public void initLanguage(){
+    List<Language> languages = List.of(
+        Language.builder().nation("KR").build(),
+        Language.builder().nation("CN").build(),
+        Language.builder().nation("EN").build(),
+        Language.builder().nation("JP").build(),
+        Language.builder().nation("ES").build()
+    );
+    languageRepository.saveAll(languages);
   }
 
 }
