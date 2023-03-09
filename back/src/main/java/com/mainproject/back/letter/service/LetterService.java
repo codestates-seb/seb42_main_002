@@ -56,7 +56,7 @@ public class LetterService {
     Optional<Letter> letterOptional = letterRepository.findById(letterId);
     Letter letter = letterOptional.orElseThrow(
         () -> new BusinessLogicException(LetterExceptionCode.LETTER_NOT_FOUND));
-    if (!letter.getIsRead()) {
+    if (!letter.getIsRead() && letter.getAvailableAt().isBefore(LocalDateTime.now())) {
       letter.setIsRead(true);
     }
     Letter savedLetter = letterRepository.save(letter);

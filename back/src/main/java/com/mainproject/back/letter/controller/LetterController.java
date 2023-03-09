@@ -42,9 +42,8 @@ public class LetterController {
     letterPostDto.setSenderId(1L);
     Letter letter = letterMapper.LetterPostDtoToLetter(letterPostDto);
     Letter savedLetter = letterService.createLetter(letter);
-    LetterResponseDto letterResponseDto = letterMapper.LetterToLetterResponseDto(savedLetter);
     URI uri = UriCreator.createUri("/letter", savedLetter.getLetterId());
-    return ResponseEntity.created(uri).body(letterResponseDto);
+    return ResponseEntity.created(uri).build();
   }
 
   @GetMapping("/{letter-id}")
