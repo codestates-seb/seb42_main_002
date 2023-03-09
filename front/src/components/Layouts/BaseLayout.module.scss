@@ -1,0 +1,21 @@
+.baselayout {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  overflow-y: auto;
+  min-height: 100vh;
+  background-color: #eee;
+  background-image: url('../../assets/img/base_texture.svg');
+  background-repeat: repeat;
+  &.is_auth {
+    grid-template-rows: calc(100vh - 4rem) 4rem;
+  }
+
+  article {
+    padding: 1.5rem 1rem;
+    overflow-y: scroll;
+    border-top: 13px solid;
+    border-image: url('../../assets/img/envelope_line.svg') 26;
+    border-image-repeat: repeat;
+  }
+}
