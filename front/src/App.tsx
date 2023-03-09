@@ -6,6 +6,7 @@ import BaseLayout from './components/Layouts/BaseLayout';
 import MainPage from './pages/MainPage';
 import MyProfilePage from './pages/MyProfilePage';
 import LetterListPage from './pages/LetterListPage';
+import GuidePage from './pages/GuidePage';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
               <Route path="/followings" element={<MainPage />} />
               <Route path="/voca" element={<MainPage />} />
               <Route path="/my-profile" element={<MyProfilePage />} />
+              <Route path="/guide" element={<GuidePage />} />
             </Route>
           </Routes>
         </AuthProvider>

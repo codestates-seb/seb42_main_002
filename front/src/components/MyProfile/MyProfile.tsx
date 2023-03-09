@@ -1,8 +1,11 @@
 import classNames from 'classnames';
 import { useState } from 'react';
 import { useAuth } from '../../context/auth-context';
+import PageTitle from '../Common/PageTitle/PageTitle';
 import styles from './MyProfile.module.scss';
 import MyProfileImage from './MyProfileImage';
+import { ReactComponent as PrevButtonIcon } from '../../assets/img/prev_button.svg';
+import { Link } from 'react-router-dom';
 
 const MyProfile = () => {
   const { logout } = useAuth();
@@ -20,10 +23,11 @@ const MyProfile = () => {
   return (
     <div className={styles.container}>
       {/** TODO: 타이틀 공통 컴포넌트로 교체  */}
-      <header className={styles.title}>
-        <h2>MyProfile</h2>
-        <p>프로필</p>
-      </header>
+      <PageTitle
+        title="Profile"
+        translate="프로필"
+        prevIcon={<PrevButtonIcon />}
+      />
       {/** TODO:  공통 컴포넌트 작업하기   */}
       <div className={styles.contents}>
         <section className={styles.profile_base_info}>
@@ -131,6 +135,7 @@ const MyProfile = () => {
       </div>
       <div>
         <button onClick={logout}>로그아웃</button>
+        <Link to="/guide">스타일 가이드</Link>
       </div>
     </div>
   );
