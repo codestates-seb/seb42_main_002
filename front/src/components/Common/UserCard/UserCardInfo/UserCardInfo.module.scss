@@ -1,5 +1,5 @@
-$main-font-size: 0.875rem;
-$sub-font-size: 0.625rem;
+$main-font-size: var(--font-size-xs);
+$sub-font-size: var(--font-size-xxs);
 
 .user_info {
   display: flex;
