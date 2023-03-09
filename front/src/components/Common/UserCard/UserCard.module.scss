@@ -1,0 +1,17 @@
+.usercard {
+  display: flex;
+  box-shadow: var(--default-box-shadow);
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: var(--white);
+}
+.profile_img {
+  margin-right: 1.5rem;
+}
+.profile_info {
+  flex: 1 1 0;
+}
+.children_wrapper {
+  display: flex;
+}

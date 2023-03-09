@@ -1,0 +1,43 @@
+$border-color: var(--border-color);
+$nation-left-position: 0.35rem;
+
+.round_profile {
+  position: relative;
+  margin-left: $nation-left-position;
+}
+
+.location {
+  width: 1.25rem;
+  height: 0.75rem;
+  position: absolute;
+  top: 0;
+  left: -$nation-left-position;
+  border: 2px solid $border-color;
+  border-radius: 2px;
+  background-color: #fff;
+  background-image: url('../../../assets/img/spr_flags.svg');
+  background-size: 20rem 12.5rem;
+  background-position: -3.75rem 0;
+  background-repeat: no-repeat;
+}
+
+.profile {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid $border-color;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  & img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+  & .default_profile {
+    object-fit: contain;
+    width: 80%;
+    height: 80%;
+  }
+}
