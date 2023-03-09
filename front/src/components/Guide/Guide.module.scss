@@ -11,9 +11,18 @@
     margin-bottom: 1rem;
   }
 
-  div {
-    + div {
+  .box {
+    background-color: white;
+    border-radius: var(--border-radius-md);
+    padding: 1.5em;
+    + .box {
       margin-top: 1rem;
+    }
+
+    div {
+      + div {
+        margin-top: 1rem;
+      }
     }
   }
 
