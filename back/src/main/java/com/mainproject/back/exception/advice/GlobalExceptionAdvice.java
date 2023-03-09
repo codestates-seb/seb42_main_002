@@ -46,8 +46,7 @@ public class GlobalExceptionAdvice {
   public ErrorResponse handleHttpMessageNotReadableException(
       HttpMessageNotReadableException e) {
 
-    final ErrorResponse response = ErrorResponse.of(HttpStatus.BAD_REQUEST,
-        "Required request body is missing");
+    final ErrorResponse response = ErrorResponse.of(HttpStatus.BAD_REQUEST, e.getMessage());
 
     return response;
   }

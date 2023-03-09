@@ -12,7 +12,7 @@ import lombok.Setter;
 public class LetterPostDto {
 
   @Setter
-  private long memberId;
+  private long senderId;
   @Setter
   private long receiverId;
   private String title;
