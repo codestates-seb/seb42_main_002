@@ -65,6 +65,9 @@ button {
   --default-color: #f0f0f0;
   --danger-color: #932f42;
   --success-color: #2f9381;
+  --border-radius-sm: 0.25rem;
+  --border-radius-md: 0.5rem;
+  --border-radius-lg: 1rem;
 }
 
 .blind {
