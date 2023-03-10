@@ -7,6 +7,7 @@ import com.mainproject.back.vocabulary.dto.VocabDto.Response;
 import com.mainproject.back.vocabulary.entity.Vocabulary;
 import com.mainproject.back.vocabulary.mapper.VocabMapper;
 import com.mainproject.back.vocabulary.service.VocabService;
+import java.security.Principal;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -42,8 +43,8 @@ public class VocabController {
 
 
   @PostMapping
-  public ResponseEntity postVocab(@RequestBody VocabDto.Post requestBody) {
-    Member member = memberService.findMember(requestBody.getMemberId());
+  public ResponseEntity postVocab(@RequestBody VocabDto.Post requestBody, Principal principal) {
+    Member member = memberService.findMemberByEmail(principal.getName());
 
     Vocabulary vocab = mapper.vocabPostToVocab(requestBody);
     vocab.setMember(member);
@@ -56,10 +57,11 @@ public class VocabController {
 
   @PatchMapping("/{vocab-id}")
   public ResponseEntity patchVocab(@PathVariable("vocab-id") long vocabId,
-      @RequestBody VocabDto.Patch requestBody) {
+      @RequestBody VocabDto.Patch requestBody, Principal principal) {
+    Member member = memberService.findMemberByEmail(principal.getName());
+    requestBody.setVocabId(vocabId);
     Vocabulary vocab = mapper.vocabPatchToVocab(requestBody);
-    vocab.setVocabId(vocabId);
-    Vocabulary updatedVocab = vocabService.updateVocab(vocab);
+    Vocabulary updatedVocab = vocabService.updateVocab(member.getMemberId(), vocab);
 
     VocabDto.Response response = mapper.vocabToVocabResponse(updatedVocab);
 
@@ -75,9 +77,9 @@ public class VocabController {
   }
 
   @GetMapping
-  public ResponseEntity getVocabs( @RequestParam int page) {
-    long memberId = 1L; // 임시
-    Page<Vocabulary> pageVocabs = vocabService.findVocabs(memberId, page);
+  public ResponseEntity getVocabs( @RequestParam int page, Principal principal) {
+    Member member = memberService.findMemberByEmail(principal.getName());
+    Page<Vocabulary> pageVocabs = vocabService.findVocabs(member.getMemberId(), page);
     List<Vocabulary> vocabs = pageVocabs.getContent();
     List<Response> responses = mapper.vocabsToVocabResponses(vocabs);
 

@@ -28,6 +28,8 @@ public class VocabDto {
   @Getter
   public static class Patch {
 
+    @Setter
+    private long vocabId;
     private String word;
     private String meaning;
   }
