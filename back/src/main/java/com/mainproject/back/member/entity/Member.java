@@ -47,7 +47,7 @@ public class Member extends Auditable {
   @Column(nullable = false, updatable = false)
   private String email;
   @JsonProperty(access = Access.WRITE_ONLY)
-  @Column(nullable = false, length = 30)
+  @Column(nullable = false)
   private String password;
   @Column(nullable = false)
   private String birthday;

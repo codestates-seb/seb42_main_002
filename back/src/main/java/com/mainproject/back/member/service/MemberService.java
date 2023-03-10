@@ -1,19 +1,22 @@
 package com.mainproject.back.member.service;
 
 
+import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.member.dto.MemberDto;
 import com.mainproject.back.member.dto.MemberTagDto;
 import com.mainproject.back.member.dto.MemberTagPatchDto;
 import com.mainproject.back.member.entity.Member;
 
+import com.mainproject.back.member.exception.MemberExceptionCode;
 import com.mainproject.back.member.repository.MemberRepository;
 import com.mainproject.back.member.repository.MemberTagRepository;
 import com.mainproject.back.member.tag.MemberTag;
+import com.mainproject.back.security.utils.AuthorityUtils;
 import com.mainproject.back.tag.repository.TagRepository;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -27,10 +30,19 @@ public class MemberService {
   private final MemberRepository memberRepository;
   private final MemberTagRepository memberTagRepository;
   private final TagRepository tagRepository;
+  private final PasswordEncoder passwordEncoder;
+  private final AuthorityUtils authorityUtils;
 
 
   public Member createMember(Member member) {
     verifyExistsEmail(member.getEmail());
+
+    String encryptedPassword = passwordEncoder.encode(member.getPassword());
+    member.setPassword(encryptedPassword);
+
+    List<String> roles = authorityUtils.createRoles(member.getEmail());
+    member.setRoles(roles);
+
     return memberRepository.save(member);
   }
 
@@ -97,7 +109,7 @@ public class MemberService {
         memberRepository.findById(memberId);
     Member findMember =
         optionalMember.orElseThrow(() ->
-            new RuntimeException("Not found "));
+            new BusinessLogicException(MemberExceptionCode.MEMBER_NOT_FOUND));
     return findMember;
   }
 
@@ -108,4 +120,11 @@ public class MemberService {
     }
   }
 
+  public Member findMemberByEmail(String email) {
+    Optional<Member> optionalMember = memberRepository.findByEmail(email);
+
+    Member findMember = optionalMember.orElseThrow(()
+        ->new BusinessLogicException(MemberExceptionCode.MEMBER_NOT_FOUND));
+    return findMember;
+  }
 }
