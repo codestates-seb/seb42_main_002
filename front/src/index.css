@@ -93,3 +93,21 @@ button {
   height: 1px;
   margin: -1px;
 }
+
+/* transition animation */
+.slideInUp-enter {
+  transform: translateY(100%);
+}
+.slideInUp-enter-active {
+  transform: translateY(0%);
+  transition: transform 0.3s ease-out;
+}
+
+.slideInUp-exit {
+  transform: translateY(0%);
+}
+
+.slideInUp-exit {
+  transform: translateY(100%);
+  transition: transform 0.3s ease-out;
+}
