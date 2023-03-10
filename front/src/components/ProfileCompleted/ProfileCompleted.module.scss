@@ -1,0 +1,47 @@
+.profile_completed_container{
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items: center;
+    height: 100%;
+}
+.stamp_icon{
+    position: absolute;
+    left: 160px;
+    top:-140px;
+}
+.fly_owl_container{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 50px;
+}
+.cloud_1{
+    position: absolute;
+    left: -40px;
+    top:-20px;
+}
+.cloud_2{
+    position: absolute;
+    left: 180px;
+    top:90px;
+}
+.text_container{
+    text-align: center;
+    margin-bottom: 50px;
+    .text_Head{
+        font-size: 20px;
+        color: var(--title-secondary-color);
+        margin-bottom: 20px;
+    }
+    .text_body{
+        font-size: 12px;
+        color: var(--text-secondary-color);
+        margin-bottom: 4px;
+    }
+}
+.start_btn{
+    width: 300px;
+}
