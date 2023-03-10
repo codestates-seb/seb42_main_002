@@ -1,5 +1,7 @@
-package com.mainproject.back.follow.entity;
+package com.mainproject.back.member.language;
 
+
+import com.mainproject.back.language.entity.Language;
 import com.mainproject.back.member.entity.Member;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,20 +14,21 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-public class Follow {
+public class MemberLanguage {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int followId;
+  private int memberLanguageId;
 
   @ManyToOne
-  @JoinColumn(name = "FOLLOWER_ID")
-  private Member follower;
+  @JoinColumn(name = "MEMBER_ID")
+  private Member member;
 
   @ManyToOne
-  @JoinColumn(name = "FOLLOWING_ID")
-  private Member following;
+  @JoinColumn(name = "LANGUAGE_ID")
+  private Language language;
 
 }

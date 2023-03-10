@@ -1,32 +1,24 @@
 package com.mainproject.back.letter.entity;
 
-import com.mainproject.back.audit.Auditable;
-import com.mainproject.back.member.entity.Member;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import lombok.Setter;
-import lombok.ToString;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
-public class Letter extends Auditable {
+@Setter
 
+public class Letter {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long letterId;
+  private String letterId;
 
   @Column(nullable = false)
   private String title;
@@ -35,42 +27,9 @@ public class Letter extends Auditable {
   @Lob
   private String body;
 
-  @Column
-  @Setter
-  @Default
-  private Boolean isRead = false;
-
-  @Column
-  @ElementCollection(fetch = FetchType.LAZY)
-  @Default
-  private List<String> pic = new ArrayList<>();
-
   @Column(nullable = false)
-  @Setter
-  private LocalDateTime availableAt;
+  private String available_at;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "sender_id")
-  @Setter
-  private Member sender;
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "receiver_id")
-  @Setter
-  private Member receiver;
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(sender, receiver);
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj instanceof Letter) {
-      Letter letter = (Letter) obj;
-      return letter.getSender().getMemberId() == sender.getMemberId()
-          && letter.getReceiver().getMemberId() == receiver.getMemberId();
-    }
-    return false;
-  }
+//  @OneToMany(mappedBy = "member")
+//  private Member member;
 }
