@@ -1,6 +1,7 @@
 package com.mainproject.back.vocabulary.service;
 
 import com.mainproject.back.exception.BusinessLogicException;
+import com.mainproject.back.member.exception.MemberExceptionCode;
 import com.mainproject.back.vocabulary.entity.Vocabulary;
 import com.mainproject.back.vocabulary.exception.VocabExceptionCode;
 import com.mainproject.back.vocabulary.repository.VocabRepository;
@@ -25,8 +26,11 @@ public class VocabService {
     return savedVocab;
   }
 
-  public Vocabulary updateVocab(Vocabulary vocab) {
+  public Vocabulary updateVocab(long memberId, Vocabulary vocab) {
     Vocabulary findVocab = findVerifiedVocab(vocab.getVocabId());
+
+    if(findVocab.getMember().getMemberId() != memberId)
+        throw new BusinessLogicException(MemberExceptionCode.MEMBER_NOT_ALLOWED);
 
     Optional.ofNullable(vocab.getWord())
         .ifPresent(findVocab::setWord);
