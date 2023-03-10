@@ -1,6 +1,5 @@
 package com.mainproject.back.tag.entity;
 
-import com.mainproject.back.member.tag.MemberTag;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -15,7 +14,6 @@ import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

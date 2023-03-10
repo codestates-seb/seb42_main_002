@@ -1,7 +1,8 @@
-package com.mainproject.back.member.tag;
+package com.mainproject.back.tag.entity;
 
+import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.member.entity.Member;
-import com.mainproject.back.tag.entity.Tag;
+import com.mainproject.back.tag.exception.TagExceptionCode;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -14,7 +15,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Builder
@@ -31,21 +31,25 @@ public class MemberTag {
   @JoinColumn(name = "member_id")
   private Member member;
 
-  @Setter
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "tag_id")
   private Tag tag;
 
   public void addMember(Member member) {
     this.member = member;
-    if (!this.member.getMemberTags().contains(this)) {
+    if (this.member.getMemberTags().contains(this)) {
+      throw new BusinessLogicException(
+          TagExceptionCode.TAG_EXISTS);
+    } else {
       this.member.getMemberTags().add(this);
     }
   }
 
   public void addTag(Tag tag) {
     this.tag = tag;
-    if (!this.tag.getMemberTags().contains(this)) {
+    if (this.tag.getMemberTags().contains(this)) {
+      throw new BusinessLogicException(TagExceptionCode.TAG_EXISTS);
+    } else {
       this.tag.getMemberTags().add(this);
     }
   }
