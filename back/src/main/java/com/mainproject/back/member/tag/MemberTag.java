@@ -1,6 +1,7 @@
-package com.mainproject.back.follow.entity;
+package com.mainproject.back.member.tag;
 
 import com.mainproject.back.member.entity.Member;
+import com.mainproject.back.tag.entity.Tag;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,20 +13,21 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-public class Follow {
+public class MemberTag {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int followId;
+  private int memberTagId;
 
   @ManyToOne
-  @JoinColumn(name = "FOLLOWER_ID")
-  private Member follower;
+  @JoinColumn(name = "MEMBER_ID")
+  private Member member;
 
   @ManyToOne
-  @JoinColumn(name = "FOLLOWING_ID")
-  private Member following;
+  @JoinColumn(name = "TAG_ID")
+  private Tag tag;
 
 }

@@ -1,4 +1,4 @@
-package com.mainproject.back.follow.entity;
+package com.mainproject.back.ban.entity;
 
 import com.mainproject.back.member.entity.Member;
 import javax.persistence.Entity;
@@ -12,20 +12,21 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-public class Follow {
+public class Ban {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int followId;
+  private int banId;
 
   @ManyToOne
-  @JoinColumn(name = "FOLLOWER_ID")
-  private Member follower;
+  @JoinColumn(name = "MEMBER_ID")
+  private Member memberId;
 
   @ManyToOne
-  @JoinColumn(name = "FOLLOWING_ID")
-  private Member following;
+  @JoinColumn(name = "TARGET_ID")
+  private Member targetId;
 
 }
