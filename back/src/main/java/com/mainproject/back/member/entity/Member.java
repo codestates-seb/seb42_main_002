@@ -101,3 +101,5 @@ public class Member extends Auditable {
     private final String choseGender;
   }
 }
+
+

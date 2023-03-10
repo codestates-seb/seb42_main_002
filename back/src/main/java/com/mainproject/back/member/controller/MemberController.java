@@ -40,6 +40,7 @@ public class MemberController {
 
   @PostMapping
   public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post requestBody) {
+
     requestBody.setMemberStatus(MemberStatus.MEMBER_ACTIVE);
     Member member = mapper.memberPostToMember(requestBody);
 
