@@ -1,0 +1,38 @@
+.profile_img {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 8rem;
+  figure {
+    position: relative;
+    width: 100%;
+    height: 8rem;
+    background-color: var(--light-color);
+    border: 2px solid var(--button-primary-color);
+    border-radius: var(--border-radius-sm);
+    img {
+      max-width: 100%;
+      min-height: 100%;
+    }
+    .icon_flags {
+      position: absolute;
+      width: 3.5rem;
+      height: 2.25rem;
+      background-color: #000;
+      border-radius: var(--border-radius-sm);
+      top: -1rem;
+      left: -1rem;
+    }
+  }
+  label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.5rem;
+    width: 100%;
+    min-height: 2rem;
+    background-color: var(--button-primary-color);
+    color: white;
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-xs);
+  }
+}
