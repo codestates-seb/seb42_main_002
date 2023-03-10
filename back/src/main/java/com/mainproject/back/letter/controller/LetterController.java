@@ -8,8 +8,11 @@ import com.mainproject.back.letter.entity.Letter;
 import com.mainproject.back.letter.mapper.LetterMapper;
 import com.mainproject.back.letter.service.LetterService;
 import com.mainproject.back.member.dto.MemberLetterDto;
+import com.mainproject.back.member.entity.Member;
+import com.mainproject.back.member.service.MemberService;
 import com.mainproject.back.util.UriCreator;
 import java.net.URI;
+import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -31,15 +34,18 @@ public class LetterController {
 
   private final LetterService letterService;
   private final LetterMapper letterMapper;
+  private final MemberService memberService;
 
   @PostMapping("/{receiver-id}")
   public ResponseEntity postLetter(@PathVariable("receiver-id") long receiverId, @RequestBody
-  LetterPostDto letterPostDto) {
+      LetterPostDto letterPostDto, Principal principal) {
     log.info("## 편지 보내기: {}", receiverId);
     log.info("## letter post dto: {}", letterPostDto.getTitle());
     letterPostDto.setReceiverId(receiverId);
-    // TODO get member id from principal
-    letterPostDto.setSenderId(1L);
+
+    Member member = memberService.findMemberByEmail(principal.getName());
+    letterPostDto.setSenderId(member.getMemberId());
+
     Letter letter = letterMapper.LetterPostDtoToLetter(letterPostDto);
     Letter savedLetter = letterService.createLetter(letter);
     URI uri = UriCreator.createUri("/letter", savedLetter.getLetterId());
@@ -65,7 +71,8 @@ public class LetterController {
   }
 
   @GetMapping()
-  public ResponseEntity getMembersByLetter(@PageableDefault(sort = "lastLetter.createdAt") Pageable pageable) {
+  public ResponseEntity getMembersByLetter(
+      @PageableDefault(sort = "lastLetter.createdAt") Pageable pageable) {
     log.info("## 나와 편지를 주고 받은 멤버 리스트 조회");
     Page<MemberLetterDto> memberLetterDtoPage = letterService.findMembersByLetter(pageable);
     return ResponseEntity.ok().body(memberLetterDtoPage);

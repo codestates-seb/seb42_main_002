@@ -3,10 +3,14 @@ package com.mainproject.back.member.service;
 
 import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.member.entity.Member;
+
 import com.mainproject.back.member.exception.MemberExceptionCode;
 import com.mainproject.back.member.repository.MemberRepository;
+import com.mainproject.back.security.utils.AuthorityUtils;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,10 +23,20 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
   private final MemberRepository memberRepository;
+  private final PasswordEncoder passwordEncoder;
+  private final AuthorityUtils authorityUtils;
+
 
   @Transactional
   public Member createMember(Member member) {
     verifyExistsEmail(member.getEmail());
+
+    String encryptedPassword = passwordEncoder.encode(member.getPassword());
+    member.setPassword(encryptedPassword);
+
+    List<String> roles = authorityUtils.createRoles(member.getEmail());
+    member.setRoles(roles);
+
     return memberRepository.save(member);
   }
 
@@ -109,8 +123,9 @@ public class MemberService {
     Optional<Member> optionalMember =
         memberRepository.findById(memberId);
     Member findMember =
-        optionalMember.orElseThrow(
-            () -> new BusinessLogicException(MemberExceptionCode.MEMBER_NOT_FOUND));
+        optionalMember.orElseThrow(() ->
+            new BusinessLogicException(MemberExceptionCode.MEMBER_NOT_FOUND));
+
     return findMember;
   }
 
@@ -121,4 +136,11 @@ public class MemberService {
     }
   }
 
+  public Member findMemberByEmail(String email) {
+    Optional<Member> optionalMember = memberRepository.findByEmail(email);
+
+    Member findMember = optionalMember.orElseThrow(()
+        ->new BusinessLogicException(MemberExceptionCode.MEMBER_NOT_FOUND));
+    return findMember;
+  }
 }

@@ -48,8 +48,9 @@ public class Member extends Auditable {
   private String name;
   @Column(nullable = false, updatable = false)
   private String email;
+  @Setter
   @JsonProperty(access = Access.WRITE_ONLY)
-  @Column(nullable = false, length = 30)
+  @Column(nullable = false)
   private String password;
   @Column(nullable = false)
   private String birthday;
@@ -120,6 +121,7 @@ public class Member extends Auditable {
 
   @ElementCollection(fetch = FetchType.LAZY)
   @Default
+  @Setter
   private List<String> roles = new ArrayList<>();
 
   @RequiredArgsConstructor

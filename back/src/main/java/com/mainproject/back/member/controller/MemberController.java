@@ -7,6 +7,7 @@ import com.mainproject.back.member.mapper.MemberMapper;
 import com.mainproject.back.member.service.MemberConvertService;
 import com.mainproject.back.member.service.MemberService;
 import java.net.URI;
+import java.security.Principal;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -48,11 +49,12 @@ public class MemberController {
     return ResponseEntity.created(location).build();
   }
 
-  @PatchMapping("/{member-id}")
+  @PatchMapping
   public ResponseEntity patchMember(
-      @PathVariable("member-id") @Positive long memberId,
+      Principal principal,
       @Valid @RequestBody MemberDto.Patch requestBody) {
-    requestBody.setMemberId(memberId);
+    Member currentMember = memberService.findMemberByEmail(principal.getName());
+    requestBody.setMemberId(currentMember.getMemberId());
     Member member = memberConvertService.memberPatchDtoToMember(requestBody);
     log.info("## 사용자 정보 수정: {}", member.toString());
     Member updateMember = memberService.updateMember(member);
