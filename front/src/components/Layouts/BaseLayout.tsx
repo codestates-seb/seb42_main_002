@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import classNames from 'classnames';
-import { useAuth } from '../../context/auth-context';
+import { useAuth } from '../../context/AuthContext';
 import BottomNav from './Nav/BottomNavBar';
 import styles from './BaseLayout.module.scss';
 

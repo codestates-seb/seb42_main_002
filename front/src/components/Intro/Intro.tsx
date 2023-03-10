@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAuth } from '../../context/auth-context';
+import { useAuth } from '../../context/AuthContext';
 import { signInUser } from '../../dummy/users';
 
 const Intro = () => {

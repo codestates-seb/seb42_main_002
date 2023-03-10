@@ -1,13 +1,47 @@
-import classNames from 'classnames';
 import { useState } from 'react';
-import { useAuth } from '../../context/auth-context';
-import styles from './MyProfile.module.scss';
+import { Link } from 'react-router-dom';
+import classNames from 'classnames';
+import { useAuth } from '../../context/AuthContext';
+import useModals from '../../hooks/useModals';
+import PageTitle from '../Common/PageTitle/PageTitle';
 import MyProfileImage from './MyProfileImage';
+import Button from '../Common/Button/Button';
+import FullPageModal, {
+  FullPageModalProps,
+} from '../Common/Modal/FullPageModal';
+
+import { ReactComponent as PrevButtonIcon } from '../../assets/img/prev_button.svg';
+import styles from './MyProfile.module.scss';
+
+const LocationEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
+  return (
+    <FullPageModal onSubmit={onSubmit} onClose={onClose} labelSubmit="수정">
+      국가 수정 모달
+    </FullPageModal>
+  );
+};
+
+const LanguageEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
+  return (
+    <FullPageModal onSubmit={onSubmit} onClose={onClose} labelSubmit="수정">
+      언어 추가 모달
+    </FullPageModal>
+  );
+};
+
+const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
+  return (
+    <FullPageModal onSubmit={onSubmit} onClose={onClose} labelSubmit="수정">
+      태그 수정 모달
+    </FullPageModal>
+  );
+};
 
 const MyProfile = () => {
   const { logout } = useAuth();
   const [isEditDisplayName, setIsEditDisplayName] = useState(false);
   const [isEdiitAboutMe, setIsEditAboutMe] = useState(false);
+  const { openModal } = useModals();
 
   const clickChangeDisplayNameHandler = () => {
     setIsEditDisplayName((prevState) => !prevState);
@@ -17,17 +51,42 @@ const MyProfile = () => {
     setIsEditAboutMe((prevState) => !prevState);
   };
 
+  const onClickLocationModalHandler = () => {
+    openModal(LocationEditModal, {
+      onSubmit: () => {
+        console.log('국가 수정');
+      },
+    });
+  };
+
+  const onClickLangugeModalHandler = () => {
+    openModal(LanguageEditModal, {
+      onSubmit: () => {
+        console.log('언어수정');
+      },
+    });
+  };
+
+  const onClickTagModalHandler = () => {
+    openModal(TagEditModal, {
+      onSubmit: () => {
+        console.log('태그수정');
+      },
+    });
+  };
+
   return (
     <div className={styles.container}>
       {/** TODO: 타이틀 공통 컴포넌트로 교체  */}
-      <header className={styles.title}>
-        <h2>MyProfile</h2>
-        <p>프로필</p>
-      </header>
+      <PageTitle
+        title="Profile"
+        translate="프로필"
+        prevIcon={<PrevButtonIcon />}
+      />
       {/** TODO:  공통 컴포넌트 작업하기   */}
       <div className={styles.contents}>
         <section className={styles.profile_base_info}>
-          <MyProfileImage />
+          <MyProfileImage onChangeLocation={onClickLocationModalHandler} />
           <div className={styles.profile_info}>
             <div className={styles.input_container}>
               <label htmlFor="displayName">별명</label>
@@ -116,7 +175,13 @@ const MyProfile = () => {
             <div className={styles.tag_list}>
               <span className={styles.tags}>일본어 Lv.3</span>
               <span className={styles.tags}>영어 Lv.1</span>
-              <button>+ 언어추가</button>
+              <Button
+                size="sm"
+                variant="dashed"
+                onClick={onClickLangugeModalHandler}
+              >
+                + 언어추가
+              </Button>
             </div>
           </div>
           <div className={styles.input_container}>
@@ -124,13 +189,20 @@ const MyProfile = () => {
             <div className={styles.tag_list}>
               <span className={styles.tags}>음악</span>
               <span className={styles.tags}>KPOP</span>
-              <button>+ 언어추가</button>
+              <Button
+                size="sm"
+                variant="dashed"
+                onClick={onClickTagModalHandler}
+              >
+                + 태그추가
+              </Button>
             </div>
           </div>
         </section>
       </div>
       <div>
         <button onClick={logout}>로그아웃</button>
+        <Link to="/guide">스타일 가이드</Link>
       </div>
     </div>
   );
