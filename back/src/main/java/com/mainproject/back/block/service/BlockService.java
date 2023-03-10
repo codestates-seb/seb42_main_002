@@ -1,7 +1,7 @@
-package com.mainproject.back.block.entity;
+package com.mainproject.back.block.service;
 
-import com.mainproject.back.member.entity.Member;
-import com.mainproject.back.member.repository.MemberRepository;
+import com.mainproject.back.block.entity.Block;
+import com.mainproject.back.block.repository.BlockRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;

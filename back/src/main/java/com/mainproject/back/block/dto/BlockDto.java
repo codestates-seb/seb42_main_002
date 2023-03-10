@@ -1,4 +1,4 @@
-package com.mainproject.back.block.entity;
+package com.mainproject.back.block.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
