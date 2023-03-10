@@ -2,17 +2,15 @@ package com.mainproject.back.member.controller;
 
 import com.mainproject.back.helper.UriCreator;
 import com.mainproject.back.member.dto.MemberDto;
-import com.mainproject.back.member.dto.MemberDto.Patch;
-import com.mainproject.back.member.dto.MemberTagDto;
-import com.mainproject.back.member.dto.MemberTagPatchDto;
 import com.mainproject.back.member.entity.Member;
-import com.mainproject.back.member.entity.Member.MemberStatus;
 import com.mainproject.back.member.mapper.MemberMapper;
+import com.mainproject.back.member.service.MemberConvertService;
 import com.mainproject.back.member.service.MemberService;
-import com.mainproject.back.member.tag.MemberTag;
 import java.net.URI;
+import java.security.Principal;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/members")
+@RequiredArgsConstructor
 @Validated
 @Slf4j
 public class MemberController {
@@ -35,16 +34,12 @@ public class MemberController {
   private final static String MEMBER_DEFAULT_URL = "/members";
   private final MemberService memberService;
   private final MemberMapper mapper;
+  private final MemberConvertService memberConvertService;
 
-  public MemberController(MemberService memberService, MemberMapper mapper) {
-    this.memberService = memberService;
-    this.mapper = mapper;
-  }
 
   @PostMapping
   public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post requestBody) {
 
-    requestBody.setMemberStatus(MemberStatus.MEMBER_ACTIVE);
     Member member = mapper.memberPostToMember(requestBody);
 
     Member createdMember = memberService.createMember(member);
@@ -52,30 +47,18 @@ public class MemberController {
     URI location = UriCreator.createUri(MEMBER_DEFAULT_URL, createdMember.getMemberId());
 
     return ResponseEntity.created(location).build();
-
   }
 
-  @PatchMapping("/{member-id}")
+  @PatchMapping
   public ResponseEntity patchMember(
-      @PathVariable("member-id") @Positive long memberId,
+      Principal principal,
       @Valid @RequestBody MemberDto.Patch requestBody) {
-//    Patch.builder()
-//        .memberId(memberId)
-//        .build();
-
-    requestBody.setMemberId(memberId);
-    Member updateMember = memberService.updateMember(requestBody, mapper.memberPatchToMember(requestBody));
-
-    return new ResponseEntity<>(mapper.memberToMemberResponse(updateMember), HttpStatus.OK);
-  }
-  @PatchMapping("/{member-id}/tag")
-  public ResponseEntity patchMemberTag(
-      @PathVariable("member-id") @Positive long memberId,
-      @Valid @RequestBody MemberTagPatchDto requestBody) {
-
-    Member updateMember = memberService.updateMemberTag(memberId, requestBody);
-
-    return new ResponseEntity<>(mapper.memberToMemberResponse(updateMember), HttpStatus.OK);
+    Member currentMember = memberService.findMemberByEmail(principal.getName());
+    requestBody.setMemberId(currentMember.getMemberId());
+    Member member = memberConvertService.memberPatchDtoToMember(requestBody);
+    log.info("## 사용자 정보 수정: {}", member.toString());
+    Member updateMember = memberService.updateMember(member);
+    return ResponseEntity.ok().body(mapper.memberToMemberResponse(updateMember));
   }
 
   @GetMapping("/{member-id}")
