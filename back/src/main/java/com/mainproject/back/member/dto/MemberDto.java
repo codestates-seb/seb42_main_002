@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.language.MemberLanguage;
-import com.mainproject.back.member.tag.MemberTag;
 import java.util.List;
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -22,6 +22,7 @@ public class MemberDto {
   @AllArgsConstructor
   @JsonInclude(Include.NON_NULL)
   public static class Post {
+
     @NotNull(message = "공백 불가")
     private String name;
     @NotNull(message = "공백 불가")
@@ -42,6 +43,9 @@ public class MemberDto {
     @Nullable
     private String profile;
 
+    @Valid
+    private List<MemberTagDto> memberTags;
+
     @Nullable
     private Member.MemberStatus memberStatus;
   }
@@ -49,6 +53,7 @@ public class MemberDto {
   @Getter
   @AllArgsConstructor
   public static class Response {
+
     private int memberId;
     private String name;
     private String email;
@@ -57,24 +62,25 @@ public class MemberDto {
     private String birthday;
     private String profile;
     private List<MemberLanguage> language;
-    private List<MemberTag> tag;
+    private List<MemberTagResponseDto> tag;
     private Member.MemberStatus memberStatus;
 
     public String getMemberStatus() {
       return memberStatus.getStatus();
     }
   }
+
   @Getter
   @Builder
   @AllArgsConstructor
   public static class Patch {
+
+    @Setter
     private long memberId;
     private String name;
     private String introduce;
     private String profile;
     private List<MemberLanguage> language;
-    private List<MemberTag> tag;
-
     private Member.MemberStatus memberStatus;
   }
 }

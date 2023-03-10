@@ -18,7 +18,7 @@ import lombok.Setter;
 
 @Entity
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class MemberTag {
@@ -31,8 +31,22 @@ public class MemberTag {
   @JoinColumn(name = "member_id")
   private Member member;
 
+  @Setter
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "tag_id")
   private Tag tag;
 
+  public void addMember(Member member) {
+    this.member = member;
+    if (!this.member.getMemberTags().contains(this)) {
+      this.member.getMemberTags().add(this);
+    }
+  }
+
+  public void addTag(Tag tag) {
+    this.tag = tag;
+    if (!this.tag.getMemberTags().contains(this)) {
+      this.tag.getMemberTags().add(this);
+    }
+  }
 }

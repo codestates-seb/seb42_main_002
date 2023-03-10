@@ -10,10 +10,13 @@ import com.mainproject.back.member.tag.MemberTag;
 import com.mainproject.back.vocabulary.entity.Vocabulary;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,12 +29,14 @@ import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Setter
 public class Member extends Auditable {
 
   @Id
@@ -67,7 +72,8 @@ public class Member extends Auditable {
   @OneToMany(mappedBy = "following")
   private List<Follow> followings = new ArrayList<>();
 
-  @OneToMany(mappedBy = "member")
+  @Setter
+  @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
   private List<MemberTag> memberTags = new ArrayList<>();
 
   @OneToMany(mappedBy = "member")
@@ -86,10 +92,8 @@ public class Member extends Auditable {
     private final String status;
   }
 
-  public enum MemberRole {
-    ROLE_USER,
-    ROLE_ADMIN
-  }
+  @ElementCollection(fetch = FetchType.EAGER)
+  private List<String> roles = new ArrayList<>();
 
   @RequiredArgsConstructor
   public enum Gender {
