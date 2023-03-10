@@ -34,6 +34,7 @@ import lombok.ToString.Exclude;
 
 @Getter
 @Builder
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -119,7 +120,7 @@ public class Member extends Auditable {
     private final String status;
   }
 
-  @ElementCollection(fetch = FetchType.LAZY)
+  @ElementCollection(fetch = FetchType.EAGER)
   @Default
   @Setter
   private List<String> roles = new ArrayList<>();

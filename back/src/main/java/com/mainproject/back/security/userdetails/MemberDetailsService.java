@@ -40,16 +40,15 @@ public class MemberDetailsService implements UserDetailsService {
   public final class MyUserDetails extends Member implements UserDetails {
 
     MyUserDetails(Member member) {
-      Member.builder()
-          .memberId(getMemberId())
-          .name(member.getName())
-          .email(member.getEmail())
-          .password(member.getPassword())
-          .introduce(member.getIntroduce())
-          .birthday(member.getBirthday())
-          .gender(member.getGender())
-          .location(member.getLocation())
-          .roles(member.getRoles()).build();
+      setMemberId(member.getMemberId());
+      setName(member.getName());
+      setEmail(member.getEmail());
+      setPassword(member.getPassword());
+      setIntroduce(member.getIntroduce());
+      setBirthday(member.getBirthday());
+      setGender(member.getGender());
+      setLocation(member.getLocation());
+      setRoles(member.getRoles());
     }
 
     @Override
