@@ -1,4 +1,4 @@
-package com.mainproject.back.ban.entity;
+package com.mainproject.back.block.entity;
 
 import com.mainproject.back.audit.Auditable;
 import com.mainproject.back.member.entity.Member;
@@ -12,26 +12,31 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Ban extends Auditable {
+
+public class Block extends Auditable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long banId;
+  private Long blockId;
 
   @ManyToOne
+  @Setter
   @JoinColumn(name = "member_id")
   private Member member;
 
   @ManyToOne
+  @Setter
   @JoinColumn(name = "target_id")
   private Member target;
 
+
 }
+
