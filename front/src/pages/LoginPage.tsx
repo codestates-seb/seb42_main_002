@@ -1,18 +1,18 @@
-import { InputForm } from './SignUpPage';
-import styles from './SignUpPage.module.scss';
-import { MdOutlineAttachEmail } from 'react-icons/md';
-import { AiOutlineLock } from 'react-icons/ai';
+import PageTitle from '../components/Common/PageTitle/PageTitle';
+import LoginMain from '../components/Login/LoginMain';
+import { ReactComponent as BackIcon } from '../assets/BackIcon.svg';
+import SignUpFooter from '../components/SignUp/SignUpFooter';
 
 export default function LoginPage() {
   return (
-    <div className={styles.login_container}>
-      <InputForm htmlfor="email" labelInner="이메일">
-        <MdOutlineAttachEmail className={styles.icon} />
-      </InputForm>
-      <InputForm htmlfor="passWord" labelInner="비밀번호">
-        <AiOutlineLock className={styles.icon} />
-      </InputForm>
-      <button className={styles.signUp_Btn}>로그인</button>
-    </div>
+    <>
+      <PageTitle title="Login" translate="로그인" prevIcon={<BackIcon />} />
+      <LoginMain />
+      <SignUpFooter
+        isText="아직 가입하지 않았다면?"
+        linkText="회원가입 하러가기"
+        link="/#"
+      />
+    </>
   );
 }

@@ -1,108 +1,18 @@
-import styles from './SignUpPage.module.scss';
-import { MdOutlineAttachEmail } from 'react-icons/md';
-import { BsPencil } from 'react-icons/bs';
-import { BsCalendar2Date } from 'react-icons/bs';
-import { AiOutlineLock } from 'react-icons/ai';
-import { FaVenus } from 'react-icons/fa';
-import { FaMars } from 'react-icons/fa';
-import { FaTransgender } from 'react-icons/fa';
-import { useState } from 'react';
+import PageTitle from '../components/Common/PageTitle/PageTitle';
+import { ReactComponent as BackIcon } from '../assets/BackIcon.svg';
+import SignUpMain from '../components/SignUp/SignUpMain';
+import SignUpFooter from '../components/SignUp/SignUpFooter';
 
 export default function SignUpPage() {
-  const [isBtnClick, setIsBtnClick] = useState([false, false, false]);
-
-  const isBtnClickHandler = (el: number) => {
-    const isBtnClickData = [...isBtnClick].map((ele, index) => {
-      if (index === el) {
-        return true;
-      } else {
-        return false;
-      }
-    });
-    setIsBtnClick(isBtnClickData);
-  };
-
   return (
-    <div className={styles.container}>
-      <InputForm htmlfor="email" labelInner="이메일">
-        <MdOutlineAttachEmail className={styles.icon} />
-      </InputForm>
-      <InputForm htmlfor="alias" labelInner="별명">
-        <BsPencil className={styles.icon} />
-      </InputForm>
-      <p>성별</p>
-      <div className={styles.button_Container}>
-        <button
-          onClick={() => {
-            isBtnClickHandler(0);
-          }}
-          className={
-            isBtnClick[0] ? `${styles.clicked}` : `${styles.not_clicked}`
-          }
-        >
-          <FaMars className={styles.male_icon} /> 남자
-        </button>
-        <button
-          onClick={() => {
-            isBtnClickHandler(1);
-          }}
-          className={
-            isBtnClick[1] ? `${styles.clicked}` : `${styles.not_clicked}`
-          }
-        >
-          <FaVenus className={styles.female_icon} /> 여자
-        </button>
-        <button
-          onClick={() => {
-            isBtnClickHandler(2);
-          }}
-          className={
-            isBtnClick[2] ? `${styles.clicked}` : `${styles.not_clicked}`
-          }
-        >
-          <FaTransgender className={styles.ambiguous_icon} /> 기타
-        </button>
-      </div>
-      <InputForm
-        htmlfor="birthDate"
-        labelInner="생년월일"
-        placeholder="1989-12-24"
-      >
-        <BsCalendar2Date className={styles.icon} />
-      </InputForm>
-      <InputForm htmlfor="passWord" labelInner="비밀번호">
-        <AiOutlineLock className={styles.icon} />
-      </InputForm>
-      <InputForm htmlfor="passWordCheck" labelInner="비밀번호 확인">
-        <AiOutlineLock className={styles.icon} />
-      </InputForm>
-      <button className={styles.signUp_Btn}>회원가입</button>
-    </div>
-  );
-}
-
-export function InputForm({
-  children,
-  htmlfor,
-  labelInner,
-  placeholder,
-}: {
-  children: JSX.Element;
-  htmlfor: string;
-  labelInner: string;
-  placeholder?: string;
-}) {
-  return (
-    <div className={styles.input_container}>
-      <label htmlFor={htmlfor} className={styles.inputform_lable}>
-        {labelInner}
-      </label>
-      <input
-        id={htmlfor}
-        placeholder={placeholder}
-        className={styles.inputform_input}
+    <>
+      <PageTitle title="Sign Up" translate="회원가입" prevIcon={<BackIcon />} />
+      <SignUpMain />
+      <SignUpFooter
+        isText="이미 가입되어있다면?"
+        linkText="로그인 하러가기"
+        link="/#"
       />
-      {children}
-    </div>
+    </>
   );
 }
