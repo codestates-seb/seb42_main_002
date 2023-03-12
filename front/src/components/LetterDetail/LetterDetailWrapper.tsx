@@ -1,7 +1,6 @@
 import LetterContent from './LetterContent/LetterContent';
-import LetterPicture from './LetterPicture/LetterPicture';
+import LetterPictureWrapper from './LetterPicture/LetterPictureWrapper';
 import Button from '../Common/Button/Button';
-import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { SeletedLetterData } from '../../utils';
 import { seletedLetter } from '../../dummy/letter';
@@ -40,21 +39,11 @@ const LetterDetailWrapper = () => {
         type="1"
       />
       {/* 편지 사진 */}
-      <div className={styles.pictures}>
-        <Swiper spaceBetween={0} slidesPerView={4} className={styles.swiper}>
-          {/* 이미지 key을 어떤 값으로 변경할지 */}
-          {seletedLetter.pic.length > 0 &&
-            seletedLetter.pic.map((picture, idx) => (
-              <SwiperSlide key={picture}>
-                <LetterPicture
-                  pic={picture}
-                  rotate={idx}
-                  onClick={pictureClickHandler}
-                />
-              </SwiperSlide>
-            ))}
-        </Swiper>
-      </div>
+      <LetterPictureWrapper
+        pictures={seletedLetter.pic}
+        onClick={pictureClickHandler}
+      />
+
       {/* 답장 */}
       <Button variant="primary" size="lg" full to="/newletter">
         답장하기
