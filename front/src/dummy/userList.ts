@@ -1,10 +1,12 @@
 import { LetterUserData } from './../utils/types/letter/user.type';
+
 export const userData: LetterUserData[] = [
   {
     profile: null,
     name: '안아영',
     memberId: 1,
     location: 'KR',
+    birthday: '1994-12-22',
     lastLetter: {
       status: 'SENT',
       createdAt: '2023-02-28T10:49:01',
@@ -17,6 +19,7 @@ export const userData: LetterUserData[] = [
     name: 'はるひ',
     memberId: 2,
     location: 'JP',
+    birthday: '1996-03-23',
     lastLetter: {
       status: 'RECEIVED',
       createdAt: '2023-02-28T09:12:01',
@@ -29,6 +32,7 @@ export const userData: LetterUserData[] = [
     name: '范冰冰',
     memberId: 3,
     location: 'CN',
+    birthday: '2023-02-28',
     lastLetter: {
       status: 'RECEIVED',
       createdAt: '2023-02-28T19:12:01',
@@ -40,6 +44,7 @@ export const userData: LetterUserData[] = [
     name: 'Jennie',
     memberId: 4,
     location: 'US',
+    birthday: '2023-02-28',
     lastLetter: {
       status: 'RECEIVED',
       createdAt: '2023-02-28T11:30:01',
@@ -51,6 +56,7 @@ export const userData: LetterUserData[] = [
     name: 'mefistoo',
     memberId: 5,
     location: 'TR',
+    birthday: '2023-02-28',
     lastLetter: {
       status: 'RECEIVED',
       createdAt: '2023-02-28T23:12:01',
@@ -63,6 +69,7 @@ export const userData: LetterUserData[] = [
     name: '안아영',
     memberId: 6,
     location: 'KR',
+    birthday: '2023-02-28',
     lastLetter: {
       status: 'SENT',
       createdAt: '2023-02-28T03:12:01',
@@ -74,6 +81,7 @@ export const userData: LetterUserData[] = [
     name: 'はるひ',
     memberId: 7,
     location: 'JP',
+    birthday: '2023-02-28',
     lastLetter: {
       status: 'RECEIVED',
       createdAt: '2023-02-28T19:12:01',
@@ -86,6 +94,7 @@ export const userData: LetterUserData[] = [
     name: '范冰冰',
     memberId: 8,
     location: 'CN',
+    birthday: '2023-02-28',
     lastLetter: {
       status: 'SENT',
       createdAt: '2023-02-28T19:12:01',
@@ -97,6 +106,7 @@ export const userData: LetterUserData[] = [
     name: 'Jennie',
     memberId: 9,
     location: 'US',
+    birthday: '2023-02-28',
     lastLetter: {
       status: 'RECEIVED',
       createdAt: '2023-02-28T19:12:01',
@@ -109,6 +119,7 @@ export const userData: LetterUserData[] = [
     name: 'mefistoo',
     memberId: 10,
     location: 'TR',
+    birthday: '2023-02-28',
     lastLetter: {
       status: 'RECEIVED',
       createdAt: '2023-02-28T19:12:01',
