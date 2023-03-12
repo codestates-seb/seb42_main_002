@@ -19,6 +19,11 @@ const LetterDetailWrapper = () => {
     console.log('번역중...');
   };
 
+  // 사진 확대 핸들러
+  const pictureClickHandler = (pic: string) => {
+    console.log('사진 확대', pic);
+  };
+
   return (
     <div className={styles.wrapper}>
       {/* 파파고 버튼 */}
@@ -41,7 +46,11 @@ const LetterDetailWrapper = () => {
           {seletedLetter.pic.length > 0 &&
             seletedLetter.pic.map((picture, idx) => (
               <SwiperSlide key={picture}>
-                <LetterPicture pic={picture} rotate={idx} />
+                <LetterPicture
+                  pic={picture}
+                  rotate={idx}
+                  onClick={pictureClickHandler}
+                />
               </SwiperSlide>
             ))}
         </Swiper>
