@@ -42,8 +42,8 @@ const LetterDetailWrapper = () => {
       <LetterPictureWrapper
         pictures={seletedLetter.pic}
         onClick={pictureClickHandler}
+        isRead
       />
-
       {/* 답장 */}
       <Button variant="primary" size="lg" full to="/newletter">
         답장하기

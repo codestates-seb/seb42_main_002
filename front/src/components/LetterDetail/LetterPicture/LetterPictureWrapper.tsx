@@ -6,12 +6,18 @@ import 'swiper/css';
 
 type LetterPictureWrapperProps = {
   pictures: string[];
-  onClick: (pic: string) => void;
+  onClick?: (pic: string) => void;
+  onRemove?: (idx: number) => void;
+  onAdd?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  isRead: boolean;
 };
 
 const LetterPictureWrapper = ({
   pictures,
   onClick,
+  isRead,
+  onAdd,
+  onRemove,
 }: LetterPictureWrapperProps) => {
   return (
     <div className={styles.pictures}>
@@ -20,9 +26,19 @@ const LetterPictureWrapper = ({
         {pictures.length > 0 &&
           pictures.map((picture, idx) => (
             <SwiperSlide key={picture}>
-              <LetterPicture pic={picture} rotate={idx} onClick={onClick} />
+              <LetterPicture
+                pic={picture}
+                rotate={idx}
+                onClick={isRead ? onClick : onRemove?.bind(null, idx)}
+              />
             </SwiperSlide>
           ))}
+        {/* 글쓰기 모드 */}
+        {!isRead && (
+          <SwiperSlide>
+            <LetterPicture pic={''} isAdd rotate={1} onAdd={onAdd} />
+          </SwiperSlide>
+        )}
       </Swiper>
     </div>
   );

@@ -13,6 +13,7 @@ import GuidePage from './pages/GuidePage';
 import HobbyTagPage from './components/Tag/AddHobbyTag';
 import ModalProvider from './context/ModalContext';
 import LetterDetailPage from './pages/LetterDetailPage';
+import NewLetterPage from './pages/NewLetterPage';
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
                   path="/letters/:memberId/:letterId"
                   element={<LetterDetailPage />}
                 />
+                <Route path="/newLetter" element={<NewLetterPage />} />
                 <Route path="/followings" element={<MainPage />} />
                 <Route path="/voca" element={<HobbyTagPage />} />
                 <Route path="/my-profile" element={<MyProfilePage />} />
