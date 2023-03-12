@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from '../components/Common/Button/Button';
 import LifeQuotes from '../components/Main/LifeQuotes/LifeQuotes';
 import MainLetter from '../components/Main/MainLetters/MainLetter';
 import MainSection from '../components/Main/MainSection';
@@ -16,6 +17,11 @@ const MainPage = () => {
       </MainSection>
       <MainSection>
         <MainLetter />
+      </MainSection>
+      <MainSection>
+        <Button variant="primary" size="lg" full to="/letters">
+          친구 찾으러 가기
+        </Button>
       </MainSection>
       <MainSection>
         <MainVoca />
