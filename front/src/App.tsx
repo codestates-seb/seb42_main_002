@@ -12,6 +12,7 @@ import SignUpPage from './pages/SignUpPage';
 import GuidePage from './pages/GuidePage';
 import HobbyTagPage from './components/Tag/AddHobbyTag';
 import ModalProvider from './context/ModalContext';
+import LetterDetialPage from './pages/LetterDetialPage';
 
 function App() {
   return (
@@ -31,6 +32,10 @@ function App() {
                 <Route
                   path="/letters/:memberId"
                   element={<UserLetterListPage />}
+                />
+                <Route
+                  path="/letters/:memberId/:letterId"
+                  element={<LetterDetialPage />}
                 />
                 <Route path="/followings" element={<MainPage />} />
                 <Route path="/voca" element={<HobbyTagPage />} />
