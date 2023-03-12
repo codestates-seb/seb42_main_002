@@ -1,9 +1,11 @@
-import LetterDtailHeader from '../components/LetterDetail/LetterDetailHeader';
+import LetterDetailHeader from '../components/LetterDetail/LetterDetailHeader';
+import LetterDetailWrapper from '../components/LetterDetail/LetterDetailWrapper';
 
 const LetterDetailPage = () => {
   return (
     <>
-      <LetterDtailHeader />
+      <LetterDetailHeader />
+      <LetterDetailWrapper />
     </>
   );
 };

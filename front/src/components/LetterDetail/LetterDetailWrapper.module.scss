@@ -1,0 +1,16 @@
+.wrapper {
+  position: relative;
+}
+.translate {
+  position: absolute;
+  right: 0;
+  top: -2.5rem;
+}
+.pictures {
+  display: flex;
+  flex-wrap: nowrap;
+  margin-bottom: 0.5rem;
+}
+.swiper {
+  padding: 1rem 0;
+}
