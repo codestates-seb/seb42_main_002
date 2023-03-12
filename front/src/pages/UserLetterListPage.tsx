@@ -1,11 +1,11 @@
 import LetterListHeader from '../components/Letter/LetterListHeader/LetterListHeader';
-import LetterUserCard from '../components/Letter/LetterUserCard/LetterUserCard';
+import LetterWrapper from '../components/Letter/LetterWrapper/LetterWrapper';
 
 const UserLetterListPage = () => {
   return (
     <>
       <LetterListHeader />
-      <LetterUserCard />
+      <LetterWrapper />
     </>
   );
 };

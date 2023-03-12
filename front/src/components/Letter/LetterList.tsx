@@ -1,7 +1,9 @@
 import { userData } from '../../dummy/userList';
 import { LetterUserData } from '../../utils';
+
 import LetterStatusIcon from '../Common/LetterStatusIcon/LetterStatusIcon';
 import UserCard from '../Common/UserCard/UserCard';
+
 import styles from './LetterList.module.scss';
 
 const LetterList = () => {
