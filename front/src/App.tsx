@@ -10,7 +10,7 @@ import UserLetterListPage from './pages/UserLetterListPage';
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import GuidePage from './pages/GuidePage';
-import HobbyTagPage from './components/Tag/AddHobbyTag';
+// import HobbyTagPage from './components/Tag/AddHobbyTag';
 import ModalProvider from './context/ModalContext';
 import LetterDetailPage from './pages/LetterDetailPage';
 import NewLetterPage from './pages/NewLetterPage';
@@ -42,7 +42,7 @@ function App() {
                 <Route path="followings" element={<FollowingPage />} />
                 <Route path="/newLetter" element={<NewLetterPage />} />
                 <Route path="/followings" element={<MainPage />} />
-                <Route path="/voca" element={<HobbyTagPage />} />
+                {/* <Route path="/voca" element={<HobbyTagPage />} /> */}
                 <Route path="/my-profile" element={<MyProfilePage />} />
                 <Route path="/guide" element={<GuidePage />} />
               </Route>

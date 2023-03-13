@@ -1,1 +1,1 @@
-export type TagDataType = { name?: string; englishName?: string; id?: number };
+export type TagDataType = { id: number; name: string; englishName?: string; alpha?:string; };
