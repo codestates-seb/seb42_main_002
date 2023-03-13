@@ -45,6 +45,7 @@ const LetterDetailWrapper = () => {
         isRead
       />
       {/* 답장 */}
+      {/* 버튼 고민 */}
       <Button variant="primary" size="lg" full to="/newletter">
         답장하기
       </Button>

@@ -6,6 +6,7 @@ import LetterUserCard from '../LetterUserCard/LetterUserCard';
 import styles from './LetterWrapper.module.scss';
 import { lettersData } from '../../../dummy/letter';
 
+// TODO : state를 변경해야한다.
 const LetterWrapper = () => {
   const { state } = useLocation();
 

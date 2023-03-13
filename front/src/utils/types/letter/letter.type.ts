@@ -20,6 +20,7 @@ export type LetterData = {
 export type SeletedLetterData = {
   letterId: number;
   sender: string;
+  type: number;
   receiver: string;
   body: string;
   availableAt: string;

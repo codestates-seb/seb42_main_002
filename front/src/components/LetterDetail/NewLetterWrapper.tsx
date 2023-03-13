@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Button from '../Common/Button/Button';
 import NewLetterContent from './LetterContent/NewLetterContent';
 import LetterPictureWrapper from './LetterPicture/LetterPictureWrapper';
 import LetterType from './LetterType/LetterType';
@@ -12,7 +13,7 @@ const NewLetterWrapper = () => {
     'https://images.unsplash.com/photo-1678537223079-aac394356c16?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
   ]);
   // 콘텐츠
-  const [body, setBody] = useState<string>();
+  const [body, setBody] = useState<string>('');
 
   // TODO : 이미지 삭제 시, 모달로 확인하기?
   const pictureRemoveHandler = (idx: number) => {
@@ -32,16 +33,38 @@ const NewLetterWrapper = () => {
     file && reader.readAsDataURL(file);
   };
 
+  const onChangeHandler = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ): void => {
+    console.log('편지 내용 작성');
+    setBody(event.target.value);
+  };
+
+  const onSubmitHandler = () => {
+    console.log('편지 제출', body, pictures);
+  };
+
   return (
     <>
+      {/* 편지지 선택 */}
       <LetterType />
-      <NewLetterContent />
+      {/* 편지 내용 */}
+      <NewLetterContent
+        body={body}
+        onChange={onChangeHandler}
+        receiver="안아영"
+      />
+      {/* 이미지 선택 */}
       <LetterPictureWrapper
         pictures={pictures}
         onRemove={pictureRemoveHandler}
         onAdd={pictureAddHandler}
         isRead={false}
       />
+      {/* 편지 보내기 */}
+      <Button variant="primary" size="lg" full onClick={onSubmitHandler}>
+        편지 보내기
+      </Button>
     </>
   );
 };

@@ -70,6 +70,7 @@ export const seletedLetter: SeletedLetterData = {
   sender: '하루히',
   receiver: '안아영',
   // title: "",
+  type: 1,
   body: `
   ありがとうと君に言われるとなんだか切ないさようならの後も解けぬ魔法淡くほろ苦い友達でも恋人でもない中間地点で収穫の時を夢見てる青いフルーツあと一歩が踏み出せないせいで
 
