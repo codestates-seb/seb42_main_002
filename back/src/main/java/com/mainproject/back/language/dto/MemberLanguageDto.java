@@ -9,6 +9,6 @@ import lombok.Getter;
 @Builder
 public class MemberLanguageDto {
 
-  private String nation;
+  private String location;
   private int level;
 }

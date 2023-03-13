@@ -3,14 +3,14 @@ package com.mainproject.back.vocabulary.controller;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.service.MemberService;
 import com.mainproject.back.vocabulary.dto.VocabDto;
-import com.mainproject.back.vocabulary.dto.VocabDto.Response;
 import com.mainproject.back.vocabulary.entity.Vocabulary;
 import com.mainproject.back.vocabulary.mapper.VocabMapper;
 import com.mainproject.back.vocabulary.service.VocabService;
 import java.security.Principal;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Validated
@@ -44,6 +43,8 @@ public class VocabController {
 
   @PostMapping
   public ResponseEntity postVocab(@RequestBody VocabDto.Post requestBody, Principal principal) {
+    log.info("## 단어 생성: {}", requestBody);
+    log.info("## principal: {}", principal.getName());
     Member member = memberService.findMemberByEmail(principal.getName());
 
     Vocabulary vocab = mapper.vocabPostToVocab(requestBody);
@@ -77,13 +78,13 @@ public class VocabController {
   }
 
   @GetMapping
-  public ResponseEntity getVocabs( @RequestParam int page, Principal principal) {
+  public ResponseEntity getVocabs(@PageableDefault Pageable pageable, Principal principal) {
     Member member = memberService.findMemberByEmail(principal.getName());
-    Page<Vocabulary> pageVocabs = vocabService.findVocabs(member.getMemberId(), page);
-    List<Vocabulary> vocabs = pageVocabs.getContent();
-    List<Response> responses = mapper.vocabsToVocabResponses(vocabs);
+    Page<Vocabulary> pageVocabs = vocabService.findVocabs(member.getMemberId(), pageable);
+//    List<Vocabulary> vocabs = pageVocabs.getContent();
+//    List<Response> responses = mapper.vocabsToVocabResponses(vocabs);
 
-    return new ResponseEntity<>(responses, HttpStatus.OK);
+    return new ResponseEntity<>(pageVocabs, HttpStatus.OK);
   }
 
   @DeleteMapping("/{vocab-id}")

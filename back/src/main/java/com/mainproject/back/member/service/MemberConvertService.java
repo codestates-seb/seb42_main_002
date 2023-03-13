@@ -42,7 +42,7 @@ public class MemberConvertService {
     List<MemberLanguage> memberLanguageList = languageDtoList.stream().map(languageDto -> {
       MemberLanguage memberLanguage = MemberLanguage.builder().level(languageDto.getLevel())
           .build();
-      memberLanguage.addLanguage(findLanguage(allLanguages, languageDto.getNation()));
+      memberLanguage.addLanguage(findLanguage(allLanguages, languageDto.getLocation()));
       memberLanguage.addMember(member);
       return memberLanguage;
     }).collect(Collectors.toList());
@@ -51,7 +51,7 @@ public class MemberConvertService {
 
   private Language findLanguage(List<Language> allLanguage, String nation) {
     for (Language language : allLanguage) {
-      if (language.getNation().equals(nation)) {
+      if (language.getLocation().equals(nation)) {
         return language;
       }
     }

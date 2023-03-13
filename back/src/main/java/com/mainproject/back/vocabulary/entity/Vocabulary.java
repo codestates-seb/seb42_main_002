@@ -9,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,7 +35,7 @@ public class Vocabulary extends Auditable {
   private String meaning;
 
   @Column(nullable = false)
-  private String langCode;
+  private String location;
 
   @ManyToOne
   @JoinColumn(name = "member_id")

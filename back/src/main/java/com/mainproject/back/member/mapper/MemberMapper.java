@@ -103,7 +103,7 @@ public interface MemberMapper {
     List<MemberLanguage> memberLanguageList = member.getMemberLanguages();
     List<MemberLanguageDto> memberLanguageDtoList = memberLanguageList.stream().map(
             (memberLanguage) -> MemberLanguageDto.builder()
-                .nation(memberLanguage.getLanguage().getNation()).level(memberLanguage.getLevel())
+                .location(memberLanguage.getLanguage().getLocation()).level(memberLanguage.getLevel())
                 .build())
         .collect(
             Collectors.toList());

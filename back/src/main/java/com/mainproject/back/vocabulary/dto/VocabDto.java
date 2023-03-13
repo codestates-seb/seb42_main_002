@@ -2,24 +2,25 @@ package com.mainproject.back.vocabulary.dto;
 
 import com.sun.istack.NotNull;
 import java.time.LocalDateTime;
-import javax.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 
 public class VocabDto {
 
 
   @Getter
+  @ToString
   public static class Post {
     @NotNull
     private String word;
     @Setter
     private String meaning;
     @Setter
-    private String langCode;
+    private String location;
     @Setter
     private long memberId;
   }
@@ -40,8 +41,7 @@ public class VocabDto {
   public static class Response {
 
     private long vocabId;
-    private long memberId;
-    private String langCode;
+    private String location;
     private String word;
     private String meaning;
     private LocalDateTime createdAt;

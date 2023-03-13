@@ -8,8 +8,7 @@ import com.mainproject.back.vocabulary.repository.VocabRepository;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,13 +28,14 @@ public class VocabService {
   public Vocabulary updateVocab(long memberId, Vocabulary vocab) {
     Vocabulary findVocab = findVerifiedVocab(vocab.getVocabId());
 
-    if(findVocab.getMember().getMemberId() != memberId)
-        throw new BusinessLogicException(MemberExceptionCode.MEMBER_NOT_ALLOWED);
+    if (findVocab.getMember().getMemberId() != memberId) {
+      throw new BusinessLogicException(MemberExceptionCode.MEMBER_NOT_ALLOWED);
+    }
 
     Optional.ofNullable(vocab.getWord())
         .ifPresent(findVocab::setWord);
-    Optional.ofNullable(vocab.getLangCode())
-        .ifPresent(findVocab::setLangCode);
+    Optional.ofNullable(vocab.getLocation())
+        .ifPresent(findVocab::setLocation);
     Optional.ofNullable(vocab.getMeaning())
         .ifPresent(findVocab::setMeaning);
 
@@ -49,8 +49,8 @@ public class VocabService {
     return findVocab;
   }
 
-  public Page<Vocabulary> findVocabs(long memberId, int page){
-    return vocabRepository.findAllByMemberId(memberId, PageRequest.of(page-1,15, Sort.by("vocab_id").descending()));
+  public Page<Vocabulary> findVocabs(long memberId, Pageable pageable) {
+    return vocabRepository.findAllByMemberId(memberId, pageable);
   }
 
   public void deleteVocab(long vocabId) {

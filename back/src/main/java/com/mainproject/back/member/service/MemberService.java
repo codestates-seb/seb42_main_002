@@ -3,15 +3,14 @@ package com.mainproject.back.member.service;
 
 import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.member.entity.Member;
-
 import com.mainproject.back.member.exception.MemberExceptionCode;
 import com.mainproject.back.member.repository.MemberRepository;
 import com.mainproject.back.security.utils.AuthorityUtils;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -132,7 +131,7 @@ public class MemberService {
   private void verifyExistsEmail(String email) {
     Optional<Member> member = memberRepository.findByEmail(email);
     if (member.isPresent()) {
-      throw new RuntimeException("MEMBER_EXISTS");
+      throw new BusinessLogicException(MemberExceptionCode.EMAIL_EXISTS);
     }
   }
 

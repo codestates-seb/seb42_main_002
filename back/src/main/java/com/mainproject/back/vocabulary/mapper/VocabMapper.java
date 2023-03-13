@@ -1,9 +1,7 @@
 package com.mainproject.back.vocabulary.mapper;
 
 import com.mainproject.back.vocabulary.dto.VocabDto;
-import com.mainproject.back.vocabulary.dto.VocabDto.Response;
 import com.mainproject.back.vocabulary.entity.Vocabulary;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.mapstruct.Mapper;
@@ -23,8 +21,7 @@ public interface VocabMapper {
         .word(vocab.getWord())
         .createdAt(vocab.getCreatedAt())
         .meaning(vocab.getMeaning())
-        .langCode(vocab.getLangCode())
-        .memberId(vocab.getMember().getMemberId())
+        .location(vocab.getLocation())
         .build();
     return response;
   }
@@ -38,8 +35,7 @@ public interface VocabMapper {
             .word(vocab.getWord())
             .createdAt(vocab.getCreatedAt())
             .meaning(vocab.getMeaning())
-            .langCode(vocab.getLangCode())
-            .memberId(vocab.getMember().getMemberId())
+            .location(vocab.getLocation())
             .build())
         .collect(Collectors.toList());
   }
