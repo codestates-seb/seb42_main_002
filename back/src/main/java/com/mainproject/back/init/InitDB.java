@@ -76,11 +76,11 @@ class Init {
   @Transactional
   public void initLanguage(){
     List<Language> languages = List.of(
-        Language.builder().nation("KR").build(),
-        Language.builder().nation("CN").build(),
-        Language.builder().nation("EN").build(),
-        Language.builder().nation("JP").build(),
-        Language.builder().nation("ES").build()
+        Language.builder().location("KR").build(),
+        Language.builder().location("CN").build(),
+        Language.builder().location("EN").build(),
+        Language.builder().location("JP").build(),
+        Language.builder().location("ES").build()
     );
     languageRepository.saveAll(languages);
   }

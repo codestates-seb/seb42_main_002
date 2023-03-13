@@ -8,7 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface VocabRepository extends JpaRepository<Vocabulary, Long> {
-  @Query(value = "select * from vocabulary where member_id = :memberId", nativeQuery = true)
-  public Page<Vocabulary> findAllByMemberId(long memberId, Pageable pageable);
+
+  @Query("select v from Vocabulary v join v.member m where m.memberId = :memberId")
+  Page<Vocabulary> findAllByMemberId(@Param("memberId") long memberId, Pageable pageable);
 
 }
