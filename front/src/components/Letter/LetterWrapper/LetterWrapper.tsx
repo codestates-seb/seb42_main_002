@@ -1,18 +1,20 @@
-import { useLocation } from 'react-router-dom';
-
 import Letter from '../Letter/Letter';
 import LetterUserCard from '../LetterUserCard/LetterUserCard';
 
-import styles from './LetterWrapper.module.scss';
 import { lettersData } from '../../../dummy/letter';
+
+import styles from './LetterWrapper.module.scss';
 
 // TODO : state를 변경해야한다.
 const LetterWrapper = () => {
-  const { state } = useLocation();
-
   return (
     <>
-      <LetterUserCard {...state} />
+      <LetterUserCard
+        birthday="1994-12-22"
+        location="KR"
+        name="안아영"
+        profile={null}
+      />
       <div className={styles.letter_wrapper}>
         {lettersData.map((letter) => (
           <Letter

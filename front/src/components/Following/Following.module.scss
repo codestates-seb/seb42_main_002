@@ -1,0 +1,8 @@
+.letter_list {
+  & li {
+    margin-bottom: 1rem;
+  }
+  & li:last-child {
+    margin-bottom: 0;
+  }
+}

@@ -5,6 +5,7 @@ $sub-font-size: var(--font-size-xxs);
 .wrapper {
   display: flex;
   width: 100%;
+  cursor: pointer;
 }
 
 .usercard {
