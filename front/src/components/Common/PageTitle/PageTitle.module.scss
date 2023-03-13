@@ -5,12 +5,12 @@
   justify-content: space-between;
   align-items: center;
   & .title {
-    font-size: 1.5rem;
+    font-size: var(--font-size-xxl);
     color: var(--title-primary-color);
     margin-bottom: 0.5rem;
   }
   & .translate {
-    font-size: 0.75rem;
+    font-size: var(--font-size-xs);
     color: var(--title-secondary-color);
   }
 }

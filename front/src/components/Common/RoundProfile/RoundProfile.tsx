@@ -1,4 +1,4 @@
-import defaultProfile from '../../../assets/img/owl1.svg';
+import defaultProfile from '../../../assets/img/default_owls_thumb.svg';
 import styles from './RoundProfile.module.scss';
 
 type RoundProfileProps = {

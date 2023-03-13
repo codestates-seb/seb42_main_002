@@ -1,0 +1,53 @@
+.letter {
+  background-color: var(--white);
+  min-height: 10rem;
+  min-width: 10rem;
+  padding: 1rem;
+  font-size: var(--font-size-xxs);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: var(--text-primary-color);
+  box-shadow: var(--default-box-shadow);
+}
+
+.letter_status {
+  height: 1.2rem;
+  display: flex;
+  align-items: center;
+  & svg {
+    margin-right: 4px;
+  }
+}
+
+.letter_body {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+}
+
+.letter_info {
+  height: 1.2rem;
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  & .time {
+    color: var(--text-secondary-color);
+  }
+}
+
+.lock {
+  & .letter_info {
+    justify-content: end;
+  }
+
+  & .open_time {
+    font-size: var(--font-size-xs);
+    text-align: center;
+    font-weight: 700;
+  }
+}

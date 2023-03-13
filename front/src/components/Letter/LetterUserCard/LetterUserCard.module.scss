@@ -1,0 +1,40 @@
+$button_shadow: linear-gradient(270deg, #ffffff 0%, #e2e2e2 221.53%);
+$main-font-size: var(--font-size-xs);
+$sub-font-size: var(--font-size-xxs);
+
+.wrapper {
+  display: flex;
+  width: 100%;
+}
+
+.usercard {
+  display: flex;
+  box-shadow: var(--default-box-shadow);
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: var(--white);
+  flex: 1 1 0;
+  z-index: 1;
+}
+
+.user {
+  margin-left: 1.5rem;
+  & .name {
+    font-size: $main-font-size;
+    font-weight: 700;
+    color: var(--text-primary-color);
+    margin-bottom: 0.25rem;
+  }
+
+  & .info {
+    font-size: $sub-font-size;
+    color: var(--text-primary-color);
+  }
+}
+
+.profile_button {
+  width: 10%;
+  min-width: 3.75rem;
+  background: $button_shadow;
+  box-shadow: var(--default-box-shadow);
+}

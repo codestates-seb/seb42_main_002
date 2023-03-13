@@ -6,11 +6,13 @@ import BaseLayout from './components/Layouts/BaseLayout';
 import MainPage from './pages/MainPage';
 import MyProfilePage from './pages/MyProfilePage';
 import LetterListPage from './pages/LetterListPage';
+import UserLetterListPage from './pages/UserLetterListPage';
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import GuidePage from './pages/GuidePage';
 import HobbyTagPage from './components/Tag/AddHobbyTag';
 import ModalProvider from './context/ModalContext';
+import LetterDetialPage from './pages/LetterDetialPage';
 
 function App() {
   return (
@@ -27,6 +29,14 @@ function App() {
               <Route element={<BaseLayout isAuth />}>
                 <Route path="/main" element={<MainPage />} />
                 <Route path="/letters" element={<LetterListPage />} />
+                <Route
+                  path="/letters/:memberId"
+                  element={<UserLetterListPage />}
+                />
+                <Route
+                  path="/letters/:memberId/:letterId"
+                  element={<LetterDetialPage />}
+                />
                 <Route path="/followings" element={<MainPage />} />
                 <Route path="/voca" element={<HobbyTagPage />} />
                 <Route path="/my-profile" element={<MyProfilePage />} />
