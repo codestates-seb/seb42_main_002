@@ -3,14 +3,20 @@ package com.mainproject.back.member.mapper;
 
 import com.mainproject.back.language.dto.MemberLanguageDto;
 import com.mainproject.back.language.entity.MemberLanguage;
+import com.mainproject.back.letter.dto.LetterListDto;
+import com.mainproject.back.letter.entity.Letter;
 import com.mainproject.back.member.dto.MemberDto;
+import com.mainproject.back.member.dto.MemberRecommendDto;
+import com.mainproject.back.member.dto.MemberSimpleDto;
 import com.mainproject.back.member.dto.MemberTagResponseDto;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.tag.entity.MemberTag;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
+import org.springframework.data.domain.Page;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface MemberMapper {
@@ -124,4 +130,15 @@ public interface MemberMapper {
         .collect(Collectors.toList());
   }
 
+  default Page<MemberRecommendDto> pageMemberToMemberRecommendDtoPage(Page<Member> memberPage) {
+    return memberPage.map(this::memberToMemberRecommend);
+  }
+
+  default MemberRecommendDto memberToMemberRecommend(Member member) {
+    MemberRecommendDto.MemberRecommendDtoBuilder builder = MemberRecommendDto.builder()
+        .memberId(member.getMemberId())
+        .name(member.getName())
+        .profile(member.getProfile());
+    return builder.build();
+  }
 }
