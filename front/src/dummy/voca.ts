@@ -4,7 +4,9 @@ export const vocaArr: VocaData[] = [
   {
     vocabId: 1,
     word: 'Apple',
-    meaning: '사과는 달콤새콤',
+    meaning: `사과 an apple pi 사과[애플]파이 
+      - 사과는 맛있다.
+      `,
     location: 'EN',
     createdAt: '2023-02-28T19:12:01',
   },
