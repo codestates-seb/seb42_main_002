@@ -1,7 +1,10 @@
 package com.mainproject.back.member.controller;
 
 import com.mainproject.back.helper.UriCreator;
+import com.mainproject.back.letter.dto.LetterListDto;
+import com.mainproject.back.letter.entity.Letter;
 import com.mainproject.back.member.dto.MemberDto;
+import com.mainproject.back.member.dto.MemberRecommendDto;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.mapper.MemberMapper;
 import com.mainproject.back.member.service.MemberConvertService;
@@ -12,6 +15,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -77,6 +83,17 @@ public class MemberController {
     memberService.deleteMember(memberId);
 
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+  }
+
+  @GetMapping("/recommend")
+  public ResponseEntity getRecommended(Principal principal, @PageableDefault Pageable pageable) {
+    Member currentMember = memberService.findMemberByEmail(principal.getName());
+
+    Page<Member> memberPage = memberService.findRecommendedMember(
+        currentMember.getMemberId(), pageable);
+    Page<MemberRecommendDto> memberRecommendDtoPage = mapper.pageMemberToMemberRecommendDtoPage(
+        memberPage);
+    return ResponseEntity.ok().body(memberRecommendDtoPage);
   }
 
 }
