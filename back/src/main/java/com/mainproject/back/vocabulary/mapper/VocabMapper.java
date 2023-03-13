@@ -1,11 +1,15 @@
 package com.mainproject.back.vocabulary.mapper;
 
+import com.mainproject.back.letter.dto.LetterListDto;
+import com.mainproject.back.letter.entity.Letter;
+import com.mainproject.back.member.dto.MemberSimpleDto;
 import com.mainproject.back.vocabulary.dto.VocabDto;
 import com.mainproject.back.vocabulary.entity.Vocabulary;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
+import org.springframework.data.domain.Page;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface VocabMapper {
@@ -14,10 +18,16 @@ public interface VocabMapper {
 
   Vocabulary vocabPatchToVocab(VocabDto.Patch requestBody);
 
+  default Page<VocabDto.Response> pageVocabToPageVocabResponsePage(Page<Vocabulary> vocabPage) {
+    return vocabPage.map(this::vocabToVocabResponse);
+  }
+
   default VocabDto.Response vocabToVocabResponse(Vocabulary vocab) {
     VocabDto.Response response =VocabDto.Response
         .builder()
         .vocabId(vocab.getVocabId())
+        .member(MemberSimpleDto.builder().memberId(vocab.getMember().getMemberId())
+            .name(vocab.getMember().getName()).build())
         .word(vocab.getWord())
         .createdAt(vocab.getCreatedAt())
         .meaning(vocab.getMeaning())
