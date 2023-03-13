@@ -23,3 +23,10 @@ export type UserProfileData = {
   language: Language[];
   tag: string[];
 };
+
+export type BlackUserData = {
+  memberId: number;
+  name: string;
+  location: string;
+  profile: string | null;
+};
