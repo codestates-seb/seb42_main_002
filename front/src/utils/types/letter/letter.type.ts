@@ -16,3 +16,14 @@ export type LetterData = {
   createdAt: string;
   hasPic: boolean; // 이미지 첨부 여부
 };
+
+export type SeletedLetterData = {
+  letterId: number;
+  sender: string;
+  type: number;
+  receiver: string;
+  body: string;
+  availableAt: string;
+  createdAt: string;
+  pic: string[];
+};

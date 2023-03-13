@@ -4,6 +4,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 2.5rem;
   & .title {
     font-size: var(--font-size-xxl);
     color: var(--title-primary-color);
