@@ -16,6 +16,7 @@ import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -86,11 +87,11 @@ public class MemberController {
   }
 
   @GetMapping("/recommend")
-  public ResponseEntity getRecommended(Principal principal, @PageableDefault Pageable pageable) {
+  public ResponseEntity getRecommended(Principal principal) {
     Member currentMember = memberService.findMemberByEmail(principal.getName());
 
     Page<Member> memberPage = memberService.findRecommendedMember(
-        currentMember.getMemberId(), pageable);
+        currentMember.getMemberId(), PageRequest.of(0,10));
     Page<MemberRecommendDto> memberRecommendDtoPage = mapper.pageMemberToMemberRecommendDtoPage(
         memberPage);
     return ResponseEntity.ok().body(memberRecommendDtoPage);
