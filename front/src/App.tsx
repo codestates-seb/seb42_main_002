@@ -15,6 +15,7 @@ import ModalProvider from './context/ModalContext';
 import LetterDetailPage from './pages/LetterDetailPage';
 import NewLetterPage from './pages/NewLetterPage';
 import FollowingPage from './pages/FollowingPage';
+import VocaPage from './pages/VocaPage';
 
 function App() {
   return (
@@ -42,7 +43,7 @@ function App() {
                 <Route path="followings" element={<FollowingPage />} />
                 <Route path="/newLetter" element={<NewLetterPage />} />
                 <Route path="/followings" element={<MainPage />} />
-                <Route path="/voca" element={<HobbyTagPage />} />
+                <Route path="/voca" element={<VocaPage />} />
                 <Route path="/my-profile" element={<MyProfilePage />} />
                 <Route path="/guide" element={<GuidePage />} />
               </Route>
