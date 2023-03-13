@@ -10,7 +10,7 @@ type UserCardProps = {
   profile: string | null;
   children?: React.ReactNode;
   date: string | null;
-  onClick: (id: number) => void;
+  onClick?: (id: number) => void;
 };
 
 const UserCard = ({
@@ -26,7 +26,7 @@ const UserCard = ({
     <li
       className={styles.usercard}
       role="presentation"
-      onClick={onClick.bind(null, memberId)}
+      onClick={onClick && onClick.bind(null, memberId)}
     >
       {/* PROFILE */}
       <div className={styles.profile_img}>

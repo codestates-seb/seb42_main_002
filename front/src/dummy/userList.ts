@@ -1,3 +1,4 @@
+import { BlackUserData } from './../utils/types/users/user.type';
 import { LetterUserData } from './../utils/types/letter/user.type';
 
 export const userData: LetterUserData[] = [
@@ -125,5 +126,27 @@ export const userData: LetterUserData[] = [
       createdAt: '2023-02-28T19:12:01',
       isRead: true,
     },
+  },
+];
+
+export const blackListData: BlackUserData[] = [
+  {
+    profile: null,
+    name: '안아영',
+    memberId: 1,
+    location: 'KR',
+  },
+  {
+    profile: null,
+    name: '하루히',
+    memberId: 2,
+    location: 'JP',
+  },
+  {
+    profile:
+      'https://images.unsplash.com/photo-1670272499188-79fe22656f64?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
+    name: 'James',
+    memberId: 3,
+    location: 'US',
   },
 ];

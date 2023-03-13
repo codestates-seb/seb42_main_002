@@ -15,6 +15,7 @@ import ModalProvider from './context/ModalContext';
 import LetterDetailPage from './pages/LetterDetailPage';
 import NewLetterPage from './pages/NewLetterPage';
 import FollowingPage from './pages/FollowingPage';
+import BlackListPage from './pages/BlackListPage';
 
 function App() {
   return (
@@ -39,9 +40,9 @@ function App() {
                   path="/letters/:memberId/:letterId"
                   element={<LetterDetailPage />}
                 />
-                <Route path="followings" element={<FollowingPage />} />
+                <Route path="/followings" element={<FollowingPage />} />
+                <Route path="/blacklist" element={<BlackListPage />} />
                 <Route path="/newLetter" element={<NewLetterPage />} />
-                <Route path="/followings" element={<MainPage />} />
                 <Route path="/voca" element={<HobbyTagPage />} />
                 <Route path="/my-profile" element={<MyProfilePage />} />
                 <Route path="/guide" element={<GuidePage />} />
