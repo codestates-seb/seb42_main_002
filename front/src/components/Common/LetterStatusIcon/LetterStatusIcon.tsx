@@ -5,7 +5,7 @@ import styles from './LetterStatusIcon.module.scss';
 
 type LetterStatusIconProps = {
   status?: 'SENT' | 'RECEIVED';
-  onClick: (e: React.MouseEvent<Element, MouseEvent>) => void;
+  onClick?: (e: React.MouseEvent<Element, MouseEvent>) => void;
   isRead?: boolean;
 };
 
@@ -28,7 +28,7 @@ const LetterStatusIcon = ({
   return (
     <div className={styles.letter_state}>
       {/* 상태에 따른 아이콘 */}
-      <button onClick={onClick}>{Icons[status]}</button>
+      <button onClick={onClick && onClick}>{Icons[status]}</button>
     </div>
   );
 };

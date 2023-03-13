@@ -3,7 +3,7 @@ export type LetterUserData = {
   name: string;
   memberId: number;
   location: string;
-  birthday: string;
+  birthday?: string;
   lastLetter: {
     status: 'SENT' | 'RECEIVED';
     createdAt: string;

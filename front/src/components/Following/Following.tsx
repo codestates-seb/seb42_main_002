@@ -1,27 +1,16 @@
 import { useNavigate } from 'react-router-dom';
-import { userData } from '../../dummy/userList';
-import { LetterUserData } from '../../utils';
-
 import LetterStatusIcon from '../Common/LetterStatusIcon/LetterStatusIcon';
 import UserCard from '../Common/UserCard/UserCard';
+import { LetterUserData } from '../../utils';
+import { userData } from '../../dummy/userList';
+import styles from './Following.module.scss';
 
-import styles from './LetterList.module.scss';
-
-const LetterList = () => {
-  // 렌더링 시, 데이터 fetch
-  const onClickHandler = (e: React.MouseEvent<Element, MouseEvent>) => {
-    console.log('아이콘 클릭');
-    // 이벤트 전파 방지
-    e.stopPropagation();
-  };
-
+const Following = () => {
   const navigate = useNavigate();
 
-  // TODO : 이부분 로직을 상태관리 라이브러리로 변경
-  const moveLetterHandler = (id: number): void => {
-    navigate(`/letters/${id}`);
+  const moveProfileHandler = (id: number): void => {
+    navigate(`/profile/${id}`);
   };
-
   return (
     <ul className={styles.letter_list}>
       {userData.map((user: LetterUserData) => (
@@ -29,12 +18,11 @@ const LetterList = () => {
           key={user.memberId}
           {...user}
           date={user.lastLetter.createdAt}
-          onClick={moveLetterHandler}
+          onClick={moveProfileHandler}
         >
           {/* UserCard에 사용할 아이콘을 children으로 전달 */}
           <LetterStatusIcon
             status={user.lastLetter.status}
-            onClick={onClickHandler}
             isRead={user.lastLetter.isRead}
           />
         </UserCard>
@@ -43,4 +31,4 @@ const LetterList = () => {
   );
 };
 
-export default LetterList;
+export default Following;
