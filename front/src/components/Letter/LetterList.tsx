@@ -1,7 +1,10 @@
+import { useNavigate } from 'react-router-dom';
 import { userData } from '../../dummy/userList';
 import { LetterUserData } from '../../utils';
+
 import LetterStatusIcon from '../Common/LetterStatusIcon/LetterStatusIcon';
 import UserCard from '../Common/UserCard/UserCard';
+
 import styles from './LetterList.module.scss';
 
 const LetterList = () => {
@@ -12,15 +15,27 @@ const LetterList = () => {
     e.stopPropagation();
   };
 
+  const navigate = useNavigate();
+
+  // TODO : 이부분 로직을 상태관리 라이브러리로 변경
+  const moveLetterHandler = (id: number): void => {
+    navigate(`/letters/${id}`);
+  };
+
   return (
     <ul className={styles.letter_list}>
       {userData.map((user: LetterUserData) => (
-        <UserCard key={user.id} {...user} date={user.lastLetter.createdAt}>
+        <UserCard
+          key={user.memberId}
+          {...user}
+          date={user.lastLetter.createdAt}
+          onClick={moveLetterHandler}
+        >
           {/* UserCard에 사용할 아이콘을 children으로 전달 */}
           <LetterStatusIcon
             status={user.lastLetter.status}
             onClick={onClickHandler}
-            read={user.lastLetter.read}
+            isRead={user.lastLetter.isRead}
           />
         </UserCard>
       ))}

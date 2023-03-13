@@ -5,21 +5,21 @@ import styles from './LetterStatusIcon.module.scss';
 
 type LetterStatusIconProps = {
   status?: 'SENT' | 'RECEIVED';
-  onClick: (e: React.MouseEvent<Element, MouseEvent>) => void;
-  read?: boolean;
+  onClick?: (e: React.MouseEvent<Element, MouseEvent>) => void;
+  isRead?: boolean;
 };
 
 const LetterStatusIcon = ({
   status = 'SENT',
   onClick,
-  read = false,
+  isRead = false,
 }: LetterStatusIconProps) => {
   // 조건부 렌더링 같은 경우 어떤 식으로 하는 게 좋을지
   const Icons = {
     SENT: <Send />,
     RECEIVED: (
       <>
-        {read && <div className={styles.read_flag}></div>}
+        {isRead && <div className={styles.read_flag}></div>}
         <Receive />
       </>
     ),
@@ -28,7 +28,7 @@ const LetterStatusIcon = ({
   return (
     <div className={styles.letter_state}>
       {/* 상태에 따른 아이콘 */}
-      <button onClick={onClick}>{Icons[status]}</button>
+      <button onClick={onClick && onClick}>{Icons[status]}</button>
     </div>
   );
 };

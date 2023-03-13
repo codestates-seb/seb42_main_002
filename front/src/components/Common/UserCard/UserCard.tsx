@@ -5,30 +5,28 @@ import styles from './UserCard.module.scss';
 
 type UserCardProps = {
   name: string;
-  id: string | number; // 아직 미정
+  memberId: number;
   location: string; // 2자리 국가코드
   profile: string | null;
   children?: React.ReactNode;
   date: string | null;
+  onClick?: (id: number) => void;
 };
 
 const UserCard = ({
   name,
-  id,
+  memberId,
   location,
   profile,
   children,
   date,
+  onClick,
 }: UserCardProps) => {
-  const onClickHandler = (): void => {
-    console.log('임시 클릭 핸들러');
-  };
-
   return (
     <li
       className={styles.usercard}
       role="presentation"
-      onClick={onClickHandler}
+      onClick={onClick && onClick.bind(null, memberId)}
     >
       {/* PROFILE */}
       <div className={styles.profile_img}>
