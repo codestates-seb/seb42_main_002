@@ -1,4 +1,5 @@
 import styles from './SignUpFooter.module.scss';
+import { Link } from 'react-router-dom';
 
 export default function SignUpFooter({
   isText,
@@ -12,7 +13,7 @@ export default function SignUpFooter({
   return (
     <div className={styles.signup_footer}>
       <p>{isText}</p>
-      <a href={link}>{linkText}</a>
+      <Link to={link}>{linkText}</Link>
     </div>
   );
 }

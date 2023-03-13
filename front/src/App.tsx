@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import AuthProvider from './context/AuthContext';
 import NoneLayout from './components/Layouts/NoneLayout';
-import Intro from './components/Intro/Intro';
+import IntroPage from './pages/IntroPage';
 import BaseLayout from './components/Layouts/BaseLayout';
 import MainPage from './pages/MainPage';
 import MyProfilePage from './pages/MyProfilePage';
@@ -23,7 +23,7 @@ function App() {
           <ModalProvider>
             <Routes>
               <Route element={<NoneLayout />}>
-                <Route path="/" element={<Intro />} />
+                <Route path="/" element={<IntroPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<SignUpPage />} />
               </Route>
