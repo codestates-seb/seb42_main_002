@@ -2,7 +2,9 @@ package com.mainproject.back.block.controller;
 
 import com.mainproject.back.block.dto.BlockDto;
 import com.mainproject.back.block.entity.Block;
+import com.mainproject.back.block.mapper.BlockMapper;
 import com.mainproject.back.block.service.BlockService;
+import com.mainproject.back.letter.dto.LetterListDto;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.service.MemberService;
 import java.security.Principal;
@@ -39,6 +41,7 @@ public class BlockController {
 
   private final BlockService blockService;
   private final MemberService memberService;
+  private final BlockMapper mapper;
 
   @PostMapping
   public ResponseEntity postBlock(@Valid @RequestBody BlockDto.Post requestBody,
@@ -60,8 +63,9 @@ public class BlockController {
   public ResponseEntity getBlocks(@PageableDefault(sort = "block_id") Pageable pageable, Principal principal) {
     Member member = memberService.findMemberByEmail(principal.getName());
     Page<Block> blockPage = blockService.findBlocks(member.getMemberId(), pageable);
-
-    return ResponseEntity.ok().body(blockPage);
+    Page<BlockDto.Response> responses = mapper.pageBlockToPageBlockResponsePage(
+        blockPage);
+    return ResponseEntity.ok().body(responses);
 
   }
 

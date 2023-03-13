@@ -1,5 +1,6 @@
 package com.mainproject.back.vocabulary.controller;
 
+import com.mainproject.back.letter.dto.LetterListDto;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.service.MemberService;
 import com.mainproject.back.vocabulary.dto.VocabDto;
@@ -81,10 +82,9 @@ public class VocabController {
   public ResponseEntity getVocabs(@PageableDefault Pageable pageable, Principal principal) {
     Member member = memberService.findMemberByEmail(principal.getName());
     Page<Vocabulary> pageVocabs = vocabService.findVocabs(member.getMemberId(), pageable);
-//    List<Vocabulary> vocabs = pageVocabs.getContent();
-//    List<Response> responses = mapper.vocabsToVocabResponses(vocabs);
-
-    return new ResponseEntity<>(pageVocabs, HttpStatus.OK);
+    Page<VocabDto.Response> vocabResponseDto = mapper.pageVocabToPageVocabResponsePage(
+        pageVocabs);
+    return new ResponseEntity<>(vocabResponseDto, HttpStatus.OK);
   }
 
   @DeleteMapping("/{vocab-id}")

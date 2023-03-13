@@ -1,5 +1,6 @@
 package com.mainproject.back.vocabulary.dto;
 
+import com.mainproject.back.member.dto.MemberSimpleDto;
 import com.sun.istack.NotNull;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -41,6 +42,7 @@ public class VocabDto {
   public static class Response {
 
     private long vocabId;
+    private MemberSimpleDto member;
     private String location;
     private String word;
     private String meaning;
