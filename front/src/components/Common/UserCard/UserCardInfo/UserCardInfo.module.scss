@@ -1,5 +1,5 @@
-$main-font-size: 0.875rem;
-$sub-font-size: 0.625rem;
+$main-font-size: var(--font-size-xs);
+$sub-font-size: var(--font-size-xxs);
 
 .user_info {
   display: flex;
@@ -7,8 +7,6 @@ $sub-font-size: 0.625rem;
   justify-content: space-between;
 }
 .user {
-  margin-bottom: 0.625rem;
-
   & .name {
     font-size: $main-font-size;
     font-weight: 700;
@@ -23,4 +21,5 @@ $sub-font-size: 0.625rem;
 .interaction_date {
   font-size: $sub-font-size;
   color: var(--text-secondary-color);
+  margin-top: 0.625rem;
 }
