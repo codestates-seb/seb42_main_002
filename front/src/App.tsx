@@ -14,6 +14,7 @@ import HobbyTagPage from './components/Tag/AddHobbyTag';
 import ModalProvider from './context/ModalContext';
 import LetterDetailPage from './pages/LetterDetailPage';
 import NewLetterPage from './pages/NewLetterPage';
+import WelcomPage from './pages/WelcomPage';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
                 <Route path="/" element={<IntroPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<SignUpPage />} />
+                <Route path="/welcome" element={<WelcomPage />} />
               </Route>
               <Route element={<BaseLayout isAuth />}>
                 <Route path="/main" element={<MainPage />} />

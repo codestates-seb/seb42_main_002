@@ -4,11 +4,13 @@
     justify-content:center;
     align-items: center;
     height: 100%;
+    max-width: 40rem;
+    margin: 3rem auto;
 }
 .stamp_icon{
     position: absolute;
-    left: 160px;
-    top:-140px;
+    left: 18.75rem;
+    top:-11.25rem;
 }
 .fly_owl_container{
     position: relative;
@@ -16,32 +18,32 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-bottom: 50px;
+    margin-bottom: 3.125rem;
 }
 .cloud_1{
     position: absolute;
-    left: -40px;
-    top:-20px;
+    left: -6.25rem;
+    top:-2.5rem;
 }
 .cloud_2{
     position: absolute;
-    left: 180px;
-    top:90px;
+    left: 20rem;
+    top:8.75rem;
 }
 .text_container{
     text-align: center;
-    margin-bottom: 50px;
+    margin-bottom: 3.125rem;
     .text_Head{
-        font-size: 20px;
+        font-size: 1.25rem;
         color: var(--title-secondary-color);
-        margin-bottom: 20px;
+        margin-bottom: 1.25rem;
     }
     .text_body{
-        font-size: 12px;
+        font-size: .75rem;
         color: var(--text-secondary-color);
-        margin-bottom: 4px;
+        margin-bottom: .25rem;
     }
 }
 .start_btn{
-    width: 300px;
+    width: 18.75rem;
 }
