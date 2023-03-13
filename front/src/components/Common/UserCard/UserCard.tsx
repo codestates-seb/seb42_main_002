@@ -1,5 +1,3 @@
-import { useNavigate } from 'react-router-dom';
-
 import RoundProfile from '../RoundProfile/RoundProfile';
 import UserCardInfo from './UserCardInfo/UserCardInfo';
 
@@ -7,41 +5,28 @@ import styles from './UserCard.module.scss';
 
 type UserCardProps = {
   name: string;
-  memberId: string | number; // 아직 미정
+  memberId: number;
   location: string; // 2자리 국가코드
-  birthday: string;
   profile: string | null;
   children?: React.ReactNode;
   date: string | null;
+  onClick: (id: number) => void;
 };
 
 const UserCard = ({
   name,
   memberId,
   location,
-  birthday,
   profile,
   children,
   date,
+  onClick,
 }: UserCardProps) => {
-  const navigate = useNavigate();
-
-  const onClickHandler = (): void => {
-    navigate(`/letters/${memberId}`, {
-      state: {
-        name,
-        birthday,
-        profile,
-        location,
-      },
-    });
-  };
-
   return (
     <li
       className={styles.usercard}
       role="presentation"
-      onClick={onClickHandler}
+      onClick={onClick.bind(null, memberId)}
     >
       {/* PROFILE */}
       <div className={styles.profile_img}>
