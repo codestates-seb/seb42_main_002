@@ -1,0 +1,15 @@
+.card_list {
+  & li {
+    margin-bottom: 1rem;
+  }
+  & li:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.button {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 4.5rem;
+  box-shadow: var(--default-box-shadow);
+}

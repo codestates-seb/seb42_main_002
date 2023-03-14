@@ -16,6 +16,7 @@ import LetterDetailPage from './pages/LetterDetailPage';
 import NewLetterPage from './pages/NewLetterPage';
 import WelcomPage from './pages/WelcomPage';
 import FollowingPage from './pages/FollowingPage';
+import VocaPage from './pages/VocaPage';
 import BlackListPage from './pages/BlackListPage';
 
 function App() {
@@ -45,7 +46,8 @@ function App() {
                 <Route path="/followings" element={<FollowingPage />} />
                 <Route path="/blacklist" element={<BlackListPage />} />
                 <Route path="/newLetter" element={<NewLetterPage />} />
-                <Route path="/voca" element={<HobbyTagPage />} />
+                <Route path="/followings" element={<MainPage />} />
+                <Route path="/voca" element={<VocaPage />} />
                 <Route path="/my-profile" element={<MyProfilePage />} />
                 <Route path="/guide" element={<GuidePage />} />
               </Route>
