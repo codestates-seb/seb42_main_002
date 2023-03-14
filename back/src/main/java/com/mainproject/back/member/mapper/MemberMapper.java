@@ -3,15 +3,13 @@ package com.mainproject.back.member.mapper;
 
 import com.mainproject.back.language.dto.MemberLanguageDto;
 import com.mainproject.back.language.entity.MemberLanguage;
-import com.mainproject.back.letter.dto.LetterListDto;
-import com.mainproject.back.letter.entity.Letter;
 import com.mainproject.back.member.dto.MemberDto;
 import com.mainproject.back.member.dto.MemberRecommendDto;
-import com.mainproject.back.member.dto.MemberSimpleDto;
+import com.mainproject.back.member.dto.MemberSearchDto;
 import com.mainproject.back.member.dto.MemberTagResponseDto;
 import com.mainproject.back.member.entity.Member;
+import com.mainproject.back.tag.dto.TagSimpleDto;
 import com.mainproject.back.tag.entity.MemberTag;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.mapstruct.Mapper;
@@ -103,13 +101,18 @@ public interface MemberMapper {
         .location(member.getLocation())
         .gender(member.getGender())
         .profile(member.getProfile())
-        .tag(member.getMemberTags().stream().map(memberTag -> memberTag.getTag().getName()).collect(
-            Collectors.toList()));
-
+        .tag(member.getMemberTags().stream().map(memberTag -> {
+          TagSimpleDto dto = TagSimpleDto.builder()
+              .tagId(memberTag.getTag().getTagId())
+              .name(memberTag.getTag().getName())
+              .build();
+          return dto;
+        }).collect(Collectors.toList()));
     List<MemberLanguage> memberLanguageList = member.getMemberLanguages();
     List<MemberLanguageDto> memberLanguageDtoList = memberLanguageList.stream().map(
             (memberLanguage) -> MemberLanguageDto.builder()
-                .location(memberLanguage.getLanguage().getLocation()).level(memberLanguage.getLevel())
+                .languageId(memberLanguage.getLanguage().getLanguageId())
+                .nation(memberLanguage.getLanguage().getNation()).level(memberLanguage.getLevel())
                 .build())
         .collect(
             Collectors.toList());
@@ -141,4 +144,6 @@ public interface MemberMapper {
         .profile(member.getProfile());
     return builder.build();
   }
+
+  MemberSearchDto memberToMemberSearchDto(Member member);
 }

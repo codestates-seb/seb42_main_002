@@ -27,7 +27,7 @@ public class Language {
   private Long languageId;
 
   @Column
-  private String location;
+  private String nation;
 
   @OneToMany(mappedBy = "language")
   @Default

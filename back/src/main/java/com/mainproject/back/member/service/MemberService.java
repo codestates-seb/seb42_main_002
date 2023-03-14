@@ -6,11 +6,18 @@ import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.exception.MemberExceptionCode;
 import com.mainproject.back.member.repository.MemberRepository;
 import com.mainproject.back.security.utils.AuthorityUtils;
+import com.mainproject.back.tag.entity.Tag;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -148,5 +155,17 @@ public class MemberService {
   public Page<Member> findRecommendedMember(long memberId, Pageable pageable) {
     Page<Member> memberPage = memberRepository.findRecommended(memberId, pageable);
     return memberPage;
+  }
+
+  public Page<Member> searchMembersByTag(List<Tag> tagList, Pageable pageable){
+    Page<Member> memberPage = memberRepository.getMemberByTags(tagList, pageable);
+    List<Member> distinct = memberPage.stream().filter(distinctByKey(Member::getMemberId)).collect(
+        Collectors.toList());
+
+    return new PageImpl<>(distinct, pageable, distinct.size());
+  }
+  public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+    Set<Object> seen = ConcurrentHashMap.newKeySet();
+    return t -> seen.add(keyExtractor.apply(t));
   }
 }

@@ -17,9 +17,9 @@ public class LetterResponseDto {
   private String sender;
   @Setter
   private String receiver;
-  private String title;
   private String body;
   private List<String> pic;
+  private int type;
   private LocalDateTime createdAt;
   private LocalDateTime availableAt;
 }

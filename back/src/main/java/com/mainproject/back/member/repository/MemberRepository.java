@@ -1,7 +1,8 @@
 package com.mainproject.back.member.repository;
 
-import com.mainproject.back.letter.entity.Letter;
 import com.mainproject.back.member.entity.Member;
+import com.mainproject.back.tag.entity.Tag;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,5 +23,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
       + "group by b.member_id order by count(*) desc", nativeQuery = true)
   Page<Member> findRecommended(@Param("memberId") long memberId, Pageable pageable);
 
-
+  @Query("select m from Member m join m.memberTags t where t.tag in(:tags)")
+  Page<Member> getMemberByTags(@Param("tags")List<Tag> tags, Pageable pageable);
 }

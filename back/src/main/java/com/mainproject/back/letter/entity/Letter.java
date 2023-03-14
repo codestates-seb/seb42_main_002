@@ -6,16 +6,23 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Builder
@@ -27,9 +34,6 @@ public class Letter extends Auditable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long letterId;
-
-  @Column(nullable = false)
-  private String title;
 
   @Column(nullable = false)
   @Lob
@@ -58,6 +62,9 @@ public class Letter extends Auditable {
   @JoinColumn(name = "receiver_id")
   @Setter
   private Member receiver;
+
+  @Default
+  private Integer type = 1;
 
   @Override
   public int hashCode() {

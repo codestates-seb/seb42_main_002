@@ -40,7 +40,6 @@ public class LetterController {
   public ResponseEntity postLetter(@PathVariable("receiver-id") long receiverId, @RequestBody
       LetterPostDto letterPostDto, Principal principal) {
     log.info("## 편지 보내기: {}", receiverId);
-    log.info("## letter post dto: {}", letterPostDto.getTitle());
     letterPostDto.setReceiverId(receiverId);
 
     Member member = memberService.findMemberByEmail(principal.getName());

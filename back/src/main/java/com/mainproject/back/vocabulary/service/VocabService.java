@@ -34,8 +34,8 @@ public class VocabService {
 
     Optional.ofNullable(vocab.getWord())
         .ifPresent(findVocab::setWord);
-    Optional.ofNullable(vocab.getLocation())
-        .ifPresent(findVocab::setLocation);
+    Optional.ofNullable(vocab.getNation())
+        .ifPresent(findVocab::setNation);
     Optional.ofNullable(vocab.getMeaning())
         .ifPresent(findVocab::setMeaning);
 
