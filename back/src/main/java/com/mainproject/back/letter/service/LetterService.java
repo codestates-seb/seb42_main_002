@@ -9,13 +9,11 @@ import com.mainproject.back.letter.entity.Nations;
 import com.mainproject.back.letter.exception.LetterExceptionCode;
 import com.mainproject.back.letter.repository.LetterRepository;
 import com.mainproject.back.member.dto.MemberLetterDto;
-import com.mainproject.back.member.dto.MemberSimpleDto;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.service.MemberService;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,7 +23,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,9 +60,9 @@ public class LetterService {
     return savedLetter;
   }
 
-  public Page<Letter> findLettersByMemberAndTarget(long targetId, Pageable pageable) {
-    // TODO get memberId from principal
-    long memberId = 1L;
+  public Page<Letter> findLettersByMemberAndTarget(long targetId, Pageable pageable,
+      Principal principal) {
+    long memberId = memberService.findMemberByEmail(principal.getName()).getMemberId();
     Page<Letter> letterPage = letterRepository.findLettersByMemberAndTarget(memberId, targetId,
         pageable);
     return letterPage;
@@ -81,9 +78,7 @@ public class LetterService {
     return LocalDateTime.now();
   }
 
-  public Page<MemberLetterDto> findMembersByLetter(Pageable pageable) {
-    // TODO get memberId from principal
-    long memberId = 1L;
+  public Page<MemberLetterDto> findMembersByLetter(Pageable pageable, long memberId) {
     Set<Letter> sentLetter = letterRepository.findSentLettersByMember(memberId);
     Set<Letter> receivedLetter = letterRepository.findReceivedLettersByMember(memberId);
     Set<MemberLetterDto> memberLetterDtoSet = sentLetter.stream().map(letter -> {
@@ -112,10 +107,15 @@ public class LetterService {
     return memberLetterDtoPage;
   }
 
-  public LetterCountDto getArrivedLettersCount() {
-    // TODO get memberId from principal
-    long memberId = 1L;
+  public LetterCountDto getArrivedLettersCount(long memberId) {
     Long count = letterRepository.countByIsReadAndReceiver(memberId);
     return new LetterCountDto(count);
+  }
+
+  public Letter findLastLetter(long targetId, long memberId) {
+    Page<Letter> letterPage = letterRepository.findLastLetterByMember(targetId, memberId,
+        PageRequest.of(0, 1));
+    if(letterPage.isEmpty()) return null;
+    return letterPage.getContent().get(0);
   }
 }

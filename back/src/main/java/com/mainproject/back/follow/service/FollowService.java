@@ -24,7 +24,7 @@ public class FollowService {
   public Page<Follow> findFollower(long memberId, Pageable pageable) { return followRepository.findAllFollowersByFollowingId(memberId, pageable); }
 
 
-  public Page<Follow> findFollowing(long memberId, Pageable pageable) { return followRepository.findAllFollowersByFollowingId(memberId, pageable); }
+  public Page<Follow> findFollowing(long memberId, Pageable pageable) { return followRepository.findAllFollowingsByFollowerId(memberId, pageable); }
 
 
 }

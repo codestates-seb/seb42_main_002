@@ -50,9 +50,6 @@ public class MemberService {
 
   @Transactional
   public Member updateMember(Member member) {
-    // member patch dto -> member
-    // member patch dto : list<string> tag -> member : list<memberTag> tag
-    // member -> find member 수정
     Member findMember = findVerifiedMember(member.getMemberId());
     Optional.ofNullable(member.getName())
         .ifPresent(findMember::setName);
@@ -68,54 +65,6 @@ public class MemberService {
     log.info("## updated member: {}", savedMember);
     return savedMember;
   }
-
-//  @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-//  public Member updateMember(MemberDto.Patch requestBody, Member member) {
-//    Member findMember = findVerifiedMember(member.getMemberId());
-
-//    Optional.ofNullable(member.getName())
-//        .ifPresent(name -> Member.builder().name(name).build());
-//    Optional.ofNullable(member.getPassword())
-//        .ifPresent(password -> Member.builder().password(password).build());
-//    Optional.ofNullable(member.getMemberLanguages())
-//            .ifPresent(memberLanguages -> Member.builder().memberLanguages(memberLanguages).build());
-//    Optional.ofNullable(member.getMemberTags())
-//        .ifPresent(memberTags -> Member.builder().memberTags(memberTags).build());
-//    Optional.ofNullable(member.getIntroduce())
-//            .ifPresent(introduce -> Member.builder().introduce(introduce).build());
-//    Optional.ofNullable(member.getMemberStatus())
-//        .ifPresent(memberStatus -> Member.builder().memberStatus(memberStatus).build());
-
-//    Optional.ofNullable(member.getName())
-//        .ifPresent(findMember::setName);
-//    Optional.ofNullable(member.getIntroduce())
-//        .ifPresent(findMember::setIntroduce);
-////    Optional.ofNullable(member.getMemberLanguages())
-////        .ifPresent(findMember::setMemberLanguages);
-//    Optional.ofNullable(member.getProfile())
-//        .ifPresent(findMember::setProfile);
-//
-//
-//
-//    return memberRepository.save(findMember);
-//  }
-
-//  @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-//  public Member updateMemberTag(long memberId, MemberTagPatchDto requestBody) {
-////    List<MemberTag> findMembers = memberTagRepository.findAllByMemberId(memberId);
-//
-//    Member findMember = findVerifiedMember(memberId);
-//
-//    memberTagRepository.deleteAllByMember(findMember);
-//
-//    for (MemberTagDto dto : requestBody.getMemberTags()) {
-//      MemberTag memberTag = MemberTag.builder()
-//          .member(findMember)
-//          .tag(tagRepository.findById(dto.getTagId())).build();
-//      memberTagRepository.save(memberTag);
-//    }
-//    return findVerifiedMember(memberId);
-//  }
 
   public Member findMember(long memberId) {
     return findVerifiedMember(memberId);
@@ -152,18 +101,24 @@ public class MemberService {
     return findMember;
   }
 
+  public Long findMemberIdByEmail(String email) {
+    return memberRepository.findMemberIdByEmail(email)
+        .orElseThrow(() -> new BusinessLogicException(MemberExceptionCode.MEMBER_NOT_FOUND));
+  }
+
   public Page<Member> findRecommendedMember(long memberId, Pageable pageable) {
     Page<Member> memberPage = memberRepository.findRecommended(memberId, pageable);
     return memberPage;
   }
 
-  public Page<Member> searchMembersByTag(List<Tag> tagList, Pageable pageable){
+  public Page<Member> searchMembersByTag(List<Tag> tagList, Pageable pageable) {
     Page<Member> memberPage = memberRepository.getMemberByTags(tagList, pageable);
     List<Member> distinct = memberPage.stream().filter(distinctByKey(Member::getMemberId)).collect(
         Collectors.toList());
 
     return new PageImpl<>(distinct, pageable, distinct.size());
   }
+
   public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
     Set<Object> seen = ConcurrentHashMap.newKeySet();
     return t -> seen.add(keyExtractor.apply(t));
