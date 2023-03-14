@@ -1,6 +1,7 @@
 import TagsModal from '../Common/Tags/TagsModal';
 import { nationalityTags, languageTags, hobbyTags } from '../../dummy/Tags';
 
+// 첫 국적 선택 모달
 export function FirstNationality() {
   return (
     <>
@@ -14,6 +15,7 @@ export function FirstNationality() {
   );
 }
 
+// 첫 언어선택 모달
 export function FirstLanguage() {
   return (
     <>
@@ -22,6 +24,7 @@ export function FirstLanguage() {
   );
 }
 
+// 첫 취미 선택 모달
 export function FirstHobby() {
   return (
     <>

@@ -3,7 +3,7 @@
   height: 100%;
   padding: 1rem;
   background-color: white;
-  margin-bottom: 3rem;
+  position: relative;
 }
 .input_container {
   position: relative;
@@ -37,6 +37,9 @@
   justify-content: space-between;
   width: 100%;
   cursor: default;
+  overflow-y: scroll;
+  max-height: 66vh;
+  padding-bottom: 2rem;
 }
 .tag {
   display: flex;
@@ -84,7 +87,9 @@
   margin-bottom: 1.5rem;
 }
 .bottom_btn {
-  position: fixed;
+  position: absolute;
   bottom: 0;
-  width: calc(100% - 1.875rem);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
 }

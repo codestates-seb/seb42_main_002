@@ -71,7 +71,7 @@ export default function TagsModal({
           </Button>
         </div>
       ) : (
-        <button>임시</button>
+        <></>
       )}
     </div>
   );
