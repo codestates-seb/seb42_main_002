@@ -1,16 +1,22 @@
-export const nationalityTags = [  
-{ id:1, name:'한국', flag:'KOREA', alpha:'KR'},
-{ id:2, name:'미국', flag:'English', alpha:'EN'},
-{ id:3, name:'중국', flag:'Simplified Chinese', alpha:'ZH-CN'},
-{ id:4, name:'일본', flag:'Japanese', alpha:'JA'},
-{ id:5, name:'스페인', flag:'Spanish', alpha:'ES'},]
+export const nationalityTags = [
+  { id: 1, name: '한국', flag: 'KOREA', alpha: 'KR' },
+  { id: 2, name: '미국', flag: 'English', alpha: 'EN' },
+  { id: 3, name: '중국', flag: 'Simplified Chinese', alpha: 'ZH-CN' },
+  { id: 4, name: '일본', flag: 'Japanese', alpha: 'JA' },
+  { id: 5, name: '스페인', flag: 'Spanish', alpha: 'ES' },
+];
 
 export const languageTags = [
-  { id:1, name:'한국어', englishName:'KOREA',alpha:'KR'},
-  { id:2, name:'English', englishName:'English',alpha:'EN'},
-  { id:3, name:'简体中文', englishName:'Simplified Chinese',alpha:'ZH-CN'},
-  { id:4, name:'日本語', englishName:'Japanese',alpha:'JA'},
-  { id:5, name:'Español', englishName:'Spanish',alpha:'ES'},
+  { id: 1, name: '한국어', englishName: 'KOREA', alpha: 'KR' },
+  { id: 2, name: 'English', englishName: 'English', alpha: 'EN' },
+  {
+    id: 3,
+    name: '简体中文',
+    englishName: 'Simplified Chinese',
+    alpha: 'ZH-CN',
+  },
+  { id: 4, name: '日本語', englishName: 'Japanese', alpha: 'JA' },
+  { id: 5, name: 'Español', englishName: 'Spanish', alpha: 'ES' },
 ];
 
 export const hobbyTags = [

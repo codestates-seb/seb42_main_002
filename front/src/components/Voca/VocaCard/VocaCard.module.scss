@@ -1,0 +1,42 @@
+.card {
+  display: flex;
+  box-shadow: var(--default-box-shadow);
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: var(--white);
+  cursor: pointer;
+  min-height: 4.5rem;
+}
+.word {
+  max-width: 3.5rem;
+  text-align: center;
+  font-weight: 700;
+  color: var(--text-primary-color);
+  margin-right: 0.8rem;
+  word-break: break-all;
+  white-space: pre-line;
+  word-wrap: break-word;
+  height: 100%;
+}
+.meaning {
+  font-size: var(--font-size-xxs);
+  color: var(--text-secondary-color);
+  flex: 1 1 0;
+  word-break: break-all;
+  white-space: pre-line;
+  word-wrap: break-word;
+  height: 100%;
+  margin-right: 0.8rem;
+}
+.buttons {
+  & .button:first-child {
+    margin-right: 0.8rem;
+  }
+}
+.button {
+  color: var(--button-secondary-color);
+  &:hover {
+    color: var(--button-primary-color);
+  }
+}

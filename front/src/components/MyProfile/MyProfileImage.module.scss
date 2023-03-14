@@ -19,8 +19,14 @@
       height: 2.25rem;
       background-color: #000;
       border-radius: var(--border-radius-sm);
+      border: 2px solid var(--text-primary-color);
+      overflow: hidden;
       top: -1rem;
       left: -1rem;
+      background-size: cover;
+      &.KR {
+        background-image: url('../../assets/img/flags/flag_kr.svg');
+      }
     }
   }
   label {

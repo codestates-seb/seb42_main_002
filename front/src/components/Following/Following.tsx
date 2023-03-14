@@ -11,6 +11,7 @@ const Following = () => {
   const moveProfileHandler = (id: number): void => {
     navigate(`/profile/${id}`);
   };
+
   return (
     <ul className={styles.letter_list}>
       {userData.map((user: LetterUserData) => (
