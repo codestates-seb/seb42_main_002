@@ -19,7 +19,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Follow extends Auditable {
 
@@ -28,11 +28,14 @@ public class Follow extends Auditable {
   private Long followId;
 
   @ManyToOne(fetch = FetchType.LAZY)
+  @Setter
   @JoinColumn(name = "follower_id")
   private Member follower;
 
   @ManyToOne(fetch = FetchType.LAZY)
+  @Setter
   @JoinColumn(name = "following_id")
   private Member following;
 
 }
+
