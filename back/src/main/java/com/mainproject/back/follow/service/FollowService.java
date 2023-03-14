@@ -1,7 +1,9 @@
 package com.mainproject.back.follow.service;
 
 
+import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.follow.entity.Follow;
+import com.mainproject.back.follow.exception.FollowExceptionCode;
 import com.mainproject.back.follow.repository.FollowRepository;
 import com.mainproject.back.member.dto.MemberSearchDto;
 import com.mainproject.back.member.entity.Member;
@@ -24,7 +26,10 @@ public class FollowService {
   }
 
   public void deleteFollow(long followId) {
-    followRepository.deleteById(followId);
+    long id = followRepository.findFollowIdById(followId)
+        .orElseThrow(() -> new BusinessLogicException(
+            FollowExceptionCode.FOLLOW_NOT_FOUND));
+    followRepository.deleteById(id);
   }
 
   public Page<Follow> findFollower(long memberId, Pageable pageable) {
