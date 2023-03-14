@@ -1,12 +1,11 @@
 package com.mainproject.back.follow.controller;
 
 
-
-import com.mainproject.back.block.dto.BlockDto;
-import com.mainproject.back.follow.entity.Follow;
 import com.mainproject.back.follow.dto.FollowDto;
+import com.mainproject.back.follow.entity.Follow;
 import com.mainproject.back.follow.mapper.FollowMapper;
 import com.mainproject.back.follow.service.FollowService;
+import com.mainproject.back.member.dto.MemberSearchDto;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.service.MemberService;
 import java.security.Principal;
@@ -40,6 +39,7 @@ public class FollowController {
 
   private final FollowMapper followMapper;
   private final MemberService memberService;
+
   @PostMapping
   public ResponseEntity postFollow(@Valid @RequestBody FollowDto.Post requestBody,
       Principal principal) {
@@ -51,14 +51,14 @@ public class FollowController {
     follow.setFollower(follower);
     follow.setFollowing(following);
 
-
     followService.createFollow(follow);
 
     return ResponseEntity.ok().build();
   }
 
   @GetMapping("/follower")
-  public ResponseEntity getFollower(@PageableDefault(sort = "follow_id") Pageable pageable, Principal principal) {
+  public ResponseEntity getFollower(@PageableDefault(sort = "follow_id") Pageable pageable,
+      Principal principal) {
     Member currentMember = memberService.findMemberByEmail(principal.getName());
 
     Page<Follow> followPage = followService.findFollower(currentMember.getMemberId(), pageable);
@@ -71,14 +71,13 @@ public class FollowController {
   }
 
   @GetMapping("/following")
-  public ResponseEntity getFollowing(@PageableDefault(sort = "follow_id") Pageable pageable, Principal principal) {
+  public ResponseEntity getFollowing(@PageableDefault(sort = "follow_id") Pageable pageable,
+      Principal principal) {
     Member currentMember = memberService.findMemberByEmail(principal.getName());
 
     Page<Follow> followPage = followService.findFollowing(currentMember.getMemberId(), pageable);
 
-    Page<FollowDto.Response> responses = followMapper.pageFollowToPageFollowResponsePage(
-        followPage);
-
+    Page<MemberSearchDto> responses = followService.convertToResponseDto(followPage);
 
     return ResponseEntity.ok().body(responses);
 

@@ -32,7 +32,7 @@ public interface LetterRepository extends JpaRepository<Letter, Long> {
 
   @Query("select l from Letter l "
       + "join l.receiver r join l.sender s "
-      + "where r.memberId = :receiverId and s.memberId = :senderId "
+      + "where (r.memberId = :targetId and s.memberId = :memberId) or (r.memberId = :memberId and s.memberId = :targetId)"
       + "order by l.createdAt")
-  Page<Letter> findLastLetterByMember(@Param("receiverId") long receiverId, @Param("senderId") long senderId, Pageable pageable);
+  Page<Letter> findLastLetterByMember(@Param("targetId") long targetId, @Param("memberId") long memberId, Pageable pageable);
 }
