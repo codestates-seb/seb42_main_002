@@ -1,18 +1,17 @@
-import styles from './AddTagPage.module.scss';
+import { useState, ChangeEvent } from 'react';
 import { BsSearch } from 'react-icons/bs';
-import { useState } from 'react';
 import { TagDataType } from '../../utils/types/tags/tags';
+import styles from './AddTagPage.module.scss';
 
-export default function TagSearchBar({
-  tags,
-  filterHandler,
-}: {
+type TagSearchBarProps = {
   tags: TagDataType[];
-  filterHandler: any;
-}) {
+  filterHandler: (filteredTags: TagDataType[]) => void;
+};
+
+const TagSearchBar = ({ tags, filterHandler }: TagSearchBarProps) => {
   const [innerText, setInnerText] = useState('');
 
-  const onChangeHandler = (e: any) => {
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setInnerText(e.target.value);
     const filterArray = tags.filter((el) => {
       if (el.name !== undefined) return el.name.includes(e.target.value);
@@ -33,4 +32,6 @@ export default function TagSearchBar({
       <BsSearch className={styles.search_icon} />
     </div>
   );
-}
+};
+
+export default TagSearchBar;

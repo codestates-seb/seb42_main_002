@@ -7,6 +7,8 @@ type LabelProps = {
   to?: string; // 링크가 있는 경우
   isActive?: boolean;
   children?: ReactNode;
+  className?: string;
+  onClick?: () => void;
 };
 
 const Label = ({ to, isActive, children }: LabelProps) => {

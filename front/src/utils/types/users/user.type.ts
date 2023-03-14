@@ -1,6 +1,22 @@
+import { GENDER_TYPE } from '../../enums/common/common.enum';
+import { LanguageDataType } from '../common/common.type';
+import { TagDataType } from '../tags/tags';
+
 export type UserData = {
+  memberId: number;
   email: string;
-  displayName: string;
+  name: string;
+  gender: GENDER_TYPE;
+  location?: string;
+  birthday?: string;
+  language: LanguageDataType[];
+  tag?: TagDataType[];
+  introduce?: string;
+  profile?: string | null;
+  memberStatus?: string;
+  selectedLevelValue?: number | string | null;
+  selectedNationValue?: number | string | null;
+  selectedLanguage?: any;
 };
 
 type Language = {

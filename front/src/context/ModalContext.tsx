@@ -16,8 +16,9 @@ export type SetOpenModalProps = {
 
 // 모달에서 발생하는 이벤트를 설정하는 객체 타입
 export type ModalEventProps = {
-  onSubmit?: () => void;
+  onSubmit?: (...props: any) => void;
   onClose?: () => void;
+  onCustom?: (...props: any) => void;
 };
 
 type ModalStateContextProps = {
