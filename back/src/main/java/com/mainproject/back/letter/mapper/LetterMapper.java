@@ -20,7 +20,6 @@ public interface LetterMapper {
       return null;
     } else {
       Letter.LetterBuilder letter = Letter.builder();
-      letter.title(letterPostDto.getTitle());
       letter.body(letterPostDto.getBody());
       ArrayList<String> arrayList = letterPostDto.getPic();
       if (arrayList != null) {
@@ -50,11 +49,6 @@ public interface LetterMapper {
     } else {
       builder.receiver(letter.getReceiver().getName());
     }
-    if (letter.getAvailableAt().isAfter(LocalDateTime.now())) {
-      builder.title(null).body(null);
-    } else {
-      builder.title(letter.getTitle()).body(letter.getBody());
-    }
     return builder.build();
   }
 
@@ -71,11 +65,14 @@ public interface LetterMapper {
             .name(letter.getReceiver().getName()).build())
         .isRead(letter.getIsRead())
         .availableAt(letter.getAvailableAt())
-        .createdAt(letter.getCreatedAt())
-        .pic(letter.getPic());
+        .createdAt(letter.getCreatedAt());
     if (LocalDateTime.now().isAfter(letter.getAvailableAt())) {
-      builder.title(letter.getTitle())
-          .body(letter.getBody());
+      builder.body(letter.getBody());
+    }
+    if (letter.getPic() == null || letter.getPic().isEmpty()) {
+      builder.hasPic(false);
+    } else {
+      builder.hasPic(true);
     }
     return builder.build();
   }

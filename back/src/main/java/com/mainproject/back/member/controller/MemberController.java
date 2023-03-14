@@ -1,16 +1,17 @@
 package com.mainproject.back.member.controller;
 
 import com.mainproject.back.helper.UriCreator;
-import com.mainproject.back.letter.dto.LetterListDto;
-import com.mainproject.back.letter.entity.Letter;
 import com.mainproject.back.member.dto.MemberDto;
 import com.mainproject.back.member.dto.MemberRecommendDto;
+import com.mainproject.back.member.dto.MemberSearchDto;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.mapper.MemberMapper;
 import com.mainproject.back.member.service.MemberConvertService;
 import com.mainproject.back.member.service.MemberService;
+import com.mainproject.back.tag.entity.Tag;
 import java.net.URI;
 import java.security.Principal;
+import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -95,6 +96,14 @@ public class MemberController {
     Page<MemberRecommendDto> memberRecommendDtoPage = mapper.pageMemberToMemberRecommendDtoPage(
         memberPage);
     return ResponseEntity.ok().body(memberRecommendDtoPage);
+  }
+
+  @GetMapping("/tag/{tags}")
+  public ResponseEntity searchMembers(@PathVariable("tags") String tags, @PageableDefault Pageable pageable) {
+    List<Tag> tagList = memberConvertService.getTags(tags);
+    Page<Member> memberPage = memberService.searchMembersByTag(tagList, pageable);
+    Page<MemberSearchDto> searchDtoPage = memberPage.map(mapper::memberToMemberSearchDto);
+    return ResponseEntity.ok().body(searchDtoPage);
   }
 
 }

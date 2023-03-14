@@ -1,7 +1,5 @@
 package com.mainproject.back.vocabulary.mapper;
 
-import com.mainproject.back.letter.dto.LetterListDto;
-import com.mainproject.back.letter.entity.Letter;
 import com.mainproject.back.member.dto.MemberSimpleDto;
 import com.mainproject.back.vocabulary.dto.VocabDto;
 import com.mainproject.back.vocabulary.entity.Vocabulary;
@@ -31,7 +29,7 @@ public interface VocabMapper {
         .word(vocab.getWord())
         .createdAt(vocab.getCreatedAt())
         .meaning(vocab.getMeaning())
-        .location(vocab.getLocation())
+        .nation(vocab.getNation())
         .build();
     return response;
   }
@@ -45,7 +43,7 @@ public interface VocabMapper {
             .word(vocab.getWord())
             .createdAt(vocab.getCreatedAt())
             .meaning(vocab.getMeaning())
-            .location(vocab.getLocation())
+            .nation(vocab.getNation())
             .build())
         .collect(Collectors.toList());
   }

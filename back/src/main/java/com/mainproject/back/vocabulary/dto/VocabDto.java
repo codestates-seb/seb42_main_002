@@ -21,7 +21,7 @@ public class VocabDto {
     @Setter
     private String meaning;
     @Setter
-    private String location;
+    private String nation;
     @Setter
     private long memberId;
   }
@@ -43,7 +43,7 @@ public class VocabDto {
 
     private long vocabId;
     private MemberSimpleDto member;
-    private String location;
+    private String nation;
     private String word;
     private String meaning;
     private LocalDateTime createdAt;

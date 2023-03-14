@@ -13,6 +13,7 @@ import com.mainproject.back.tag.entity.MemberTag;
 import com.mainproject.back.tag.entity.Tag;
 import com.mainproject.back.tag.exception.TagExceptionCode;
 import com.mainproject.back.tag.service.TagService;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -42,7 +43,7 @@ public class MemberConvertService {
     List<MemberLanguage> memberLanguageList = languageDtoList.stream().map(languageDto -> {
       MemberLanguage memberLanguage = MemberLanguage.builder().level(languageDto.getLevel())
           .build();
-      memberLanguage.addLanguage(findLanguage(allLanguages, languageDto.getLocation()));
+      memberLanguage.addLanguage(findLanguage(allLanguages, languageDto.getNation()));
       memberLanguage.addMember(member);
       return memberLanguage;
     }).collect(Collectors.toList());
@@ -51,7 +52,7 @@ public class MemberConvertService {
 
   private Language findLanguage(List<Language> allLanguage, String nation) {
     for (Language language : allLanguage) {
-      if (language.getLocation().equals(nation)) {
+      if (language.getNation().equals(nation)) {
         return language;
       }
     }
@@ -61,9 +62,10 @@ public class MemberConvertService {
   private void getMemberTag(Member member, List<String> names) {
     List<Tag> allTags = tagService.findAllTags();
     List<MemberTag> memberTagList = names.stream().map(name -> {
+      Tag tag = findTag(allTags, name);
       MemberTag memberTag = MemberTag.builder().build();
       memberTag.addMember(member);
-      memberTag.addTag(findTag(allTags, name));
+      memberTag.addTag(tag);
       return memberTag;
     }).collect(Collectors.toList());
     member.setMemberTags(memberTagList);
@@ -78,4 +80,11 @@ public class MemberConvertService {
     throw new BusinessLogicException(TagExceptionCode.TAG_NOT_FOUND);
   }
 
+  public List<Tag> getTags(String tagNames){
+    String[] tagNameArr = tagNames.split("[+]");
+    List<Tag> allTags = tagService.findAllTags();
+    List<Tag> tagList = Arrays.stream(tagNameArr).map(name -> findTag(allTags, name)).collect(
+        Collectors.toList());
+    return tagList;
+  }
 }

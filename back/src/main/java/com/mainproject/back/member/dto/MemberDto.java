@@ -2,6 +2,7 @@ package com.mainproject.back.member.dto;
 
 import com.mainproject.back.language.dto.MemberLanguageDto;
 import com.mainproject.back.member.entity.Member;
+import com.mainproject.back.tag.dto.TagSimpleDto;
 import java.util.List;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -46,7 +47,7 @@ public class MemberDto {
     private String birthday;
     private String profile;
     private List<MemberLanguageDto> language;
-    private List<String> tag;
+    private List<TagSimpleDto> tag;
     private Member.MemberStatus memberStatus;
   }
 

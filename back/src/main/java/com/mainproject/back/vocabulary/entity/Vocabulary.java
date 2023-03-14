@@ -35,7 +35,7 @@ public class Vocabulary extends Auditable {
   private String meaning;
 
   @Column(nullable = false)
-  private String location;
+  private String nation;
 
   @ManyToOne
   @JoinColumn(name = "member_id")
