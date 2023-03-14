@@ -1,0 +1,23 @@
+.extra_info {
+  position: relative;
+  padding: 2rem 1rem 1.5rem;
+  &:before {
+    display: block;
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 17px;
+    left: 0;
+    top: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(217, 217, 217, 0.41) 0%,
+      rgba(217, 217, 217, 0) 100%
+    );
+  }
+  .input_container {
+    + .input_container {
+      margin-top: 2rem;
+    }
+  }
+}

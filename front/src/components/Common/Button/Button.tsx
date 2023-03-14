@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import styles from './Button.module.scss';
 
 type ButtonProps = {
-  variant: 'default' | 'primary' | 'secondary' | 'dashed'; // 버튼 테마 색상 타입
+  variant: 'default' | 'primary' | 'secondary' | 'danger' | 'dashed'; // 버튼 테마 색상 타입
   size: 'sm' | 'md' | 'lg'; // 버튼 사이즈
   icon?: string | ReactNode; // 아이콘
   iconBtn?: boolean; // 아이콘 버튼 형태
@@ -17,11 +17,17 @@ type ButtonProps = {
   onClick?: (e: React.MouseEvent<Element, MouseEvent>) => void;
 };
 
-type sizeTypes = { sm: string; md: string; lg: string };
+type sizeTypes = {
+  sm: string;
+  md: string;
+  lg: string;
+};
+
 type variantTypes = {
   default: string;
   primary: string;
   secondary: string;
+  danger: string;
   dashed: string;
 };
 
@@ -35,6 +41,7 @@ const VARIANTS: variantTypes = {
   default: styles.default,
   primary: styles.primary,
   secondary: styles.secondary,
+  danger: styles.danger,
   dashed: styles.dashed,
 };
 

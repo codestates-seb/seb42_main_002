@@ -1,5 +1,16 @@
 .row {
   display: flex;
+  width: 100%;
+  flex-direction: row;
+  &.row_reverse {
+    flex-direction: row-reverse;
+  }
+  &.column {
+    flex-direction: column;
+  }
+  &.col_reverse {
+    flex-direction: column-reverse;
+  }
 
   // gap
   &.gap_sm {

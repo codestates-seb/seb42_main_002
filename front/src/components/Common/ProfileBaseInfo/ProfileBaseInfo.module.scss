@@ -1,0 +1,12 @@
+.base_info {
+  position: relative;
+  padding: 2rem 1rem 1.5rem;
+  display: grid;
+  grid-template-columns: minmax(40%, 4rem) 1fr;
+  gap: 1rem;
+  .img_area {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 8rem;
+  }
+}

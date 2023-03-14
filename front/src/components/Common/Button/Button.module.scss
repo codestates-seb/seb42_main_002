@@ -52,6 +52,10 @@
       background-color: var(--light-color);
     }
   }
+  &.danger {
+    background-color: var(--danger-color);
+    color: var(--white);
+  }
 
   // full size
   &.is_full {

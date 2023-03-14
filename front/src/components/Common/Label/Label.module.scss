@@ -8,6 +8,7 @@
   background-color: var(--light-color);
   color: var(--text-primary-color);
   font-size: var(--font-size-xs);
+  white-space: nowrap;
   &.is_active {
     background-color: var(--active-color);
     color: var(--white);
