@@ -1,0 +1,15 @@
+.container {
+  margin-top: 1rem;
+  .name {
+    font-size: var(--font-size-sm);
+  }
+
+  .englishName {
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary-color);
+  }
+
+  .level {
+    font-size: var(--font-size-md);
+  }
+}

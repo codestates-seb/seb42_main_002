@@ -20,11 +20,9 @@
     display: grid;
     grid-template-rows: auto 1fr auto;
     width: 100%;
-    height: calc(100vh - 1rem);
+    height: 100vh;
     position: relative;
     padding: 0;
-    z-index: 100;
-    margin-top: 1rem;
     background-color: white;
     border-top-left-radius: var(--border-radius-md);
     border-top-right-radius: var(--border-radius-md);
@@ -37,9 +35,11 @@
     }
     .body {
       padding: 2rem 1rem;
+      overflow-y: auto;
     }
     .footer {
       padding: 1rem 1rem;
+      box-shadow: 0 -0.5rem 1.5rem rgba(0, 0, 0, 0.1);
     }
   }
 }

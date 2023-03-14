@@ -1,4 +1,10 @@
 import { UserProfileData } from './../utils/types/users';
+import { UserData } from '../utils';
+import {
+  GENDER_TYPE,
+  LANGUAGE_CODE,
+  LOCATION_CODE,
+} from '../utils/enums/common/common.enum';
 import { SignInData } from '../utils/types/auth';
 
 export const signInUser: SignInData = {
@@ -27,4 +33,43 @@ export const userProfile: UserProfileData = {
     },
   ],
   tag: ['음악', '댄스'],
+};
+
+export const profileUser: UserData = {
+  memberId: 1,
+  name: '록벨',
+  email: 'rockbell89@gmail.com',
+  gender: GENDER_TYPE.MALE,
+  location: LOCATION_CODE.KR,
+  birthday: '2022-03-06',
+  profile: null,
+  introduce: '안녕하세요~ 반갑습니다~~!',
+  language: [
+    {
+      nation: LANGUAGE_CODE.KO,
+      level: 1,
+    },
+    {
+      nation: LANGUAGE_CODE.JA,
+      level: 2,
+    },
+    {
+      nation: LANGUAGE_CODE.EN,
+      level: 3,
+    },
+  ],
+  tag: [
+    {
+      id: 1,
+      name: '코딩',
+    },
+    {
+      id: 13,
+      name: '음악',
+    },
+  ],
+  memberStatus: '활동중',
+  selectedLanguage: null,
+  selectedLevelValue: null,
+  selectedNationValue: null,
 };
