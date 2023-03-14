@@ -18,6 +18,7 @@ import WelcomPage from './pages/WelcomPage';
 import FollowingPage from './pages/FollowingPage';
 import VocaPage from './pages/VocaPage';
 import BlackListPage from './pages/BlackListPage';
+import ProfilePage from './components/Profile/ProfilePage';
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
                 <Route path="/followings" element={<MainPage />} />
                 <Route path="/voca" element={<VocaPage />} />
                 <Route path="/my-profile" element={<MyProfilePage />} />
+                <Route path="/profile/:memberId" element={<ProfilePage />} />
                 <Route path="/guide" element={<GuidePage />} />
               </Route>
             </Routes>
