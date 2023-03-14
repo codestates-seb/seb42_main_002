@@ -17,6 +17,7 @@ import NewLetterPage from './pages/NewLetterPage';
 import WelcomPage from './pages/WelcomPage';
 import FollowingPage from './pages/FollowingPage';
 import BlackListPage from './pages/BlackListPage';
+import ProfilePage from './components/Profile/ProfilePage';
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
                 <Route path="/newLetter" element={<NewLetterPage />} />
                 <Route path="/voca" element={<HobbyTagPage />} />
                 <Route path="/my-profile" element={<MyProfilePage />} />
+                <Route path="/profile/:memberId" element={<ProfilePage />} />
                 <Route path="/guide" element={<GuidePage />} />
               </Route>
             </Routes>
