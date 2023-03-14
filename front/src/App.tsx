@@ -10,7 +10,6 @@ import UserLetterListPage from './pages/UserLetterListPage';
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import GuidePage from './pages/GuidePage';
-import HobbyTagPage from './components/Tag/AddHobbyTag';
 import ModalProvider from './context/ModalContext';
 import LetterDetailPage from './pages/LetterDetailPage';
 import NewLetterPage from './pages/NewLetterPage';
