@@ -6,11 +6,13 @@
   text-decoration: none;
   border-radius: var(--border-radius-sm);
   background-color: var(--light-color);
+  border: 2px solid var(--light-color);
   color: var(--text-primary-color);
   font-size: var(--font-size-xs);
   white-space: nowrap;
   &.is_active {
     background-color: var(--active-color);
+    border-color: var(--active-color);
     color: var(--white);
   }
 }

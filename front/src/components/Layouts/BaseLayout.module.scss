@@ -17,9 +17,10 @@
     border-top: 13px solid;
     border-image: url('../../assets/img/envelope_line.svg') 26;
     border-image-repeat: repeat;
-    &:not(.noTitle) {
-      display: grid;
-      grid-template-rows: auto 1fr;
-    }
+    // &:not(.noTitle) {
+    //   display: grid;
+    //   grid-template-rows: auto 1fr;
+    //   grid-template-columns: 100%;
+    // }
   }
 }

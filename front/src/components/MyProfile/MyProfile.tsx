@@ -19,6 +19,21 @@ import { userState } from '../../recoil/atoms/user';
 import { userTagState } from '../../recoil/atoms/userTag';
 import { userLanguageState } from '../../recoil/atoms/userLanguage';
 import ButtonGroup from '../Common/Button/ButtonGroup';
+import ProfileCard from '../Common/ProfileCard/ProfileCard.module';
+import Flex from '../Common/Flex/Flex';
+import ProfileImage from '../Common/ProfileImage/ProfileImage';
+import InfoGroup from '../Common/InfoGroup/InfoGroup';
+import { RiAlarmWarningLine } from 'react-icons/ri';
+import InputForm from '../SignUp/InputForm';
+import { MdOutlineAttachEmail } from 'react-icons/md';
+import { FaMars, FaTransgender, FaVenus } from 'react-icons/fa';
+import RadioGroup from '../Common/RadioButton/RadioButtonGroup';
+import {
+  CONST_GENDER_TYPE,
+  GENDER_TYPE,
+} from '../../utils/enums/common/common.enum';
+import InputFeild from '../Common/InputFeild/InputFeild';
+import TextAreaFeild from '../Common/TextAreaFeild/TextAreaFeild';
 
 const LocationEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
   return (
@@ -30,19 +45,61 @@ const LocationEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
 
 const MyProfile = () => {
   const { logout } = useAuth();
-  const [isEditDisplayName, setIsEditDisplayName] = useState(false);
-  const [isEdiitAboutMe, setIsEditAboutMe] = useState(false);
-  const { openModal } = useModals();
   const userInfo = useRecoilValue(userState);
   const userTags = useRecoilValue(userTagState);
   const userLanguages = useRecoilValue(userLanguageState);
+  const [isEditBaseInfo, setIsEditBaseInfo] = useState(false);
+  const [isEditIntroduce, setIsEditIntroduce] = useState(false);
+  const { openModal } = useModals();
 
-  const clickChangeDisplayNameHandler = () => {
-    setIsEditDisplayName((prevState) => !prevState);
+  const [selectedGender, setSelectedGender] = useState(userInfo.gender);
+
+  const GaenderIcons = {
+    MALE: <FaMars color="#253c63" />,
+    FEMALE: <FaVenus color="#932f42" />,
+    OTHERS: <FaTransgender color="#505050" />,
   };
 
-  const clickChangeAboutMeHandler = () => {
-    setIsEditAboutMe((prevState) => !prevState);
+  const onChangeEditBaseInfo = () => {
+    setIsEditBaseInfo((prevState) => !prevState);
+  };
+
+  const onChangeGenderHandler = (value: any) => {
+    console.log('성별 선택');
+    setSelectedGender(value);
+    console.log(value);
+  };
+
+  const onSubmitChangeBaseInfo = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const requestData = {
+      name: formData.get('name'),
+      gender: formData.get('gender'),
+      birthDay: formData.get('birthDay'),
+    };
+    console.log(requestData);
+    if (requestData) {
+      setIsEditBaseInfo((prevState) => !prevState);
+    }
+  };
+
+  const onChangeEditIntroduce = () => {
+    setIsEditIntroduce((prevState) => !prevState);
+  };
+
+  const onSubmitChangeIntroduceHandler = (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const requestData = {
+      introduce: formData.get('introduce'),
+    };
+    console.log(requestData);
+    if (requestData) {
+      setIsEditIntroduce((prevState) => !prevState);
+    }
   };
 
   const onClickLocationModalHandler = () => {
@@ -70,112 +127,205 @@ const MyProfile = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <PageTitle
-        title="Profile"
-        translate="프로필"
-        prevIcon={<PrevButtonIcon />}
-      />
-      {/** TODO:  공통 컴포넌트 작업하기   */}
-      <div className={styles.contents}>
+    <>
+      <ProfileCard>
         {userInfo && (
           <>
-            <section className={styles.profile_base_info}>
-              <MyProfileImage onChangeLocation={onClickLocationModalHandler} />
-              <div className={styles.profile_info}>
-                <div className={styles.input_container}>
-                  <label htmlFor="displayName">별명</label>
-                  <div className={styles.input_group}>
-                    {isEditDisplayName ? (
-                      <>
-                        <div
-                          className={classNames(
-                            styles.field_wrapper,
-                            styles.input_field
-                          )}
-                        >
-                          <input id="displayName" />
-                        </div>
-                        <button onClick={clickChangeDisplayNameHandler}>
-                          저장
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <div
-                          className={classNames(
-                            styles.field_wrapper,
-                            styles.display_field
-                          )}
-                        >
-                          <p>{userInfo.name}</p>
-                        </div>
-                        <button onClick={clickChangeDisplayNameHandler}>
-                          수정
-                        </button>
-                      </>
-                    )}
-                  </div>
-                </div>
-                <div className={styles.input_container}>
-                  <label htmlFor="email">이메일</label>
-                  <p>{userInfo.email}</p>
-                </div>
-                <div className={styles.input_container}>
-                  <label htmlFor="point">성별</label>
-                  <p>{userInfo.gender}</p>
-                </div>
-                <div className={styles.input_container}>
-                  <label htmlFor="point">생년월일</label>
-                  <p>{userInfo.birthday}</p>
-                </div>
-              </div>
-            </section>
-            <section className={styles.profile_extra_info}>
-              <div className={styles.input_container}>
-                <label htmlFor="aboutMe">자기소개</label>
-                <div className={styles.input_group}>
-                  {isEdiitAboutMe ? (
-                    <>
-                      <div
-                        className={classNames(
-                          styles.field_wrapper,
-                          styles.textarea_field
-                        )}
-                      >
-                        <textarea id="aboutMe" />
-                      </div>
-                      <button onClick={clickChangeAboutMeHandler}>저장</button>
-                    </>
-                  ) : (
-                    <>
-                      <div
-                        className={classNames(
-                          styles.field_wrapper,
-                          styles.display_field
-                        )}
-                      >
-                        <p>{userInfo.introduce}</p>
-                      </div>
-                      <button onClick={clickChangeAboutMeHandler}>
-                        {userInfo.introduce && userInfo.introduce.length > 0
-                          ? '수정'
-                          : '등록'}
-                      </button>
-                    </>
-                  )}
-                </div>
-              </div>
-              <div className={styles.input_container}>
-                <label htmlFor="language">언어</label>
-                <div className={styles.tag_list}>
+            <ProfileCard.BaseInfo>
+              <ProfileCard.BaseInfo.ImageArea>
+                <Flex dir="column" gap="sm">
+                  <Flex.Col>
+                    <ProfileImage
+                      profile={userInfo.profile}
+                      location={userInfo.location}
+                    />
+                  </Flex.Col>
+                  <Flex.Col>
+                    <ButtonGroup>
+                      <Flex dir="column" gap="sm">
+                        <Button size="sm" variant="secondary" full>
+                          사진수정
+                        </Button>
+                      </Flex>
+                    </ButtonGroup>
+                  </Flex.Col>
+                </Flex>
+              </ProfileCard.BaseInfo.ImageArea>
+              <ProfileCard.BaseInfo.InfoArea>
+                {/** TODO : 추후 컴포넌트로 분리 */}
+                {!isEditBaseInfo ? (
+                  // 정보 출력
                   <>
-                    {userLanguages &&
-                      userLanguages.map((language) => (
-                        <Label key={language.nation}>
-                          {langTransformer(language.nation)} Lv.{language.level}
-                        </Label>
-                      ))}
+                    <Flex dir="column" gap="lg">
+                      <Flex.Col>
+                        <InfoGroup>
+                          <InfoGroup.Label>별명</InfoGroup.Label>
+                          <InfoGroup.Content>
+                            <p>{userInfo.name}</p>
+                          </InfoGroup.Content>
+                        </InfoGroup>
+                        <InfoGroup>
+                          <InfoGroup.Label>성별</InfoGroup.Label>
+                          <InfoGroup.Content>
+                            <p>{userInfo.gender}</p>
+                          </InfoGroup.Content>
+                        </InfoGroup>
+                        <InfoGroup>
+                          <InfoGroup.Label>생년월일</InfoGroup.Label>
+                          <InfoGroup.Content>
+                            <p>{userInfo.birthday}</p>
+                          </InfoGroup.Content>
+                        </InfoGroup>
+                      </Flex.Col>
+                      <Flex.Col>
+                        <ButtonGroup justify="end">
+                          <Button
+                            size="sm"
+                            variant="secondary"
+                            onClick={onChangeEditBaseInfo}
+                          >
+                            수정
+                          </Button>
+                        </ButtonGroup>
+                      </Flex.Col>
+                    </Flex>
+                  </>
+                ) : (
+                  // 정보 수정 폼
+                  <form onSubmit={onSubmitChangeBaseInfo}>
+                    <Flex dir="column" gap="lg">
+                      <Flex.Col>
+                        <InfoGroup>
+                          <InfoGroup.Label>
+                            <label htmlFor="name">별명</label>
+                          </InfoGroup.Label>
+                          <InfoGroup.Content>
+                            <InputFeild
+                              id="name"
+                              name="name"
+                              type="text"
+                              placeholder="홍길동"
+                            />
+                          </InfoGroup.Content>
+                        </InfoGroup>
+                        <InfoGroup>
+                          <InfoGroup.Label>성별</InfoGroup.Label>
+                          <InfoGroup.Content>
+                            <RadioGroup
+                              name="gender"
+                              onChange={onChangeGenderHandler}
+                              value={selectedGender}
+                              isSet
+                            >
+                              {CONST_GENDER_TYPE.map((gender, index) => (
+                                <>
+                                  <RadioGroup.Item
+                                    key={index}
+                                    value={gender}
+                                    id={`gender_${gender}`}
+                                    icon={GaenderIcons[gender]}
+                                  >
+                                    {gender}
+                                  </RadioGroup.Item>
+                                </>
+                              ))}
+                            </RadioGroup>
+                          </InfoGroup.Content>
+                        </InfoGroup>
+                        <InfoGroup>
+                          <InfoGroup.Label>
+                            <label htmlFor="birthDay">생년월일</label>
+                          </InfoGroup.Label>
+                          <InfoGroup.Content>
+                            <InputFeild
+                              id="birthDay"
+                              name="birthDay"
+                              type="text"
+                              pattern="^\d{4}-\d{2}-\d{2}$"
+                              placeholder="1989-12-24"
+                            />
+                          </InfoGroup.Content>
+                        </InfoGroup>
+                      </Flex.Col>
+                      <Flex.Col>
+                        <ButtonGroup justify="end">
+                          <Button size="sm" variant="primary" type="submit">
+                            저장
+                          </Button>
+                        </ButtonGroup>
+                      </Flex.Col>
+                    </Flex>
+                  </form>
+                )}
+              </ProfileCard.BaseInfo.InfoArea>
+            </ProfileCard.BaseInfo>
+            <ProfileCard.ExtraInfo>
+              {/** TODO : 추후 컴포넌트로 분리 */}
+              {!isEditIntroduce ? (
+                <InfoGroup className="extra_info">
+                  <InfoGroup.Label>자기소개</InfoGroup.Label>
+                  <InfoGroup.Content>
+                    <Flex gap="sm">
+                      <Flex.Col cols={12}>
+                        <p>{userInfo.introduce}</p>
+                      </Flex.Col>
+                      <Flex.Col cols={2}>
+                        <ButtonGroup justify="end">
+                          <Button
+                            size="sm"
+                            variant="secondary"
+                            onClick={onChangeEditIntroduce}
+                          >
+                            수정
+                          </Button>
+                        </ButtonGroup>
+                      </Flex.Col>
+                    </Flex>
+                  </InfoGroup.Content>
+                </InfoGroup>
+              ) : (
+                <InfoGroup className="extra_info">
+                  <form onSubmit={onSubmitChangeIntroduceHandler}>
+                    <InfoGroup.Label>자기소개</InfoGroup.Label>
+                    <InfoGroup.Content>
+                      <Flex gap="sm">
+                        <Flex.Col cols={10}>
+                          <TextAreaFeild
+                            id="introduce"
+                            name="introduce"
+                            value={userInfo.introduce}
+                          />
+                        </Flex.Col>
+                        <Flex.Col cols={2}>
+                          <ButtonGroup justify="end">
+                            <Button size="sm" variant="primary" type="submit">
+                              저장
+                            </Button>
+                          </ButtonGroup>
+                        </Flex.Col>
+                      </Flex>
+                    </InfoGroup.Content>
+                  </form>
+                </InfoGroup>
+              )}
+
+              <InfoGroup className="extra_info">
+                <InfoGroup.Label>언어</InfoGroup.Label>
+                <InfoGroup.Content>
+                  <Flex gap="sm" wrap="wrap">
+                    <>
+                      {userLanguages &&
+                        userLanguages.map((language) => (
+                          <>
+                            <Flex.Col key={language.nation}>
+                              <Label>
+                                {langTransformer(language.nation)} Lv.
+                                {language.level}
+                              </Label>
+                            </Flex.Col>
+                          </>
+                        ))}
+                    </>
                     <Button
                       size="sm"
                       variant="dashed"
@@ -183,17 +333,23 @@ const MyProfile = () => {
                     >
                       + 언어관리
                     </Button>
-                  </>
-                </div>
-              </div>
-              <div className={styles.input_container}>
-                <label htmlFor="language">태그</label>
-                <div className={styles.tag_list}>
-                  <>
-                    {userTags &&
-                      userTags.map((tag) => (
-                        <Label key={tag.id}>{tag.name}</Label>
-                      ))}
+                  </Flex>
+                </InfoGroup.Content>
+              </InfoGroup>
+              <InfoGroup className="extra_info">
+                <InfoGroup.Label>태그</InfoGroup.Label>
+                <InfoGroup.Content>
+                  <Flex gap="sm" wrap="wrap">
+                    <>
+                      {userTags &&
+                        userTags.map((tag) => (
+                          <>
+                            <Flex.Col key={tag.id}>
+                              <Label>{tag.name}</Label>
+                            </Flex.Col>
+                          </>
+                        ))}
+                    </>
                     <Button
                       size="sm"
                       variant="dashed"
@@ -201,13 +357,13 @@ const MyProfile = () => {
                     >
                       + 태그관리
                     </Button>
-                  </>
-                </div>
-              </div>
-            </section>
+                  </Flex>
+                </InfoGroup.Content>
+              </InfoGroup>
+            </ProfileCard.ExtraInfo>
           </>
         )}
-      </div>
+      </ProfileCard>
       <ButtonGroup gap="sm" justify="end" className={styles.btns}>
         <Button variant="secondary" size="sm" to="/guide">
           스타일 가이드
@@ -216,7 +372,7 @@ const MyProfile = () => {
           로그아웃
         </Button>
       </ButtonGroup>
-    </div>
+    </>
   );
 };
 

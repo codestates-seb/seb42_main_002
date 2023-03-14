@@ -12,16 +12,18 @@ type LabelProps = {
 };
 
 const Label = ({ to, isActive, children }: LabelProps) => {
+  const classNameValues = classNames(styles.label, {
+    [styles.is_active]: isActive,
+  });
+
   if (to) {
-    return <Link to={to}>{children}</Link>;
+    return (
+      <Link to={to} className={classNameValues}>
+        {children}
+      </Link>
+    );
   }
-  return (
-    <span
-      className={classNames(styles.label, { [styles.is_active]: isActive })}
-    >
-      {children}
-    </span>
-  );
+  return <span className={classNameValues}>{children}</span>;
 };
 
 export default Label;
