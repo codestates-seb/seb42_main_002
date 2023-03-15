@@ -1,19 +1,32 @@
+import { useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
+import { selectedUserInfo } from '../../../recoil/atoms';
+import { useNavigate } from 'react-router-dom';
+
 import Letter from '../Letter/Letter';
 import LetterUserCard from '../LetterUserCard/LetterUserCard';
 
 import { lettersData } from '../../../dummy/letter';
-
 import styles from './LetterWrapper.module.scss';
 
-// TODO : state를 변경해야한다.
 const LetterWrapper = () => {
+  const navigate = useNavigate();
+  const selectedUser = useRecoilValue(selectedUserInfo);
+
+  useEffect(() => {
+    // 리다이렉트
+    if (selectedUser.name === '') {
+      navigate('/');
+    }
+  }, []);
+
   return (
     <>
       <LetterUserCard
-        birthday="1994-12-22"
-        location="KR"
-        name="안아영"
-        profile={null}
+        birthday={selectedUser.birthday}
+        location={selectedUser.location}
+        name={selectedUser.name}
+        profile={selectedUser.profile}
       />
       <div className={styles.letter_wrapper}>
         {lettersData.map((letter) => (
