@@ -6,7 +6,7 @@ import RoundProfile from '../../Common/RoundProfile/RoundProfile';
 
 import styles from './LetterUserCard.module.scss';
 
-type LetterUserCardProps = {
+export type LetterUserCardProps = {
   birthday: string;
   location: string;
   name: string;
