@@ -9,7 +9,7 @@ export const userLanguageState = atom({
 
 export const userLanguageNationState = atom({
   key: 'selectedUserLanguageNation',
-  default: null,
+  default: '',
 });
 
 export const userLanguageLevelState = atom({

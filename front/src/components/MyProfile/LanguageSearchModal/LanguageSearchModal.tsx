@@ -2,45 +2,29 @@ import { useState } from 'react';
 import FullPageModal, {
   FullPageModalProps,
 } from '../../Common/Modal/FullPageModal';
-import TagSearchBar from '../../Common/Tags/TagSearchBar';
-import { languageTags } from '../../../dummy/Tags';
 import {
   CONST_LANGUAGE_CODE,
   LANGUAGE_CODE,
 } from '../../../utils/enums/common/common.enum';
 import LanguageSearchList from './LanguageSearchList';
-import { UserData } from '../../../utils';
+import SearchInput from '../../Common/SearchInput/SearchInput';
+import { languageTags } from '../../../dummy/Tags';
 
 const LanguageSearchModal = ({ onSubmit, onClose }: FullPageModalProps) => {
-  const [languageList, setLanguageList] = useState<LANGUAGE_CODE[]>([
-    ...CONST_LANGUAGE_CODE,
-  ]);
-  // const { selectedLanguage } = useSelector(
-  //   (state: { user: UserData }) => state.user
-  // );
-  // const dispatch = useDispatch();
+  const [languageList, setLanguageList] = useState([...languageTags]);
 
-  // TODO : 버그 수정
-  const onSubmitHandler = () => {
-    if (onSubmit) {
-      // if (selectedLanguage) {
-      //   dispatch({
-      //     type: 'ADD_LANGUAGE',
-      //     payload: selectedLanguage,
-      //   });
-      // }
-      // if (onClose) {
-      //   onClose();
-      // }
-    }
+  // 태그 검색
+  const onChangeSearchInputHandler = (filteredItems: any) => {
+    setLanguageList(filteredItems);
   };
 
   return (
-    <FullPageModal
-      onSubmit={onSubmitHandler}
-      onClose={onClose}
-      labelSubmit="수정"
-    >
+    <FullPageModal onSubmit={onSubmit} onClose={onClose} noFooter>
+      <SearchInput
+        items={languageTags}
+        filterKey="filterTag"
+        filterHandler={onChangeSearchInputHandler}
+      />
       <LanguageSearchList languages={languageList}></LanguageSearchList>
     </FullPageModal>
   );

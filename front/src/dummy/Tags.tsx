@@ -1,3 +1,6 @@
+import { LanguageDataType } from '../utils';
+import { LANGUAGE_CODE } from '../utils/enums/common/common.enum';
+
 export const nationalityTags = [
   { id: 1, name: '한국', flag: 'KOREA', alpha: 'KR' },
   { id: 2, name: '미국', flag: 'English', alpha: 'EN' },
@@ -7,16 +10,41 @@ export const nationalityTags = [
 ];
 
 export const languageTags = [
-  { id: 1, name: '한국어', englishName: 'KOREA', alpha: 'KR' },
-  { id: 2, name: 'English', englishName: 'English', alpha: 'EN' },
+  {
+    id: 1,
+    name: '한국어',
+    englishName: 'Korean',
+    nation: LANGUAGE_CODE.KO,
+    filterTag: '한국어 Korean',
+  },
+  {
+    id: 2,
+    name: 'English',
+    englishName: 'English',
+    nation: LANGUAGE_CODE.ES,
+    filterTag: 'English 영어',
+  },
   {
     id: 3,
-    name: '简体中文',
-    englishName: 'Simplified Chinese',
-    alpha: 'ZH-CN',
+    name: '中文',
+    englishName: 'Chinese',
+    nation: LANGUAGE_CODE.CN,
+    filterTag: '中文 Chinese 중국어',
   },
-  { id: 4, name: '日本語', englishName: 'Japanese', alpha: 'JA' },
-  { id: 5, name: 'Español', englishName: 'Spanish', alpha: 'ES' },
+  {
+    id: 4,
+    name: '日本語',
+    englishName: 'Japanese',
+    nation: LANGUAGE_CODE.JA,
+    filterTag: '日本語 Japanese 일본어',
+  },
+  {
+    id: 5,
+    name: 'Español',
+    englishName: 'Spanish',
+    nation: LANGUAGE_CODE.ES,
+    filterTag: 'Español Spanish 스페인어',
+  },
 ];
 
 export const hobbyTags = [
@@ -55,4 +83,27 @@ export const hobbyTags = [
   { id: 33, name: '소설' },
   { id: 34, name: '문화' },
   { id: 35, name: '스포츠' },
+];
+
+export const languageLevels = [
+  {
+    level: 1,
+    text: '관심 있음',
+  },
+  {
+    level: 2,
+    text: '초급 수준',
+  },
+  {
+    level: 3,
+    text: '중급 수준',
+  },
+  {
+    level: 4,
+    text: '고급 수준',
+  },
+  {
+    level: 5,
+    text: '원어민 수준',
+  },
 ];

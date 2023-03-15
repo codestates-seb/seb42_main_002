@@ -1,73 +1,68 @@
-import { useState, useEffect } from 'react';
-import { useRecoilState } from 'recoil';
-import { userLanguageLevelState } from '../../../recoil/atoms/user/userLanguage';
-import { UserData } from '../../../utils';
+import { useState } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { languageLevels } from '../../../dummy/Tags';
+import useModals from '../../../hooks/useModals';
+import {
+  userLanguageNationState,
+  userLanguageState,
+} from '../../../recoil/atoms/user/userLanguage';
 import Flex from '../../Common/Flex/Flex';
 import LabelButton from '../../Common/LabelButton/LabelButton';
 import FullPageModal, {
   FullPageModalProps,
 } from '../../Common/Modal/FullPageModal';
-
-const languageLevels = [
-  {
-    level: 1,
-    text: '관심 있음',
-  },
-  {
-    level: 2,
-    text: '초급 수준',
-  },
-  {
-    level: 3,
-    text: '중급 수준',
-  },
-  {
-    level: 4,
-    text: '고급 수준',
-  },
-  {
-    level: 5,
-    text: '원어민 수준',
-  },
-];
+import LanguageEditModal from '../LanguageEditModal/LanguageEditModal';
+import LanguageSearchModal from '../LanguageSearchModal/LanguageSearchModal';
 
 /**
  * 언어 레벨 선택 모달
  * @param
  * @returns
  */
-const LanguageLevelModal = ({ onSubmit, onClose }: FullPageModalProps) => {
-  const [selectedLevel, setSeletedLvel] = useState();
-  // const { selectedLanguage, selectedNationValue } = useSelector(
-  //   (state: { user: UserData }) => state.user
-  // );
-  // const dispatch = useDispatch();
-  const [selectedUserLanguageLevel, setSelectedUserLanguageLevel] =
-    useRecoilState(userLanguageLevelState);
+const LanguageLevelModal = ({
+  onSubmit,
+  onClose,
+  labelSubmit,
+}: FullPageModalProps) => {
+  const { closeModal } = useModals();
+  const [selectedLevel, setSeletedLevel] = useState<number>();
+  const selectedUserLanguageNation = useRecoilValue(userLanguageNationState);
+  const [selectedUserLanguages, setSelectedUserLanguages] =
+    useRecoilState<any[]>(userLanguageState);
 
-  const onSelectLevelHandler = (level: any) => {
-    setSelectedUserLanguageLevel(level);
+  const onSelectLevelHandler = (level: number) => {
+    setSeletedLevel(level);
   };
 
   const onSubmitHandler = () => {
     if (onSubmit) {
-      // dispatch({
-      //   type: 'SELECT_LANGUAGE',
-      //   payload: {
-      //     nation: selectedNationValue,
-      //     level: selectedLevel,
-      //   },
-      // });
-      // dispatch({
-      //   type: 'CHANGE_LEVEL',
-      //   payload: {
-      //     nation: selectedLanguage.nation,
-      //     level: selectedLevel,
-      //   },
-      // });
-      if (onClose) {
-        onClose();
+      const findIdx = selectedUserLanguages.findIndex(
+        (lang) => lang.nation === selectedUserLanguageNation
+      );
+      // 언어 추가
+      if (findIdx < 0) {
+        const newLanguages = {
+          nation: selectedUserLanguageNation,
+          level: selectedLevel,
+        };
+        setSelectedUserLanguages((prevState) => [...prevState, newLanguages]);
+      } else {
+        // 언어 레벨 수정
+        setSelectedUserLanguages((prevState) => [
+          ...prevState.map((lang) => {
+            if (lang.nation === selectedUserLanguageNation) {
+              return {
+                ...lang,
+                level: selectedLevel,
+              };
+            }
+            return lang;
+          }),
+        ]);
       }
+      closeModal(LanguageSearchModal);
+      closeModal(LanguageEditModal);
+      onClose && onClose();
     }
   };
 
@@ -75,24 +70,22 @@ const LanguageLevelModal = ({ onSubmit, onClose }: FullPageModalProps) => {
     <FullPageModal
       onSubmit={onSubmitHandler}
       onClose={onClose}
-      labelSubmit="수정"
+      labelSubmit={labelSubmit}
     >
-      {languageLevels.map((level) => (
-        <>
-          <LabelButton
-            full
-            key={level.level}
-            onClick={() => onSelectLevelHandler(level.level)}
-            isActive={level.level === selectedUserLanguageLevel}
-          >
-            <LabelButton.Content>
-              <Flex gap="sm">
-                <Flex.Col>Lv. {level.level}</Flex.Col>
-                <Flex.Col>{level.text}</Flex.Col>
-              </Flex>
-            </LabelButton.Content>
-          </LabelButton>
-        </>
+      {languageLevels.map((level, index) => (
+        <LabelButton
+          full
+          key={index}
+          onClick={() => onSelectLevelHandler(level.level)}
+          isActive={level.level === selectedLevel}
+        >
+          <LabelButton.Content>
+            <Flex gap="sm">
+              <Flex.Col>Lv. {level.level}</Flex.Col>
+              <Flex.Col>{level.text}</Flex.Col>
+            </Flex>
+          </LabelButton.Content>
+        </LabelButton>
       ))}
     </FullPageModal>
   );

@@ -12,8 +12,12 @@ export type DefaultProps = {
 };
 
 export type LanguageDataType = {
+  id?: number;
+  name?: string;
+  englishName?: string;
   nation: LANGUAGE_CODE;
-  level: number | string;
+  level?: number | null | undefined;
+  filterTag?: string;
 };
 
 export type locationTypes = {

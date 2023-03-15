@@ -8,7 +8,7 @@ import LabelButton from '../../Common/LabelButton/LabelButton';
 import FullPageModal, {
   FullPageModalProps,
 } from '../../Common/Modal/FullPageModal';
-import TagSearchBar from '../../Common/Tags/TagSearchBar';
+import SearchInput from '../../Common/SearchInput/SearchInput';
 
 const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
   const [selectedUserTags, setSelectedUserTags] = useRecoilState(userTagState);
@@ -25,11 +25,10 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
       setChangeTags(changeTagIds.filter((tag) => tag.id !== selectedTag.id));
     }
   };
-  console.log(changeTagIds);
 
   // 태그 검색
-  const onChangeSearchInputHandler = (filterTags: any) => {
-    setTagList(filterTags);
+  const onChangeSearchInputHandler = (filteredItems: any) => {
+    setTagList(filteredItems);
   };
 
   const onSubmitHandler = () => {
@@ -54,8 +53,9 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
       onClose={onCloseHandler}
       labelSubmit="수정"
     >
-      <TagSearchBar
-        tags={hobbyTags}
+      <SearchInput
+        items={hobbyTags}
+        filterKey="name"
         filterHandler={onChangeSearchInputHandler}
       />
       <Flex gap="sm" wrap="wrap">

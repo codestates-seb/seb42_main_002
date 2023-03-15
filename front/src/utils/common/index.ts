@@ -43,7 +43,7 @@ export const langTransformer = (value: LANGUAGE_CODE, isEnglish?: boolean) => {
       case LANGUAGE_CODE.EN:
         return 'English';
       case LANGUAGE_CODE.ES:
-        return 'Castellano';
+        return 'Spanish';
       case LANGUAGE_CODE.FR:
         return 'France';
       case LANGUAGE_CODE.IT:

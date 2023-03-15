@@ -94,27 +94,15 @@ const MyProfile = () => {
   };
 
   const onClickLangugeModalHandler = () => {
-    openModal(LanguageEditModal, {
-      onSubmit: () => {
-        console.log('언어 수정');
-      },
-    });
+    openModal(LanguageEditModal);
   };
 
   const onClickTagModalHandler = () => {
-    openModal(TagEditModal, {
-      onSubmit: () => {
-        console.log('태그 수정');
-      },
-    });
+    openModal(TagEditModal);
   };
 
   const onClickLocationModalHandler = () => {
-    openModal(LocationEditModal, {
-      onSubmit: () => {
-        console.log('국가 수정');
-      },
-    });
+    openModal(LocationEditModal);
   };
 
   return (
@@ -287,24 +275,19 @@ const MyProfile = () => {
                   </form>
                 </InfoGroup>
               )}
-
               <InfoGroup className="extra_info">
                 <InfoGroup.Label>언어</InfoGroup.Label>
                 <InfoGroup.Content>
                   <Flex gap="sm" wrap="wrap">
-                    <>
-                      {userLanguages &&
-                        userLanguages.map((language) => (
-                          <>
-                            <Flex.Col key={language.nation}>
-                              <Label>
-                                {langTransformer(language.nation)} Lv.
-                                {language.level}
-                              </Label>
-                            </Flex.Col>
-                          </>
-                        ))}
-                    </>
+                    {userLanguages &&
+                      userLanguages.map((language) => (
+                        <Flex.Col key={language.nation}>
+                          <Label>
+                            {langTransformer(language.nation)} Lv.
+                            {language.level}
+                          </Label>
+                        </Flex.Col>
+                      ))}
                     <Button
                       size="sm"
                       variant="dashed"
@@ -319,16 +302,12 @@ const MyProfile = () => {
                 <InfoGroup.Label>태그</InfoGroup.Label>
                 <InfoGroup.Content>
                   <Flex gap="sm" wrap="wrap">
-                    <>
-                      {userTags &&
-                        userTags.map((tag) => (
-                          <>
-                            <Flex.Col key={tag.id}>
-                              <Label>{tag.name}</Label>
-                            </Flex.Col>
-                          </>
-                        ))}
-                    </>
+                    {userTags &&
+                      userTags.map((tag) => (
+                        <Flex.Col key={tag.id}>
+                          <Label>{tag.name}</Label>
+                        </Flex.Col>
+                      ))}
                     <Button
                       size="sm"
                       variant="dashed"
