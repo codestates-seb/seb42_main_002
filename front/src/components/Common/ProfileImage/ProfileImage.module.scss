@@ -1,0 +1,53 @@
+.profile_img_wrapper {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 8rem;
+  .profile_img {
+    position: relative;
+    width: 100%;
+    height: 8rem;
+    background-color: var(--white);
+    border: 2px solid var(--button-primary-color);
+    border-radius: var(--border-radius-sm);
+    figure {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      &.default_profile {
+        padding: 1rem;
+      }
+      img {
+        max-width: 100%;
+        min-height: 100%;
+      }
+    }
+    .icon_flags {
+      position: absolute;
+      width: 3rem;
+      height: 2rem;
+      background-color: #000;
+      border-radius: var(--border-radius-sm);
+      border: 2px solid var(--text-primary-color);
+      overflow: hidden;
+      top: -1rem;
+      left: -1rem;
+      background-size: cover;
+      &.KR {
+        background-image: url('../../../assets/img/flags/flag_kr.svg');
+      }
+    }
+  }
+  label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.5rem;
+    width: 100%;
+    min-height: 2rem;
+    background-color: var(--button-primary-color);
+    color: white;
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-xs);
+  }
+}

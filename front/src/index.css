@@ -1,3 +1,14 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  min-width: 0;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,6 +16,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1;
 }
 
 code {
@@ -12,14 +24,94 @@ code {
     monospace;
 }
 
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+a,
+a:hover,
+a:active,
+a:focus {
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background-color: inherit;
+  font: inherit;
+}
+
 :root {
   --button-primary-color: #706052;
   --button-secondary-color: #8c8783;
   --text-primary-color: #505050;
   --text-secondary-color: #969696;
+  --title-primary-color: #716152;
+  --title-secondary-color: #8c8783;
   --light-color: #e8e8e8;
   --active-color: #c6a47f;
   --default-color: #f0f0f0;
   --danger-color: #932f42;
   --success-color: #2f9381;
+  --border-color: #505050;
+  --alert-color: #be0000;
+  --white: #fff;
+  --modal-bg: rgba(0, 0, 0, 0.15);
+
+  --default-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  --inset-box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  --default-drop-shadow: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+  --border-radius-sm: 0.25rem;
+  --border-radius-md: 0.5rem;
+  --border-radius-lg: 1rem;
+  --font-size-xxs: 0.625rem; /* 10px */
+  --font-size-xs: 0.75rem; /* 12px */
+  --font-size-sm: 0.875rem; /* 14px */
+  --font-size-md: 1rem; /* 16px */
+  --font-size-lg: 1.125rem; /* 18px */
+  --font-size-xl: 1.25rem; /* 20px */
+  --font-size-xxl: 1.25rem; /* 24px */
+}
+
+.blind {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+}
+
+/* transition animation */
+.slideInUp-enter {
+  transform: translateY(100%);
+}
+.slideInUp-enter-active {
+  transform: translateY(0%);
+  transition: transform 0.3s ease-out;
+}
+
+.slideInUp-exit {
+  transform: translateY(0%);
+}
+
+.slideInUp-exit {
+  transform: translateY(100%);
+  transition: transform 0.3s ease-out;
 }

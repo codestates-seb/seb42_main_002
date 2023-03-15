@@ -1,0 +1,11 @@
+.icon_flags {
+  display: inline-block;
+  width: 3rem;
+  border-radius: var(--border-radius-sm);
+  overflow: hidden;
+}
+
+.location_title {
+  width: calc(100% - 3rem);
+  text-align: center;
+}

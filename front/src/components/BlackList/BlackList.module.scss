@@ -1,0 +1,17 @@
+.letter_list {
+  & li {
+    margin-bottom: 1rem;
+  }
+  & li:last-child {
+    margin-bottom: 0;
+  }
+  & svg {
+    color: var(--button-secondary-color);
+  }
+  & svg:hover {
+    color: var(--danger-color);
+  }
+}
+.button {
+  z-index: 10;
+}
