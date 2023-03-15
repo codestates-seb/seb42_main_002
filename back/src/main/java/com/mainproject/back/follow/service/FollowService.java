@@ -5,9 +5,7 @@ import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.follow.entity.Follow;
 import com.mainproject.back.follow.exception.FollowExceptionCode;
 import com.mainproject.back.follow.repository.FollowRepository;
-import com.mainproject.back.member.dto.MemberSearchDto;
-import com.mainproject.back.member.entity.Member;
-import com.mainproject.back.member.service.MemberService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,8 +16,6 @@ import org.springframework.stereotype.Service;
 public class FollowService {
 
   private final FollowRepository followRepository;
-  private final MemberService memberService;
-
 
   public Follow createFollow(Follow follow) {
     return followRepository.save(follow);
@@ -41,12 +37,10 @@ public class FollowService {
     return followRepository.findAllFollowingsByFollowerId(memberId, pageable);
   }
 
-  public Page<MemberSearchDto> convertToResponseDto(Page<Follow> followPage) {
-    return followPage.map(follow -> {
-      Member member = memberService.findMember(follow.getFollowing().getMemberId());
-      return MemberSearchDto.builder().memberId(member.getMemberId()).name(member.getName())
-          .location(member.getLocation()).profile(member.getProfile()).build();
-    });
+  public List<Long> findFollowingId(long memberId){
+    return followRepository.findAllFollowingId(memberId);
   }
+
+
 
 }

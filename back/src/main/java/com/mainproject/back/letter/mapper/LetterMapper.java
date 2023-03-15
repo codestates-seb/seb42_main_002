@@ -23,7 +23,7 @@ public interface LetterMapper {
       letter.body(letterPostDto.getBody());
       ArrayList<String> arrayList = letterPostDto.getPic();
       if (arrayList != null) {
-        letter.pic(new ArrayList<>(arrayList));
+        letter.photoUrl(new ArrayList<>(arrayList));
       }
       letter.sender(Member.builder().memberId(letterPostDto.getSenderId()).build());
       letter.receiver(Member.builder().memberId(letterPostDto.getReceiverId()).build());
@@ -71,7 +71,7 @@ public interface LetterMapper {
     if (LocalDateTime.now().isAfter(letter.getAvailableAt())) {
       builder.body(letter.getBody());
     }
-    if (letter.getPic() == null || letter.getPic().isEmpty()) {
+    if (letter.getPhotoUrl() == null || letter.getPhotoUrl().isEmpty()) {
       builder.hasPic(false);
     } else {
       builder.hasPic(true);

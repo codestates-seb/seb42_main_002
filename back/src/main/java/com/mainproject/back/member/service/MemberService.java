@@ -2,6 +2,9 @@ package com.mainproject.back.member.service;
 
 
 import com.mainproject.back.exception.BusinessLogicException;
+import com.mainproject.back.follow.entity.Follow;
+import com.mainproject.back.follow.service.FollowService;
+import com.mainproject.back.member.dto.MemberSearchDto;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.exception.MemberExceptionCode;
 import com.mainproject.back.member.repository.MemberRepository;
@@ -33,6 +36,7 @@ public class MemberService {
   private final MemberRepository memberRepository;
   private final PasswordEncoder passwordEncoder;
   private final AuthorityUtils authorityUtils;
+  private final FollowService followService;
 
 
   @Transactional
@@ -108,13 +112,20 @@ public class MemberService {
 
   public Page<Member> findRecommendedMember(long memberId, Pageable pageable) {
     Page<Member> memberPage = memberRepository.findRecommended(memberId, pageable);
-    return memberPage;
+    List<Long> followingIdList = followService.findFollowingId(memberId);
+
+    List<Member> result = memberPage.stream()
+        .filter(member -> !followingIdList.contains(member.getMemberId())).collect(
+            Collectors.toList());
+
+    return new PageImpl<>(result, pageable, result.size());
   }
 
-  public Page<Member> searchMembersByTag(List<Tag> tagList, Pageable pageable) {
+  public Page<Member> searchMembersByTag(List<Tag> tagList, Pageable pageable, long memberId) {
     Page<Member> memberPage = memberRepository.getMemberByTags(tagList, pageable);
-    List<Member> distinct = memberPage.stream().filter(distinctByKey(Member::getMemberId)).collect(
-        Collectors.toList());
+    List<Member> distinct = memberPage.stream().filter(distinctByKey(Member::getMemberId))
+        .filter(member -> member.getMemberId() != memberId).collect(
+            Collectors.toList());
 
     return new PageImpl<>(distinct, pageable, distinct.size());
   }
@@ -122,5 +133,13 @@ public class MemberService {
   public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
     Set<Object> seen = ConcurrentHashMap.newKeySet();
     return t -> seen.add(keyExtractor.apply(t));
+  }
+
+  public Page<MemberSearchDto> convertToResponseDto(Page<Follow> followPage) {
+    return followPage.map(follow -> {
+      Member member = findMember(follow.getFollowing().getMemberId());
+      return MemberSearchDto.builder().memberId(member.getMemberId()).name(member.getName())
+          .location(member.getLocation()).profile(member.getProfile()).build();
+    });
   }
 }

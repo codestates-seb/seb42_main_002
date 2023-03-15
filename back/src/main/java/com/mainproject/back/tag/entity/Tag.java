@@ -1,5 +1,6 @@
 package com.mainproject.back.tag.entity;
 
+import com.mainproject.back.audit.Auditable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class Tag {
+public class Tag extends Auditable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

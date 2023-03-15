@@ -71,11 +71,13 @@ public class MemberController {
 
   @GetMapping("/{member-id}")
   public ResponseEntity getMember(
-      @PathVariable("member-id") @Positive long memberId) {
+      @PathVariable("member-id") @Positive long memberId, Principal principal) {
 
     Member findMember = memberService.findMember(memberId);
+    long id = memberService.findMemberIdByEmail(principal.getName());
 
-    return new ResponseEntity<>(mapper.memberToMemberResponse(findMember), HttpStatus.OK);
+    return new ResponseEntity<>(memberConvertService.memberToResponseDto(findMember, id),
+        HttpStatus.OK);
 
   }
 
@@ -92,17 +94,20 @@ public class MemberController {
     Member currentMember = memberService.findMemberByEmail(principal.getName());
 
     Page<Member> memberPage = memberService.findRecommendedMember(
-        currentMember.getMemberId(), PageRequest.of(0,10));
+        currentMember.getMemberId(), PageRequest.of(0, 10));
     Page<MemberRecommendDto> memberRecommendDtoPage = mapper.pageMemberToMemberRecommendDtoPage(
         memberPage);
     return ResponseEntity.ok().body(memberRecommendDtoPage);
   }
 
   @GetMapping("/tag/{tags}")
-  public ResponseEntity searchMembers(@PathVariable("tags") String tags, @PageableDefault Pageable pageable) {
+  public ResponseEntity searchMembers(@PathVariable("tags") String tags,
+      @PageableDefault Pageable pageable, Principal principal) {
+    long memberId = memberService.findMemberIdByEmail(principal.getName());
     List<Tag> tagList = memberConvertService.getTags(tags);
-    Page<Member> memberPage = memberService.searchMembersByTag(tagList, pageable);
-    Page<MemberSearchDto> searchDtoPage = memberPage.map(mapper::memberToMemberSearchDto);
+    Page<Member> memberPage = memberService.searchMembersByTag(tagList, pageable, memberId);
+    Page<MemberSearchDto> searchDtoPage = memberConvertService.memberPageToMemberSearchDtoPage(
+        memberPage, memberId);
     return ResponseEntity.ok().body(searchDtoPage);
   }
 
