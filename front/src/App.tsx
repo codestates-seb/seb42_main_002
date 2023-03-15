@@ -10,12 +10,12 @@ import UserLetterListPage from './pages/UserLetterListPage';
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import GuidePage from './pages/GuidePage';
-import HobbyTagPage from './components/Tag/AddHobbyTag';
 import ModalProvider from './context/ModalContext';
 import LetterDetailPage from './pages/LetterDetailPage';
 import NewLetterPage from './pages/NewLetterPage';
 import WelcomPage from './pages/WelcomPage';
 import FollowingPage from './pages/FollowingPage';
+import VocaPage from './pages/VocaPage';
 import BlackListPage from './pages/BlackListPage';
 import ProfilePage from './pages/ProfilePage';
 
@@ -48,7 +48,8 @@ function App() {
                 <Route path="/followings" element={<FollowingPage />} />
                 <Route path="/blacklist" element={<BlackListPage />} />
                 <Route path="/newLetter" element={<NewLetterPage />} />
-                <Route path="/voca" element={<HobbyTagPage />} />
+                <Route path="/followings" element={<MainPage />} />
+                <Route path="/voca" element={<VocaPage />} />
                 <Route path="/my-profile" element={<MyProfilePage />} />
                 <Route path="/profile/:memberId" element={<ProfilePage />} />
                 <Route path="/guide" element={<GuidePage />} />

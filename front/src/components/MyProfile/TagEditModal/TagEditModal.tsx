@@ -8,7 +8,7 @@ import LabelButton from '../../Common/LabelButton/LabelButton';
 import FullPageModal, {
   FullPageModalProps,
 } from '../../Common/Modal/FullPageModal';
-import TagSearchBar from '../../Tag/TagSearchBar';
+import TagSearchBar from '../../Common/Tags/TagSearchBar';
 
 const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
   const [selectedUserTags, setSelectedUserTags] = useRecoilState(userTagState);

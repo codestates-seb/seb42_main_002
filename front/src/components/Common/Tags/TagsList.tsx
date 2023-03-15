@@ -1,17 +1,18 @@
 import { useState } from 'react';
-import styles from './AddTagPage.module.scss';
-import { TagDataType } from '../../utils/types/tags/tags';
+import styles from './Tags.module.scss';
+import { TagDataType } from '../../../utils/types/tags/tags';
 
-export default function TagContainer({
+export default function TagsList({
   tags,
   clickDataHandler,
 }: {
   tags: TagDataType[];
-  clickDataHandler: any;
+  clickDataHandler: (a: TagDataType[]) => void;
+  // 랜더링할 tags데이터임. (id, name으로 이루워진 객체데이터)
 }) {
   const [select, setSelect] = useState<TagDataType[]>([]);
 
-  const clickHandler = (el: TagDataType) => {
+  const clickHandler = (el: TagDataType): void => {
     if (!select.includes(el)) {
       setSelect([...select, el]);
       clickDataHandler([...select, el]);

@@ -1,7 +1,7 @@
 import { useState, ChangeEvent } from 'react';
 import { BsSearch } from 'react-icons/bs';
-import { TagDataType } from '../../utils/types/tags/tags';
-import styles from './AddTagPage.module.scss';
+import { TagDataType } from '../../../utils/types/tags/tags';
+import styles from './Tags.module.scss';
 
 type TagSearchBarProps = {
   tags: TagDataType[];
@@ -17,6 +17,7 @@ const TagSearchBar = ({ tags, filterHandler }: TagSearchBarProps) => {
       if (el.name !== undefined) return el.name.includes(e.target.value);
     });
     filterHandler(filterArray);
+    //필터링된 tag데이터를 부모한테 보내줌!
   };
 
   return (

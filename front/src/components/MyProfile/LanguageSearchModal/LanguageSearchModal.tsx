@@ -2,8 +2,8 @@ import { useState } from 'react';
 import FullPageModal, {
   FullPageModalProps,
 } from '../../Common/Modal/FullPageModal';
-import TagSearchBar from '../../Tag/TagSearchBar';
-import { countryTags } from '../../../dummy/Tags';
+import TagSearchBar from '../../Common/Tags/TagSearchBar';
+import { languageTags } from '../../../dummy/Tags';
 import {
   CONST_LANGUAGE_CODE,
   LANGUAGE_CODE,
