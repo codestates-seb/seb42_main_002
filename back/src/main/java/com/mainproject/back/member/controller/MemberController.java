@@ -72,7 +72,7 @@ public class MemberController {
   @GetMapping("/{member-id}")
   public ResponseEntity getMember(
       @PathVariable("member-id") @Positive long memberId, Principal principal) {
-
+    log.info("## 멤버 조회: {}", memberId);
     Member findMember = memberService.findMember(memberId);
     long id = memberService.findMemberIdByEmail(principal.getName());
 
