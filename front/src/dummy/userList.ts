@@ -57,7 +57,7 @@ export const userData: LetterUserData[] = [
     profile: null,
     name: 'mefistoo',
     memberId: 5,
-    location: 'TR' as LOCATION_CODE,
+    location: 'KR' as LOCATION_CODE,
     birthday: '2023-02-28',
     lastLetter: {
       status: 'RECEIVED',
@@ -120,7 +120,7 @@ export const userData: LetterUserData[] = [
       'https://images.unsplash.com/photo-1678043639486-c79cb3aa965f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80',
     name: 'mefistoo',
     memberId: 10,
-    location: 'TR' as LOCATION_CODE,
+    location: 'KR' as LOCATION_CODE,
     birthday: '2023-02-28',
     lastLetter: {
       status: 'RECEIVED',

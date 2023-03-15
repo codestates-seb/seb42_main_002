@@ -6,6 +6,7 @@ import { LOCATION_CODE } from '../../../utils/enums/common/common.enum';
 import RoundProfile from '../../Common/RoundProfile/RoundProfile';
 
 import styles from './LetterUserCard.module.scss';
+import { locationTransformer } from '../../../utils/common';
 
 export type LetterUserCardProps = {
   birthday: string;
@@ -34,9 +35,9 @@ const LetterUserCard = ({
         </div>
         <div className={styles.user}>
           <h2 className={styles.name}>{name}</h2>
-          <div
-            className={styles.info}
-          >{`${location} / ${formatedDate} / ${age}세`}</div>
+          <div className={styles.info}>{`${locationTransformer(
+            location
+          )} / ${formatedDate} / ${age}세`}</div>
         </div>
       </div>
       <button className={styles.profile_button}>
