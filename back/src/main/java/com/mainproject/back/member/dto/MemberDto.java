@@ -46,6 +46,8 @@ public class MemberDto {
     private String location;
     private String birthday;
     private String profile;
+    @Setter
+    private boolean isFriend;
     private List<MemberLanguageDto> language;
     private List<TagSimpleDto> tag;
     private Member.MemberStatus memberStatus;

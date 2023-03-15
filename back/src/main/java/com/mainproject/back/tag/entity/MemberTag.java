@@ -1,5 +1,6 @@
 package com.mainproject.back.tag.entity;
 
+import com.mainproject.back.audit.Auditable;
 import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.tag.exception.TagExceptionCode;
@@ -21,7 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class MemberTag {
+public class MemberTag extends Auditable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

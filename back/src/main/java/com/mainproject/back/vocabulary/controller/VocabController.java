@@ -1,12 +1,13 @@
 package com.mainproject.back.vocabulary.controller;
 
-import com.mainproject.back.letter.dto.LetterListDto;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.service.MemberService;
+import com.mainproject.back.util.UriCreator;
 import com.mainproject.back.vocabulary.dto.VocabDto;
 import com.mainproject.back.vocabulary.entity.Vocabulary;
 import com.mainproject.back.vocabulary.mapper.VocabMapper;
 import com.mainproject.back.vocabulary.service.VocabService;
+import java.net.URI;
 import java.security.Principal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -54,7 +55,8 @@ public class VocabController {
 
     VocabDto.Response response = mapper.vocabToVocabResponse(createdVocab);
 
-    return new ResponseEntity<>(response, HttpStatus.CREATED);
+    URI uri = UriCreator.createUri("/vocabs", createdVocab.getVocabId());
+    return ResponseEntity.created(uri).build();
   }
 
   @PatchMapping("/{vocab-id}")

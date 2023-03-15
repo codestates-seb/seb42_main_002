@@ -47,7 +47,7 @@ public class Letter extends Auditable {
   @Column
   @ElementCollection(fetch = FetchType.LAZY)
   @Default
-  private List<String> pic = new ArrayList<>();
+  private List<String> photoUrl = new ArrayList<>();
 
   @Column(nullable = false)
   @Setter

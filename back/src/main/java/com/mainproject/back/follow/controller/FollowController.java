@@ -8,6 +8,8 @@ import com.mainproject.back.follow.service.FollowService;
 import com.mainproject.back.member.dto.MemberSearchDto;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.service.MemberService;
+import com.mainproject.back.util.UriCreator;
+import java.net.URI;
 import java.security.Principal;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -29,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/follow")
+@RequestMapping("/follows")
 @Validated
 @RequiredArgsConstructor
 @Slf4j
@@ -51,9 +52,9 @@ public class FollowController {
     follow.setFollower(follower);
     follow.setFollowing(following);
 
-    followService.createFollow(follow);
-
-    return ResponseEntity.ok().build();
+    Follow createdFollow = followService.createFollow(follow);
+    URI uri = UriCreator.createUri("/follow", createdFollow.getFollowId());
+    return ResponseEntity.created(uri).build();
   }
 
   @GetMapping("/follower")
@@ -77,7 +78,7 @@ public class FollowController {
 
     Page<Follow> followPage = followService.findFollowing(currentMember.getMemberId(), pageable);
 
-    Page<MemberSearchDto> responses = followService.convertToResponseDto(followPage);
+    Page<MemberSearchDto> responses = memberService.convertToResponseDto(followPage);
 
     return ResponseEntity.ok().body(responses);
 
@@ -86,7 +87,7 @@ public class FollowController {
   @DeleteMapping("/{follow-id}")
   public ResponseEntity deleteBlock(@PathVariable("follow-id") long followId) {
     followService.deleteFollow(followId);
-    return new ResponseEntity<>(HttpStatus.OK);
+    return ResponseEntity.noContent().build();
   }
 }
 
