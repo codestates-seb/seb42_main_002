@@ -25,11 +25,18 @@ export default function InputForm({
     } else if (name === 'name') {
       validation(undefined, e.target.value);
     } else if (name === 'birthday') {
-      validation(undefined, undefined, e.target.value);
-    } else if (name === 'password') {
       validation(undefined, undefined, undefined, e.target.value);
-    } else if (name === 'passwordCheck') {
+    } else if (name === 'password') {
       validation(undefined, undefined, undefined, undefined, e.target.value);
+    } else if (name === 'passwordCheck') {
+      validation(
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        e.target.value
+      );
     }
   };
   // console.log(isError);

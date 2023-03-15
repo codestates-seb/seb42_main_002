@@ -6,15 +6,15 @@ import { AiOutlineLock } from 'react-icons/ai';
 import { FaVenus } from 'react-icons/fa';
 import { FaMars } from 'react-icons/fa';
 import { FaTransgender } from 'react-icons/fa';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import InputForm from './InputForm';
 
-export default function SignUpMain() {
+const SignUpMain = (): JSX.Element => {
   const [isBtnClick, setIsBtnClick] = useState([false, false, false]);
   const [isError, setIsError] = useState({
     eamil: false,
     name: false,
-    gender: true,
+    gender: false,
     birthday: false,
     password: false,
     passwordCheck: false,
@@ -29,7 +29,21 @@ export default function SignUpMain() {
   });
   const [passwordState, setPasswordState] = useState('');
 
-  const isBtnClickHandler = (el: number) => {
+  // 성별 버튼 유효성 검사
+  useEffect(() => {
+    if (
+      !(
+        isBtnClick[0] === false &&
+        isBtnClick[1] === false &&
+        isBtnClick[2] === false
+      )
+    ) {
+      setIsError({ ...isError, gender: false });
+      setErrorText({ ...errorText, gender: '' });
+    }
+  }, [isBtnClick]);
+
+  const isBtnClickHandler = (el: number): boolean | void => {
     const isBtnClickData = [...isBtnClick].map((ele, index) => {
       if (index === el) {
         return true;
@@ -40,7 +54,6 @@ export default function SignUpMain() {
     setIsBtnClick(isBtnClickData);
   };
 
-  // 유효성 검사
   const genderCheck = (): string | void => {
     if (isBtnClick[0] === true) return '남자';
     else if (isBtnClick[1] === true) return '여자';
@@ -51,9 +64,11 @@ export default function SignUpMain() {
     }
   };
 
+  // 유효성 검사
   const validation = (
     email?: string,
     name?: string,
+    gender?: boolean[],
     birthday?: string,
     password?: string,
     passwordCheck?: string
@@ -96,6 +111,14 @@ export default function SignUpMain() {
       }
     }
 
+    if (!(gender === undefined)) {
+      if (gender[0] === false && gender[1] === false && gender[2] === false) {
+        setIsError({ ...isError, gender: true });
+        setErrorText({ ...errorText, gender: '성별을 선택하세요.' });
+        return;
+      }
+    }
+
     if (!(birthday === undefined)) {
       if (birthday == '') {
         setIsError({ ...isError, birthday: true });
@@ -128,7 +151,7 @@ export default function SignUpMain() {
         setIsError({ ...isError, password: true });
         setErrorText({
           ...errorText,
-          password: '비밀번호는 7글자이상 20글자 이하만 사용 가능합니다.',
+          password: '7글자이상 20글자 이하만 사용 가능합니다.',
         });
         return;
       } else {
@@ -138,6 +161,14 @@ export default function SignUpMain() {
     }
 
     if (!(passwordCheck === undefined)) {
+      if (passwordCheck.length < 6 || passwordCheck.length > 20) {
+        setIsError({ ...isError, passwordCheck: true });
+        setErrorText({
+          ...errorText,
+          passwordCheck: '7글자이상 20글자 이하만 사용 가능합니다.',
+        });
+        return;
+      }
       if (!(passwordCheck === passwordState)) {
         setIsError({ ...isError, passwordCheck: true });
         setErrorText({
@@ -160,23 +191,27 @@ export default function SignUpMain() {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const data = Object.fromEntries(formData);
+
     if (
       validation(
         data.email as string,
         data.name as string,
+        isBtnClick as boolean[],
         data.birthday as string,
         data.password as string,
         data.passwordCheck as string
       )
     ) {
+      const gender = genderCheck();
       const sentData = {
         name: data.name,
         email: data.email,
         password: data.password,
         birthday: data.birthday,
-        gender: 'OTHER',
+        gender: gender,
       };
       console.log(sentData);
+      //  서버로 보낼 데이터
     }
   };
 
@@ -282,4 +317,6 @@ export default function SignUpMain() {
       </button>
     </form>
   );
-}
+};
+
+export default SignUpMain;

@@ -5,7 +5,7 @@ import { AiOutlineLock } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 // import axios from 'axios';
 
-export default function LoginMain() {
+const LoginMain = () => {
   // const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -15,7 +15,9 @@ export default function LoginMain() {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const data = Object.fromEntries(formData);
-    console.log(`아이디: ${data.email} 비밀번호: ${data.passWord}`);
+
+    //백엔드로 보낼 데이터
+    console.log(`아이디: ${data.email} 비밀번호: ${data.password}`);
 
     // 로그인 요청 로직
     // try {
@@ -35,10 +37,10 @@ export default function LoginMain() {
 
   return (
     <form className={styles.login_container} onSubmit={loginSubmitHandler}>
-      <InputForm htmlfor="email" labelInner="이메일">
+      <InputForm htmlfor="email" labelInner="이메일" name="email">
         <MdOutlineAttachEmail className={styles.icon} />
       </InputForm>
-      <InputForm htmlfor="passWord" labelInner="비밀번호">
+      <InputForm htmlfor="passWord" labelInner="비밀번호" name="password">
         <AiOutlineLock className={styles.icon} />
       </InputForm>
       <button type="submit" className={styles.signUp_Btn}>
@@ -46,4 +48,5 @@ export default function LoginMain() {
       </button>
     </form>
   );
-}
+};
+export default LoginMain;
