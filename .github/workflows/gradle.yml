@@ -10,7 +10,7 @@ name: Back CI with Gradle
 on:
   push:
     branches:
-      - 'be-deploy/deploy_ming'
+      - be-deploy/deploy_ming
 
 permissions:
   contents: read
