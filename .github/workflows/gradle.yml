@@ -9,9 +9,9 @@ name: BACK CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "be-deploy/deploy_ming" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "be-deploy/deploy_ming" ]
 
 permissions:
   contents: read
