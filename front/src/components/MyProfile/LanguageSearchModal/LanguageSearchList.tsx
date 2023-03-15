@@ -9,7 +9,7 @@ import useModals from '../../../hooks/useModals';
 import { LANGUAGE_CODE } from '../../../utils/enums/common/common.enum';
 import { LanguageDataType } from '../../../utils/types/common/common.type';
 import { useRecoilValue } from 'recoil';
-import { userLanguageState } from '../../../recoil/atoms/userLanguage';
+import { userLanguageState } from '../../../recoil/atoms/user/userLanguage';
 
 type LanguageSearchListProps = {
   languages: any[];

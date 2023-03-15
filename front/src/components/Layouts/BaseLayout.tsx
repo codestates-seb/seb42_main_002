@@ -6,16 +6,19 @@ import styles from './BaseLayout.module.scss';
 
 type BaseLayouProps = {
   isAuth?: boolean;
+  noTitle?: boolean;
 };
 
-const BaseLayout = ({ isAuth }: BaseLayouProps): JSX.Element => {
+const BaseLayout = ({ isAuth, noTitle }: BaseLayouProps): JSX.Element => {
   const { user } = useAuth();
   if (!user) return <Navigate to="/" />;
   return (
     <main
       className={classNames(styles.baselayout, { [styles.is_auth]: isAuth })}
     >
-      <article className={styles.article}>
+      <article
+        className={classNames(styles.article, { [styles.noTitle]: noTitle })}
+      >
         <Outlet />
       </article>
       {isAuth && <BottomNav />}

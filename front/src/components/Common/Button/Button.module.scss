@@ -7,6 +7,10 @@
   border-radius: var(--border-radius-sm);
   background-color: transparent;
   color: var(--text-primary-color);
+  white-space: nowrap;
+  border-width: 2px;
+  border-style: solid;
+  border-color: transparent;
 
   // size
   &.sm {
@@ -26,21 +30,26 @@
   &.default {
     &:hover {
       background-color: var(--light-color);
+      border-color: var(--light-color);
     }
   }
 
   &.primary {
     background-color: var(--button-primary-color);
+    border-color: var(--button-primary-color);
     color: var(--white);
     &:hover {
       background-color: #53473c;
+      border-color: #53473c;
     }
   }
   &.secondary {
     background-color: var(--button-secondary-color);
+    border-color: var(--button-secondary-color);
     color: var(--white);
     &:hover {
       background-color: #726e6a;
+      border-color: #726e6a;
     }
   }
   &.dashed {
@@ -51,6 +60,10 @@
     &:hover {
       background-color: var(--light-color);
     }
+  }
+  &.danger {
+    background-color: var(--danger-color);
+    color: var(--white);
   }
 
   // full size

@@ -4,7 +4,6 @@ import styles from './Flex.module.scss';
 
 type ColsProps = DefaultProps & {
   cols?: number;
-  gap?: string;
   sm?: number;
   md?: number;
   lg?: number;
@@ -15,24 +14,34 @@ type RowProps = DefaultProps & {
   justify?: 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly'; // 버튼 그룹 가로 정렬
   align?: 'start' | 'center' | 'end'; // 버튼 그룹 세로 정렬
   wrap?: 'wrap' | 'nowrap';
+  dir?: 'column' | 'row' | 'columnReverse' | 'rowReverse';
 };
 
 type alignTypes = {
-  start: string;
-  center: string;
-  end: string;
+  start?: string;
+  center?: string;
+  end?: string;
 };
 
 type justifyTypes = {
-  start: string;
-  center: string;
-  end: string;
-  between: string;
+  start?: string;
+  center?: string;
+  end?: string;
+  between?: string;
+  around?: string;
+  evenly?: string;
 };
 
 type wrapTypes = {
-  wrap: string;
-  nowrap: string;
+  wrap?: string;
+  nowrap?: string;
+};
+
+type directTypes = {
+  column?: string;
+  row?: string;
+  columnReverse?: string;
+  rowReverse: string;
 };
 
 const GAP_SIZES = {
@@ -53,6 +62,8 @@ const JUSTIFY_CONTENT = {
   center: styles.h_center,
   end: styles.h_end,
   between: styles.h_between,
+  around: styles.h_around,
+  evenly: styles.h_evenly,
 };
 
 const FLEX_WRAP = {
@@ -60,7 +71,14 @@ const FLEX_WRAP = {
   nowrap: styles.nowrap,
 };
 
-const FlexColumn = ({ cols, gap, children }: ColsProps) => {
+const DIRECTIONS = {
+  column: styles.column,
+  columnReverse: styles.col_reverse,
+  row: styles.row,
+  rowReverse: styles.row_reverse,
+};
+
+const FlexColumn = ({ cols, children }: ColsProps) => {
   const colWidth = cols && `calc(${(cols / 12) * 100}% - 0.25rem)`;
 
   return (
@@ -75,6 +93,7 @@ const FlexRow = ({
   justify,
   align,
   wrap,
+  dir,
   children,
   className,
 }: RowProps) => {
@@ -86,6 +105,7 @@ const FlexRow = ({
         ALIGN_ITMES[align as keyof alignTypes],
         JUSTIFY_CONTENT[justify as keyof justifyTypes],
         FLEX_WRAP[wrap as keyof wrapTypes],
+        DIRECTIONS[dir as keyof directTypes],
         className
       )}
     >
@@ -96,6 +116,7 @@ const FlexRow = ({
 
 const Flex = Object.assign(FlexRow, {
   Col: FlexColumn,
+  Row: FlexRow,
 });
 
 export default Flex;

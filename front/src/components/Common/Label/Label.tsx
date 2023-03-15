@@ -8,20 +8,24 @@ type LabelProps = {
   isActive?: boolean;
   children?: ReactNode;
   className?: string;
+  full?: boolean;
   onClick?: () => void;
 };
 
-const Label = ({ to, isActive, children }: LabelProps) => {
+const Label = ({ to, isActive, full, children }: LabelProps) => {
+  const classNameValues = classNames(styles.label, {
+    [styles.is_active]: isActive,
+    [styles.full]: full,
+  });
+
   if (to) {
-    return <Link to={to}>{children}</Link>;
+    return (
+      <Link to={to} className={classNameValues}>
+        {children}
+      </Link>
+    );
   }
-  return (
-    <span
-      className={classNames(styles.label, { [styles.is_active]: isActive })}
-    >
-      {children}
-    </span>
-  );
+  return <span className={classNameValues}>{children}</span>;
 };
 
 export default Label;
