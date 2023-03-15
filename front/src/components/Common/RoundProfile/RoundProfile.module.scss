@@ -15,10 +15,9 @@ $nation-left-position: 0.35rem;
   border: 2px solid $border-color;
   border-radius: 2px;
   background-color: #fff;
-  // background-image: url('../../../assets/img/spr_flags.svg');
-  background-size: 20rem 12.5rem;
-  background-position: -3.75rem 0;
   background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
 .profile {

@@ -6,11 +6,12 @@ import { useSetRecoilState } from 'recoil';
 import { selectedUserInfo } from '../../../recoil/atoms';
 import { LetterUserCardProps } from '../../Letter/LetterUserCard/LetterUserCard';
 import { useNavigate } from 'react-router-dom';
+import { LOCATION_CODE } from '../../../utils/enums/common/common.enum';
 
 type UserCardProps = {
   name: string;
   memberId: number;
-  location: string; // 2자리 국가코드
+  location: LOCATION_CODE;
   profile: string | null;
   birthday?: string;
   children?: React.ReactNode;
