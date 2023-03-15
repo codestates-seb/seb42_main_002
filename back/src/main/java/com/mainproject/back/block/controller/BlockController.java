@@ -4,15 +4,15 @@ import com.mainproject.back.block.dto.BlockDto;
 import com.mainproject.back.block.entity.Block;
 import com.mainproject.back.block.mapper.BlockMapper;
 import com.mainproject.back.block.service.BlockService;
-import com.mainproject.back.letter.dto.LetterListDto;
+import com.mainproject.back.member.dto.MemberLetterDto;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.service.MemberService;
 import java.security.Principal;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,8 +63,7 @@ public class BlockController {
   public ResponseEntity getBlocks(@PageableDefault(sort = "block_id") Pageable pageable, Principal principal) {
     Member member = memberService.findMemberByEmail(principal.getName());
     Page<Block> blockPage = blockService.findBlocks(member.getMemberId(), pageable);
-    Page<BlockDto.Response> responses = mapper.pageBlockToPageBlockResponsePage(
-        blockPage);
+    Page<MemberLetterDto> responses = blockService.blockToMemberLetterDto(blockPage);
     return ResponseEntity.ok().body(responses);
 
   }

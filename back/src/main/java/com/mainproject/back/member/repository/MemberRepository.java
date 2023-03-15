@@ -15,6 +15,8 @@ import org.springframework.stereotype.Repository;
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
   Optional<Member> findByEmail(String email);
+  @Query("select m.memberId from Member m where m.email = :email")
+  Optional<Long> findMemberIdByEmail(@Param("email") String email);
 
   // 공통된 태그 많은 순으로 정렬
   @Query(value = "select m.* from member_tag a join member_tag b on a.tag_id = b.tag_id "

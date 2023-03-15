@@ -49,6 +49,8 @@ public interface LetterMapper {
     } else {
       builder.receiver(letter.getReceiver().getName());
     }
+    if(letter.getAvailableAt().isBefore(LocalDateTime.now())) builder.body(letter.getBody());
+
     return builder.build();
   }
 
@@ -60,8 +62,8 @@ public interface LetterMapper {
     LetterListDto.LetterListDtoBuilder builder = LetterListDto.builder()
         .letterId(letter.getLetterId())
         .sender(MemberSimpleDto.builder().memberId(letter.getSender().getMemberId())
-            .name(letter.getReceiver().getName()).build())
-        .receiver(MemberSimpleDto.builder().memberId(letter.getSender().getMemberId())
+            .name(letter.getSender().getName()).build())
+        .receiver(MemberSimpleDto.builder().memberId(letter.getReceiver().getMemberId())
             .name(letter.getReceiver().getName()).build())
         .isRead(letter.getIsRead())
         .availableAt(letter.getAvailableAt())

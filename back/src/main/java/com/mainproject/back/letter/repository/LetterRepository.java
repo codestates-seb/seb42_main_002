@@ -1,8 +1,6 @@
 package com.mainproject.back.letter.repository;
 
 import com.mainproject.back.letter.entity.Letter;
-import com.mainproject.back.member.entity.Member;
-import java.util.ArrayList;
 import java.util.Set;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +30,9 @@ public interface LetterRepository extends JpaRepository<Letter, Long> {
   @Query("select l from Letter l join l.receiver r where r.memberId = :memberId")
   Set<Letter> findReceivedLettersByMember(@Param("memberId") long memberId);
 
-  // 특정 멤버가 보내거나 받은 편지 리스트
-  @Query("select l from Letter l join l.sender s join l.receiver r where r.memberId = :memberId or s.memberId = :memberId")
-  Page<Letter> findLettersByMember(@Param("memberId") long memberId, Pageable pageable);
+  @Query("select l from Letter l "
+      + "join l.receiver r join l.sender s "
+      + "where (r.memberId = :targetId and s.memberId = :memberId) or (r.memberId = :memberId and s.memberId = :targetId)"
+      + "order by l.createdAt")
+  Page<Letter> findLastLetterByMember(@Param("targetId") long targetId, @Param("memberId") long memberId, Pageable pageable);
 }

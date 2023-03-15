@@ -38,7 +38,7 @@ public class LetterController {
 
   @PostMapping("/{receiver-id}")
   public ResponseEntity postLetter(@PathVariable("receiver-id") long receiverId, @RequestBody
-      LetterPostDto letterPostDto, Principal principal) {
+  LetterPostDto letterPostDto, Principal principal) {
     log.info("## 편지 보내기: {}", receiverId);
     letterPostDto.setReceiverId(receiverId);
 
@@ -61,9 +61,10 @@ public class LetterController {
 
   @GetMapping("/members/{member-id}")
   public ResponseEntity getLettersByMember(@PathVariable("member-id") long targetId,
-      @PageableDefault Pageable pageable) {
+      @PageableDefault Pageable pageable, Principal principal) {
     log.info("## 특정 멤버와 주고 받은 편지 리스트 조회: {}", targetId);
-    Page<Letter> letterPage = letterService.findLettersByMemberAndTarget(targetId, pageable);
+    Page<Letter> letterPage = letterService.findLettersByMemberAndTarget(targetId, pageable,
+        principal);
     Page<LetterListDto> letterListDtoPage = letterMapper.pageLetterToPageLetterListDtoPage(
         letterPage);
     return ResponseEntity.ok().body(letterListDtoPage);
@@ -71,16 +72,18 @@ public class LetterController {
 
   @GetMapping()
   public ResponseEntity getMembersByLetter(
-      @PageableDefault(sort = "lastLetter.createdAt") Pageable pageable) {
+      @PageableDefault(sort = "lastLetter.createdAt") Pageable pageable, Principal principal) {
     log.info("## 나와 편지를 주고 받은 멤버 리스트 조회");
-    Page<MemberLetterDto> memberLetterDtoPage = letterService.findMembersByLetter(pageable);
+    Page<MemberLetterDto> memberLetterDtoPage = letterService.findMembersByLetter(pageable,
+        memberService.findMemberIdByEmail(principal.getName()));
     return ResponseEntity.ok().body(memberLetterDtoPage);
   }
 
   @GetMapping("/arrived")
-  public ResponseEntity getArrivedLetterCount() {
+  public ResponseEntity getArrivedLetterCount(Principal principal) {
     log.info("## 도착한 편지 개수 조회");
-    LetterCountDto letterCountDto = letterService.getArrivedLettersCount();
+    LetterCountDto letterCountDto = letterService.getArrivedLettersCount(
+        memberService.findMemberIdByEmail(principal.getName()));
     return ResponseEntity.ok().body(letterCountDto);
   }
 }

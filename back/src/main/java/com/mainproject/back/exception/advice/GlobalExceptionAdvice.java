@@ -65,7 +65,7 @@ public class GlobalExceptionAdvice {
   @ExceptionHandler
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public ErrorResponse handleException(Exception e) {
-    log.error("# handle Exception: {}", e.toString());
+    log.error("# handle Exception: {}", e.getMessage());
     // TODO logback 적용 후 discord4j 넣어봐도 재밌을 듯!!!
 
     final ErrorResponse response = ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR);
