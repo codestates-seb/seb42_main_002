@@ -6,6 +6,7 @@ import styles from './ProfileImage.module.scss';
 type ProfileImageProps = {
   profile?: string | undefined | null;
   location?: string | LOCATION_CODE | null;
+  onChangeLocation?: () => void;
 };
 
 type locationTypes = {
@@ -24,21 +25,33 @@ const LOCATIONS = {
   ES: styles.ES,
 };
 
-const ProfileImage = ({ profile, location }: ProfileImageProps) => {
+const ProfileImage = ({
+  profile,
+  location,
+  onChangeLocation,
+}: ProfileImageProps) => {
   return (
     <div className={styles.profile_img_wrapper}>
       <div className={styles.profile_img}>
-        {location && (
+        {!onChangeLocation ? (
           <span
             className={classNames(
               styles.icon_flags,
               LOCATIONS[location as keyof locationTypes]
             )}
           ></span>
+        ) : (
+          <button
+            className={classNames(
+              styles.icon_flags,
+              LOCATIONS[location as keyof locationTypes]
+            )}
+            onClick={onChangeLocation}
+          ></button>
         )}
-        <figure className={styles.default_profile}>
-          {profile && <img src={profile} alt="" />}
-          {!profile && <img src={defaultProfile} alt="프로필" />}
+        <figure className={classNames({ [styles.default_profile]: !profile })}>
+          {profile && <img src={profile} alt="프로필 이미지" />}
+          {!profile && <img src={defaultProfile} alt="프로필 기본 이미지" />}
         </figure>
       </div>
     </div>

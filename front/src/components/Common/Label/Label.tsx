@@ -8,12 +8,14 @@ type LabelProps = {
   isActive?: boolean;
   children?: ReactNode;
   className?: string;
+  full?: boolean;
   onClick?: () => void;
 };
 
-const Label = ({ to, isActive, children }: LabelProps) => {
+const Label = ({ to, isActive, full, children }: LabelProps) => {
   const classNameValues = classNames(styles.label, {
     [styles.is_active]: isActive,
+    [styles.full]: full,
   });
 
   if (to) {

@@ -10,6 +10,9 @@
   color: var(--text-primary-color);
   font-size: var(--font-size-xs);
   white-space: nowrap;
+  &.full {
+    width: 100%;
+  }
   &.is_active {
     background-color: var(--active-color);
     border-color: var(--active-color);

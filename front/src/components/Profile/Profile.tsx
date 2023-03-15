@@ -1,6 +1,6 @@
 import { RiAlarmWarningLine } from 'react-icons/ri';
 import { useRecoilValue } from 'recoil';
-import { userState } from '../../recoil/atoms/user';
+import { userState } from '../../recoil/atoms/user/user';
 import { langTransformer } from '../../utils/common';
 import Button from '../Common/Button/Button';
 import ButtonGroup from '../Common/Button/ButtonGroup';

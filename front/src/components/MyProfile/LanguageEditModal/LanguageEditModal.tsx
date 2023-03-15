@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import useModals from '../../../hooks/useModals';
-import { userLanguageState } from '../../../recoil/atoms/userLanguage';
+import { userLanguageState } from '../../../recoil/atoms/user/userLanguage';
 import { UserData } from '../../../utils';
 import {
   CONST_LANGUAGE_CODE,

@@ -10,7 +10,7 @@ type TextAreaFeildProps = DefaultProps & {
 const TextAreaFeild = ({ id, name, value }: TextAreaFeildProps) => {
   return (
     <div className={styles.textarea}>
-      <textarea id={id} name={name} value={value} />
+      <textarea id={id} name={name} defaultValue={value} />
     </div>
   );
 };
