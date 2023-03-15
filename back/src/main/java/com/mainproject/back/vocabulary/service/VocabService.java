@@ -7,11 +7,13 @@ import com.mainproject.back.vocabulary.exception.VocabExceptionCode;
 import com.mainproject.back.vocabulary.repository.VocabRepository;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class VocabService {
 
   public VocabService(VocabRepository vocabRepository) {
@@ -21,6 +23,7 @@ public class VocabService {
   private VocabRepository vocabRepository;
 
   public Vocabulary createVocab(Vocabulary vocab) {
+    log.info("## 단어장 추가: {}", vocab.getWord());
     Vocabulary savedVocab = vocabRepository.save(vocab);
     return savedVocab;
   }
