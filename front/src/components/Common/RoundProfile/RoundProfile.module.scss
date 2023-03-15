@@ -1,5 +1,5 @@
 $border-color: var(--border-color);
-$nation-left-position: 0.35rem;
+$nation-left-position: 0.85rem;
 
 .round_profile {
   position: relative;
@@ -7,8 +7,9 @@ $nation-left-position: 0.35rem;
 }
 
 .location {
-  width: 1.25rem;
-  height: 0.75rem;
+  // 1:0.625
+  width: 1.8rem;
+  height: 1.125rem;
   position: absolute;
   top: 0;
   left: -$nation-left-position;

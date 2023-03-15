@@ -3,7 +3,7 @@
   min-height: 10rem;
   min-width: 10rem;
   padding: 1rem;
-  font-size: var(--font-size-xxs);
+  font-size: var(--font-size-sm);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -46,7 +46,7 @@
   }
 
   & .open_time {
-    font-size: var(--font-size-xs);
+    font-size: var(--font-size-sm);
     text-align: center;
     font-weight: 700;
   }
