@@ -29,6 +29,7 @@ public class VocabService {
   }
 
   public Vocabulary updateVocab(long memberId, Vocabulary vocab) {
+    log.info("## 단어장 수정: {}", vocab.getVocabId());
     Vocabulary findVocab = findVerifiedVocab(vocab.getVocabId());
 
     if (findVocab.getMember().getMemberId() != memberId) {
