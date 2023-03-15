@@ -38,7 +38,7 @@
 
   // justify content
   &.h_start {
-    align-items: flex-start;
+    justify-content: flex-start;
   }
 
   &.h_center {
@@ -51,6 +51,14 @@
 
   &.h_between {
     justify-content: space-between;
+  }
+
+  &.h_around {
+    justify-content: space-around;
+  }
+
+  &.h_evenly {
+    justify-content: space-evenly;
   }
 
   // flex wrap

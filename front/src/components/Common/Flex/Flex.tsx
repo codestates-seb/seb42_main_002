@@ -14,7 +14,7 @@ type RowProps = DefaultProps & {
   justify?: 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly'; // 버튼 그룹 가로 정렬
   align?: 'start' | 'center' | 'end'; // 버튼 그룹 세로 정렬
   wrap?: 'wrap' | 'nowrap';
-  dir?: 'column' | 'row' | 'column-reverse' | 'row_reverse';
+  dir?: 'column' | 'row' | 'columnReverse' | 'rowReverse';
 };
 
 type alignTypes = {
@@ -28,6 +28,8 @@ type justifyTypes = {
   center?: string;
   end?: string;
   between?: string;
+  around?: string;
+  evenly?: string;
 };
 
 type wrapTypes = {
@@ -38,8 +40,8 @@ type wrapTypes = {
 type directTypes = {
   column?: string;
   row?: string;
-  'column-reverse'?: string;
-  'row-reverse'?: string;
+  columnReverse?: string;
+  rowReverse: string;
 };
 
 const GAP_SIZES = {
@@ -60,6 +62,8 @@ const JUSTIFY_CONTENT = {
   center: styles.h_center,
   end: styles.h_end,
   between: styles.h_between,
+  around: styles.h_around,
+  evenly: styles.h_evenly,
 };
 
 const FLEX_WRAP = {
@@ -69,9 +73,9 @@ const FLEX_WRAP = {
 
 const DIRECTIONS = {
   column: styles.column,
-  'column-reverse': styles.col_reverse,
+  columnReverse: styles.col_reverse,
   row: styles.row,
-  'row-reverse': styles.row_reverse,
+  rowReverse: styles.row_reverse,
 };
 
 const FlexColumn = ({ cols, children }: ColsProps) => {
