@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { FaMars, FaTransgender, FaVenus } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
 import useModals from '../../hooks/useModals';
@@ -20,13 +20,13 @@ import { CONST_GENDER_TYPE } from '../../utils/enums/common/common.enum';
 import InputFeild from '../Common/InputFeild/InputFeild';
 import TextAreaFeild from '../Common/TextAreaFeild/TextAreaFeild';
 import MyProfileImage from './MyProfileImage';
-import styles from './MyProfile.module.scss';
 import LocationEditModal from './LocationEditModal/LocationEditModal';
+import styles from './MyProfile.module.scss';
 
 const MyProfile = () => {
   const { logout } = useAuth();
   const { openModal } = useModals();
-  const userInfo = useRecoilValue(userState);
+  const [userInfo, setUserInfo] = useRecoilState(userState);
   const userTags = useRecoilValue(userTagState);
   const userLanguages = useRecoilValue(userLanguageState);
   const [isEditBaseInfo, setIsEditBaseInfo] = useState(false);
@@ -60,6 +60,13 @@ const MyProfile = () => {
     console.log(requestData);
     if (requestData) {
       setIsEditBaseInfo((prevState) => !prevState);
+      setUserInfo((prevState: any) => ({
+        ...prevState,
+        name: requestData.name,
+        gender: requestData.gender,
+        birthday: requestData.birthDay,
+      }));
+      console.log(userInfo);
     }
   };
 
@@ -78,6 +85,11 @@ const MyProfile = () => {
     console.log(requestData);
     if (requestData) {
       setIsEditIntroduce((prevState) => !prevState);
+      setUserInfo((prevState: any) => ({
+        ...prevState,
+        introduce: requestData.introduce,
+      }));
+      console.log(userInfo);
     }
   };
 

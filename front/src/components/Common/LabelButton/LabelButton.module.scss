@@ -5,6 +5,8 @@
   padding: 1rem;
   align-items: center;
   gap: 1rem;
+  font-size: var(--font-size-sm);
+  color: var(--text-primary-color);
 
   &.is_active {
     background-color: var(--active-color);

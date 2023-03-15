@@ -25,6 +25,7 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
       setChangeTags(changeTagIds.filter((tag) => tag.id !== selectedTag.id));
     }
   };
+  console.log(changeTagIds);
 
   // 태그 검색
   const onChangeSearchInputHandler = (filterTags: any) => {
