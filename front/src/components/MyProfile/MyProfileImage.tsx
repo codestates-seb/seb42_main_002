@@ -1,61 +1,77 @@
-import classNames from 'classnames';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { userState } from '../../recoil/atoms/user';
-import { UserData } from '../../utils';
-import { LOCATION_CODE } from '../../utils/enums/common/common.enum';
-import styles from './MyProfileImage.module.scss';
+import { userState } from '../../recoil/atoms/user/user';
+import Button from '../Common/Button/Button';
+import ButtonGroup from '../Common/Button/ButtonGroup';
+import Flex from '../Common/Flex/Flex';
+import ProfileImage from '../Common/ProfileImage/ProfileImage';
 
-type MyProfileImage = {
+type MyProfileImageProps = {
   onChangeLocation: () => void;
 };
 
-type locationTypes = {
-  KR: LOCATION_CODE;
-};
-
-const LOCATIONS = {
-  KR: styles.KR,
-};
-
-const MyProfileImage = ({ onChangeLocation }: MyProfileImage) => {
-  const { location } = useRecoilValue(userState);
+const MyProfileImage = ({ onChangeLocation }: MyProfileImageProps) => {
+  const { location, profile } = useRecoilValue(userState);
   // TODO : 이미지 미리보기 로직 수정 필요
-  const [thumnail, setThumnail] = useState<string | null>('');
+  const [photoURL, setPhotoURL] = useState<string | null>(profile as string);
 
-  const clickChangeThumbnailHandler = (event: any) => {
+  // 이미지 변경
+  const onChangeImageHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const reader = new FileReader();
+    const file = event.target.files && event.target.files[0];
 
-    reader.onload = (event: any) => {
-      setThumnail(event.target.result);
+    reader.onload = () => {
+      setPhotoURL(() => reader.result as string);
     };
 
-    reader.readAsDataURL(event.target.files[0]);
+    file && reader.readAsDataURL(file);
+  };
+
+  // 이미지 제거
+  const onRemoveImageHandler = () => {
+    setPhotoURL(null);
   };
 
   return (
-    <div className={styles.profile_img}>
-      <figure>
-        {location && (
-          <button
-            className={classNames(
-              styles.icon_flags,
-              LOCATIONS[location as keyof locationTypes]
+    <Flex dir="column" gap="sm">
+      <Flex.Col>
+        <ProfileImage
+          profile={photoURL}
+          location={location}
+          onChangeLocation={onChangeLocation}
+        />
+      </Flex.Col>
+      <Flex.Col>
+        <ButtonGroup>
+          <Flex dir="column" gap="sm">
+            {!photoURL ? (
+              <>
+                <Button size="sm" variant="primary">
+                  <label htmlFor="profile">
+                    <input
+                      type="file"
+                      id="profile"
+                      className="blind"
+                      accept="image/*"
+                      onChange={onChangeImageHandler}
+                    />
+                    사진 수정
+                  </label>
+                </Button>
+              </>
+            ) : (
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={onRemoveImageHandler}
+              >
+                사진 제거
+              </Button>
             )}
-            onClick={onChangeLocation}
-          ></button>
-        )}
-        {thumnail && <img src={thumnail} alt="" />}
-      </figure>
-      <label htmlFor="profile">사진 수정</label>
-      <input
-        type="file"
-        id="profile"
-        className="blind"
-        accept="image/*"
-        onChange={clickChangeThumbnailHandler}
-      />
-    </div>
+          </Flex>
+        </ButtonGroup>
+      </Flex.Col>
+    </Flex>
   );
 };
 

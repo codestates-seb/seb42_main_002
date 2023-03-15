@@ -17,7 +17,7 @@ import WelcomPage from './pages/WelcomPage';
 import FollowingPage from './pages/FollowingPage';
 import VocaPage from './pages/VocaPage';
 import BlackListPage from './pages/BlackListPage';
-import ProfilePage from './components/Profile/ProfilePage';
+import ProfilePage from './pages/ProfilePage';
 
 function App() {
   return (
@@ -32,8 +32,10 @@ function App() {
                 <Route path="/signup" element={<SignUpPage />} />
                 <Route path="/welcome" element={<WelcomPage />} />
               </Route>
-              <Route element={<BaseLayout isAuth />}>
+              <Route element={<BaseLayout isAuth noTitle />}>
                 <Route path="/main" element={<MainPage />} />
+              </Route>
+              <Route element={<BaseLayout isAuth />}>
                 <Route path="/letters" element={<LetterListPage />} />
                 <Route
                   path="/letters/:memberId"

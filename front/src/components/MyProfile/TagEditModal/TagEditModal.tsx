@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { hobbyTags } from '../../../dummy/Tags';
-import { userTagState } from '../../../recoil/atoms/userTag';
+import { userTagState } from '../../../recoil/atoms/user/userTag';
 import { TagDataType } from '../../../utils/types/tags/tags';
 import Flex from '../../Common/Flex/Flex';
 import LabelButton from '../../Common/LabelButton/LabelButton';

@@ -13,9 +13,14 @@
 
   article {
     padding: 1.5rem 1rem;
-    overflow-y: scroll;
+    overflow-y: auto;
     border-top: 13px solid;
     border-image: url('../../assets/img/envelope_line.svg') 26;
     border-image-repeat: repeat;
+    // &:not(.noTitle) {
+    //   display: grid;
+    //   grid-template-rows: auto 1fr;
+    //   grid-template-columns: 100%;
+    // }
   }
 }

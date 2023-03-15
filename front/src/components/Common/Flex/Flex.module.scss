@@ -1,5 +1,16 @@
 .row {
   display: flex;
+  width: 100%;
+  flex-direction: row;
+  &.row_reverse {
+    flex-direction: row-reverse;
+  }
+  &.column {
+    flex-direction: column;
+  }
+  &.col_reverse {
+    flex-direction: column-reverse;
+  }
 
   // gap
   &.gap_sm {
@@ -27,7 +38,7 @@
 
   // justify content
   &.h_start {
-    align-items: flex-start;
+    justify-content: flex-start;
   }
 
   &.h_center {
@@ -40,6 +51,14 @@
 
   &.h_between {
     justify-content: space-between;
+  }
+
+  &.h_around {
+    justify-content: space-around;
+  }
+
+  &.h_evenly {
+    justify-content: space-evenly;
   }
 
   // flex wrap

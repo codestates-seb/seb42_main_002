@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
-import { userLanguageLevelState } from '../../../recoil/atoms/userLanguage';
+import { userLanguageLevelState } from '../../../recoil/atoms/user/userLanguage';
 import { UserData } from '../../../utils';
 import Flex from '../../Common/Flex/Flex';
 import LabelButton from '../../Common/LabelButton/LabelButton';
