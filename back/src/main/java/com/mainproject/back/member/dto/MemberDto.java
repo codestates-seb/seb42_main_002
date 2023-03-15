@@ -10,12 +10,14 @@ import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 public class MemberDto {
 
   @Getter
   @AllArgsConstructor
+  @NoArgsConstructor
   @Builder
   public static class Post {
 
@@ -56,6 +58,7 @@ public class MemberDto {
   @Getter
   @Builder
   @AllArgsConstructor
+  @NoArgsConstructor
   public static class Patch {
 
     @Setter
