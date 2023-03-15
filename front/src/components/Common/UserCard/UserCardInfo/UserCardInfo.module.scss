@@ -1,0 +1,25 @@
+$main-font-size: var(--font-size-xs);
+$sub-font-size: var(--font-size-xxs);
+
+.user_info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.user {
+  & .name {
+    font-size: $main-font-size;
+    font-weight: 700;
+    color: var(--text-primary-color);
+    margin-bottom: 0.25rem;
+  }
+  & .location {
+    font-size: $sub-font-size;
+    color: var(--text-primary-color);
+  }
+}
+.interaction_date {
+  font-size: $sub-font-size;
+  color: var(--text-secondary-color);
+  margin-top: 0.625rem;
+}

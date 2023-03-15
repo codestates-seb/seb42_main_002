@@ -4,11 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8bd51402-4170-431e-bbb5-de6d0e587f8f" name="변경" comment="">
-      <change beforePath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/ban/entity/Ban.java" beforeDir="false" afterPath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/block/entity/Block.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/follow/entity/Follow.java" beforeDir="false" afterPath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/follow/entity/Follow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/member/entity/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/member/entity/Member.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/back/src/main/resources/application.yml" afterDir="false" />
+    <list default="true" id="8bd51402-4170-431e-bbb5-de6d0e587f8f" name="변경" comment="test: push&#10;&#10;로그 추가">
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/sshConfigs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/webServers.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/aws.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/aws.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jpa-buddy.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jpa-buddy.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,9 +27,28 @@
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
       <state>
+        <task path="$PROJECT_DIR$/back">
+          <activation />
+        </task>
         <projects_view>
           <tree_state>
-            <expand />
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="back" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="back" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="back" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
             <select />
           </tree_state>
         </projects_view>
@@ -36,11 +59,20 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="be-deploy/deploy_ming" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JpbToolWindowState">
+    <option name="isToolWindowVisible" value="false" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -52,13 +84,31 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowPanel.toolwindow.highlight.mappings&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowPanel.toolwindow.highlight.symlinks&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowPanel.toolwindow.show.date&quot;: &quot;false&quot;,
+    &quot;WebServerToolWindowPanel.toolwindow.show.permissions&quot;: &quot;false&quot;,
+    &quot;WebServerToolWindowPanel.toolwindow.show.size&quot;: &quot;false&quot;,
     &quot;last_opened_file_path&quot;: &quot;/Users/jisoyeon/seb42_main_002&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;모듈&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;trusted.hosts&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;d506a6f836e4c5be7e0ec4824f4c7fd3&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -66,7 +116,7 @@
       <recent name="com.mainproject.back.ban.entity" />
     </key>
   </component>
-  <component name="RunManager" selected="애플리케이션.BackApplication">
+  <component name="RunManager" selected="Spring Boot.BackApplication">
     <configuration name="BackApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.mainproject.back.BackApplication" />
       <module name="back.main" />
@@ -103,10 +153,47 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
+    <configuration name="back [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/back" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="BackApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="back.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.mainproject.back.BackApplication" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.mainproject.back.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Spring Boot.BackApplication" />
         <item itemvalue="Gradle.BackApplicationTests" />
-        <item itemvalue="애플리케이션.BackApplication" />
+        <item itemvalue="Gradle.back [build]" />
+        <item itemvalue="Application.BackApplication" />
+        <item itemvalue="Spring Boot.BackApplication" />
       </list>
     </recent_temporary>
   </component>
@@ -118,29 +205,178 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1678151754426</updated>
+      <workItem from="1678412086685" duration="15831000" />
+      <workItem from="1678436600001" duration="4829000" />
+      <workItem from="1678527311086" duration="18000" />
+      <workItem from="1678665468992" duration="9054000" />
+      <workItem from="1678757100616" duration="16777000" />
+      <workItem from="1678867570487" duration="3624000" />
     </task>
+    <task id="LOCAL-00001" summary="feat: 회원 정보 수정&#10;&#10;회원 정보 수정 구현">
+      <created>1678431257354</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1678431257354</updated>
+    </task>
+    <task id="LOCAL-00002" summary="fix: 필드 이름 location으로 통일&#10;&#10;Language - nation,&#10;Vocabulary - langCode 를 location으로 통일&#10;TODO 회원 단어장 전체 조회 시 스택오버플로우 터짐">
+      <created>1678667013391</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1678667013391</updated>
+    </task>
+    <task id="LOCAL-00003" summary="fix: block 수정">
+      <created>1678670951558</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1678670951558</updated>
+    </task>
+    <task id="LOCAL-00004" summary="feat: 멤버 태그 검색 구현&#10;&#10;멤버 태그로 검색 구현&#10;location/nation 구분&#10;letter에 hasPic 추가">
+      <created>1678756320135</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1678756320135</updated>
+    </task>
+    <task id="LOCAL-00005" summary="fix: block 전체 조회 dto 수정&#10;&#10;사용자 정보 + 마지막 주고 받은 편지 포함">
+      <created>1678779961242</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1678779961242</updated>
+    </task>
+    <task id="LOCAL-00006" summary="fix: following 전체 조회 dto 수정&#10;&#10;사용자 정보 포함">
+      <created>1678780476914</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1678780476914</updated>
+    </task>
+    <task id="LOCAL-00007" summary="fix: follow 삭제 시 예외처리&#10;&#10;찾는 사용자가 없을 시 예외처리 추가">
+      <created>1678782052040</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1678782052040</updated>
+    </task>
+    <task id="LOCAL-00008" summary="fix: 기능 부가사항 수정&#10;&#10;- 태그로 검색 시 본인 제외, 추천 친구에 이미 친구인 사람 제외&#10;- 태그 검색, 멤버 정보 조회에 친구인지 아닌지 boolean 값 추가&#10;- Letter의 pic -&gt; photoUrl&#10;- 모든 엔티티에 Auditable 추가">
+      <created>1678857449933</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1678857449933</updated>
+    </task>
+    <task id="LOCAL-00009" summary="chore: 배포 자동화 설정 작성&#10;&#10;- appspec, deploy.sh 작성">
+      <created>1678867880926</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1678867880926</updated>
+    </task>
+    <task id="LOCAL-00010" summary="chore: parameter store 설정 추가&#10;&#10;비밀키 숨김">
+      <created>1678868224872</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1678868224872</updated>
+    </task>
+    <task id="LOCAL-00011" summary="test: push 시 배포 되는지..&#10;&#10;로그 한줄 추가">
+      <created>1678869633425</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1678869633426</updated>
+    </task>
+    <task id="LOCAL-00012" summary="test: gradle.yml 추가&#10;&#10;main에 해서 안되나..">
+      <created>1678869762750</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1678869762750</updated>
+    </task>
+    <task id="LOCAL-00013" summary="test: gradle.yml 추가&#10;&#10;main에 해서 안되나..">
+      <created>1678870090205</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1678870090205</updated>
+    </task>
+    <task id="LOCAL-00014" summary="test: gradle.yml 추가&#10;&#10;main에 해서 안되나..">
+      <created>1678870187066</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1678870187066</updated>
+    </task>
+    <task id="LOCAL-00015" summary="test: push&#10;&#10;로그 추가">
+      <created>1678870319272</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1678870319272</updated>
+    </task>
+    <task id="LOCAL-00016" summary="test: push&#10;&#10;로그 추가">
+      <created>1678870466207</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1678870466207</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="be" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
     </option>
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/back/src/test/java/com/mainproject/back/BackApplicationTests.java</url>
-          <line>6</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="feat: 회원 정보 수정&#10;&#10;회원 정보 수정 구현" />
+    <MESSAGE value="fix: 필드 이름 location으로 통일&#10;&#10;Language - nation,&#10;Vocabulary - langCode 를 location으로 통일&#10;TODO 회원 단어장 전체 조회 시 스택오버플로우 터짐" />
+    <MESSAGE value="fix: block 수정" />
+    <MESSAGE value="feat: 멤버 태그 검색 구현&#10;&#10;멤버 태그로 검색 구현&#10;location/nation 구분&#10;letter에 hasPic 추가" />
+    <MESSAGE value="fix: block 전체 조회 dto 수정&#10;&#10;사용자 정보 + 마지막 주고 받은 편지 포함" />
+    <MESSAGE value="fix: following 전체 조회 dto 수정&#10;&#10;사용자 정보 포함" />
+    <MESSAGE value="fix: follow 삭제 시 예외처리&#10;&#10;찾는 사용자가 없을 시 예외처리 추가" />
+    <MESSAGE value="fix: 기능 부가사항 수정&#10;&#10;- 태그로 검색 시 본인 제외, 추천 친구에 이미 친구인 사람 제외&#10;- 태그 검색, 멤버 정보 조회에 친구인지 아닌지 boolean 값 추가&#10;- Letter의 pic -&gt; photoUrl&#10;- 모든 엔티티에 Auditable 추가" />
+    <MESSAGE value="chore: 배포 자동화 설정 작성&#10;&#10;- appspec, deploy.sh 작성" />
+    <MESSAGE value="chore: parameter store 설정 추가&#10;&#10;비밀키 숨김" />
+    <MESSAGE value="test: push 시 배포 되는지..&#10;&#10;로그 한줄 추가" />
+    <MESSAGE value="test: gradle.yml 추가&#10;&#10;main에 해서 안되나.." />
+    <MESSAGE value="test: push&#10;&#10;로그 추가" />
+    <option name="LAST_COMMIT_MESSAGE" value="test: push&#10;&#10;로그 추가" />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/seb42_main_002$BackApplication.ic" NAME="BackApplication Coverage Results" MODIFIED="1678437938235" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.mainproject.back.*</FILTER>
+    </SUITE>
   </component>
 </project>
