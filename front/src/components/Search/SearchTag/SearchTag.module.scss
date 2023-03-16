@@ -1,9 +1,10 @@
 .tag {
-  padding: 0.2rem 0.5rem;
+  padding: 0.3rem 0.5rem;
   border-radius: 4px;
   color: var(--white);
   display: inline-block;
   white-space: nowrap;
+  font-size: var(--font-size-sm);
 }
 .default {
   background-color: var(--title-secondary-color);
