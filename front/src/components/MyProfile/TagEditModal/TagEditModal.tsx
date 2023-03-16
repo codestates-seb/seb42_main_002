@@ -19,10 +19,12 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
 
   // 태그 선택
   const onSelectTagHandler = (selectedTag: TagDataType) => {
-    if (!changeTagIds.map((tag) => tag.id).includes(selectedTag.id)) {
+    if (!changeTagIds.map((tag) => tag.tagId).includes(selectedTag.tagId)) {
       setChangeTags((currentState) => [...currentState, selectedTag]);
     } else {
-      setChangeTags(changeTagIds.filter((tag) => tag.id !== selectedTag.id));
+      setChangeTags(
+        changeTagIds.filter((tag) => tag.tagId !== selectedTag.tagId)
+      );
     }
   };
 
@@ -65,7 +67,9 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
               <LabelButton
                 full
                 onClick={() => onSelectTagHandler(tag)}
-                isActive={changeTagIds.map((tag) => tag.id).includes(tag.id)}
+                isActive={changeTagIds
+                  .map((tag) => tag.tagId)
+                  .includes(tag.tagId)}
               >
                 <LabelButton.Content>{tag.name}</LabelButton.Content>
               </LabelButton>

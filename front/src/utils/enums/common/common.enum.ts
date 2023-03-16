@@ -6,7 +6,7 @@
 export enum GENDER_TYPE {
   MALE = 'MALE',
   FEMALE = 'FEMALE',
-  OTHERS = 'OTHERS',
+  OTHER = 'OTHER',
 }
 
 export const CONST_GENDER_TYPE = Object.values(GENDER_TYPE);

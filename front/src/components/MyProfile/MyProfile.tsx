@@ -33,10 +33,10 @@ const MyProfile = () => {
   const [isEditIntroduce, setIsEditIntroduce] = useState(false);
   const [selectedGender, setSelectedGender] = useState<string>(userInfo.gender);
 
-  const GaenderIcons = {
+  const GenderIcons = {
     MALE: <FaMars color="#253c63" />,
     FEMALE: <FaVenus color="#932f42" />,
-    OTHERS: <FaTransgender color="#505050" />,
+    OTHER: <FaTransgender color="#505050" />,
   };
 
   const onChangeEditBaseInfo = () => {
@@ -189,7 +189,7 @@ const MyProfile = () => {
                                     key={index}
                                     value={gender}
                                     id={`gender_${gender}`}
-                                    icon={GaenderIcons[gender]}
+                                    icon={GenderIcons[gender]}
                                   >
                                     {gender}
                                   </RadioGroup.Item>
@@ -304,7 +304,7 @@ const MyProfile = () => {
                   <Flex gap="sm" wrap="wrap">
                     {userTags &&
                       userTags.map((tag) => (
-                        <Flex.Col key={tag.id}>
+                        <Flex.Col key={tag.tagId}>
                           <Label>{tag.name}</Label>
                         </Flex.Col>
                       ))}
