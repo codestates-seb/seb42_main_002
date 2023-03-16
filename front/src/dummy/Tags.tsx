@@ -9,7 +9,7 @@ export const nationalityTags = [
   { tagId: 5, name: '스페인', flag: 'Spanish', alpha: 'ES' },
 ];
 
-export const languageTags = [
+export const languageTags: LanguageDataType[] = [
   {
     languageId: 1,
     name: '한국어',
@@ -21,7 +21,7 @@ export const languageTags = [
     languageId: 2,
     name: 'English',
     englishName: 'English',
-    nation: LANGUAGE_CODE.ES,
+    nation: LANGUAGE_CODE.EN,
     filterTag: 'English 영어',
   },
   {

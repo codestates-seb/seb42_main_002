@@ -2,10 +2,6 @@ import { useState } from 'react';
 import FullPageModal, {
   FullPageModalProps,
 } from '../../Common/Modal/FullPageModal';
-import {
-  CONST_LANGUAGE_CODE,
-  LANGUAGE_CODE,
-} from '../../../utils/enums/common/common.enum';
 import LanguageSearchList from './LanguageSearchList';
 import SearchInput from '../../Common/SearchInput/SearchInput';
 import { languageTags } from '../../../dummy/Tags';

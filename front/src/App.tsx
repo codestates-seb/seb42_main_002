@@ -18,6 +18,7 @@ import FollowingPage from './pages/FollowingPage';
 import VocaPage from './pages/VocaPage';
 import BlackListPage from './pages/BlackListPage';
 import ProfilePage from './pages/ProfilePage';
+import StartPage from './pages/StartPage';
 
 function App() {
   return (
@@ -30,12 +31,15 @@ function App() {
                 <Route path="/" element={<IntroPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<SignUpPage />} />
+              </Route>
+              {/** TODO : 첫 로그인 이후 접근 안되게 처리 필요 */}
+              <Route element={<BaseLayout />}>
+                <Route path="/start" element={<StartPage />} />
                 <Route path="/welcome" element={<WelcomPage />} />
               </Route>
-              <Route element={<BaseLayout isAuth noTitle />}>
-                <Route path="/main" element={<MainPage />} />
-              </Route>
+              {/** TODO : 첫 프로필 작성 하고나서 접근 처리 필요 */}
               <Route element={<BaseLayout isAuth />}>
+                <Route path="/main" element={<MainPage />} />
                 <Route path="/letters" element={<LetterListPage />} />
                 <Route
                   path="/letters/:memberId"
