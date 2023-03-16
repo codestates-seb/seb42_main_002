@@ -11,6 +11,12 @@ import {
   selectedSearchLangTagState,
   selectedSearchTagState,
 } from '../../../recoil/atoms/search';
+import InfoGroup from '../../Common/InfoGroup/InfoGroup';
+import Flex from '../../Common/Flex/Flex';
+import Label from '../../Common/Label/Label';
+
+import styles from './SearchFilterModal.module.scss';
+import SearchLangTagFilter from '../SearchLangTagFilter/SearchLangTagFilter';
 
 const SearchFilterModal = ({ onSubmit, onClose }: FullPageModalProps) => {
   const { openModal } = useModals();
@@ -25,7 +31,7 @@ const SearchFilterModal = ({ onSubmit, onClose }: FullPageModalProps) => {
 
   const openLangFilterModal = () => {
     console.log('언어 필터');
-    // openModal(SearchTagFilter);
+    openModal(SearchLangTagFilter);
   };
 
   const openTagFilterModal = () => {
@@ -35,12 +41,45 @@ const SearchFilterModal = ({ onSubmit, onClose }: FullPageModalProps) => {
 
   return (
     <FullPageModal onClose={onClose} onSubmit={onSubmit}>
-      <Button variant="primary" size="md" onClick={openTagFilterModal}>
-        언어 필터 테스트
-      </Button>
-      <Button variant="primary" size="md" onClick={openTagFilterModal}>
-        태그 필터 테스트
-      </Button>
+      {/* 언어 태그 */}
+      <InfoGroup className="extra_info">
+        <h3 className={styles.title}>
+          선택된 <span className={styles.strong}>언어</span> 필터
+        </h3>
+        <InfoGroup.Content>
+          <Flex gap="sm" wrap="wrap">
+            {searchLangTags &&
+              searchLangTags.map((tag) => (
+                <Flex.Col key={tag.languageId}>
+                  <Label>{tag.name}</Label>
+                </Flex.Col>
+              ))}
+            <Button size="sm" variant="dashed" onClick={openLangFilterModal}>
+              + 언어 필터 추가
+            </Button>
+          </Flex>
+        </InfoGroup.Content>
+      </InfoGroup>
+
+      {/* 취미 태그 */}
+      <InfoGroup className="extra_info">
+        <h3 className={styles.title}>
+          선택된 <span className={styles.strong}>태그</span> 필터
+        </h3>
+        <InfoGroup.Content>
+          <Flex gap="sm" wrap="wrap">
+            {searchTags &&
+              searchTags.map((tag) => (
+                <Flex.Col key={tag.tagId}>
+                  <Label>{tag.name}</Label>
+                </Flex.Col>
+              ))}
+            <Button size="sm" variant="dashed" onClick={openTagFilterModal}>
+              + 태그 필터 추가
+            </Button>
+          </Flex>
+        </InfoGroup.Content>
+      </InfoGroup>
     </FullPageModal>
   );
 };
