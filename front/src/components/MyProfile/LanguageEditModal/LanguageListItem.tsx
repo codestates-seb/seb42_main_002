@@ -1,13 +1,19 @@
-import React from 'react';
-import { BsTrash } from 'react-icons/bs';
-import { MdEdit } from 'react-icons/md';
+import { BiEdit } from 'react-icons/bi';
+import { FiTrash2 } from 'react-icons/fi';
+import { useSetRecoilState } from 'recoil';
 import useModals from '../../../hooks/useModals';
+import {
+  userLanguageNationState,
+  userLanguageState,
+} from '../../../recoil/atoms';
 import { langTransformer } from '../../../utils/common';
+import { LANGUAGE_CODE } from '../../../utils/enums/common/common.enum';
 import { LanguageDataType } from '../../../utils/types/common/common.type';
 import Button from '../../Common/Button/Button';
 import Flex from '../../Common/Flex/Flex';
 import LabelButton from '../../Common/LabelButton/LabelButton';
 import LanguageLevelModal from '../LanguageLevelModal/LanguageLevelModal';
+import LanguageEditModal from './LanguageEditModal';
 import styles from './LanguageListItem.module.scss';
 
 type LanguageListItemProps = {
@@ -15,20 +21,22 @@ type LanguageListItemProps = {
 };
 
 const LanguageListItem = ({ item }: LanguageListItemProps) => {
-  // const dispatch = useDispatch();
-  const { openModal } = useModals();
+  const { openModal, closeModal } = useModals();
+  const setSelectedUserLanguageNation = useSetRecoilState(
+    userLanguageNationState
+  );
+  const setSelectedUserLanguages = useSetRecoilState<any[]>(userLanguageState);
 
-  const onEditLanguageHandler = (nation: any) => {
-    // dispatch({ type: 'SELECT_NATION', payload: nation });
-    openModal(LanguageLevelModal, {
-      onSubmit: () => {
-        console.log('onSubmit');
-      },
-    });
+  const onEditLanguageHandler = (nation: LANGUAGE_CODE) => {
+    openModal(LanguageLevelModal);
+    setSelectedUserLanguageNation(nation);
   };
 
-  const onDeleteLanguageHandler = (nation: any) => {
-    // dispatch({ type: 'REMOVE_LANGUAGE', payload: nation });
+  const onDeleteLanguageHandler = (nation: LANGUAGE_CODE) => {
+    setSelectedUserLanguages((prevState) =>
+      prevState.filter((lang) => lang.nation !== nation)
+    );
+    closeModal(LanguageEditModal);
   };
 
   return (
@@ -58,7 +66,7 @@ const LanguageListItem = ({ item }: LanguageListItemProps) => {
         <Button
           size="sm"
           variant="default"
-          icon={<MdEdit />}
+          icon={<BiEdit />}
           iconBtn
           onClick={() => onEditLanguageHandler(item.nation)}
         >
@@ -67,7 +75,7 @@ const LanguageListItem = ({ item }: LanguageListItemProps) => {
         <Button
           size="sm"
           variant="default"
-          icon={<BsTrash />}
+          icon={<FiTrash2 />}
           iconBtn
           onClick={() => onDeleteLanguageHandler(item.nation)}
         >

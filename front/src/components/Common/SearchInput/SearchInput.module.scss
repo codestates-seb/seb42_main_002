@@ -1,0 +1,22 @@
+.input_container {
+  position: relative;
+  margin-bottom: 1.5rem;
+  input {
+    padding: 0.625rem;
+    padding-left: 2.5rem;
+    width: 100%;
+    box-shadow: 0rem 0rem 1.25rem rgba(0, 0, 0, 0.1);
+    &:focus {
+      outline: none;
+    }
+  }
+  .search_icon {
+    position: absolute;
+    top: 50%;
+    left: 0.625rem;
+    width: 1rem;
+    height: 1rem;
+    margin-top: -0.5rem;
+    color: var(--text-secondary-color);
+  }
+}

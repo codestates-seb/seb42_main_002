@@ -13,7 +13,7 @@ export default function TagsModal({
   text,
   btn,
 }: {
-  TagData: TagDataType[];
+  TagData: any[];
   icon: 'back' | 'cancel';
   text: 'firstNationality' | 'firstHobby' | 'none';
   btn: 'add' | 'next' | 'none';
