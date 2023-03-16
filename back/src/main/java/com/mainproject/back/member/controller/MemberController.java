@@ -82,7 +82,7 @@ public class MemberController {
 
   }
 
-  @PatchMapping("/quit")
+  @DeleteMapping
   public ResponseEntity deleteMember(Principal principal) {
     log.info("## 사용자 탈퇴: {}", principal.getName());
     Member currentMember = memberService.findMemberByEmail(principal.getName());
