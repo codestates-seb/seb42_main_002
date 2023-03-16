@@ -71,6 +71,7 @@ public class BlockController {
 
   @DeleteMapping("/{block-id}")
   public ResponseEntity deleteBlock(@PathVariable("block-id") long blockId) {
+    log.info("## 차단 목록 삭제: {}", blockId);
     blockService.deleteBlock(blockId);
     return ResponseEntity.noContent().build();
   }
