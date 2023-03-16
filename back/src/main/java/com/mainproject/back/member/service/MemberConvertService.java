@@ -31,8 +31,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Slf4j
 public class MemberConvertService {
@@ -44,6 +46,7 @@ public class MemberConvertService {
   private final MemberService memberService;
   private final LetterService letterService;
 
+  @Transactional
   public Member memberPatchDtoToMember(MemberDto.Patch memberPatchDto) {
     Member member = memberMapper.memberPatchToMember(memberPatchDto);
     Optional.ofNullable(memberPatchDto.getTag()).ifPresent((tags) -> getMemberTag(member, tags));
@@ -52,6 +55,7 @@ public class MemberConvertService {
     return member;
   }
 
+  @Transactional
   private void getMemberLanguage(Member member, List<MemberLanguageDto> languageDtoList) {
     List<Language> allLanguages = languageService.findAllLanguages();
     List<MemberLanguage> memberLanguageList = languageDtoList.stream().map(languageDto -> {
@@ -73,7 +77,8 @@ public class MemberConvertService {
     throw new BusinessLogicException(LanguageExceptionCode.LANGUAGE_NOT_FOUND);
   }
 
-  private void getMemberTag(Member member, List<String> names) {
+  @Transactional
+  public void getMemberTag(Member member, List<String> names) {
     List<Tag> allTags = tagService.findAllTags();
     List<MemberTag> memberTagList = names.stream().map(name -> {
       Tag tag = findTag(allTags, name);
@@ -94,6 +99,7 @@ public class MemberConvertService {
     throw new BusinessLogicException(TagExceptionCode.TAG_NOT_FOUND);
   }
 
+  @Transactional
   public List<Tag> getTags(String tagNames) {
     String[] tagNameArr = tagNames.split("[+]");
     List<Tag> allTags = tagService.findAllTags();
