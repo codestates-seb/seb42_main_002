@@ -10,11 +10,4 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 public class MemberRepositoryTest {
 
-  @Autowired
-  private MemberRepository memberRepository;
-
-  @BeforeEach
-  public void init(){
-
-  }
 }

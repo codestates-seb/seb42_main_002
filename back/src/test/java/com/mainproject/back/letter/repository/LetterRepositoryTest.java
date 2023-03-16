@@ -16,13 +16,4 @@ public class LetterRepositoryTest {
   @Autowired
   private LetterRepository letterRepository;
 
-  @BeforeEach
-  public void init() {
-
-  }
-
-  @Test
-  public void findMemberByLetterTest() {
-
-  }
 }
