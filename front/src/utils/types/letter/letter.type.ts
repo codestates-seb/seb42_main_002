@@ -8,7 +8,6 @@ export type LetterData = {
     memberId: number;
     name: string;
   };
-  // title: string; // 이게 어디서 쓰이는거지
   body: string;
   isRead: boolean; // 읽음 여부
   availableAt: string;
@@ -26,4 +25,13 @@ export type SeletedLetterData = {
   availableAt: string;
   createdAt: string;
   pic: string[];
+};
+
+/**
+ * @description 편지 생성 type
+ */
+export type newLetterType = {
+  body: string;
+  photoUrl: string[];
+  type?: number;
 };
