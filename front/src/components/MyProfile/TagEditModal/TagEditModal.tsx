@@ -8,7 +8,7 @@ import LabelButton from '../../Common/LabelButton/LabelButton';
 import FullPageModal, {
   FullPageModalProps,
 } from '../../Common/Modal/FullPageModal';
-import TagSearchBar from '../../Common/Tags/TagSearchBar';
+import SearchInput from '../../Common/SearchInput/SearchInput';
 
 const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
   const [selectedUserTags, setSelectedUserTags] = useRecoilState(userTagState);
@@ -19,16 +19,18 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
 
   // 태그 선택
   const onSelectTagHandler = (selectedTag: TagDataType) => {
-    if (!changeTagIds.map((tag) => tag.id).includes(selectedTag.id)) {
+    if (!changeTagIds.map((tag) => tag.tagId).includes(selectedTag.tagId)) {
       setChangeTags((currentState) => [...currentState, selectedTag]);
     } else {
-      setChangeTags(changeTagIds.filter((tag) => tag.id !== selectedTag.id));
+      setChangeTags(
+        changeTagIds.filter((tag) => tag.tagId !== selectedTag.tagId)
+      );
     }
   };
 
   // 태그 검색
-  const onChangeSearchInputHandler = (filterTags: any) => {
-    setTagList(filterTags);
+  const onChangeSearchInputHandler = (filteredItems: any) => {
+    setTagList(filteredItems);
   };
 
   const onSubmitHandler = () => {
@@ -53,8 +55,9 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
       onClose={onCloseHandler}
       labelSubmit="수정"
     >
-      <TagSearchBar
-        tags={hobbyTags}
+      <SearchInput
+        items={hobbyTags}
+        filterKey="name"
         filterHandler={onChangeSearchInputHandler}
       />
       <Flex gap="sm" wrap="wrap">
@@ -64,7 +67,9 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
               <LabelButton
                 full
                 onClick={() => onSelectTagHandler(tag)}
-                isActive={changeTagIds.map((tag) => tag.id).includes(tag.id)}
+                isActive={changeTagIds
+                  .map((tag) => tag.tagId)
+                  .includes(tag.tagId)}
               >
                 <LabelButton.Content>{tag.name}</LabelButton.Content>
               </LabelButton>

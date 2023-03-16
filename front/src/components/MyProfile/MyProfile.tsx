@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { FaMars, FaTransgender, FaVenus } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
 import useModals from '../../hooks/useModals';
@@ -20,23 +20,23 @@ import { CONST_GENDER_TYPE } from '../../utils/enums/common/common.enum';
 import InputFeild from '../Common/InputFeild/InputFeild';
 import TextAreaFeild from '../Common/TextAreaFeild/TextAreaFeild';
 import MyProfileImage from './MyProfileImage';
-import styles from './MyProfile.module.scss';
 import LocationEditModal from './LocationEditModal/LocationEditModal';
+import styles from './MyProfile.module.scss';
 
 const MyProfile = () => {
   const { logout } = useAuth();
   const { openModal } = useModals();
-  const userInfo = useRecoilValue(userState);
+  const [userInfo, setUserInfo] = useRecoilState(userState);
   const userTags = useRecoilValue(userTagState);
   const userLanguages = useRecoilValue(userLanguageState);
   const [isEditBaseInfo, setIsEditBaseInfo] = useState(false);
   const [isEditIntroduce, setIsEditIntroduce] = useState(false);
   const [selectedGender, setSelectedGender] = useState<string>(userInfo.gender);
 
-  const GaenderIcons = {
+  const GenderIcons = {
     MALE: <FaMars color="#253c63" />,
     FEMALE: <FaVenus color="#932f42" />,
-    OTHERS: <FaTransgender color="#505050" />,
+    OTHER: <FaTransgender color="#505050" />,
   };
 
   const onChangeEditBaseInfo = () => {
@@ -60,6 +60,13 @@ const MyProfile = () => {
     console.log(requestData);
     if (requestData) {
       setIsEditBaseInfo((prevState) => !prevState);
+      setUserInfo((prevState: any) => ({
+        ...prevState,
+        name: requestData.name,
+        gender: requestData.gender,
+        birthday: requestData.birthDay,
+      }));
+      console.log(userInfo);
     }
   };
 
@@ -78,31 +85,24 @@ const MyProfile = () => {
     console.log(requestData);
     if (requestData) {
       setIsEditIntroduce((prevState) => !prevState);
+      setUserInfo((prevState: any) => ({
+        ...prevState,
+        introduce: requestData.introduce,
+      }));
+      console.log(userInfo);
     }
   };
 
   const onClickLangugeModalHandler = () => {
-    openModal(LanguageEditModal, {
-      onSubmit: () => {
-        console.log('언어 수정');
-      },
-    });
+    openModal(LanguageEditModal);
   };
 
   const onClickTagModalHandler = () => {
-    openModal(TagEditModal, {
-      onSubmit: () => {
-        console.log('태그 수정');
-      },
-    });
+    openModal(TagEditModal);
   };
 
   const onClickLocationModalHandler = () => {
-    openModal(LocationEditModal, {
-      onSubmit: () => {
-        console.log('국가 수정');
-      },
-    });
+    openModal(LocationEditModal);
   };
 
   return (
@@ -189,7 +189,7 @@ const MyProfile = () => {
                                     key={index}
                                     value={gender}
                                     id={`gender_${gender}`}
-                                    icon={GaenderIcons[gender]}
+                                    icon={GenderIcons[gender]}
                                   >
                                     {gender}
                                   </RadioGroup.Item>
@@ -275,24 +275,19 @@ const MyProfile = () => {
                   </form>
                 </InfoGroup>
               )}
-
               <InfoGroup className="extra_info">
                 <InfoGroup.Label>언어</InfoGroup.Label>
                 <InfoGroup.Content>
                   <Flex gap="sm" wrap="wrap">
-                    <>
-                      {userLanguages &&
-                        userLanguages.map((language) => (
-                          <>
-                            <Flex.Col key={language.nation}>
-                              <Label>
-                                {langTransformer(language.nation)} Lv.
-                                {language.level}
-                              </Label>
-                            </Flex.Col>
-                          </>
-                        ))}
-                    </>
+                    {userLanguages &&
+                      userLanguages.map((language) => (
+                        <Flex.Col key={language.nation}>
+                          <Label>
+                            {langTransformer(language.nation)} Lv.
+                            {language.level}
+                          </Label>
+                        </Flex.Col>
+                      ))}
                     <Button
                       size="sm"
                       variant="dashed"
@@ -307,16 +302,12 @@ const MyProfile = () => {
                 <InfoGroup.Label>태그</InfoGroup.Label>
                 <InfoGroup.Content>
                   <Flex gap="sm" wrap="wrap">
-                    <>
-                      {userTags &&
-                        userTags.map((tag) => (
-                          <>
-                            <Flex.Col key={tag.id}>
-                              <Label>{tag.name}</Label>
-                            </Flex.Col>
-                          </>
-                        ))}
-                    </>
+                    {userTags &&
+                      userTags.map((tag) => (
+                        <Flex.Col key={tag.tagId}>
+                          <Label>{tag.name}</Label>
+                        </Flex.Col>
+                      ))}
                     <Button
                       size="sm"
                       variant="dashed"

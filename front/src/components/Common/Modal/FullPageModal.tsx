@@ -15,6 +15,7 @@ export type FullPageModalProps = {
   labelClose?: string;
   onSubmit?: (...props: any) => void | undefined;
   onClose?: () => void | undefined;
+  noFooter?: boolean;
   children?: ReactNode;
 };
 
@@ -28,6 +29,7 @@ const FullPageChild = ({
   onClose,
   labelSubmit = '확인',
   labelClose,
+  noFooter,
   children,
 }: FullPageModalProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -70,20 +72,22 @@ const FullPageChild = ({
             <h2>{title}</h2>
           </div>
           <div className={styles.body}>{children}</div>
-          <div className={styles.footer}>
-            <ButtonGroup gap="sm" wrap="nowrap">
-              {labelClose && (
-                <Button size="md" variant="secondary" onClick={onClose} full>
-                  {labelClose}
-                </Button>
-              )}
-              {labelSubmit && (
-                <Button size="lg" variant="primary" onClick={onSubmit} full>
-                  {labelSubmit}
-                </Button>
-              )}
-            </ButtonGroup>
-          </div>
+          {!noFooter && (
+            <div className={styles.footer}>
+              <ButtonGroup gap="md" wrap="nowrap">
+                {labelClose && (
+                  <Button size="lg" variant="secondary" onClick={onClose} full>
+                    {labelClose}
+                  </Button>
+                )}
+                {labelSubmit && (
+                  <Button size="lg" variant="primary" onClick={onSubmit} full>
+                    {labelSubmit}
+                  </Button>
+                )}
+              </ButtonGroup>
+            </div>
+          )}
         </div>
       </CSSTransition>
     </div>,
