@@ -1,5 +1,5 @@
 export type TagDataType = {
-  id: number;
+  tagId: number;
   name: string;
   englishName?: string;
   alpha?: string;

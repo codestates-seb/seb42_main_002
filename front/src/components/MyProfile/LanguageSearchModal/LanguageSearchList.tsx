@@ -1,6 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
-import { langTransformer } from '../../../utils/common';
-import { UserData } from '../../../utils';
+import { useState, useCallback } from 'react';
 import LabelButton from '../../Common/LabelButton/LabelButton';
 import { BsPlus } from 'react-icons/bs';
 import Flex from '../../Common/Flex/Flex';
@@ -8,8 +6,12 @@ import LanguageLevelModal from '../../MyProfile/LanguageLevelModal/LanguageLevel
 import useModals from '../../../hooks/useModals';
 import { LANGUAGE_CODE } from '../../../utils/enums/common/common.enum';
 import { LanguageDataType } from '../../../utils/types/common/common.type';
-import { useRecoilValue } from 'recoil';
-import { userLanguageState } from '../../../recoil/atoms/user/userLanguage';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+  userLanguageNationState,
+  userLanguageState,
+} from '../../../recoil/atoms/user/userLanguage';
+import { languageTags } from '../../../dummy/Tags';
 
 type LanguageSearchListProps = {
   languages: any[];
@@ -17,47 +19,27 @@ type LanguageSearchListProps = {
 
 const LanguageSearchList = ({ languages }: LanguageSearchListProps) => {
   const { openModal } = useModals();
-  // const dispatch = useDispatch();
   const selectedUserLanguages = useRecoilValue(userLanguageState);
-  const [items, setItems] = useState<any[]>([]);
-  const [selected, setSelected] = useState<LanguageDataType[]>(
-    selectedUserLanguages.map((lang) => lang)
+  const setSelectedUserLanguageNation = useSetRecoilState(
+    userLanguageNationState
   );
-  const [notSelected, setNotSelected] = useState<any[]>(
-    languages
-      .filter((lang) => !selected.map((el) => el.nation).includes(lang))
-      .map((nation) => ({ nation: nation }))
+  const [selected] = useState<LanguageDataType[]>(
+    languageTags.filter((lang) =>
+      selectedUserLanguages.map((lang) => lang.nation).includes(lang.nation)
+    )
   );
 
   const onClickLanguageLevelModalHandler = useCallback(
     (nation: LANGUAGE_CODE) => {
-      // dispatch({ type: 'SELECT_NATION', payload: nation });
-      openModal(LanguageLevelModal, {
-        onSubmit: () => {
-          console.log('onSubmit');
-        },
-      });
+      setSelectedUserLanguageNation(nation);
+      openModal(LanguageLevelModal);
     },
     [openModal]
   );
 
-  // // TODO : 버그 수정
-  // useEffect(() => {
-  //   if (selectedLanguage) {
-  //     setSelected((prevState) => [...prevState, selectedLanguage]);
-  //     setNotSelected((prevState) =>
-  //       prevState.filter((lang) => lang.nation !== selectedLanguage.nation)
-  //     );
-  //   }
-  // }, [selectedLanguage]);
-
-  useEffect(() => {
-    setItems([...selected, ...notSelected]);
-  }, [selected, notSelected]);
-
   return (
     <>
-      {items.map((lang: any, index: number) => {
+      {languages.map((lang: LanguageDataType, index: number) => {
         return (
           <LabelButton
             key={index}
@@ -74,10 +56,10 @@ const LanguageSearchList = ({ languages }: LanguageSearchListProps) => {
                 <Flex.Col>
                   <Flex gap="sm">
                     <Flex.Col>
-                      <span>{langTransformer(lang.nation)}</span>
+                      <span>{lang.name}</span>
                     </Flex.Col>
                     <Flex.Col>
-                      <span>{langTransformer(lang.nation, true)}</span>
+                      <span>{lang.englishName}</span>
                     </Flex.Col>
                   </Flex>
                 </Flex.Col>

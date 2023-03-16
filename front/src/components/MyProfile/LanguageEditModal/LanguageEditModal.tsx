@@ -1,12 +1,6 @@
-import { useState, useEffect } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import useModals from '../../../hooks/useModals';
 import { userLanguageState } from '../../../recoil/atoms/user/userLanguage';
-import { UserData } from '../../../utils';
-import {
-  CONST_LANGUAGE_CODE,
-  LANGUAGE_CODE,
-} from '../../../utils/enums/common/common.enum';
 import Button from '../../Common/Button/Button';
 import FullPageModal, {
   FullPageModalProps,
@@ -14,29 +8,26 @@ import FullPageModal, {
 import LanguageSearchModal from '../LanguageSearchModal/LanguageSearchModal';
 import LanguageList from './LanguageList';
 
+/**
+ * 언어 레벨 수정 / 언어 삭제 / 언어 추가 모들
+ * @param
+ * @returns
+ */
 const LanguageEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
   const { openModal } = useModals();
-
-  const [selectedUserLanguages, setSelectedUserLanguages] =
-    useRecoilState(userLanguageState);
-  const [selectedLangauge, setSelectedLanguage] = useState({});
-
-  useEffect(() => {
-    if (selectedLangauge) {
-      setSelectedLanguage(selectedUserLanguages);
-    }
-  }, [selectedLangauge]);
+  const selectedUserLanguages = useRecoilValue(userLanguageState);
 
   const onClickLanguageSearchModalHandler = () => {
-    openModal(LanguageSearchModal, {
-      onSubmit: () => {
-        console.log(selectedUserLanguages);
-      },
-    });
+    openModal(LanguageSearchModal);
   };
 
   return (
-    <FullPageModal onSubmit={onSubmit} onClose={onClose} labelSubmit="수정">
+    <FullPageModal
+      onSubmit={onSubmit}
+      onClose={onClose}
+      labelSubmit="수정"
+      noFooter
+    >
       <Button
         size="lg"
         variant="dashed"

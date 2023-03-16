@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
+import { userLocationState } from '../../recoil/atoms';
 import { userState } from '../../recoil/atoms/user/user';
 import Button from '../Common/Button/Button';
 import ButtonGroup from '../Common/Button/ButtonGroup';
@@ -11,7 +12,8 @@ type MyProfileImageProps = {
 };
 
 const MyProfileImage = ({ onChangeLocation }: MyProfileImageProps) => {
-  const { location, profile } = useRecoilValue(userState);
+  const { profile } = useRecoilValue(userState);
+  const userLcation = useRecoilValue(userLocationState);
   // TODO : 이미지 미리보기 로직 수정 필요
   const [photoURL, setPhotoURL] = useState<string | null>(profile as string);
 
@@ -37,7 +39,7 @@ const MyProfileImage = ({ onChangeLocation }: MyProfileImageProps) => {
       <Flex.Col>
         <ProfileImage
           profile={photoURL}
-          location={location}
+          location={userLcation}
           onChangeLocation={onChangeLocation}
         />
       </Flex.Col>

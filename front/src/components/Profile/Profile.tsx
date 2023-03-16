@@ -31,12 +31,15 @@ const Profile = () => {
                     <ButtonGroup>
                       <Flex dir="column" gap="sm">
                         {/** TODO: 친구 여부에 따른 조건 걸어주기 */}
-                        <Button size="sm" variant="secondary" full>
-                          친구추가
-                        </Button>
-                        <Button size="sm" variant="secondary" full>
-                          친구삭제
-                        </Button>
+                        {!userInfo.profile ? (
+                          <Button size="sm" variant="secondary" full>
+                            친구추가
+                          </Button>
+                        ) : (
+                          <Button size="sm" variant="secondary" full>
+                            친구삭제
+                          </Button>
+                        )}
                         <Button size="sm" variant="danger" full>
                           친구차단
                         </Button>
@@ -111,7 +114,7 @@ const Profile = () => {
                       {userInfo.tag &&
                         userInfo.tag.map((tag) => (
                           <>
-                            <Flex.Col key={tag.id}>
+                            <Flex.Col key={tag.tagId}>
                               <Label>{tag.name}</Label>
                             </Flex.Col>
                           </>

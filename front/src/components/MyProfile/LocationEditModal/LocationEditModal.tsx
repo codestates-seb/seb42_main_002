@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import { userData } from '../../../dummy/userList';
-import { userState } from '../../../recoil/atoms/user/user';
+import { useRecoilState } from 'recoil';
+import { userLocationState } from '../../../recoil/atoms';
 import { LocationIcons, locationTypes } from '../../../utils';
 import { locationTransformer } from '../../../utils/common';
 import {
@@ -13,22 +12,33 @@ import LabelButton from '../../Common/LabelButton/LabelButton';
 import FullPageModal, {
   FullPageModalProps,
 } from '../../Common/Modal/FullPageModal';
-import TagSearchBar from '../../Common/Tags/TagSearchBar';
 import styles from './LocationEditModal.module.scss';
 
 const LocationEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
-  const { location } = useRecoilValue(userState);
+  const [selectedUserLocation, setSelectedUserLocation] =
+    useRecoilState(userLocationState);
   const [locationList, setLocationList] = useState([...CONST_LOCATION_CODE]);
-  const [changeLocation, setChangedLocation] = useState(location);
+  const [changeLocation, setChangeLocation] = useState(selectedUserLocation);
 
   const onSelectLocationHandler = (selectedLocation: LOCATION_CODE) => {
-    if (changeLocation !== selectedLocation) {
-      setChangedLocation(selectedLocation);
+    setChangeLocation(() => selectedLocation);
+  };
+
+  const onSubmitHandler = () => {
+    if (onSubmit) {
+      setSelectedUserLocation(changeLocation);
+    }
+    if (onClose) {
+      onClose();
     }
   };
 
   return (
-    <FullPageModal onSubmit={onSubmit} onClose={onClose} labelSubmit="수정">
+    <FullPageModal
+      onSubmit={onSubmitHandler}
+      onClose={onClose}
+      labelSubmit="수정"
+    >
       <Flex gap="sm" wrap="wrap">
         {locationList &&
           locationList.map((location) => (
