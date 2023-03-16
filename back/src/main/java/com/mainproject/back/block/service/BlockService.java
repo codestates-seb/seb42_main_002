@@ -16,17 +16,21 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 @Service
 public class BlockService {
 
   private final BlockRepository blockRepository;
 
+  @Transactional
   public Block createBlock(Block block) {
     return blockRepository.save(block);
   }
 
+  @Transactional
   public void deleteBlock(long blockId) {
     long foundId = blockRepository.findBlockIdByBlockId(blockId)
         .orElseThrow(() -> new BusinessLogicException(

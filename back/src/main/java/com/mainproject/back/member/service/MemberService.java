@@ -82,6 +82,7 @@ public class MemberService {
     return findVerifiedMember(memberId);
   }
 
+  @Transactional
   public void deleteMember(long memberId) {
     Member findMember = findVerifiedMember(memberId);
 
