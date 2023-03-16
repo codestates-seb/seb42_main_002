@@ -46,3 +46,7 @@ export type BlackUserData = {
   location: LOCATION_CODE;
   profile: string | null;
 };
+
+export type SearchUserDataType = BlackUserData & {
+  friend: boolean;
+};

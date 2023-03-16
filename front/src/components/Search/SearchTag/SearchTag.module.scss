@@ -1,0 +1,13 @@
+.tag {
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  color: var(--white);
+  display: inline-block;
+  white-space: nowrap;
+}
+.default {
+  background-color: var(--title-secondary-color);
+}
+.lang {
+  background-color: var(--active-color);
+}

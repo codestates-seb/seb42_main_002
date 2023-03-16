@@ -25,5 +25,6 @@ export const newLetterState = atom<newLetterType>({
     photoUrl: [],
     body: '',
     type: 0, // 일단 0으로 고정
+    receiver: '',
   },
 });

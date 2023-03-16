@@ -43,7 +43,7 @@ const NewLetterWrapper = () => {
       {/* 편지지 선택 */}
       <LetterType />
       {/* 편지 내용 */}
-      <NewLetterContent receiver="안아영" />
+      <NewLetterContent receiver={newLetter.receiver} />
       {/* 이미지 선택 */}
       <LetterPictureWrapper
         pictures={newLetter.photoUrl}
