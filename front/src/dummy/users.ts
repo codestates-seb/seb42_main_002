@@ -17,7 +17,7 @@ export const userProfile: UserProfileData = {
   name: '안아영',
   email: '12ayo22@gmail.com',
   gender: 'OTHER',
-  location: 'KR',
+  location: 'KR' as LOCATION_CODE,
   birthday: '2023-02-28',
   introduce: '멋진 프론트엔드 개발자 아영입니다!',
   profile: null,
