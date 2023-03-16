@@ -91,6 +91,7 @@ public class MemberController {
 
   @GetMapping("/recommend")
   public ResponseEntity getRecommended(Principal principal) {
+    log.info("## principal 기반 사용자 추천: {}", principal.getName());
     Member currentMember = memberService.findMemberByEmail(principal.getName());
 
     Page<Member> memberPage = memberService.findRecommendedMember(

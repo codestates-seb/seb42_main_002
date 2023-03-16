@@ -7,6 +7,7 @@
     <list default="true" id="8bd51402-4170-431e-bbb5-de6d0e587f8f" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/ban/entity/Ban.java" beforeDir="false" afterPath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/block/entity/Block.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/follow/entity/Follow.java" beforeDir="false" afterPath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/follow/entity/Follow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/member/controller/MemberController.java" beforeDir="false" afterPath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/member/controller/MemberController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/member/entity/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/member/entity/Member.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/back/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/back/src/main/resources/application.yml" afterDir="false" />
     </list>
@@ -23,6 +24,9 @@
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
       <state>
+        <task path="$PROJECT_DIR$/back">
+          <activation />
+        </task>
         <projects_view>
           <tree_state>
             <expand />
@@ -66,7 +70,7 @@
       <recent name="com.mainproject.back.ban.entity" />
     </key>
   </component>
-  <component name="RunManager" selected="애플리케이션.BackApplication">
+  <component name="RunManager" selected="Application.BackApplication">
     <configuration name="BackApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.mainproject.back.BackApplication" />
       <module name="back.main" />
@@ -103,10 +107,16 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
+    <configuration name="BackApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="back.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.mainproject.back.BackApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.BackApplicationTests" />
-        <item itemvalue="애플리케이션.BackApplication" />
       </list>
     </recent_temporary>
   </component>
@@ -142,5 +152,10 @@
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/seb42_main_002$BackApplication.ic" NAME="BackApplication Coverage Results" MODIFIED="1678871591858" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.mainproject.back.*</FILTER>
+    </SUITE>
   </component>
 </project>
