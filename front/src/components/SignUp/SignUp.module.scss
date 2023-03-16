@@ -3,29 +3,29 @@
   background-color: var(--white);
   padding: 2rem;
   color: var(--button-primary-color);
-  font-size: .75rem;
+  font-size: 0.75rem;
   font-weight: bold;
   margin: 0 auto;
   margin-bottom: 1.875rem;
   box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.1);
   p {
-    margin-bottom: .3125rem;
+    margin-bottom: 0.3125rem;
   }
 }
 
 .inputform_lable {
   display: block;
   width: 100%;
-  margin-bottom: .3125rem;
+  margin-bottom: 0.3125rem;
 }
 
 .inputform_input {
   height: 1.875rem;
   width: 100%;
   border: none;
-  border-bottom: .125rem solid black;
-  margin-bottom: .625rem;
-  padding: .125rem;
+  border-bottom: 0.125rem solid black;
+  margin-bottom: 0.625rem;
+  padding: 0.125rem;
   padding-left: 1.5625rem;
   border-color: var(--text-primary-color);
   &:focus {
@@ -36,14 +36,14 @@
 
 .input_container {
   position: relative;
-  margin-bottom: .625rem;
+  margin-bottom: 0.625rem;
   width: 100%;
 }
 
 .icon {
   position: absolute;
   top: 1.5rem;
-  left: .1875rem;
+  left: 0.1875rem;
   color: var(--text-primary-color);
   width: 1.125rem;
   height: 1.125rem;
@@ -72,35 +72,35 @@
   width: 100%;
   justify-content: space-between;
   margin-bottom: 1.25rem;
-  border: .125rem solid var(--text-primary-color);
+  border: 0.125rem solid var(--text-primary-color);
   border-right: none;
-  border-radius: .25rem;
-  font-size: .875rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
 }
 
 .not_clicked {
   flex: 1;
   background-color: white;
-  padding: .625rem;
-  border-right: .125rem solid var(--text-primary-color);
+  padding: 0.625rem;
+  border-right: 0.125rem solid var(--text-primary-color);
   color: var(--text-primary-color);
 }
 
 .clicked {
   flex: 1;
   background-color: #c7bcb0;
-  padding: .625rem;
-  border-right: .125rem solid var(--text-primary-color);
+  padding: 0.625rem;
+  border-right: 0.125rem solid var(--text-primary-color);
   color: var(--text-primary-color);
 }
 
 .signUp_Btn {
-  margin-top: .3125rem;
+  margin-top: 0.3125rem;
   width: 100%;
   color: white;
   font-size: 1.25rem;
-  padding: .9375rem;
+  padding: 0.9375rem;
   background-repeat: no-repeat;
   background-size: cover;
-  background-image: url(../../assets/DarkBtn.svg);
+  background-image: url('../../assets/img/common/btn_primary.svg');
 }
