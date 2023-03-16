@@ -11,9 +11,6 @@ on:
   push:
     branches:
       - be-deploy/deploy_ming
-  pull_request:
-    branches:
-      - be-deploy/deploy_ming
 
 permissions:
   contents: read
