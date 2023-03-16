@@ -5,8 +5,10 @@ import com.mainproject.back.follow.dto.FollowDto;
 import com.mainproject.back.follow.entity.Follow;
 import com.mainproject.back.follow.mapper.FollowMapper;
 import com.mainproject.back.follow.service.FollowService;
+import com.mainproject.back.member.dto.MemberLetterDto;
 import com.mainproject.back.member.dto.MemberSearchDto;
 import com.mainproject.back.member.entity.Member;
+import com.mainproject.back.member.service.MemberConvertService;
 import com.mainproject.back.member.service.MemberService;
 import com.mainproject.back.util.UriCreator;
 import java.net.URI;
@@ -40,6 +42,7 @@ public class FollowController {
 
   private final FollowMapper followMapper;
   private final MemberService memberService;
+  private final MemberConvertService memberConvertService;
 
   @PostMapping
   public ResponseEntity postFollow(@Valid @RequestBody FollowDto.Post requestBody,
@@ -78,7 +81,7 @@ public class FollowController {
 
     Page<Follow> followPage = followService.findFollowing(currentMember.getMemberId(), pageable);
 
-    Page<MemberSearchDto> responses = memberService.convertToResponseDto(followPage);
+    Page<MemberLetterDto> responses = memberConvertService.followPageToMemberLetterPage(followPage);
 
     return ResponseEntity.ok().body(responses);
 

@@ -1,13 +1,21 @@
 package com.mainproject.back.member.service;
 
+import com.mainproject.back.block.entity.Block;
 import com.mainproject.back.exception.BusinessLogicException;
+import com.mainproject.back.follow.entity.Follow;
 import com.mainproject.back.follow.service.FollowService;
 import com.mainproject.back.language.dto.MemberLanguageDto;
 import com.mainproject.back.language.entity.Language;
 import com.mainproject.back.language.entity.MemberLanguage;
 import com.mainproject.back.language.exception.LanguageExceptionCode;
 import com.mainproject.back.language.service.LanguageService;
+import com.mainproject.back.letter.dto.LetterSimpleDto;
+import com.mainproject.back.letter.dto.LetterSimpleDto.LetterStatus;
+import com.mainproject.back.letter.entity.Letter;
+import com.mainproject.back.letter.service.LetterService;
+import com.mainproject.back.member.dto.MemberBlockDto;
 import com.mainproject.back.member.dto.MemberDto;
+import com.mainproject.back.member.dto.MemberLetterDto;
 import com.mainproject.back.member.dto.MemberSearchDto;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.mapper.MemberMapper;
@@ -33,6 +41,8 @@ public class MemberConvertService {
   private final MemberMapper memberMapper;
   private final LanguageService languageService;
   private final FollowService followService;
+  private final MemberService memberService;
+  private final LetterService letterService;
 
   public Member memberPatchDtoToMember(MemberDto.Patch memberPatchDto) {
     Member member = memberMapper.memberPatchToMember(memberPatchDto);
@@ -99,7 +109,8 @@ public class MemberConvertService {
     return response;
   }
 
-  public Page<MemberSearchDto> memberPageToMemberSearchDtoPage(Page<Member> searchPage, long memberId) {
+  public Page<MemberSearchDto> memberPageToMemberSearchDtoPage(Page<Member> searchPage,
+      long memberId) {
     List<Long> followingIdList = followService.findFollowingId(memberId);
     return searchPage.map(search -> memberToMemberSearchDto(search, followingIdList));
   }
@@ -111,11 +122,41 @@ public class MemberConvertService {
   }
 
   private boolean findIsFriend(List<Long> followingIdList, Long memberId) {
-    for(Long followingId : followingIdList) {
-      if(followingId.equals(memberId)){
+    for (Long followingId : followingIdList) {
+      if (followingId.equals(memberId)) {
         return true;
       }
     }
     return false;
+  }
+
+  public Page<MemberLetterDto> followPageToMemberLetterPage(Page<Follow> followPage) {
+    return followPage.map(follow -> {
+      Member member = memberService.findMember(follow.getFollowing().getMemberId());
+      Letter letter = letterService.findLastLetter(follow.getFollower().getMemberId(),
+          follow.getFollowing().getMemberId());
+      MemberLetterDto.MemberLetterDtoBuilder builder = MemberLetterDto.builder()
+          .name(member.getName())
+          .profile(member.getProfile())
+          .location(member.getLocation())
+          .memberId(member.getMemberId());
+      if (letter == null) {
+        builder.lastLetter(null);
+      } else {
+        builder.lastLetter(LetterSimpleDto.builder().status(
+                follow.getFollower().getMemberId() == letter.getReceiver().getMemberId()
+                    ? LetterStatus.RECEIVED : LetterStatus.SENT).isRead(letter.getIsRead())
+            .createdAt(letter.getCreatedAt()).build());
+      }
+      return builder.build();
+    });
+  }
+
+  public Page<MemberBlockDto> blockPageToMemberBlockPage(Page<Block> blockPage) {
+    return blockPage.map(block -> {
+      Member target = memberService.findMember(block.getTarget().getMemberId());
+      return MemberBlockDto.builder().memberId(target.getMemberId()).name(target.getName())
+          .profile(target.getProfile()).location(target.getLocation()).build();
+    });
   }
 }

@@ -16,7 +16,7 @@ public class LetterPostDto {
   @Setter
   private long receiverId;
   private String body;
-  private ArrayList<String> pic;
+  private ArrayList<String> photoUrl;
 
   private int type;
 

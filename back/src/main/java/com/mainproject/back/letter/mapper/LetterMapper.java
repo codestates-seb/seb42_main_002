@@ -21,7 +21,7 @@ public interface LetterMapper {
     } else {
       Letter.LetterBuilder letter = Letter.builder();
       letter.body(letterPostDto.getBody());
-      ArrayList<String> arrayList = letterPostDto.getPic();
+      ArrayList<String> arrayList = letterPostDto.getPhotoUrl();
       if (arrayList != null) {
         letter.photoUrl(new ArrayList<>(arrayList));
       }
