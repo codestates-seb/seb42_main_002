@@ -81,10 +81,10 @@ public class MemberController {
 
   }
 
-  @DeleteMapping("/{member-id}")
-  public ResponseEntity deleteMember(
-      @PathVariable("member-id") @Positive long memberId) {
-    memberService.deleteMember(memberId);
+  @DeleteMapping
+  public ResponseEntity deleteMember(Principal principal) {
+    Member currentMember = memberService.findMemberByEmail(principal.getName());
+    memberService.deleteMember(currentMember.getMemberId());
 
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
