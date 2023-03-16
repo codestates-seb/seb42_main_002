@@ -1,8 +1,7 @@
 .title {
   margin: 0 0 1rem;
   h2 {
-    font-size: 1.25rem;
+    font-size: var(--font-size-md);
     color: var(--button-primary-color);
-    font-weight: bold;
   }
 }
