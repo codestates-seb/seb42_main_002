@@ -22,6 +22,10 @@ permissions:
   
 env:
   S3_BUCKET_NAME: mpt-bucket
+  
+defaults:
+  run:
+    working-directory: back
 
 jobs:
   build:
@@ -39,6 +43,7 @@ jobs:
       uses: /gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
         arguments: build
+        build-root-directory: ./back
 
     - name: Make zip file
       run: zip -r ./back.zip .
