@@ -10,13 +10,10 @@ name: Back CI with Gradle
 on:
   push:
     branches:
-      - dev
       - be-deploy/deploy_ming
   pull_request:
     branches:
-      - dev
-      - be
-      - main
+      - be-deploy/deploy_ming
 
 permissions:
   contents: read
