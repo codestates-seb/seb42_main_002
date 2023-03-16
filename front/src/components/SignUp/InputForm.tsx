@@ -9,6 +9,7 @@ export default function InputForm({
   isError,
   errorText,
   validation,
+  passwordProps,
 }: {
   children: JSX.Element;
   htmlfor: string;
@@ -18,28 +19,40 @@ export default function InputForm({
   isError?: boolean;
   errorText?: string;
   validation?: any;
+  passwordProps?: any;
 }) {
   const onBlurHandler = (e: any) => {
-    if (name === 'email') {
-      validation(e.target.value);
-    } else if (name === 'name') {
-      validation(undefined, e.target.value);
-    } else if (name === 'birthday') {
-      validation(undefined, undefined, undefined, e.target.value);
-    } else if (name === 'password') {
-      validation(undefined, undefined, undefined, undefined, e.target.value);
-    } else if (name === 'passwordCheck') {
-      validation(
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        e.target.value
-      );
+    if (validation) {
+      if (name === 'email') {
+        validation(e.target.value);
+      } else if (name === 'name') {
+        validation(undefined, e.target.value);
+      } else if (name === 'birthday') {
+        validation(undefined, undefined, undefined, e.target.value);
+      } else if (name === 'signup_password') {
+        validation(undefined, undefined, undefined, undefined, e.target.value);
+      } else if (name === 'passwordCheck') {
+        validation(
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          e.target.value
+        );
+      } else if (name === 'loginEmail') {
+        validation(e.target.value);
+      } else if (name === 'Loginpassword') {
+        validation(undefined, e.target.value);
+      }
     }
   };
-  // console.log(isError);
+
+  const onchangeHandler = (e: any) => {
+    if (name === 'signup_password') {
+      passwordProps(e.target.value);
+    }
+  };
 
   return (
     <div className={styles.input_container}>
@@ -52,6 +65,7 @@ export default function InputForm({
         {labelInner}
       </label>
       <input
+        onChange={onchangeHandler}
         onBlur={onBlurHandler}
         type={htmlfor}
         id={htmlfor}

@@ -8,6 +8,14 @@ import { FaMars } from 'react-icons/fa';
 import { FaTransgender } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import InputForm from './InputForm';
+import {
+  emailValidation,
+  nameValidation,
+  genderValidation,
+  birthdayValidation,
+  passwordValidation,
+  passwordCheckValidation,
+} from '../../utils/signup/function';
 
 const SignUpMain = (): JSX.Element => {
   const [isBtnClick, setIsBtnClick] = useState([false, false, false]);
@@ -27,7 +35,7 @@ const SignUpMain = (): JSX.Element => {
     password: '',
     passwordCheck: '',
   });
-  const [passwordState, setPasswordState] = useState('');
+  const [passwordCheckData, setPasswordCheckData] = useState('');
 
   // 성별 버튼 유효성 검사
   useEffect(() => {
@@ -65,124 +73,111 @@ const SignUpMain = (): JSX.Element => {
   };
 
   // 유효성 검사
-  const validation = (
-    email?: string,
-    name?: string,
-    gender?: boolean[],
-    birthday?: string,
-    password?: string,
-    passwordCheck?: string
+  const signupValidation = (
+    email: string,
+    name: string,
+    gender: boolean[],
+    birthday: string,
+    password: string,
+    passwordCheck: string
   ) => {
-    if (!(email === undefined)) {
-      if (
-        !/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i.test(
-          email
-        )
-      ) {
-        setIsError((pre) => {
-          return { ...pre, eamil: true };
-        });
-        setErrorText({ ...errorText, eamil: '유효하지 않은 이메일 입니다.' });
-        return;
-      } else {
-        setIsError({ ...isError, eamil: false });
-        setErrorText({ ...errorText, eamil: '' });
-      }
-    }
-
-    if (!(name === undefined)) {
-      if (name.length < 2 || name.length > 10) {
-        setIsError({ ...isError, name: true });
-        setErrorText({
-          ...errorText,
-          name: '별명의 길이가 2이상 10 이하 이여야 합니다.',
-        });
-        return;
-      } else if (!/^[\w가-힣]+$/i.test(name)) {
-        setIsError({ ...isError, name: true });
-        setErrorText({
-          ...errorText,
-          name: '한글, 영문, 숫자, 밑줄 만 사용 가능합니다.',
-        });
-        return;
-      } else {
-        setIsError({ ...isError, name: false });
-        setErrorText({ ...errorText, name: '' });
-      }
-    }
-
-    if (!(gender === undefined)) {
-      if (gender[0] === false && gender[1] === false && gender[2] === false) {
-        setIsError({ ...isError, gender: true });
-        setErrorText({ ...errorText, gender: '성별을 선택하세요.' });
-        return;
-      }
-    }
-
-    if (!(birthday === undefined)) {
-      if (birthday == '') {
-        setIsError({ ...isError, birthday: true });
-        setErrorText({
-          ...errorText,
-          birthday: '생년월일을 입력하세요.',
-        });
-        return;
-      }
-      const regex = /^(\d{4,5})-/;
-      const result = birthday.match(regex)?.[1];
-      if (!(result === undefined)) {
-        if (parseInt(result) > 2019) {
-          setIsError({ ...isError, birthday: true });
-          setErrorText({
-            ...errorText,
-            birthday: '2020년 이상은 가입할수 없습니다.',
+    let result = true;
+    switch (1) {
+      case 1: {
+        const emailValidationResult = emailValidation(email);
+        if (emailValidationResult !== undefined) {
+          const { isErrorEmail, emailErrorText } = emailValidationResult;
+          setIsError((pre) => {
+            return { ...pre, eamil: isErrorEmail };
           });
-          return;
-        } else {
-          setIsError({ ...isError, birthday: false });
-          setErrorText({ ...errorText, birthday: '' });
+          setErrorText((pre) => {
+            return { ...pre, eamil: emailErrorText };
+          });
+          if (isErrorEmail === true) return (result = false);
         }
+        /* falls through */
       }
-    }
+      case 2 as 1: {
+        const nameValidationResult = nameValidation(name);
+        if (nameValidationResult !== undefined) {
+          const { isErrorName, nameErrorText } = nameValidationResult;
+          setIsError((pre) => {
+            return { ...pre, name: isErrorName };
+          });
+          setErrorText((pre) => {
+            return { ...pre, name: nameErrorText };
+          });
+          if (isErrorName === true) return (result = false);
+        }
+        /* falls through */
+      }
+      case 3 as 1: {
+        const genderValidationResult = genderValidation(gender);
+        if (genderValidationResult !== undefined) {
+          const { isErrorGender, genderErrorText } = genderValidationResult;
+          setIsError((pre) => {
+            return { ...pre, gender: isErrorGender };
+          });
+          setErrorText((pre) => {
+            return { ...pre, gender: genderErrorText };
+          });
+          if (isErrorGender === true) return (result = false);
+        }
+        /* falls through */
+      }
+      case 4 as 1: {
+        const birthdayValidationResult = birthdayValidation(birthday);
+        if (birthdayValidationResult !== undefined) {
+          const { isErrorBirthday, birthdayErrorText } =
+            birthdayValidationResult;
+          setIsError((pre) => {
+            return { ...pre, birthday: isErrorBirthday };
+          });
+          setErrorText((pre) => {
+            return { ...pre, birthday: birthdayErrorText };
+          });
+          if (isErrorBirthday === true) return (result = false);
+        }
+        /* falls through */
+      }
+      case 5 as 1: {
+        const passwordValidationResult = passwordValidation(password);
+        if (passwordValidationResult !== undefined) {
+          const { isErrorPassword, passwordErrorText } =
+            passwordValidationResult;
+          setIsError((pre) => {
+            return { ...pre, password: isErrorPassword };
+          });
+          setErrorText((pre) => {
+            return { ...pre, password: passwordErrorText };
+          });
+          if (isErrorPassword === true) {
+            return (result = false);
+          }
+        }
+        /* falls through */
+      }
 
-    if (!(password === undefined)) {
-      setPasswordState(password);
-      if (password.length < 6 || password.length > 20) {
-        setIsError({ ...isError, password: true });
-        setErrorText({
-          ...errorText,
-          password: '7글자이상 20글자 이하만 사용 가능합니다.',
-        });
-        return;
-      } else {
-        setIsError({ ...isError, password: false });
-        setErrorText({ ...errorText, password: '' });
-      }
+      case 6 as 1:
+        {
+          const passwordCheckValidationResult = passwordCheckValidation(
+            passwordCheck,
+            passwordCheckData
+          );
+          if (passwordCheckValidationResult !== undefined) {
+            const { isErrorPasswordCheck, passwordCheckErrorText } =
+              passwordCheckValidationResult;
+            setIsError((pre) => {
+              return { ...pre, passwordCheck: isErrorPasswordCheck };
+            });
+            setErrorText((pre) => {
+              return { ...pre, passwordCheck: passwordCheckErrorText };
+            });
+            if (isErrorPasswordCheck === true) return (result = false);
+          }
+        }
+        return result;
     }
-
-    if (!(passwordCheck === undefined)) {
-      if (passwordCheck.length < 6 || passwordCheck.length > 20) {
-        setIsError({ ...isError, passwordCheck: true });
-        setErrorText({
-          ...errorText,
-          passwordCheck: '7글자이상 20글자 이하만 사용 가능합니다.',
-        });
-        return;
-      }
-      if (!(passwordCheck === passwordState)) {
-        setIsError({ ...isError, passwordCheck: true });
-        setErrorText({
-          ...errorText,
-          passwordCheck: '비밀번호와 일치하지 않습니다.',
-        });
-        return;
-      } else {
-        setIsError({ ...isError, passwordCheck: false });
-        setErrorText({ ...errorText, passwordCheck: '' });
-      }
-    }
-
-    return true;
   };
 
   const signupSubmitHandler = async (
@@ -193,12 +188,12 @@ const SignUpMain = (): JSX.Element => {
     const data = Object.fromEntries(formData);
 
     if (
-      validation(
+      signupValidation(
         data.email as string,
         data.name as string,
         isBtnClick as boolean[],
         data.birthday as string,
-        data.password as string,
+        data.signup_password as string,
         data.passwordCheck as string
       )
     ) {
@@ -206,7 +201,7 @@ const SignUpMain = (): JSX.Element => {
       const sentData = {
         name: data.name,
         email: data.email,
-        password: data.password,
+        password: data.signup_password,
         birthday: data.birthday,
         gender: gender,
       };
@@ -214,6 +209,10 @@ const SignUpMain = (): JSX.Element => {
       //  서버로 보낼 데이터
     }
   };
+
+  function passWordProps(passwordData: string) {
+    setPasswordCheckData(passwordData);
+  }
 
   return (
     <form className={styles.container} onSubmit={signupSubmitHandler}>
@@ -223,7 +222,7 @@ const SignUpMain = (): JSX.Element => {
         name="email"
         isError={isError.eamil}
         errorText={errorText.eamil}
-        validation={validation}
+        validation={signupValidation}
       >
         <MdOutlineAttachEmail className={styles.icon} />
       </InputForm>
@@ -233,7 +232,7 @@ const SignUpMain = (): JSX.Element => {
         name="name"
         isError={isError.name}
         errorText={errorText.name}
-        validation={validation}
+        validation={signupValidation}
       >
         <BsPencil className={styles.icon} />
       </InputForm>
@@ -288,17 +287,18 @@ const SignUpMain = (): JSX.Element => {
         name="birthday"
         isError={isError.birthday}
         errorText={errorText.birthday}
-        validation={validation}
+        validation={signupValidation}
       >
         <BsCalendar2Date className={styles.icon} />
       </InputForm>
       <InputForm
         htmlfor="password"
         labelInner="비밀번호"
-        name="password"
+        name="signup_password"
         isError={isError.password}
         errorText={errorText.password}
-        validation={validation}
+        validation={signupValidation}
+        passwordProps={passWordProps}
       >
         <AiOutlineLock className={styles.icon} />
       </InputForm>
@@ -308,7 +308,7 @@ const SignUpMain = (): JSX.Element => {
         name="passwordCheck"
         isError={isError.passwordCheck}
         errorText={errorText.passwordCheck}
-        validation={validation}
+        validation={signupValidation}
       >
         <AiOutlineLock className={styles.icon} />
       </InputForm>
