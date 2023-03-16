@@ -71,4 +71,4 @@ jobs:
           aws deploy create-deployment --application-name mpt
           --deployment-config-name CodeDeployDefault.AllAtOnce
           --deployment-group-name mtp-deploy-group
-          --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=back.zip
+          --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=server-archive/back.zip
