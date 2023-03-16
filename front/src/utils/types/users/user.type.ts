@@ -1,4 +1,4 @@
-import { GENDER_TYPE, USER_STATUS } from '../../enums';
+import { GENDER_TYPE, LOCATION_CODE, USER_STATUS } from '../../enums';
 import { LanguageDataType } from '../common/common.type';
 import { TagDataType } from '../tags/tags';
 
@@ -7,7 +7,7 @@ export type UserData = {
   email: string;
   name: string;
   gender: GENDER_TYPE;
-  location?: string;
+  location?: LOCATION_CODE;
   birthday?: string;
   language: LanguageDataType[];
   tag?: TagDataType[];
@@ -29,7 +29,7 @@ export type UserProfileData = {
   name: string;
   email: string;
   gender: Gender;
-  location: string;
+  location: LOCATION_CODE;
   birthday: string;
   introduce: string;
   profile: string | null;
@@ -41,6 +41,6 @@ export type UserProfileData = {
 export type BlackUserData = {
   memberId: number;
   name: string;
-  location: string;
+  location: LOCATION_CODE;
   profile: string | null;
 };
