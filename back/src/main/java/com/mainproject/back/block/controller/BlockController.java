@@ -45,7 +45,7 @@ public class BlockController {
   @PostMapping
   public ResponseEntity postBlock(@Valid @RequestBody BlockDto.Post requestBody,
       Principal principal) {
-
+    log.info("## 차단 생성: {}", requestBody.getTargetId());
     Member member = memberService.findMemberByEmail(principal.getName());
     Member target = memberService.findMember(requestBody.getTargetId());
 
