@@ -12,6 +12,7 @@ import com.mainproject.back.letter.service.LetterService;
 import com.mainproject.back.member.dto.MemberLetterDto;
 import com.mainproject.back.member.dto.MemberSearchDto;
 import com.mainproject.back.member.entity.Member;
+import com.mainproject.back.member.entity.Member.MemberStatus;
 import com.mainproject.back.member.exception.MemberExceptionCode;
 import com.mainproject.back.member.repository.MemberRepository;
 import com.mainproject.back.security.utils.AuthorityUtils;
@@ -83,8 +84,11 @@ public class MemberService {
 
   public void deleteMember(long memberId) {
     Member findMember = findVerifiedMember(memberId);
+    findMember.setMemberStatus(MemberStatus.MEMBER_QUIT);
+    memberRepository.save(findMember);
 
-    memberRepository.delete(findMember);
+    // 봇
+//    memberRepository.delete(findMember);
   }
 
   private Member findVerifiedMember(long memberId) {
@@ -120,19 +124,24 @@ public class MemberService {
   public Page<Member> findRecommendedMember(long memberId, Pageable pageable) {
     Page<Member> memberPage = memberRepository.findRecommended(memberId, pageable);
     List<Long> followingIdList = followService.findFollowingId(memberId);
+    List<Long> blockIdList = blockService.findBlockIdList(memberId);
 
     List<Member> result = memberPage.stream()
-        .filter(member -> !followingIdList.contains(member.getMemberId())).collect(
-            Collectors.toList());
+        .filter(member -> !followingIdList.contains(member.getMemberId()) &&
+            !blockIdList.contains(member.getMemberId()))
+        .collect(Collectors.toList());
 
     return new PageImpl<>(result, pageable, result.size());
   }
 
   public Page<Member> searchMembersByTag(List<Tag> tagList, Pageable pageable, long memberId) {
     Page<Member> memberPage = memberRepository.getMemberByTags(tagList, pageable);
+    List<Long> blockIdList = blockService.findBlockIdList(memberId);
+
     List<Member> distinct = memberPage.stream().filter(distinctByKey(Member::getMemberId))
-        .filter(member -> member.getMemberId() != memberId).collect(
-            Collectors.toList());
+        .filter(member -> member.getMemberId() != memberId)
+        .filter(member -> !blockIdList.contains(member.getMemberId()))
+        .collect(Collectors.toList());
 
     return new PageImpl<>(distinct, pageable, distinct.size());
   }

@@ -11,6 +11,7 @@ import com.mainproject.back.letter.service.LetterService;
 import com.mainproject.back.member.dto.MemberLetterDto;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.service.MemberService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,5 +36,9 @@ public class BlockService {
 
   public Page<Block> findBlocks(long memberId, Pageable pageable) {
     return blockRepository.findAllByMemberId(memberId, pageable);
+  }
+
+  public List<Long> findBlockIdList(long memberId) {
+    return blockRepository.findBlockIdsByMemberId(memberId);
   }
 }

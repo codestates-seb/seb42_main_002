@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -72,8 +73,8 @@ public class MemberController {
   @GetMapping("/{member-id}")
   public ResponseEntity getMember(
       @PathVariable("member-id") @Positive long memberId, Principal principal) {
-
     Member findMember = memberService.findMember(memberId);
+    log.info("## 사용자 정보 조회: {}", findMember.toString());
     long id = memberService.findMemberIdByEmail(principal.getName());
 
     return new ResponseEntity<>(memberConvertService.memberToResponseDto(findMember, id),
@@ -81,16 +82,18 @@ public class MemberController {
 
   }
 
-  @DeleteMapping
+  @PatchMapping("/quit")
   public ResponseEntity deleteMember(Principal principal) {
+    log.info("## 사용자 탈퇴: {}", principal.getName());
     Member currentMember = memberService.findMemberByEmail(principal.getName());
     memberService.deleteMember(currentMember.getMemberId());
 
-    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 
   @GetMapping("/recommend")
   public ResponseEntity getRecommended(Principal principal) {
+    log.info("## 사용자 태그 기반 추천 친구: {}", principal.getName());
     Member currentMember = memberService.findMemberByEmail(principal.getName());
 
     Page<Member> memberPage = memberService.findRecommendedMember(
@@ -105,6 +108,7 @@ public class MemberController {
       @PageableDefault Pageable pageable, Principal principal) {
     long memberId = memberService.findMemberIdByEmail(principal.getName());
     List<Tag> tagList = memberConvertService.getTags(tags);
+    log.info("## 태그로 사용자 검색: {}", tagList.toString());
     Page<Member> memberPage = memberService.searchMembersByTag(tagList, pageable, memberId);
     Page<MemberSearchDto> searchDtoPage = memberConvertService.memberPageToMemberSearchDtoPage(
         memberPage, memberId);
