@@ -1,5 +1,17 @@
 import styles from './SignUp.module.scss';
 
+type InputFormType = {
+  children: JSX.Element;
+  htmlfor: string;
+  labelInner: string;
+  placeholder?: string;
+  name?: string;
+  isError?: boolean;
+  errorText?: string;
+  validation?: any;
+  passwordProps?: any;
+};
+
 export default function InputForm({
   children,
   htmlfor,
@@ -10,17 +22,7 @@ export default function InputForm({
   errorText,
   validation,
   passwordProps,
-}: {
-  children: JSX.Element;
-  htmlfor: string;
-  labelInner: string;
-  placeholder?: string;
-  name?: string;
-  isError?: boolean;
-  errorText?: string;
-  validation?: any;
-  passwordProps?: any;
-}) {
+}: InputFormType) {
   const onBlurHandler = (e: any) => {
     if (validation) {
       if (name === 'email') {
