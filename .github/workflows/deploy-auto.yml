@@ -40,6 +40,8 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
+          settings-path: /home/runner/work/seb42_main_002/seb42_main_002/back
+
       - name: Build with Gradle
         uses: /gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
         with:
