@@ -1,7 +1,6 @@
 package com.mainproject.back.member;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -12,7 +11,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.google.gson.Gson;
 import com.mainproject.back.exception.BusinessLogicException;
-import com.mainproject.back.letter.controller.LetterController;
 import com.mainproject.back.member.controller.MemberController;
 import com.mainproject.back.member.dto.MemberDto;
 import com.mainproject.back.member.entity.Member;
@@ -20,7 +18,6 @@ import com.mainproject.back.member.entity.Member.Gender;
 import com.mainproject.back.member.exception.MemberExceptionCode;
 import com.mainproject.back.member.repository.MemberRepository;
 import com.mainproject.back.member.service.MemberConvertService;
-import com.mainproject.back.vocabulary.controller.VocabController;
 import java.security.Principal;
 import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
@@ -29,25 +26,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-
 
 @SpringBootTest
 @Transactional
@@ -59,8 +45,8 @@ public class MemberControllerTest {
   @Autowired
   private MemberRepository memberRepository;
 
-//  @Autowired
-//  private MemberConvertService memberConvertService;
+  @Autowired
+  private MemberConvertService memberConvertService;
 
   @Autowired
   private Gson gson;
@@ -71,20 +57,19 @@ public class MemberControllerTest {
 
   @BeforeAll
   void init() {
-    // Member 테이블 비어있어야 함
     Member member1 = Member.builder().email("test1@test").password("test123!").gender(Gender.FEMALE)
         .birthday("2000-11-11").name("test1").build();
-//    List<String> tagNames1 = List.of("코딩", "요리", "영화");
+    List<String> tagNames1 = List.of("코딩", "요리", "영화");
     Member member2 = Member.builder().email("test2@test").password("test123!").gender(Gender.FEMALE)
         .birthday("2000-11-11").name("test2").build();
-//    List<String> tagNames2 = List.of("코딩");
+    List<String> tagNames2 = List.of("코딩");
     Member member3 = Member.builder().email("test3@test").password("test123!").gender(Gender.FEMALE)
         .birthday("2000-11-11").name("test3").build();
-//    List<String> tagNames3 = List.of("코딩", "요리");
+    List<String> tagNames3 = List.of("코딩", "요리");
 
-//    memberConvertService.getMemberTag(member1, tagNames1);
-//    memberConvertService.getMemberTag(member2, tagNames2);
-//    memberConvertService.getMemberTag(member3, tagNames3);
+    memberConvertService.getMemberTag(member1, tagNames1);
+    memberConvertService.getMemberTag(member2, tagNames2);
+    memberConvertService.getMemberTag(member3, tagNames3);
 
     memberRepository.save(member1);
     memberRepository.save(member2);
@@ -94,7 +79,9 @@ public class MemberControllerTest {
   @BeforeEach
   void setUp(@Autowired MemberController memberController) {
     // MockMvc
-    mockMvc = MockMvcBuilders.standaloneSetup(memberController).build();
+    mockMvc = MockMvcBuilders.standaloneSetup(memberController)
+        .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+        .build();
   }
 
   @Test
@@ -178,20 +165,37 @@ public class MemberControllerTest {
 
   }
 
-//  @Test
-//  @DisplayName("추천 회원 조회 테스트")
-//  public void recommendTest() throws Exception {
-//
-//    // when & then
-//    when(principal.getName()).thenReturn("test1@test");
-//
-//    mockMvc.perform(
-//            get("/members/recommend")
-//                .principal(principal)
-//                .accept(MediaType.APPLICATION_JSON))
-//        .andExpect(status().isOk())
-//        .andExpect(jsonPath("$.content").isArray())
-//        .andExpect(jsonPath("$content[0].name").value("test3"));
-//  }
+  @Test
+  @DisplayName("추천 회원 조회 테스트")
+  public void recommendTest() throws Exception {
+
+    // when & then
+    when(principal.getName()).thenReturn("test1@test");
+
+    mockMvc.perform(
+            get("/members/recommend")
+                .principal(principal)
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.content").isArray())
+        .andExpect(jsonPath("$.content[0].name").value("test3"));
+  }
+
+  @Test
+  @DisplayName("태그별 회원 조회 테스트")
+  public void searchTest() throws Exception {
+
+    String tags = "요리";
+    // when & then
+    when(principal.getName()).thenReturn("test1@test");
+
+    mockMvc.perform(
+            get("/members/tag/{tags}", tags)
+                .principal(principal)
+                .characterEncoding("UTF-8") // mockMvc는 한글 지원을 안해줘서 따로 설정해야함
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.content").isArray());
+  }
 
 }
