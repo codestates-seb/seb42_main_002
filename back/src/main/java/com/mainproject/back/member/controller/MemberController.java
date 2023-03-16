@@ -104,6 +104,7 @@ public class MemberController {
   @GetMapping("/tag/{tags}")
   public ResponseEntity searchMembers(@PathVariable("tags") String tags,
       @PageableDefault Pageable pageable, Principal principal) {
+    log.info("## 태그 검색 : {}", tags);
     long memberId = memberService.findMemberIdByEmail(principal.getName());
     List<Tag> tagList = memberConvertService.getTags(tags);
     Page<Member> memberPage = memberService.searchMembersByTag(tagList, pageable, memberId);
