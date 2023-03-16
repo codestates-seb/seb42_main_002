@@ -1,5 +1,5 @@
-import { BsTrash } from 'react-icons/bs';
-import { MdEdit } from 'react-icons/md';
+import { BiEdit } from 'react-icons/bi';
+import { FiTrash2 } from 'react-icons/fi';
 import { useSetRecoilState } from 'recoil';
 import useModals from '../../../hooks/useModals';
 import {
@@ -66,7 +66,7 @@ const LanguageListItem = ({ item }: LanguageListItemProps) => {
         <Button
           size="sm"
           variant="default"
-          icon={<MdEdit />}
+          icon={<BiEdit />}
           iconBtn
           onClick={() => onEditLanguageHandler(item.nation)}
         >
@@ -75,7 +75,7 @@ const LanguageListItem = ({ item }: LanguageListItemProps) => {
         <Button
           size="sm"
           variant="default"
-          icon={<BsTrash />}
+          icon={<FiTrash2 />}
           iconBtn
           onClick={() => onDeleteLanguageHandler(item.nation)}
         >

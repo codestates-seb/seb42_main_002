@@ -1,4 +1,3 @@
-import React from 'react';
 import MainTitle from '../MainTitle';
 import RecomandUserList from './RecomandUserList';
 import styles from './RecomandUser.module.scss';
