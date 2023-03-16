@@ -11,7 +11,7 @@ on:
   push:
     branches:
       - dev
-      - be-deploy/deploy_ming
+      - 'be-deploy/deploy_ming'
   pull_request:
     branches:
       - dev
@@ -43,7 +43,7 @@ jobs:
       uses: /gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
         arguments: build
-        build-root-directory: ./back
+        build-root-directory: /back
 
     - name: Make zip file
       run: zip -r ./back.zip .
