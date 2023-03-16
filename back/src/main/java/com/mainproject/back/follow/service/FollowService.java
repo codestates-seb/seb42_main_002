@@ -1,10 +1,16 @@
 package com.mainproject.back.follow.service;
 
 
+import com.mainproject.back.block.entity.Block;
 import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.follow.entity.Follow;
 import com.mainproject.back.follow.exception.FollowExceptionCode;
 import com.mainproject.back.follow.repository.FollowRepository;
+import com.mainproject.back.letter.dto.LetterSimpleDto;
+import com.mainproject.back.letter.dto.LetterSimpleDto.LetterStatus;
+import com.mainproject.back.letter.entity.Letter;
+import com.mainproject.back.member.dto.MemberLetterDto;
+import com.mainproject.back.member.entity.Member;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -40,7 +46,6 @@ public class FollowService {
   public List<Long> findFollowingId(long memberId){
     return followRepository.findAllFollowingId(memberId);
   }
-
 
 
 }

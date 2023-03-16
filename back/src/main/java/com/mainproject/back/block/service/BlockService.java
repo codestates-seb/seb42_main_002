@@ -21,8 +21,6 @@ import org.springframework.stereotype.Service;
 public class BlockService {
 
   private final BlockRepository blockRepository;
-  private final MemberService memberService;
-  private final LetterService letterService;
 
   public Block createBlock(Block block) {
     return blockRepository.save(block);
@@ -37,27 +35,5 @@ public class BlockService {
 
   public Page<Block> findBlocks(long memberId, Pageable pageable) {
     return blockRepository.findAllByMemberId(memberId, pageable);
-  }
-
-  public Page<MemberLetterDto> blockToMemberLetterDto(Page<Block> blockPage) {
-    return blockPage.map(block -> {
-      Member member = memberService.findMember(block.getTarget().getMemberId());
-      Letter letter = letterService.findLastLetter(block.getMember().getMemberId(),
-          block.getTarget().getMemberId());
-      MemberLetterDto.MemberLetterDtoBuilder builder = MemberLetterDto.builder()
-          .name(member.getName())
-          .profile(member.getProfile())
-          .location(member.getLocation())
-          .memberId(member.getMemberId());
-      if (letter == null) {
-        builder.lastLetter(null);
-      } else {
-        builder.lastLetter(LetterSimpleDto.builder().status(
-                block.getMember().getMemberId() == letter.getReceiver().getMemberId()
-                    ? LetterStatus.RECEIVED : LetterStatus.SENT).isRead(letter.getIsRead())
-            .createdAt(letter.getCreatedAt()).build());
-      }
-      return builder.build();
-    });
   }
 }

@@ -1,9 +1,15 @@
 package com.mainproject.back.member.service;
 
 
+import com.mainproject.back.block.service.BlockService;
 import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.follow.entity.Follow;
 import com.mainproject.back.follow.service.FollowService;
+import com.mainproject.back.letter.dto.LetterSimpleDto;
+import com.mainproject.back.letter.dto.LetterSimpleDto.LetterStatus;
+import com.mainproject.back.letter.entity.Letter;
+import com.mainproject.back.letter.service.LetterService;
+import com.mainproject.back.member.dto.MemberLetterDto;
 import com.mainproject.back.member.dto.MemberSearchDto;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.exception.MemberExceptionCode;
@@ -37,6 +43,7 @@ public class MemberService {
   private final PasswordEncoder passwordEncoder;
   private final AuthorityUtils authorityUtils;
   private final FollowService followService;
+  private final BlockService blockService;
 
 
   @Transactional
@@ -135,11 +142,5 @@ public class MemberService {
     return t -> seen.add(keyExtractor.apply(t));
   }
 
-  public Page<MemberSearchDto> convertToResponseDto(Page<Follow> followPage) {
-    return followPage.map(follow -> {
-      Member member = findMember(follow.getFollowing().getMemberId());
-      return MemberSearchDto.builder().memberId(member.getMemberId()).name(member.getName())
-          .location(member.getLocation()).profile(member.getProfile()).build();
-    });
-  }
+
 }
