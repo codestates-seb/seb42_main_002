@@ -11,6 +11,7 @@ import com.mainproject.back.member.mapper.MemberMapper;
 import com.mainproject.back.member.service.MemberConvertService;
 import com.mainproject.back.member.service.MemberService;
 import com.mainproject.back.tag.entity.Tag;
+import com.mainproject.back.util.Check;
 import java.net.URI;
 import java.security.Principal;
 import java.util.List;
@@ -64,7 +65,7 @@ public class MemberController {
   public ResponseEntity patchMember(
       Principal principal,
       @Valid @RequestBody MemberDto.Patch requestBody) {
-    Member currentMember = memberService.findMemberByEmail(principal.getName());
+    Member currentMember = memberService.findMemberByEmail(Check.checkPrincipal(principal));
     requestBody.setMemberId(currentMember.getMemberId());
     Member member = memberConvertService.memberPatchDtoToMember(requestBody);
     log.info("## 사용자 정보 수정: {}", member.toString());
@@ -77,10 +78,7 @@ public class MemberController {
       @PathVariable("member-id") @Positive long memberId, Principal principal) {
     Member findMember = memberService.findMember(memberId);
     log.info("## 사용자 정보 조회: {}", findMember.toString());
-    if (principal.getName() == null) {
-      throw new BusinessLogicException(MemberExceptionCode.MEMBER_NOT_FOUND);
-    }
-    long id = memberService.findMemberIdByEmail(principal.getName());
+    long id = memberService.findMemberIdByEmail(Check.checkPrincipal(principal));
 
     return new ResponseEntity<>(memberConvertService.memberToResponseDto(findMember, id),
         HttpStatus.OK);
@@ -90,7 +88,7 @@ public class MemberController {
   @DeleteMapping
   public ResponseEntity deleteMember(Principal principal) {
     log.info("## 사용자 탈퇴: {}", principal.getName());
-    Member currentMember = memberService.findMemberByEmail(principal.getName());
+    Member currentMember = memberService.findMemberByEmail(Check.checkPrincipal(principal));
     memberService.deleteMember(currentMember.getMemberId());
 
     return new ResponseEntity<>(HttpStatus.OK);
@@ -102,7 +100,7 @@ public class MemberController {
     if (principal.getName() == null) {
       throw new BusinessLogicException(MemberExceptionCode.MEMBER_NOT_FOUND);
     }
-    Member currentMember = memberService.findMemberByEmail(principal.getName());
+    Member currentMember = memberService.findMemberByEmail(Check.checkPrincipal(principal));
     Page<Member> memberPage = memberService.findRecommendedMember(
         currentMember.getMemberId(), PageRequest.of(0, 10));
     Page<MemberRecommendDto> memberRecommendDtoPage = mapper.pageMemberToMemberRecommendDtoPage(
@@ -116,7 +114,7 @@ public class MemberController {
     if (principal.getName() == null) {
       throw new BusinessLogicException(MemberExceptionCode.MEMBER_NOT_FOUND);
     }
-    long memberId = memberService.findMemberIdByEmail(principal.getName());
+    long memberId = memberService.findMemberIdByEmail(Check.checkPrincipal(principal));
     List<Tag> tagList = memberConvertService.getTags(tags);
     log.info("## 태그로 사용자 검색: {}", tagList.toString());
     Page<Member> memberPage = memberService.searchMembersByTag(tagList, pageable, memberId);

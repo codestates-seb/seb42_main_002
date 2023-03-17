@@ -65,8 +65,8 @@ public class LetterService {
   }
 
   public Page<Letter> findLettersByMemberAndTarget(long targetId, Pageable pageable,
-      Principal principal) {
-    long memberId = memberService.findMemberByEmail(principal.getName()).getMemberId();
+      String email) {
+    long memberId = memberService.findMemberIdByEmail(email);
     Page<Letter> letterPage = letterRepository.findLettersByMemberAndTarget(memberId, targetId,
         pageable);
     return letterPage;
@@ -120,9 +120,9 @@ public class LetterService {
   public LetterCountDto getArrivedLettersCount(long memberId) {
     Long count;
     List<Long> blockIdList = blockService.findBlockIdList(memberId);
-    if(blockIdList.isEmpty()) {
+    if (blockIdList.isEmpty()) {
       count = letterRepository.countByIsReadAndReceiver(memberId);
-    }else{
+    } else {
       count = letterRepository.countByIsReadAndReceiverAndBlock(memberId, blockIdList);
     }
 
