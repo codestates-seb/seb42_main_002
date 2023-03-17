@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getCookie } from '../cookie';
 
 export const instance = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
@@ -9,3 +10,16 @@ export const instance = axios.create({
   },
   withCredentials: true,
 });
+
+instance.interceptors.request.use(
+  (config) => {
+    const token = getCookie('accessJwtToken');
+    if (token) {
+      config.headers['Authorization'] = token;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
