@@ -1,11 +1,18 @@
 package com.mainproject.back.member.service;
 
 
+import com.mainproject.back.block.service.BlockService;
 import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.follow.entity.Follow;
 import com.mainproject.back.follow.service.FollowService;
+import com.mainproject.back.letter.dto.LetterSimpleDto;
+import com.mainproject.back.letter.dto.LetterSimpleDto.LetterStatus;
+import com.mainproject.back.letter.entity.Letter;
+import com.mainproject.back.letter.service.LetterService;
+import com.mainproject.back.member.dto.MemberLetterDto;
 import com.mainproject.back.member.dto.MemberSearchDto;
 import com.mainproject.back.member.entity.Member;
+import com.mainproject.back.member.entity.Member.MemberStatus;
 import com.mainproject.back.member.exception.MemberExceptionCode;
 import com.mainproject.back.member.repository.MemberRepository;
 import com.mainproject.back.security.utils.AuthorityUtils;
@@ -37,6 +44,7 @@ public class MemberService {
   private final PasswordEncoder passwordEncoder;
   private final AuthorityUtils authorityUtils;
   private final FollowService followService;
+  private final BlockService blockService;
 
 
   @Transactional
@@ -74,6 +82,7 @@ public class MemberService {
     return findVerifiedMember(memberId);
   }
 
+  @Transactional
   public void deleteMember(long memberId) {
     Member findMember = findVerifiedMember(memberId);
 
@@ -113,19 +122,24 @@ public class MemberService {
   public Page<Member> findRecommendedMember(long memberId, Pageable pageable) {
     Page<Member> memberPage = memberRepository.findRecommended(memberId, pageable);
     List<Long> followingIdList = followService.findFollowingId(memberId);
+    List<Long> blockIdList = blockService.findBlockIdList(memberId);
 
     List<Member> result = memberPage.stream()
-        .filter(member -> !followingIdList.contains(member.getMemberId())).collect(
-            Collectors.toList());
+        .filter(member -> !followingIdList.contains(member.getMemberId()) &&
+            !blockIdList.contains(member.getMemberId()))
+        .collect(Collectors.toList());
 
     return new PageImpl<>(result, pageable, result.size());
   }
 
   public Page<Member> searchMembersByTag(List<Tag> tagList, Pageable pageable, long memberId) {
     Page<Member> memberPage = memberRepository.getMemberByTags(tagList, pageable);
+    List<Long> blockIdList = blockService.findBlockIdList(memberId);
+
     List<Member> distinct = memberPage.stream().filter(distinctByKey(Member::getMemberId))
-        .filter(member -> member.getMemberId() != memberId).collect(
-            Collectors.toList());
+        .filter(member -> member.getMemberId() != memberId)
+        .filter(member -> !blockIdList.contains(member.getMemberId()))
+        .collect(Collectors.toList());
 
     return new PageImpl<>(distinct, pageable, distinct.size());
   }
@@ -135,11 +149,5 @@ public class MemberService {
     return t -> seen.add(keyExtractor.apply(t));
   }
 
-  public Page<MemberSearchDto> convertToResponseDto(Page<Follow> followPage) {
-    return followPage.map(follow -> {
-      Member member = findMember(follow.getFollowing().getMemberId());
-      return MemberSearchDto.builder().memberId(member.getMemberId()).name(member.getName())
-          .location(member.getLocation()).profile(member.getProfile()).build();
-    });
-  }
+
 }

@@ -1,6 +1,7 @@
 package com.mainproject.back.letter.repository;
 
 import com.mainproject.back.letter.entity.Letter;
+import java.util.List;
 import java.util.Set;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,8 +20,16 @@ public interface LetterRepository extends JpaRepository<Letter, Long> {
       @Param("targetId") long targetId, Pageable pageable);
 
   // 읽지 않은 받은 편지 개수
-  @Query("select COUNT(l) from Letter l join l.receiver r where l.isRead = false and r.memberId = :memberId")
+  @Query("select count(l.letterId) from Letter l join l.receiver r join l.sender s "
+      + "where l.isRead = false "
+      + "and r.memberId = :memberId ")
   Long countByIsReadAndReceiver(@Param("memberId") long memberId);
+
+  @Query("select count(l.letterId) from Letter l join l.receiver r join l.sender s "
+      + "where l.isRead = false "
+      + "and r.memberId = :memberId "
+      + "and s.memberId not in (:blockIdList)")
+  Long countByIsReadAndReceiverAndBlock(@Param("memberId") long memberId, @Param("blockIdList")List<Long> blockIdList);
 
   // 특정 멤버가 보낸 편지 리스트
   @Query("select l from Letter l join l.sender s where s.memberId = :memberId order by l.createdAt desc ")

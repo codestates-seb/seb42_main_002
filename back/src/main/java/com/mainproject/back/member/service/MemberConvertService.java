@@ -1,13 +1,21 @@
 package com.mainproject.back.member.service;
 
+import com.mainproject.back.block.entity.Block;
 import com.mainproject.back.exception.BusinessLogicException;
+import com.mainproject.back.follow.entity.Follow;
 import com.mainproject.back.follow.service.FollowService;
 import com.mainproject.back.language.dto.MemberLanguageDto;
 import com.mainproject.back.language.entity.Language;
 import com.mainproject.back.language.entity.MemberLanguage;
 import com.mainproject.back.language.exception.LanguageExceptionCode;
 import com.mainproject.back.language.service.LanguageService;
+import com.mainproject.back.letter.dto.LetterSimpleDto;
+import com.mainproject.back.letter.dto.LetterSimpleDto.LetterStatus;
+import com.mainproject.back.letter.entity.Letter;
+import com.mainproject.back.letter.service.LetterService;
+import com.mainproject.back.member.dto.MemberBlockDto;
 import com.mainproject.back.member.dto.MemberDto;
+import com.mainproject.back.member.dto.MemberLetterDto;
 import com.mainproject.back.member.dto.MemberSearchDto;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.mapper.MemberMapper;
@@ -23,8 +31,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Slf4j
 public class MemberConvertService {
@@ -33,7 +43,10 @@ public class MemberConvertService {
   private final MemberMapper memberMapper;
   private final LanguageService languageService;
   private final FollowService followService;
+  private final MemberService memberService;
+  private final LetterService letterService;
 
+  @Transactional
   public Member memberPatchDtoToMember(MemberDto.Patch memberPatchDto) {
     Member member = memberMapper.memberPatchToMember(memberPatchDto);
     Optional.ofNullable(memberPatchDto.getTag()).ifPresent((tags) -> getMemberTag(member, tags));
@@ -42,6 +55,7 @@ public class MemberConvertService {
     return member;
   }
 
+  @Transactional
   private void getMemberLanguage(Member member, List<MemberLanguageDto> languageDtoList) {
     List<Language> allLanguages = languageService.findAllLanguages();
     List<MemberLanguage> memberLanguageList = languageDtoList.stream().map(languageDto -> {
@@ -63,7 +77,8 @@ public class MemberConvertService {
     throw new BusinessLogicException(LanguageExceptionCode.LANGUAGE_NOT_FOUND);
   }
 
-  private void getMemberTag(Member member, List<String> names) {
+  @Transactional
+  public void getMemberTag(Member member, List<String> names) {
     List<Tag> allTags = tagService.findAllTags();
     List<MemberTag> memberTagList = names.stream().map(name -> {
       Tag tag = findTag(allTags, name);
@@ -84,6 +99,7 @@ public class MemberConvertService {
     throw new BusinessLogicException(TagExceptionCode.TAG_NOT_FOUND);
   }
 
+  @Transactional
   public List<Tag> getTags(String tagNames) {
     String[] tagNameArr = tagNames.split("[+]");
     List<Tag> allTags = tagService.findAllTags();
@@ -99,7 +115,8 @@ public class MemberConvertService {
     return response;
   }
 
-  public Page<MemberSearchDto> memberPageToMemberSearchDtoPage(Page<Member> searchPage, long memberId) {
+  public Page<MemberSearchDto> memberPageToMemberSearchDtoPage(Page<Member> searchPage,
+      long memberId) {
     List<Long> followingIdList = followService.findFollowingId(memberId);
     return searchPage.map(search -> memberToMemberSearchDto(search, followingIdList));
   }
@@ -111,11 +128,41 @@ public class MemberConvertService {
   }
 
   private boolean findIsFriend(List<Long> followingIdList, Long memberId) {
-    for(Long followingId : followingIdList) {
-      if(followingId.equals(memberId)){
+    for (Long followingId : followingIdList) {
+      if (followingId.equals(memberId)) {
         return true;
       }
     }
     return false;
+  }
+
+  public Page<MemberLetterDto> followPageToMemberLetterPage(Page<Follow> followPage) {
+    return followPage.map(follow -> {
+      Member member = memberService.findMember(follow.getFollowing().getMemberId());
+      Letter letter = letterService.findLastLetter(follow.getFollower().getMemberId(),
+          follow.getFollowing().getMemberId());
+      MemberLetterDto.MemberLetterDtoBuilder builder = MemberLetterDto.builder()
+          .name(member.getName())
+          .profile(member.getProfile())
+          .location(member.getLocation())
+          .memberId(member.getMemberId());
+      if (letter == null) {
+        builder.lastLetter(null);
+      } else {
+        builder.lastLetter(LetterSimpleDto.builder().status(
+                follow.getFollower().getMemberId() == letter.getReceiver().getMemberId()
+                    ? LetterStatus.RECEIVED : LetterStatus.SENT).isRead(letter.getIsRead())
+            .createdAt(letter.getCreatedAt()).build());
+      }
+      return builder.build();
+    });
+  }
+
+  public Page<MemberBlockDto> blockPageToMemberBlockPage(Page<Block> blockPage) {
+    return blockPage.map(block -> {
+      Member target = memberService.findMember(block.getTarget().getMemberId());
+      return MemberBlockDto.builder().memberId(target.getMemberId()).name(target.getName())
+          .profile(target.getProfile()).location(target.getLocation()).build();
+    });
   }
 }

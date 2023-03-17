@@ -7,29 +7,27 @@ import com.mainproject.back.vocabulary.exception.VocabExceptionCode;
 import com.mainproject.back.vocabulary.repository.VocabRepository;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Slf4j
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class VocabService {
 
-  public VocabService(VocabRepository vocabRepository) {
-    this.vocabRepository = vocabRepository;
-  }
+  private final VocabRepository vocabRepository;
 
-  private VocabRepository vocabRepository;
-
+  @Transactional
   public Vocabulary createVocab(Vocabulary vocab) {
-    log.info("## 단어장 추가: {}", vocab.getWord());
     Vocabulary savedVocab = vocabRepository.save(vocab);
     return savedVocab;
   }
 
+  @Transactional
   public Vocabulary updateVocab(long memberId, Vocabulary vocab) {
-    log.info("## 단어장 수정: {}", vocab.getVocabId());
     Vocabulary findVocab = findVerifiedVocab(vocab.getVocabId());
 
     if (findVocab.getMember().getMemberId() != memberId) {
@@ -57,10 +55,11 @@ public class VocabService {
     return vocabRepository.findAllByMemberId(memberId, pageable);
   }
 
+  @Transactional
   public void deleteVocab(long vocabId) {
     Optional<Vocabulary> optionalBoard = vocabRepository.findById(vocabId);
     Vocabulary findVocab = optionalBoard
-        .orElseThrow(() -> new NoSuchElementException());
+        .orElseThrow(() -> new BusinessLogicException(VocabExceptionCode.VOCAB_NOT_FOUND));
     vocabRepository.deleteById(vocabId);
   }
 

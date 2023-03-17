@@ -1,5 +1,6 @@
 package com.mainproject.back.letter.service;
 
+import com.mainproject.back.block.service.BlockService;
 import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.letter.dto.LetterCountDto;
 import com.mainproject.back.letter.dto.LetterSimpleDto;
@@ -14,6 +15,7 @@ import com.mainproject.back.member.service.MemberService;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -34,6 +36,7 @@ public class LetterService {
 
   private final LetterRepository letterRepository;
   private final MemberService memberService;
+  private final BlockService blockService;
 
   @Transactional
   public Letter createLetter(Letter letter) {
@@ -53,6 +56,7 @@ public class LetterService {
     Optional<Letter> letterOptional = letterRepository.findById(letterId);
     Letter letter = letterOptional.orElseThrow(
         () -> new BusinessLogicException(LetterExceptionCode.LETTER_NOT_FOUND));
+
     if (!letter.getIsRead() && letter.getAvailableAt().isBefore(LocalDateTime.now())) {
       letter.setIsRead(true);
     }
@@ -79,43 +83,58 @@ public class LetterService {
   }
 
   public Page<MemberLetterDto> findMembersByLetter(Pageable pageable, long memberId) {
+    List<Long> blockIdList = blockService.findBlockIdList(memberId);
     Set<Letter> sentLetter = letterRepository.findSentLettersByMember(memberId);
     Set<Letter> receivedLetter = letterRepository.findReceivedLettersByMember(memberId);
-    Set<MemberLetterDto> memberLetterDtoSet = sentLetter.stream().map(letter -> {
-      Member receiver = letter.getReceiver();
-      return MemberLetterDto.builder().memberId(receiver.getMemberId())
-          .name(receiver.getName())
-          .profile(receiver.getProfile())
-          .location(receiver.getLocation())
-          .lastLetter(LetterSimpleDto.builder().isRead(letter.getIsRead()).status(LetterStatus.SENT)
-              .createdAt(letter.getCreatedAt()).build())
-          .build();
-    }).collect(Collectors.toSet());
-    memberLetterDtoSet.addAll(receivedLetter.stream().map(letter -> {
-      Member sender = letter.getSender();
-      return MemberLetterDto.builder().memberId(sender.getMemberId())
-          .name(sender.getName())
-          .profile(sender.getProfile())
-          .location(sender.getLocation())
-          .lastLetter(
-              LetterSimpleDto.builder().isRead(letter.getIsRead()).status(LetterStatus.RECEIVED)
-                  .createdAt(letter.getCreatedAt()).build())
-          .build();
-    }).collect(Collectors.toSet()));
+    Set<MemberLetterDto> memberLetterDtoSet = sentLetter.stream()
+        .filter(letter -> !blockIdList.contains(letter.getReceiver().getMemberId()))
+        .map(letter -> {
+          Member receiver = letter.getReceiver();
+          return MemberLetterDto.builder().memberId(receiver.getMemberId())
+              .name(receiver.getName())
+              .profile(receiver.getProfile())
+              .location(receiver.getLocation())
+              .lastLetter(
+                  LetterSimpleDto.builder().isRead(letter.getIsRead()).status(LetterStatus.SENT)
+                      .createdAt(letter.getCreatedAt()).build())
+              .build();
+        }).collect(Collectors.toSet());
+    memberLetterDtoSet.addAll(receivedLetter.stream()
+        .filter(letter -> !blockIdList.contains(letter.getSender().getMemberId()))
+        .map(letter -> {
+          Member sender = letter.getSender();
+          return MemberLetterDto.builder().memberId(sender.getMemberId())
+              .name(sender.getName())
+              .profile(sender.getProfile())
+              .location(sender.getLocation())
+              .lastLetter(
+                  LetterSimpleDto.builder().isRead(letter.getIsRead()).status(LetterStatus.RECEIVED)
+                      .createdAt(letter.getCreatedAt()).build())
+              .build();
+        }).collect(Collectors.toSet()));
     Page<MemberLetterDto> memberLetterDtoPage = new PageImpl<>(new ArrayList<>(memberLetterDtoSet),
         pageable, memberLetterDtoSet.size());
     return memberLetterDtoPage;
   }
 
   public LetterCountDto getArrivedLettersCount(long memberId) {
-    Long count = letterRepository.countByIsReadAndReceiver(memberId);
+    Long count;
+    List<Long> blockIdList = blockService.findBlockIdList(memberId);
+    if(blockIdList.isEmpty()) {
+      count = letterRepository.countByIsReadAndReceiver(memberId);
+    }else{
+      count = letterRepository.countByIsReadAndReceiverAndBlock(memberId, blockIdList);
+    }
+
     return new LetterCountDto(count);
   }
 
   public Letter findLastLetter(long targetId, long memberId) {
     Page<Letter> letterPage = letterRepository.findLastLetterByMember(targetId, memberId,
         PageRequest.of(0, 1));
-    if(letterPage.isEmpty()) return null;
+    if (letterPage.isEmpty()) {
+      return null;
+    }
     return letterPage.getContent().get(0);
   }
 }
