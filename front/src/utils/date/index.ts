@@ -1,25 +1,37 @@
-import { differenceInMinutes, format, getYear, Locale, min } from 'date-fns';
+import { differenceInMinutes, format, getYear, Locale } from 'date-fns';
 
 /**
  * @description Date를 시간으로 변환하는 함수
  */
 export const formatDateToHour = (date: Date, locale: Locale): string => {
-  const result = format(date, 'aa h:m ', { locale });
-  return result;
+  try {
+    const result = format(date, 'aa h:m ', { locale });
+    return result;
+  } catch (error) {
+    return '';
+  }
 };
 
 /**
  * @description Date를 월/일로 변환하는 함수
  */
 export const formatDateToMonth = (date: Date, locale: Locale): string => {
-  return format(date, 'MMM do ', { locale });
+  try {
+    return format(date, 'MMM do ', { locale });
+  } catch (error) {
+    return '';
+  }
 };
 
 /**
  * @description 나이를 반환하는 함수
  */
 export const getAge = (date: Date): number => {
-  return getYear(new Date()) - getYear(date) + 1;
+  const result = getYear(new Date()) - getYear(date) + 1;
+  if (Number.isNaN(result)) {
+    return 0;
+  }
+  return result;
 };
 
 /**
@@ -29,6 +41,6 @@ export const getLetterOpenTime = (date: Date, nation: string): string => {
   const time = differenceInMinutes(new Date(), date);
   const hour = Math.floor(time / 60);
   const minute = time % 60;
-  // 문제: 언어별 처리를 어떻게 해야하는지 고민
+  // TODO: 언어별 처리를 어떻게 해야하는지 고민
   return `${hour}시간 ${minute}분후 도착`;
 };
