@@ -1,6 +1,7 @@
 package com.mainproject.back.member.controller;
 
 import com.mainproject.back.helper.UriCreator;
+import com.mainproject.back.language.entity.Language;
 import com.mainproject.back.member.dto.MemberDto;
 import com.mainproject.back.member.dto.MemberRecommendDto;
 import com.mainproject.back.member.dto.MemberSearchDto;
@@ -10,6 +11,8 @@ import com.mainproject.back.member.service.MemberConvertService;
 import com.mainproject.back.member.service.MemberService;
 import com.mainproject.back.tag.entity.Tag;
 import java.net.URI;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.util.List;
 import javax.validation.Valid;
@@ -31,6 +34,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -103,15 +107,24 @@ public class MemberController {
     return ResponseEntity.ok().body(memberRecommendDtoPage);
   }
 
-  @GetMapping("/tag/{tags}")
-  public ResponseEntity searchMembers(@PathVariable("tags") String tags,
+  @GetMapping("/search")
+  public ResponseEntity searchMembers(
+      @RequestParam(value = "tag", required = false, defaultValue = "") String tags,
+      @RequestParam(value = "lang", required = false, defaultValue = "") String lang,
       @PageableDefault Pageable pageable, Principal principal) {
     long memberId = memberService.findMemberIdByEmail(principal.getName());
-    List<Tag> tagList = memberConvertService.getTags(tags);
-    log.info("## 태그로 사용자 검색: {}", tagList.toString());
-    Page<Member> memberPage = memberService.searchMembersByTag(tagList, pageable, memberId);
-    Page<MemberSearchDto> searchDtoPage = memberConvertService.memberPageToMemberSearchDtoPage(
-        memberPage, memberId);
+    log.info("## 태그 검색: {}", tags);
+    log.info("## 언어 검색: {}", lang);
+
+    List<Tag> tagList = memberConvertService.getTags(
+        URLDecoder.decode(tags, StandardCharsets.UTF_8));
+    List<Language> languageList = memberConvertService.getLanguages(
+        URLDecoder.decode(lang, StandardCharsets.UTF_8));
+    log.info("## 태그+언어로 사용자 검색: tags={}\n\t lang={}", tagList.toString(), languageList.toString());
+    Page<Member> memberPage = memberService
+        .searchMembersByTag(tagList, languageList, pageable, memberId);
+    Page<MemberSearchDto> searchDtoPage = memberConvertService
+        .memberPageToMemberSearchDtoPage(memberPage, memberId);
     return ResponseEntity.ok().body(searchDtoPage);
   }
 

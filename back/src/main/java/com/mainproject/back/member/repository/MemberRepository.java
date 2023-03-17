@@ -1,5 +1,6 @@
 package com.mainproject.back.member.repository;
 
+import com.mainproject.back.language.entity.Language;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.tag.entity.Tag;
 import java.util.List;
@@ -25,6 +26,12 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
       + "group by b.member_id order by count(*) desc", nativeQuery = true)
   Page<Member> findRecommended(@Param("memberId") long memberId, Pageable pageable);
 
-  @Query("select m from Member m join m.memberTags t where t.tag in(:tags)")
+  @Query("select m from Member m join m.memberTags t join m.memberLanguages l where t.tag in(:tags)")
   Page<Member> getMemberByTags(@Param("tags")List<Tag> tags, Pageable pageable);
+
+  @Query("select m from Member m join m.memberTags t join m.memberLanguages l where t.tag in(:tags) and l.language in(:languages)")
+  Page<Member> getMemberByTagsAndLang(@Param("tags")List<Tag> tags, @Param("languages") List<Language> languages,Pageable pageable);
+
+  @Query("select m from Member m join m.memberTags t join m.memberLanguages l where t.tag in(:tags) and l.language in(:languages)")
+  Page<Member> getMemberByTags(@Param("tags")List<Tag> tags, @Param("languages") List<Language> languages,Pageable pageable);
 }

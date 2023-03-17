@@ -5,6 +5,7 @@ import com.mainproject.back.block.service.BlockService;
 import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.follow.entity.Follow;
 import com.mainproject.back.follow.service.FollowService;
+import com.mainproject.back.language.entity.Language;
 import com.mainproject.back.letter.dto.LetterSimpleDto;
 import com.mainproject.back.letter.dto.LetterSimpleDto.LetterStatus;
 import com.mainproject.back.letter.entity.Letter;
@@ -17,6 +18,7 @@ import com.mainproject.back.member.exception.MemberExceptionCode;
 import com.mainproject.back.member.repository.MemberRepository;
 import com.mainproject.back.security.utils.AuthorityUtils;
 import com.mainproject.back.tag.entity.Tag;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -132,9 +134,9 @@ public class MemberService {
     return new PageImpl<>(result, pageable, result.size());
   }
 
-  public Page<Member> searchMembersByTag(List<Tag> tagList, Pageable pageable, long memberId) {
-    Page<Member> memberPage = memberRepository.getMemberByTags(tagList, pageable);
-    List<Long> blockIdList = blockService.findBlockIdList(memberId);
+  public Page<Member> searchMembersByTag(List<Tag> tagList, List<Language> languageList,Pageable pageable, long memberId) {
+    Page<Member> memberPage = memberRepository.getMemberByTags(tagList, languageList, pageable);
+    List<Long> blockIdList = memberId == 0 ? new ArrayList<>() : blockService.findBlockIdList(memberId);
 
     List<Member> distinct = memberPage.stream().filter(distinctByKey(Member::getMemberId))
         .filter(member -> member.getMemberId() != memberId)
