@@ -1,0 +1,563 @@
+Index: back/src/main/java/com/mainproject/back/vocabulary/controller/VocabController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.mainproject.back.vocabulary.controller;\n\nimport com.mainproject.back.member.entity.Member;\nimport com.mainproject.back.member.service.MemberService;\nimport com.mainproject.back.vocabulary.dto.VocabDto;\nimport com.mainproject.back.vocabulary.dto.VocabDto.Response;\nimport com.mainproject.back.vocabulary.entity.Vocabulary;\nimport com.mainproject.back.vocabulary.mapper.VocabMapper;\nimport com.mainproject.back.vocabulary.service.VocabService;\nimport java.util.List;\nimport lombok.extern.slf4j.Slf4j;\nimport org.springframework.data.domain.Page;\nimport org.springframework.http.HttpStatus;\nimport org.springframework.http.ResponseEntity;\nimport org.springframework.validation.annotation.Validated;\nimport org.springframework.web.bind.annotation.DeleteMapping;\nimport org.springframework.web.bind.annotation.GetMapping;\nimport org.springframework.web.bind.annotation.PatchMapping;\nimport org.springframework.web.bind.annotation.PathVariable;\nimport org.springframework.web.bind.annotation.PostMapping;\nimport org.springframework.web.bind.annotation.RequestBody;\nimport org.springframework.web.bind.annotation.RequestMapping;\nimport org.springframework.web.bind.annotation.RequestParam;\nimport org.springframework.web.bind.annotation.RestController;\n\n@Validated\n@RestController\n@RequestMapping(\"/vocabs\")\n@Slf4j\npublic class VocabController {\n\n  private MemberService memberService;\n  private final VocabService vocabService;\n  private final VocabMapper mapper;\n\n  public VocabController(MemberService memberService,\n      VocabService vocabService, VocabMapper mapper) {\n    this.memberService = memberService;\n    this.vocabService = vocabService;\n    this.mapper = mapper;\n  }\n\n\n  @PostMapping\n  public ResponseEntity postVocab(@RequestBody VocabDto.Post requestBody) {\n    Member member = memberService.findMember(requestBody.getMemberId());\n\n    Vocabulary vocab = mapper.vocabPostToVocab(requestBody);\n    vocab.setMember(member);\n    Vocabulary createdVocab = vocabService.createVocab(vocab);\n\n    VocabDto.Response response = mapper.vocabToVocabResponse(createdVocab);\n\n    return new ResponseEntity<>(response, HttpStatus.CREATED);\n  }\n\n  @PatchMapping(\"/{vocab-id}\")\n  public ResponseEntity patchVocab(@PathVariable(\"vocab-id\") long vocabId,\n      @RequestBody VocabDto.Patch requestBody) {\n    Vocabulary vocab = mapper.vocabPatchToVocab(requestBody);\n    vocab.setVocabId(vocabId);\n    Vocabulary updatedVocab = vocabService.updateVocab(vocab);\n\n    VocabDto.Response response = mapper.vocabToVocabResponse(updatedVocab);\n\n    return new ResponseEntity<>(response, HttpStatus.OK);\n  }\n\n  @GetMapping(\"/{vocab-id}\")\n  public ResponseEntity getVocab(@PathVariable(\"vocab-id\") long vocabId) {\n    Vocabulary vocab = vocabService.findVerifiedVocab(vocabId);\n    VocabDto.Response response = mapper.vocabToVocabResponse(vocab);\n\n    return new ResponseEntity<>(response, HttpStatus.OK);\n  }\n\n  @GetMapping\n  public ResponseEntity getVocabs( @RequestParam int page) {\n    long memberId = 1L; // 임시\n    Page<Vocabulary> pageVocabs = vocabService.findVocabs(memberId, page);\n    List<Vocabulary> vocabs = pageVocabs.getContent();\n    List<Response> responses = mapper.vocabsToVocabResponses(vocabs);\n\n    return new ResponseEntity<>(responses, HttpStatus.OK);\n  }\n\n  @DeleteMapping(\"/{vocab-id}\")\n  public ResponseEntity deleteVocab(@PathVariable(\"vocab-id\") long vocabId) {\n    vocabService.deleteVocab(vocabId);\n    return new ResponseEntity<>(HttpStatus.OK);\n  }\n\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/back/src/main/java/com/mainproject/back/vocabulary/controller/VocabController.java b/back/src/main/java/com/mainproject/back/vocabulary/controller/VocabController.java
+--- a/back/src/main/java/com/mainproject/back/vocabulary/controller/VocabController.java	(revision ef24a7273357665a7bcac628e4eef18fe357e0b5)
++++ b/back/src/main/java/com/mainproject/back/vocabulary/controller/VocabController.java	(date 1678434380162)
+@@ -2,12 +2,15 @@
+ 
+ import com.mainproject.back.member.entity.Member;
+ import com.mainproject.back.member.service.MemberService;
++import com.mainproject.back.util.UriCreator;
+ import com.mainproject.back.vocabulary.dto.VocabDto;
+ import com.mainproject.back.vocabulary.dto.VocabDto.Response;
+ import com.mainproject.back.vocabulary.entity.Vocabulary;
+ import com.mainproject.back.vocabulary.mapper.VocabMapper;
+ import com.mainproject.back.vocabulary.service.VocabService;
++import java.net.URI;
+ import java.util.List;
++import lombok.RequiredArgsConstructor;
+ import lombok.extern.slf4j.Slf4j;
+ import org.springframework.data.domain.Page;
+ import org.springframework.http.HttpStatus;
+@@ -26,39 +29,28 @@
+ @Validated
+ @RestController
+ @RequestMapping("/vocabs")
++@RequiredArgsConstructor
+ @Slf4j
+ public class VocabController {
+ 
+-  private MemberService memberService;
+   private final VocabService vocabService;
+   private final VocabMapper mapper;
+ 
+-  public VocabController(MemberService memberService,
+-      VocabService vocabService, VocabMapper mapper) {
+-    this.memberService = memberService;
+-    this.vocabService = vocabService;
+-    this.mapper = mapper;
+-  }
+-
+-
+   @PostMapping
+   public ResponseEntity postVocab(@RequestBody VocabDto.Post requestBody) {
+-    Member member = memberService.findMember(requestBody.getMemberId());
+-
++    // TODO get member Id from principal
++    requestBody.setMemberId(1L);
+     Vocabulary vocab = mapper.vocabPostToVocab(requestBody);
+-    vocab.setMember(member);
+     Vocabulary createdVocab = vocabService.createVocab(vocab);
+-
+-    VocabDto.Response response = mapper.vocabToVocabResponse(createdVocab);
+-
+-    return new ResponseEntity<>(response, HttpStatus.CREATED);
++    URI uri = UriCreator.createUri("/vocab", createdVocab.getVocabId());
++    return ResponseEntity.created(uri).build();
+   }
+ 
+   @PatchMapping("/{vocab-id}")
+   public ResponseEntity patchVocab(@PathVariable("vocab-id") long vocabId,
+       @RequestBody VocabDto.Patch requestBody) {
++    requestBody.setVocabId(vocabId);
+     Vocabulary vocab = mapper.vocabPatchToVocab(requestBody);
+-    vocab.setVocabId(vocabId);
+     Vocabulary updatedVocab = vocabService.updateVocab(vocab);
+ 
+     VocabDto.Response response = mapper.vocabToVocabResponse(updatedVocab);
+@@ -75,7 +67,7 @@
+   }
+ 
+   @GetMapping
+-  public ResponseEntity getVocabs( @RequestParam int page) {
++  public ResponseEntity getVocabs(@RequestParam int page) {
+     long memberId = 1L; // 임시
+     Page<Vocabulary> pageVocabs = vocabService.findVocabs(memberId, page);
+     List<Vocabulary> vocabs = pageVocabs.getContent();
+Index: back/src/main/java/com/mainproject/back/vocabulary/service/VocabService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.mainproject.back.vocabulary.service;\n\nimport com.mainproject.back.exception.BusinessLogicException;\nimport com.mainproject.back.vocabulary.entity.Vocabulary;\nimport com.mainproject.back.vocabulary.exception.VocabExceptionCode;\nimport com.mainproject.back.vocabulary.repository.VocabRepository;\nimport java.util.NoSuchElementException;\nimport java.util.Optional;\nimport org.springframework.data.domain.Page;\nimport org.springframework.data.domain.PageRequest;\nimport org.springframework.data.domain.Sort;\nimport org.springframework.stereotype.Service;\n\n@Service\npublic class VocabService {\n\n  public VocabService(VocabRepository vocabRepository) {\n    this.vocabRepository = vocabRepository;\n  }\n\n  private VocabRepository vocabRepository;\n\n  public Vocabulary createVocab(Vocabulary vocab) {\n    Vocabulary savedVocab = vocabRepository.save(vocab);\n    return savedVocab;\n  }\n\n  public Vocabulary updateVocab(Vocabulary vocab) {\n    Vocabulary findVocab = findVerifiedVocab(vocab.getVocabId());\n\n    Optional.ofNullable(vocab.getWord())\n        .ifPresent(findVocab::setWord);\n    Optional.ofNullable(vocab.getLangCode())\n        .ifPresent(findVocab::setLangCode);\n    Optional.ofNullable(vocab.getMeaning())\n        .ifPresent(findVocab::setMeaning);\n\n    return vocabRepository.save(findVocab);\n  }\n\n  public Vocabulary findVerifiedVocab(long vocabId) {\n    Optional<Vocabulary> optionalVocab = vocabRepository.findById(vocabId);\n    Vocabulary findVocab = optionalVocab\n        .orElseThrow(() -> new BusinessLogicException(VocabExceptionCode.VOCAB_NOT_FOUND));\n    return findVocab;\n  }\n\n  public Page<Vocabulary> findVocabs(long memberId, int page){\n    return vocabRepository.findAllByMemberId(memberId, PageRequest.of(page-1,15, Sort.by(\"vocab_id\").descending()));\n  }\n\n  public void deleteVocab(long vocabId) {\n    Optional<Vocabulary> optionalBoard = vocabRepository.findById(vocabId);\n    Vocabulary findVocab = optionalBoard\n        .orElseThrow(() -> new NoSuchElementException());\n    vocabRepository.deleteById(vocabId);\n  }\n\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/back/src/main/java/com/mainproject/back/vocabulary/service/VocabService.java b/back/src/main/java/com/mainproject/back/vocabulary/service/VocabService.java
+--- a/back/src/main/java/com/mainproject/back/vocabulary/service/VocabService.java	(revision ef24a7273357665a7bcac628e4eef18fe357e0b5)
++++ b/back/src/main/java/com/mainproject/back/vocabulary/service/VocabService.java	(date 1678434380167)
+@@ -1,32 +1,37 @@
+ package com.mainproject.back.vocabulary.service;
+ 
+ import com.mainproject.back.exception.BusinessLogicException;
++import com.mainproject.back.member.entity.Member;
++import com.mainproject.back.member.service.MemberService;
+ import com.mainproject.back.vocabulary.entity.Vocabulary;
+ import com.mainproject.back.vocabulary.exception.VocabExceptionCode;
+ import com.mainproject.back.vocabulary.repository.VocabRepository;
+ import java.util.NoSuchElementException;
+ import java.util.Optional;
++import lombok.RequiredArgsConstructor;
+ import org.springframework.data.domain.Page;
+ import org.springframework.data.domain.PageRequest;
+ import org.springframework.data.domain.Sort;
+ import org.springframework.stereotype.Service;
+ 
+ @Service
++@RequiredArgsConstructor
+ public class VocabService {
+ 
+-  public VocabService(VocabRepository vocabRepository) {
+-    this.vocabRepository = vocabRepository;
+-  }
+-
+-  private VocabRepository vocabRepository;
++  private final VocabRepository vocabRepository;
++  private final MemberService memberService;
+ 
+   public Vocabulary createVocab(Vocabulary vocab) {
++    Member member = memberService.findMember(vocab.getMember().getMemberId());
++    vocab.setMember(member);
+     Vocabulary savedVocab = vocabRepository.save(vocab);
+     return savedVocab;
+   }
+ 
+   public Vocabulary updateVocab(Vocabulary vocab) {
++
+     Vocabulary findVocab = findVerifiedVocab(vocab.getVocabId());
++    // TODO 해당 멤버의 단어가 아니면 수정 불가능하게
+ 
+     Optional.ofNullable(vocab.getWord())
+         .ifPresent(findVocab::setWord);
+Index: back/src/main/java/com/mainproject/back/vocabulary/dto/VocabDto.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.mainproject.back.vocabulary.dto;\n\nimport com.sun.istack.NotNull;\nimport java.time.LocalDateTime;\nimport javax.persistence.Column;\nimport lombok.AllArgsConstructor;\nimport lombok.Builder;\nimport lombok.Getter;\nimport lombok.Setter;\n\n\npublic class VocabDto {\n\n\n  @Getter\n  public static class Post {\n    @NotNull\n    private String word;\n    @Setter\n    private String meaning;\n    @Setter\n    private String langCode;\n    @Setter\n    private long memberId;\n  }\n\n  @AllArgsConstructor\n  @Getter\n  public static class Patch {\n\n    private String word;\n    private String meaning;\n  }\n\n  @AllArgsConstructor\n  @Getter\n  @Builder\n  public static class Response {\n\n    private long vocabId;\n    private long memberId;\n    private String langCode;\n    private String word;\n    private String meaning;\n    private LocalDateTime createdAt;\n  }\n\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/back/src/main/java/com/mainproject/back/vocabulary/dto/VocabDto.java b/back/src/main/java/com/mainproject/back/vocabulary/dto/VocabDto.java
+--- a/back/src/main/java/com/mainproject/back/vocabulary/dto/VocabDto.java	(revision ef24a7273357665a7bcac628e4eef18fe357e0b5)
++++ b/back/src/main/java/com/mainproject/back/vocabulary/dto/VocabDto.java	(date 1678434452628)
+@@ -25,9 +25,11 @@
+   }
+ 
+   @AllArgsConstructor
++  @Builder
+   @Getter
+   public static class Patch {
+-
++    @Setter
++    private long vocabId;
+     private String word;
+     private String meaning;
+   }
+@@ -38,7 +40,6 @@
+   public static class Response {
+ 
+     private long vocabId;
+-    private long memberId;
+     private String langCode;
+     private String word;
+     private String meaning;
+Index: back/src/main/java/com/mainproject/back/vocabulary/entity/Vocabulary.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.mainproject.back.vocabulary.entity;\n\nimport com.mainproject.back.audit.Auditable;\nimport com.mainproject.back.member.entity.Member;\nimport javax.persistence.Column;\nimport javax.persistence.Entity;\nimport javax.persistence.GeneratedValue;\nimport javax.persistence.GenerationType;\nimport javax.persistence.Id;\nimport javax.persistence.JoinColumn;\nimport javax.persistence.ManyToOne;\nimport javax.persistence.Table;\nimport lombok.AccessLevel;\nimport lombok.AllArgsConstructor;\nimport lombok.Builder;\nimport lombok.Getter;\nimport lombok.NoArgsConstructor;\nimport lombok.Setter;\n\n@Getter\n@Setter\n@Builder\n@NoArgsConstructor(access = AccessLevel.PROTECTED)\n@AllArgsConstructor(access = AccessLevel.PROTECTED)\n@Entity\npublic class Vocabulary extends Auditable {\n\n  @Id\n  @GeneratedValue(strategy = GenerationType.IDENTITY)\n  private Long vocabId;\n\n  @Column(nullable = false)\n  private String word;\n\n  @Column(nullable = false)\n  private String meaning;\n\n  @Column(nullable = false)\n  private String langCode;\n\n  @ManyToOne\n  @JoinColumn(name = \"member_id\")\n  private Member member;\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/back/src/main/java/com/mainproject/back/vocabulary/entity/Vocabulary.java b/back/src/main/java/com/mainproject/back/vocabulary/entity/Vocabulary.java
+--- a/back/src/main/java/com/mainproject/back/vocabulary/entity/Vocabulary.java	(revision ef24a7273357665a7bcac628e4eef18fe357e0b5)
++++ b/back/src/main/java/com/mainproject/back/vocabulary/entity/Vocabulary.java	(date 1678433569967)
+@@ -18,7 +18,6 @@
+ import lombok.Setter;
+ 
+ @Getter
+-@Setter
+ @Builder
+ @NoArgsConstructor(access = AccessLevel.PROTECTED)
+ @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@@ -30,15 +29,19 @@
+   private Long vocabId;
+ 
+   @Column(nullable = false)
++  @Setter
+   private String word;
+ 
+   @Column(nullable = false)
++  @Setter
+   private String meaning;
+ 
+   @Column(nullable = false)
++  @Setter
+   private String langCode;
+ 
+   @ManyToOne
+   @JoinColumn(name = "member_id")
++  @Setter
+   private Member member;
+ }
+Index: back/src/main/resources/application.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>spring:\n  datasource:\n    url: jdbc:mysql://localhost:3306/MPT\n    password: ji6521\n    username: soyeonji\n    driver-class-name: com.mysql.cj.jdbc.Driver\n  jpa:\n    database-platform: org.hibernate.dialect.MySQL5Dialect\n    hibernate:\n      ddl-auto: create\n    #ddl-auto: none\n    properties:\n      hibernate:\n        highlight_sql: true\n        show_sql: true\n        format_sql: true\n        default_batch_fetch_size: 100\n    database: mysql\n    generate-ddl: true\n  #      open-in-view: false\nlogging:\n  level:\n    org.hibernate.sql: info\n  #    org.hibernate.type: trace
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/back/src/main/resources/application.yml b/back/src/main/resources/application.yml
+--- a/back/src/main/resources/application.yml	(revision ef24a7273357665a7bcac628e4eef18fe357e0b5)
++++ b/back/src/main/resources/application.yml	(date 1678416177808)
+@@ -1,8 +1,8 @@
+ spring:
+   datasource:
+     url: jdbc:mysql://localhost:3306/MPT
+-    password: ji6521
+-    username: soyeonji
++    password: 1234
++    username: root
+     driver-class-name: com.mysql.cj.jdbc.Driver
+   jpa:
+     database-platform: org.hibernate.dialect.MySQL5Dialect
+Index: back/src/main/java/com/mainproject/back/vocabulary/mapper/VocabMapper.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.mainproject.back.vocabulary.mapper;\n\nimport com.mainproject.back.vocabulary.dto.VocabDto;\nimport com.mainproject.back.vocabulary.dto.VocabDto.Response;\nimport com.mainproject.back.vocabulary.entity.Vocabulary;\nimport java.time.LocalDateTime;\nimport java.util.List;\nimport java.util.stream.Collectors;\nimport org.mapstruct.Mapper;\nimport org.mapstruct.ReportingPolicy;\n\n@Mapper(componentModel = \"spring\", unmappedTargetPolicy = ReportingPolicy.IGNORE)\npublic interface VocabMapper {\n\n  Vocabulary vocabPostToVocab(VocabDto.Post requestBody);\n\n  Vocabulary vocabPatchToVocab(VocabDto.Patch requestBody);\n\n  default VocabDto.Response vocabToVocabResponse(Vocabulary vocab) {\n    VocabDto.Response response =VocabDto.Response\n        .builder()\n        .vocabId(vocab.getVocabId())\n        .word(vocab.getWord())\n        .createdAt(vocab.getCreatedAt())\n        .meaning(vocab.getMeaning())\n        .langCode(vocab.getLangCode())\n        .memberId(vocab.getMember().getMemberId())\n        .build();\n    return response;\n  }\n\n  default List<VocabDto.Response> vocabsToVocabResponses(List<Vocabulary> vocabs) {\n    return vocabs\n        .stream()\n        .map(vocab -> VocabDto.Response\n            .builder()\n            .vocabId(vocab.getVocabId())\n            .word(vocab.getWord())\n            .createdAt(vocab.getCreatedAt())\n            .meaning(vocab.getMeaning())\n            .langCode(vocab.getLangCode())\n            .memberId(vocab.getMember().getMemberId())\n            .build())\n        .collect(Collectors.toList());\n  }\n\n}\n\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/back/src/main/java/com/mainproject/back/vocabulary/mapper/VocabMapper.java b/back/src/main/java/com/mainproject/back/vocabulary/mapper/VocabMapper.java
+--- a/back/src/main/java/com/mainproject/back/vocabulary/mapper/VocabMapper.java	(revision ef24a7273357665a7bcac628e4eef18fe357e0b5)
++++ b/back/src/main/java/com/mainproject/back/vocabulary/mapper/VocabMapper.java	(date 1678434464458)
+@@ -1,5 +1,6 @@
+ package com.mainproject.back.vocabulary.mapper;
+ 
++import com.mainproject.back.member.entity.Member;
+ import com.mainproject.back.vocabulary.dto.VocabDto;
+ import com.mainproject.back.vocabulary.dto.VocabDto.Response;
+ import com.mainproject.back.vocabulary.entity.Vocabulary;
+@@ -12,19 +13,31 @@
+ @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+ public interface VocabMapper {
+ 
+-  Vocabulary vocabPostToVocab(VocabDto.Post requestBody);
++  default Vocabulary vocabPostToVocab(VocabDto.Post requestBody) {
++    if (requestBody == null) {
++      return null;
++    }
++
++    Vocabulary.VocabularyBuilder vocabulary = Vocabulary.builder();
++
++    vocabulary.word(requestBody.getWord());
++    vocabulary.meaning(requestBody.getMeaning());
++    vocabulary.langCode(requestBody.getLangCode());
++    vocabulary.member(Member.builder().memberId(requestBody.getMemberId()).build());
++
++    return vocabulary.build();
++  }
+ 
+   Vocabulary vocabPatchToVocab(VocabDto.Patch requestBody);
+ 
+   default VocabDto.Response vocabToVocabResponse(Vocabulary vocab) {
+-    VocabDto.Response response =VocabDto.Response
++    VocabDto.Response response = VocabDto.Response
+         .builder()
+         .vocabId(vocab.getVocabId())
+         .word(vocab.getWord())
+         .createdAt(vocab.getCreatedAt())
+         .meaning(vocab.getMeaning())
+         .langCode(vocab.getLangCode())
+-        .memberId(vocab.getMember().getMemberId())
+         .build();
+     return response;
+   }
+@@ -39,7 +52,6 @@
+             .createdAt(vocab.getCreatedAt())
+             .meaning(vocab.getMeaning())
+             .langCode(vocab.getLangCode())
+-            .memberId(vocab.getMember().getMemberId())
+             .build())
+         .collect(Collectors.toList());
+   }
+Index: .idea/jpa-buddy.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"JpaBuddyIdeaProjectConfig\" ddlActionDbType=\"mysql\" />\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/jpa-buddy.xml b/.idea/jpa-buddy.xml
+--- a/.idea/jpa-buddy.xml	(revision ef24a7273357665a7bcac628e4eef18fe357e0b5)
++++ b/.idea/jpa-buddy.xml	(date 1678412650647)
+@@ -1,4 +1,7 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="JpaBuddyIdeaProjectConfig" ddlActionDbType="mysql" />
++  <component name="JpaBuddyIdeaProjectConfig" ddlActionDbType="mysql">
++    <option name="defaultUnitInitialized" value="true" />
++    <option name="renamerInitialized" value="true" />
++  </component>
+ </project>
+\ No newline at end of file
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"AutoImportSettings\">\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\n  </component>\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"8bd51402-4170-431e-bbb5-de6d0e587f8f\" name=\"변경\" comment=\"\">\n      <change beforePath=\"$PROJECT_DIR$/back/src/main/java/com/mainproject/back/ban/entity/Ban.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/back/src/main/java/com/mainproject/back/block/entity/Block.java\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/back/src/main/java/com/mainproject/back/follow/entity/Follow.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/back/src/main/java/com/mainproject/back/follow/entity/Follow.java\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/back/src/main/java/com/mainproject/back/member/entity/Member.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/back/src/main/java/com/mainproject/back/member/entity/Member.java\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/back/src/main/resources/application.yml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/back/src/main/resources/application.yml\" afterDir=\"false\" />\n    </list>\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"ExternalProjectsData\">\n    <projectState path=\"$PROJECT_DIR$/back\">\n      <ProjectState />\n    </projectState>\n  </component>\n  <component name=\"ExternalProjectsManager\">\n    <system id=\"GRADLE\">\n      <state>\n        <projects_view>\n          <tree_state>\n            <expand />\n            <select />\n          </tree_state>\n        </projects_view>\n      </state>\n    </system>\n  </component>\n  <component name=\"FileTemplateManagerImpl\">\n    <option name=\"RECENT_TEMPLATES\">\n      <list>\n        <option value=\"Class\" />\n      </list>\n    </option>\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\n  </component>\n  <component name=\"MarkdownSettingsMigration\">\n    <option name=\"stateVersion\" value=\"1\" />\n  </component>\n  <component name=\"ProjectId\" id=\"2MfHXCvVANFCrsGscJ9O8dZRPGF\" />\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\">{\n  &quot;keyToString&quot;: {\n    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\n    &quot;last_opened_file_path&quot;: &quot;/Users/jisoyeon/seb42_main_002&quot;,\n    &quot;project.structure.last.edited&quot;: &quot;모듈&quot;,\n    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,\n    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,\n    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;\n  }\n}</component>\n  <component name=\"RecentsManager\">\n    <key name=\"ExtractSuperBase.RECENT_KEYS\">\n      <recent name=\"com.mainproject.back.ban.entity\" />\n    </key>\n  </component>\n  <component name=\"RunManager\" selected=\"애플리케이션.BackApplication\">\n    <configuration name=\"BackApplication\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\n      <option name=\"MAIN_CLASS_NAME\" value=\"com.mainproject.back.BackApplication\" />\n      <module name=\"back.main\" />\n      <extension name=\"coverage\">\n        <pattern>\n          <option name=\"PATTERN\" value=\"com.mainproject.back.*\" />\n          <option name=\"ENABLED\" value=\"true\" />\n        </pattern>\n      </extension>\n      <method v=\"2\">\n        <option name=\"Make\" enabled=\"true\" />\n      </method>\n    </configuration>\n    <configuration name=\"BackApplicationTests\" type=\"GradleRunConfiguration\" factoryName=\"Gradle\" temporary=\"true\">\n      <ExternalSystemSettings>\n        <option name=\"executionName\" />\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$/back\" />\n        <option name=\"externalSystemIdString\" value=\"GRADLE\" />\n        <option name=\"scriptParameters\" value=\"\" />\n        <option name=\"taskDescriptions\">\n          <list />\n        </option>\n        <option name=\"taskNames\">\n          <list>\n            <option value=\":test\" />\n            <option value=\"--tests\" />\n            <option value=\"&quot;com.mainproject.back.BackApplicationTests&quot;\" />\n          </list>\n        </option>\n        <option name=\"vmOptions\" />\n      </ExternalSystemSettings>\n      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>\n      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>\n      <DebugAllEnabled>false</DebugAllEnabled>\n      <method v=\"2\" />\n    </configuration>\n    <recent_temporary>\n      <list>\n        <item itemvalue=\"Gradle.BackApplicationTests\" />\n        <item itemvalue=\"애플리케이션.BackApplication\" />\n      </list>\n    </recent_temporary>\n  </component>\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"애플리케이션 수준\" UseSingleDictionary=\"true\" transferred=\"true\" />\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"디폴트 작업\">\n      <changelist id=\"8bd51402-4170-431e-bbb5-de6d0e587f8f\" name=\"변경\" comment=\"\" />\n      <created>1678151754426</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1678151754426</updated>\n    </task>\n    <servers />\n  </component>\n  <component name=\"Vcs.Log.Tabs.Properties\">\n    <option name=\"TAB_STATES\">\n      <map>\n        <entry key=\"MAIN\">\n          <value>\n            <State />\n          </value>\n        </entry>\n      </map>\n    </option>\n  </component>\n  <component name=\"XDebuggerManager\">\n    <breakpoint-manager>\n      <breakpoints>\n        <line-breakpoint enabled=\"true\" type=\"java-line\">\n          <url>file://$PROJECT_DIR$/back/src/test/java/com/mainproject/back/BackApplicationTests.java</url>\n          <line>6</line>\n          <option name=\"timeStamp\" value=\"1\" />\n        </line-breakpoint>\n      </breakpoints>\n    </breakpoint-manager>\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision ef24a7273357665a7bcac628e4eef18fe357e0b5)
++++ b/.idea/workspace.xml	(date 1678435273325)
+@@ -4,10 +4,14 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="8bd51402-4170-431e-bbb5-de6d0e587f8f" name="변경" comment="">
+-      <change beforePath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/ban/entity/Ban.java" beforeDir="false" afterPath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/block/entity/Block.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/follow/entity/Follow.java" beforeDir="false" afterPath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/follow/entity/Follow.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/member/entity/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/member/entity/Member.java" afterDir="false" />
++    <list default="true" id="8bd51402-4170-431e-bbb5-de6d0e587f8f" name="변경" comment="feat: 회원 정보 수정&#10;&#10;회원 정보 수정 구현">
++      <change beforePath="$PROJECT_DIR$/.idea/jpa-buddy.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jpa-buddy.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/vocabulary/controller/VocabController.java" beforeDir="false" afterPath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/vocabulary/controller/VocabController.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/vocabulary/dto/VocabDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/vocabulary/dto/VocabDto.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/vocabulary/entity/Vocabulary.java" beforeDir="false" afterPath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/vocabulary/entity/Vocabulary.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/vocabulary/mapper/VocabMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/vocabulary/mapper/VocabMapper.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/vocabulary/service/VocabService.java" beforeDir="false" afterPath="$PROJECT_DIR$/back/src/main/java/com/mainproject/back/vocabulary/service/VocabService.java" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/back/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/back/src/main/resources/application.yml" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+@@ -23,9 +27,28 @@
+   <component name="ExternalProjectsManager">
+     <system id="GRADLE">
+       <state>
++        <task path="$PROJECT_DIR$/back">
++          <activation />
++        </task>
+         <projects_view>
+           <tree_state>
+-            <expand />
++            <expand>
++              <path>
++                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
++                <item name="back" type="f1a62948:ProjectNode" />
++              </path>
++              <path>
++                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
++                <item name="back" type="f1a62948:ProjectNode" />
++                <item name="Tasks" type="e4a08cd1:TasksNode" />
++              </path>
++              <path>
++                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
++                <item name="back" type="f1a62948:ProjectNode" />
++                <item name="Tasks" type="e4a08cd1:TasksNode" />
++                <item name="build" type="c8890929:TasksNode$1" />
++              </path>
++            </expand>
+             <select />
+           </tree_state>
+         </projects_view>
+@@ -36,11 +59,20 @@
+     <option name="RECENT_TEMPLATES">
+       <list>
+         <option value="Class" />
++        <option value="Enum" />
+       </list>
+     </option>
+   </component>
+   <component name="Git.Settings">
++    <option name="RECENT_BRANCH_BY_REPOSITORY">
++      <map>
++        <entry key="$PROJECT_DIR$" value="be" />
++      </map>
++    </option>
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
++  </component>
++  <component name="JpbToolWindowState">
++    <option name="isToolWindowVisible" value="false" />
+   </component>
+   <component name="MarkdownSettingsMigration">
+     <option name="stateVersion" value="1" />
+@@ -50,23 +82,35 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent">{
+-  &quot;keyToString&quot;: {
+-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+-    &quot;last_opened_file_path&quot;: &quot;/Users/jisoyeon/seb42_main_002&quot;,
+-    &quot;project.structure.last.edited&quot;: &quot;모듈&quot;,
+-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;
++  <component name="PropertiesComponent"><![CDATA[{
++  "keyToString": {
++    "RequestMappingsPanelOrder0": "0",
++    "RequestMappingsPanelOrder1": "1",
++    "RequestMappingsPanelWidth0": "75",
++    "RequestMappingsPanelWidth1": "75",
++    "RunOnceActivity.OpenProjectViewOnStart": "true",
++    "RunOnceActivity.ShowReadmeOnStart": "true",
++    "WebServerToolWindowFactoryState": "false",
++    "last_opened_file_path": "/Users/jisoyeon/seb42_main_002",
++    "node.js.detected.package.eslint": "true",
++    "node.js.detected.package.tslint": "true",
++    "node.js.selected.package.eslint": "(autodetect)",
++    "node.js.selected.package.tslint": "(autodetect)",
++    "nodejs_package_manager_path": "npm",
++    "project.structure.last.edited": "모듈",
++    "project.structure.proportion": "0.0",
++    "project.structure.side.proportion": "0.0",
++    "settings.editor.selected.configurable": "trusted.hosts",
++    "spring.configuration.checksum": "d506a6f836e4c5be7e0ec4824f4c7fd3",
++    "vue.rearranger.settings.migration": "true"
+   }
+-}</component>
++}]]></component>
+   <component name="RecentsManager">
+     <key name="ExtractSuperBase.RECENT_KEYS">
+       <recent name="com.mainproject.back.ban.entity" />
+     </key>
+   </component>
+-  <component name="RunManager" selected="애플리케이션.BackApplication">
++  <component name="RunManager" selected="Spring Boot.BackApplication">
+     <configuration name="BackApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+       <option name="MAIN_CLASS_NAME" value="com.mainproject.back.BackApplication" />
+       <module name="back.main" />
+@@ -103,10 +147,47 @@
+       <DebugAllEnabled>false</DebugAllEnabled>
+       <method v="2" />
+     </configuration>
++    <configuration name="back [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
++      <ExternalSystemSettings>
++        <option name="executionName" />
++        <option name="externalProjectPath" value="$PROJECT_DIR$/back" />
++        <option name="externalSystemIdString" value="GRADLE" />
++        <option name="scriptParameters" />
++        <option name="taskDescriptions">
++          <list />
++        </option>
++        <option name="taskNames">
++          <list>
++            <option value="build" />
++          </list>
++        </option>
++        <option name="vmOptions" />
++      </ExternalSystemSettings>
++      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
++      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
++      <DebugAllEnabled>false</DebugAllEnabled>
++      <method v="2" />
++    </configuration>
++    <configuration name="BackApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
++      <module name="back.main" />
++      <option name="SPRING_BOOT_MAIN_CLASS" value="com.mainproject.back.BackApplication" />
++      <extension name="coverage">
++        <pattern>
++          <option name="PATTERN" value="com.mainproject.back.*" />
++          <option name="ENABLED" value="true" />
++        </pattern>
++      </extension>
++      <method v="2">
++        <option name="Make" enabled="true" />
++      </method>
++    </configuration>
+     <recent_temporary>
+       <list>
++        <item itemvalue="Spring Boot.BackApplication" />
+         <item itemvalue="Gradle.BackApplicationTests" />
+-        <item itemvalue="애플리케이션.BackApplication" />
++        <item itemvalue="Gradle.back [build]" />
++        <item itemvalue="Application.BackApplication" />
++        <item itemvalue="Spring Boot.BackApplication" />
+       </list>
+     </recent_temporary>
+   </component>
+@@ -118,29 +199,51 @@
+       <option name="number" value="Default" />
+       <option name="presentableId" value="Default" />
+       <updated>1678151754426</updated>
++      <workItem from="1678412086685" duration="14507000" />
+     </task>
++    <task id="LOCAL-00001" summary="feat: 회원 정보 수정&#10;&#10;회원 정보 수정 구현">
++      <created>1678431257354</created>
++      <option name="number" value="00001" />
++      <option name="presentableId" value="LOCAL-00001" />
++      <option name="project" value="LOCAL" />
++      <updated>1678431257354</updated>
++    </task>
++    <option name="localTasksCounter" value="2" />
+     <servers />
+   </component>
++  <component name="TypeScriptGeneratedFilesManager">
++    <option name="version" value="3" />
++  </component>
+   <component name="Vcs.Log.Tabs.Properties">
+     <option name="TAB_STATES">
+       <map>
+         <entry key="MAIN">
+           <value>
+-            <State />
++            <State>
++              <option name="FILTERS">
++                <map>
++                  <entry key="branch">
++                    <value>
++                      <list>
++                        <option value="be" />
++                      </list>
++                    </value>
++                  </entry>
++                </map>
++              </option>
++            </State>
+           </value>
+         </entry>
+       </map>
+     </option>
+   </component>
+-  <component name="XDebuggerManager">
+-    <breakpoint-manager>
+-      <breakpoints>
+-        <line-breakpoint enabled="true" type="java-line">
+-          <url>file://$PROJECT_DIR$/back/src/test/java/com/mainproject/back/BackApplicationTests.java</url>
+-          <line>6</line>
+-          <option name="timeStamp" value="1" />
+-        </line-breakpoint>
+-      </breakpoints>
+-    </breakpoint-manager>
++  <component name="VcsManagerConfiguration">
++    <MESSAGE value="feat: 회원 정보 수정&#10;&#10;회원 정보 수정 구현" />
++    <option name="LAST_COMMIT_MESSAGE" value="feat: 회원 정보 수정&#10;&#10;회원 정보 수정 구현" />
++    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
++  </component>
++  <component name="XSLT-Support.FileAssociations.UIState">
++    <expand />
++    <select />
+   </component>
+ </project>
+\ No newline at end of file
+Index: back/src/main/java/com/mainproject/back/member/service/MemberService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.mainproject.back.member.service;\n\n\nimport com.mainproject.back.exception.BusinessLogicException;\nimport com.mainproject.back.member.entity.Member;\nimport com.mainproject.back.member.exception.MemberExceptionCode;\nimport com.mainproject.back.member.repository.MemberRepository;\nimport java.util.Optional;\nimport lombok.RequiredArgsConstructor;\nimport lombok.extern.slf4j.Slf4j;\nimport org.springframework.stereotype.Service;\nimport org.springframework.transaction.annotation.Transactional;\n\n\n@RequiredArgsConstructor\n@Transactional(readOnly = true)\n@Slf4j\n@Service\npublic class MemberService {\n\n  private final MemberRepository memberRepository;\n\n  @Transactional\n  public Member createMember(Member member) {\n    verifyExistsEmail(member.getEmail());\n    return memberRepository.save(member);\n  }\n\n  @Transactional\n  public Member updateMember(Member member) {\n    // member patch dto -> member\n    // member patch dto : list<string> tag -> member : list<memberTag> tag\n    // member -> find member 수정\n    Member findMember = findVerifiedMember(member.getMemberId());\n    Optional.ofNullable(member.getName())\n        .ifPresent(findMember::setName);\n    Optional.ofNullable(member.getIntroduce())\n        .ifPresent(findMember::setIntroduce);\n    Optional.ofNullable(member.getLocation()).ifPresent(findMember::setLocation);\n    Optional.ofNullable(member.getProfile())\n        .ifPresent(findMember::setProfile);\n    Optional.ofNullable(member.getMemberLanguages())\n        .ifPresent(findMember::setMemberLanguages);\n    Optional.ofNullable(member.getMemberTags()).ifPresent(findMember::setMemberTags);\n    Member savedMember = memberRepository.save(findMember);\n    log.info(\"## updated member: {}\", savedMember);\n    return savedMember;\n  }\n\n//  @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)\n//  public Member updateMember(MemberDto.Patch requestBody, Member member) {\n//    Member findMember = findVerifiedMember(member.getMemberId());\n\n//    Optional.ofNullable(member.getName())\n//        .ifPresent(name -> Member.builder().name(name).build());\n//    Optional.ofNullable(member.getPassword())\n//        .ifPresent(password -> Member.builder().password(password).build());\n//    Optional.ofNullable(member.getMemberLanguages())\n//            .ifPresent(memberLanguages -> Member.builder().memberLanguages(memberLanguages).build());\n//    Optional.ofNullable(member.getMemberTags())\n//        .ifPresent(memberTags -> Member.builder().memberTags(memberTags).build());\n//    Optional.ofNullable(member.getIntroduce())\n//            .ifPresent(introduce -> Member.builder().introduce(introduce).build());\n//    Optional.ofNullable(member.getMemberStatus())\n//        .ifPresent(memberStatus -> Member.builder().memberStatus(memberStatus).build());\n\n//    Optional.ofNullable(member.getName())\n//        .ifPresent(findMember::setName);\n//    Optional.ofNullable(member.getIntroduce())\n//        .ifPresent(findMember::setIntroduce);\n////    Optional.ofNullable(member.getMemberLanguages())\n////        .ifPresent(findMember::setMemberLanguages);\n//    Optional.ofNullable(member.getProfile())\n//        .ifPresent(findMember::setProfile);\n//\n//\n//\n//    return memberRepository.save(findMember);\n//  }\n\n//  @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)\n//  public Member updateMemberTag(long memberId, MemberTagPatchDto requestBody) {\n////    List<MemberTag> findMembers = memberTagRepository.findAllByMemberId(memberId);\n//\n//    Member findMember = findVerifiedMember(memberId);\n//\n//    memberTagRepository.deleteAllByMember(findMember);\n//\n//    for (MemberTagDto dto : requestBody.getMemberTags()) {\n//      MemberTag memberTag = MemberTag.builder()\n//          .member(findMember)\n//          .tag(tagRepository.findById(dto.getTagId())).build();\n//      memberTagRepository.save(memberTag);\n//    }\n//    return findVerifiedMember(memberId);\n//  }\n\n  public Member findMember(long memberId) {\n    return findVerifiedMember(memberId);\n  }\n\n  public void deleteMember(long memberId) {\n    Member findMember = findVerifiedMember(memberId);\n\n    memberRepository.delete(findMember);\n  }\n\n  private Member findVerifiedMember(long memberId) {\n    Optional<Member> optionalMember =\n        memberRepository.findById(memberId);\n    Member findMember =\n        optionalMember.orElseThrow(\n            () -> new BusinessLogicException(MemberExceptionCode.MEMBER_NOT_FOUND));\n    return findMember;\n  }\n\n  private void verifyExistsEmail(String email) {\n    Optional<Member> member = memberRepository.findByEmail(email);\n    if (member.isPresent()) {\n      throw new RuntimeException(\"MEMBER_EXISTS\");\n    }\n  }\n\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/back/src/main/java/com/mainproject/back/member/service/MemberService.java b/back/src/main/java/com/mainproject/back/member/service/MemberService.java
+--- a/back/src/main/java/com/mainproject/back/member/service/MemberService.java	(revision ef24a7273357665a7bcac628e4eef18fe357e0b5)
++++ b/back/src/main/java/com/mainproject/back/member/service/MemberService.java	(date 1678435038928)
+@@ -117,7 +117,7 @@
+   private void verifyExistsEmail(String email) {
+     Optional<Member> member = memberRepository.findByEmail(email);
+     if (member.isPresent()) {
+-      throw new RuntimeException("MEMBER_EXISTS");
++      throw new BusinessLogicException(MemberExceptionCode.EMAIL_EXISTS);
+     }
+   }
+ 

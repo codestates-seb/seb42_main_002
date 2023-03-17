@@ -1,7 +1,10 @@
 package com.mainproject.back.vocabulary.controller;
 
+import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.member.entity.Member;
+import com.mainproject.back.member.exception.MemberExceptionCode;
 import com.mainproject.back.member.service.MemberService;
+import com.mainproject.back.util.Check;
 import com.mainproject.back.util.UriCreator;
 import com.mainproject.back.vocabulary.dto.VocabDto;
 import com.mainproject.back.vocabulary.entity.Vocabulary;
@@ -46,8 +49,7 @@ public class VocabController {
   @PostMapping
   public ResponseEntity postVocab(@RequestBody VocabDto.Post requestBody, Principal principal) {
     log.info("## 단어 생성: {}", requestBody);
-    log.info("## principal: {}", principal.getName());
-    Member member = memberService.findMemberByEmail(principal.getName());
+    Member member = memberService.findMemberByEmail(Check.checkPrincipal(principal));
 
     Vocabulary vocab = mapper.vocabPostToVocab(requestBody);
     vocab.setMember(member);
@@ -62,6 +64,9 @@ public class VocabController {
   @PatchMapping("/{vocab-id}")
   public ResponseEntity patchVocab(@PathVariable("vocab-id") long vocabId,
       @RequestBody VocabDto.Patch requestBody, Principal principal) {
+    if (principal.getName() == null) {
+      throw new BusinessLogicException(MemberExceptionCode.MEMBER_NOT_FOUND);
+    }
     Member member = memberService.findMemberByEmail(principal.getName());
     requestBody.setVocabId(vocabId);
     Vocabulary vocab = mapper.vocabPatchToVocab(requestBody);
@@ -82,7 +87,10 @@ public class VocabController {
 
   @GetMapping
   public ResponseEntity getVocabs(@PageableDefault Pageable pageable, Principal principal) {
-    Member member = memberService.findMemberByEmail(principal.getName());
+    if (principal.getName() == null) {
+      throw new BusinessLogicException(MemberExceptionCode.MEMBER_NOT_FOUND);
+    }
+    Member member = memberService.findMemberByEmail(Check.checkPrincipal(principal));
     Page<Vocabulary> pageVocabs = vocabService.findVocabs(member.getMemberId(), pageable);
     Page<VocabDto.Response> vocabResponseDto = mapper.pageVocabToPageVocabResponsePage(
         pageVocabs);

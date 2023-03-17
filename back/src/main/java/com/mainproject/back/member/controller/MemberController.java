@@ -1,15 +1,18 @@
 package com.mainproject.back.member.controller;
 
+import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.helper.UriCreator;
 import com.mainproject.back.language.entity.Language;
 import com.mainproject.back.member.dto.MemberDto;
 import com.mainproject.back.member.dto.MemberRecommendDto;
 import com.mainproject.back.member.dto.MemberSearchDto;
 import com.mainproject.back.member.entity.Member;
+import com.mainproject.back.member.exception.MemberExceptionCode;
 import com.mainproject.back.member.mapper.MemberMapper;
 import com.mainproject.back.member.service.MemberConvertService;
 import com.mainproject.back.member.service.MemberService;
 import com.mainproject.back.tag.entity.Tag;
+import com.mainproject.back.util.Check;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -66,7 +69,7 @@ public class MemberController {
   public ResponseEntity patchMember(
       Principal principal,
       @Valid @RequestBody MemberDto.Patch requestBody) {
-    Member currentMember = memberService.findMemberByEmail(principal.getName());
+    Member currentMember = memberService.findMemberByEmail(Check.checkPrincipal(principal));
     requestBody.setMemberId(currentMember.getMemberId());
     Member member = memberConvertService.memberPatchDtoToMember(requestBody);
     log.info("## 사용자 정보 수정: {}", member.toString());
@@ -79,7 +82,7 @@ public class MemberController {
       @PathVariable("member-id") @Positive long memberId, Principal principal) {
     Member findMember = memberService.findMember(memberId);
     log.info("## 사용자 정보 조회: {}", findMember.toString());
-    long id = memberService.findMemberIdByEmail(principal.getName());
+    long id = memberService.findMemberIdByEmail(Check.checkPrincipal(principal));
 
     return new ResponseEntity<>(memberConvertService.memberToResponseDto(findMember, id),
         HttpStatus.OK);
@@ -89,7 +92,7 @@ public class MemberController {
   @DeleteMapping
   public ResponseEntity deleteMember(Principal principal) {
     log.info("## 사용자 탈퇴: {}", principal.getName());
-    Member currentMember = memberService.findMemberByEmail(principal.getName());
+    Member currentMember = memberService.findMemberByEmail(Check.checkPrincipal(principal));
     memberService.deleteMember(currentMember.getMemberId());
 
     return new ResponseEntity<>(HttpStatus.OK);
