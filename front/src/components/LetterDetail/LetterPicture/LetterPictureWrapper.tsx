@@ -1,10 +1,8 @@
 import LetterPicture from '../LetterPicture/LetterPicture';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { Scrollbar } from 'swiper';
 
 import styles from './LetterPictureWrapper.module.scss';
-import 'swiper/css';
-import 'swiper/css/scrollbar';
-import { Scrollbar } from 'swiper';
 
 type LetterPictureWrapperProps = {
   pictures: string[];
@@ -43,7 +41,7 @@ const LetterPictureWrapper = ({
           ))}
         {/* 글쓰기 모드 */}
         {!isRead && (
-          <SwiperSlide className={styles.slide}>
+          <SwiperSlide className={styles.swiper_slide}>
             <LetterPicture pic={''} isAdd rotate={1} onAdd={onAdd} />
           </SwiperSlide>
         )}

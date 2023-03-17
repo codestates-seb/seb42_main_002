@@ -1,12 +1,9 @@
 import LetterContent from './LetterContent/LetterContent';
 import LetterPictureWrapper from './LetterPicture/LetterPictureWrapper';
 import Button from '../Common/Button/Button';
-
 import { SeletedLetterData } from '../../utils';
 import { seletedLetter } from '../../dummy/letter';
 
-// Import Swiper styles
-import 'swiper/css';
 import styles from './LetterDetailWrapper.module.scss';
 
 // 임시 타입
