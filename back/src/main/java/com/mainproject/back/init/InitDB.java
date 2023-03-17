@@ -16,7 +16,7 @@ public class InitDB {
 
   private final Init init;
 
-  @PostConstruct
+  //  @PostConstruct
   public void initTag() {
     init.initTag();
     init.initLanguage();
@@ -74,7 +74,7 @@ class Init {
   }
 
   @Transactional
-  public void initLanguage(){
+  public void initLanguage() {
     List<Language> languages = List.of(
         Language.builder().nation("KR").build(),
         Language.builder().nation("CN").build(),
