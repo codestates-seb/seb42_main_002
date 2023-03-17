@@ -22,12 +22,13 @@ public class MemberAuthenticationFailureHandler implements AuthenticationFailure
     // 인증 실패 시, 에러 로그를 기록하거나 error response를 전송할 수 있다.
     log.error("# Authentication failed: {}", exception.getMessage());
 
-    sendErrorResponse(response);  // (2)
+
+    sendErrorResponse(response, exception);  // (2)
   }
 
-  private void sendErrorResponse(HttpServletResponse response) throws IOException {
+  private void sendErrorResponse(HttpServletResponse response, AuthenticationException exception) throws IOException {
     Gson gson = new Gson();     // (2-1)
-    ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.UNAUTHORIZED); // (2-2)
+    ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.UNAUTHORIZED, exception.getMessage()); // (2-2)
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);    // (2-3)
     response.setStatus(HttpStatus.UNAUTHORIZED.value());          // (2-4)
     response.getWriter().write(gson.toJson(errorResponse, ErrorResponse.class));   // (2-5)
