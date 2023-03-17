@@ -41,14 +41,14 @@ const SearchList = () => {
           date={null}
           onClick={moveProfileHandler}
         >
-          <div className={styles.button}>
-            <LetterStatusIcon
-              status={'SENT'}
-              onClick={(event) => {
-                onClickHandler(event, user.name);
-              }}
-            />
-          </div>
+          <button
+            onClick={(event) => {
+              onClickHandler(event, user.name);
+            }}
+            className={styles.button}
+          >
+            <LetterStatusIcon status={'SENT'} />
+          </button>
         </UserCard>
       ))}
     </ul>
