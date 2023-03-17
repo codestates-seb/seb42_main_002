@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -24,4 +25,7 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
 
   @Query("select f.followId from Follow f where f.followId = :id")
   Optional<Long> findFollowIdById(@Param("id") long followId);
+
+  @Query("select f.followId from Follow f join f.following ing join f.follower ed where ed.memberId = :memberId and ing.memberId = :targetId")
+  Optional<Long> findFollowIdByUsers(@Param("memberId") long memberId, @Param("targetId") long targetId);
 }

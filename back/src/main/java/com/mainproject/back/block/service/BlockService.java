@@ -4,6 +4,7 @@ import com.mainproject.back.block.entity.Block;
 import com.mainproject.back.block.exception.BlockExceptionCode;
 import com.mainproject.back.block.repository.BlockRepository;
 import com.mainproject.back.exception.BusinessLogicException;
+import com.mainproject.back.follow.service.FollowService;
 import com.mainproject.back.letter.dto.LetterSimpleDto;
 import com.mainproject.back.letter.dto.LetterSimpleDto.LetterStatus;
 import com.mainproject.back.letter.entity.Letter;
@@ -24,9 +25,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class BlockService {
 
   private final BlockRepository blockRepository;
+  private final FollowService followService;
 
   @Transactional
   public Block createBlock(Block block) {
+    followService.deleteFollowByBlock(block.getMember().getMemberId(), block.getTarget().getMemberId());
     return blockRepository.save(block);
   }
 

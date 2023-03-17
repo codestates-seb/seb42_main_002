@@ -6,6 +6,7 @@ import com.mainproject.back.follow.entity.Follow;
 import com.mainproject.back.follow.exception.FollowExceptionCode;
 import com.mainproject.back.follow.repository.FollowRepository;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +31,12 @@ public class FollowService {
         .orElseThrow(() -> new BusinessLogicException(
             FollowExceptionCode.FOLLOW_NOT_FOUND));
     followRepository.deleteById(id);
+  }
+
+  @Transactional
+  public void deleteFollowByBlock(long memberId,long targetId) {
+    Optional<Long> optionalFollowId = followRepository.findFollowIdByUsers(memberId, targetId);
+    optionalFollowId.ifPresent(followRepository::deleteById);
   }
 
   public Page<Follow> findFollower(long memberId, Pageable pageable) {
