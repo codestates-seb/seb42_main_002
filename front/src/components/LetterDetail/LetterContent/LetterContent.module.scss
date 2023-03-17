@@ -15,20 +15,19 @@
 
 .receiver_info {
   & .dear {
-    font-size: var(--font-size-md);
+    font-size: var(--font-size-lg);
     font-weight: 700;
     margin-right: 0.5rem;
     color: var(--title-primary-color);
   }
   & .receiver {
-    font-size: var(--font-size-s);
-    font-weight: 700;
+    font-size: var(--font-size-md);
     color: var(--text-primary-color);
   }
 }
 
 .content {
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-md);
   color: var(--text-primary-color);
   white-space: pre-line;
 }

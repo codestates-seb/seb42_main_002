@@ -2,7 +2,13 @@
   position: relative;
   display: inline-block;
   cursor: pointer;
+  padding: 1rem 0.5rem;
+  transition: all 0.2s ease;
+  &:hover {
+    transform: scale(1.2) rotate(15deg);
+  }
 }
+
 .read_flag {
   background-color: var(--alert-color);
   width: 0.4rem;
@@ -10,5 +16,5 @@
   border-radius: 50%;
   position: absolute;
   right: 0;
-  top: -0.5rem;
+  top: 0.5rem;
 }
