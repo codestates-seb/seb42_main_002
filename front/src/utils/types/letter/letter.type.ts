@@ -1,4 +1,4 @@
-export type LetterData = {
+export type LetterDataType = {
   letterId: number;
   sender: {
     memberId: number;
@@ -11,7 +11,6 @@ export type LetterData = {
   body: string;
   isRead: boolean; // 읽음 여부
   availableAt: string;
-  canRead: boolean;
   createdAt: string;
   hasPic: boolean; // 이미지 첨부 여부
 };

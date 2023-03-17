@@ -3,7 +3,7 @@ import UserCardInfo from './UserCardInfo/UserCardInfo';
 
 import styles from './UserCard.module.scss';
 import { useSetRecoilState } from 'recoil';
-import { selectedUserInfo } from '../../../recoil/atoms';
+import { selectedUserInfoState } from '../../../recoil/atoms';
 import { LetterUserCardProps } from '../../Letter/LetterUserCard/LetterUserCard';
 import { useNavigate } from 'react-router-dom';
 import { LOCATION_CODE } from '../../../utils/enums/common/common.enum';
@@ -30,7 +30,7 @@ const UserCard = ({
   onClick,
 }: UserCardProps) => {
   const navigate = useNavigate();
-  const setUserInfo = useSetRecoilState(selectedUserInfo);
+  const setUserInfo = useSetRecoilState(selectedUserInfoState);
 
   const onClickHandler = () => {
     // 클릭 시, 편지 유저 페이지로 이동
@@ -39,6 +39,7 @@ const UserCard = ({
       birthday: birthday ? birthday : '',
       profile,
       location,
+      memberId,
     };
     setUserInfo(selectedUser);
     navigate(`/letters/${memberId}`);

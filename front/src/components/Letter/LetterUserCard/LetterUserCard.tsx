@@ -11,6 +11,7 @@ export type LetterUserCardProps = {
   location: LOCATION_CODE;
   name: string;
   profile: string | null;
+  memberId: null | number;
 };
 
 const LetterUserCard = ({
@@ -18,6 +19,7 @@ const LetterUserCard = ({
   name,
   birthday,
   profile,
+  memberId,
 }: LetterUserCardProps) => {
   // 생년월일 계산
   const formatedDate = formatDateToMonth(new Date(birthday), ko);
