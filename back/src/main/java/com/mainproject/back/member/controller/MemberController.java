@@ -77,6 +77,13 @@ public class MemberController {
     return ResponseEntity.ok().body(mapper.memberToMemberResponse(updateMember));
   }
 
+  @GetMapping
+  public ResponseEntity getMemberBySelf(Principal principal) {
+    Member findMember = memberService.findMemberByEmail(Check.checkPrincipal(principal));
+
+    return ResponseEntity.ok().body(mapper.memberToMemberResponse(findMember));
+  }
+
   @GetMapping("/{member-id}")
   public ResponseEntity getMember(
       @PathVariable("member-id") @Positive long memberId, Principal principal) {
@@ -100,8 +107,8 @@ public class MemberController {
 
   @GetMapping("/recommend")
   public ResponseEntity getRecommended(Principal principal) {
-    log.info("## 사용자 태그 기반 추천 친구: {}", principal.getName());
-    Member currentMember = memberService.findMemberByEmail(principal.getName());
+    log.info("## 사용자 태그 기반 추천 친구");
+    Member currentMember = memberService.findMemberByEmail(Check.checkPrincipal(principal));
 
     Page<Member> memberPage = memberService.findRecommendedMember(
         currentMember.getMemberId(), PageRequest.of(0, 10));
@@ -115,7 +122,7 @@ public class MemberController {
       @RequestParam(value = "tag", required = false, defaultValue = "") String tags,
       @RequestParam(value = "lang", required = false, defaultValue = "") String lang,
       @PageableDefault Pageable pageable, Principal principal) {
-    long memberId = memberService.findMemberIdByEmail(principal.getName());
+    long memberId = memberService.findMemberIdByEmail(Check.checkPrincipal(principal));
     log.info("## 태그 검색: {}", tags);
     log.info("## 언어 검색: {}", lang);
 

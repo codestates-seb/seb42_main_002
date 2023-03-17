@@ -32,6 +32,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
   @Query("select m from Member m join m.memberTags t join m.memberLanguages l where t.tag in(:tags) and l.language in(:languages)")
   Page<Member> getMemberByTagsAndLang(@Param("tags")List<Tag> tags, @Param("languages") List<Language> languages,Pageable pageable);
 
-  @Query("select m from Member m join m.memberTags t join m.memberLanguages l where t.tag in(:tags) and l.language in(:languages)")
-  Page<Member> getMemberByTags(@Param("tags")List<Tag> tags, @Param("languages") List<Language> languages,Pageable pageable);
+  @Query("select m from Member m join m.memberTags t join m.memberLanguages l where l.language in(:languages)")
+  Page<Member> getMemberByLang(@Param("languages") List<Language> languages,Pageable pageable);
 }

@@ -134,9 +134,20 @@ public class MemberService {
     return new PageImpl<>(result, pageable, result.size());
   }
 
-  public Page<Member> searchMembersByTag(List<Tag> tagList, List<Language> languageList,Pageable pageable, long memberId) {
-    Page<Member> memberPage = memberRepository.getMemberByTags(tagList, languageList, pageable);
-    List<Long> blockIdList = memberId == 0 ? new ArrayList<>() : blockService.findBlockIdList(memberId);
+  public Page<Member> searchMembersByTag(List<Tag> tagList, List<Language> languageList,
+      Pageable pageable, long memberId) {
+    Page<Member> memberPage;
+    if (tagList.isEmpty() && !languageList.isEmpty()) {
+      memberPage = memberRepository.getMemberByLang(languageList, pageable);
+    }
+    else if(languageList.isEmpty() && !tagList.isEmpty()) {
+      memberPage = memberRepository.getMemberByTags(tagList, pageable);
+    }else {
+      memberPage = memberRepository.getMemberByTagsAndLang(tagList, languageList, pageable);
+    }
+
+    List<Long> blockIdList =
+        memberId == 0 ? new ArrayList<>() : blockService.findBlockIdList(memberId);
 
     List<Member> distinct = memberPage.stream().filter(distinctByKey(Member::getMemberId))
         .filter(member -> member.getMemberId() != memberId)
