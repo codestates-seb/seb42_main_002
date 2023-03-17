@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { languageTags } from '../../../dummy/Tags';
 import { selectedSearchLangTagState } from '../../../recoil/atoms/search';
+import { LanguageDataType } from '../../../utils';
 import { LangTagDataType } from '../../../utils/types/tags/tags';
 import Flex from '../../Common/Flex/Flex';
 import LabelButton from '../../Common/LabelButton/LabelButton';
@@ -18,10 +19,11 @@ const SearchLangTagFilter = ({ onSubmit, onClose }: FullPageModalProps) => {
   const [languageList, setLanguageList] = useState([...languageTags]);
 
   // 수정 전 임시 태그 데이터
-  const [tempTagList, setTempTagList] = useState(searchTags);
+  const [tempTagList, setTempTagList] =
+    useState<LanguageDataType[]>(searchTags);
 
   // 태그 선택
-  const onSelectTagHandler = (selectedTag: LangTagDataType) => {
+  const onSelectTagHandler = (selectedTag: LanguageDataType) => {
     console.log('태그', selectedTag);
 
     if (

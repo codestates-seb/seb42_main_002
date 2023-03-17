@@ -1,9 +1,9 @@
-import Welcom from "../components/ProfileCompleted/Welcom"
+import Welcome from '../components/Welcome/Welcome';
 
-export default function WelcomPage (){
-    return (
-        <>
-        <Welcom />
-        </>
-    )
-} 
+export default function WelcomPage() {
+  return (
+    <>
+      <Welcome />
+    </>
+  );
+}

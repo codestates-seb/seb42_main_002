@@ -1,9 +1,11 @@
-import React from 'react';
-import styles from './Intro.module.scss';
-import { ReactComponent as MailIcon } from '../../assets/Intro/mailIcon.svg';
-import { ReactComponent as OwlIcon } from '../../assets/Intro/owlIcon.svg';
-import { ReactComponent as SpeechBubble } from '../../assets/Intro/speechBubble.svg';
+import classNames from 'classnames';
 import { useNavigate } from 'react-router-dom';
+import { ReactComponent as MailIcon } from '../../assets/img/intro/mailIcon.svg';
+import { ReactComponent as OwlHead } from '../../assets/img/intro/owls_head.svg';
+import { ReactComponent as OwlBody } from '../../assets/img/intro/owls_body.svg';
+import { ReactComponent as OwlWingLeft } from '../../assets/img/intro/owls_wing_left.svg';
+import { ReactComponent as OwlWingRight } from '../../assets/img/intro/owls_wing_right.svg';
+import styles from './Intro.module.scss';
 
 const Intro = (): JSX.Element => {
   const navigate = useNavigate();
@@ -15,30 +17,50 @@ const Intro = (): JSX.Element => {
         <p>당신의 편지를 전달해드립니다.</p>
       </div>
       <div className={styles.intro_main}>
-        <SpeechBubble className={styles.speech_bubble} />
-        <div className={styles.speech_bubble_text}>
-          <p>언어도 배우고~</p>
-          <p>친구도 만들고~</p>
+        <div className={styles.owls_character}>
+          <div className={styles.speech_bubble}>
+            <div className={styles.speech_bubble_text}>
+              <p>언어도 배우고~</p>
+              <p>친구도 만들고~</p>
+            </div>
+          </div>
+          <div className={styles.owls_body}>
+            <div className={styles.owls_head}>
+              <OwlHead />
+            </div>
+            <OwlBody />
+            <div
+              className={classNames(styles.owls_wing, styles.owls_wing_left)}
+            >
+              <OwlWingLeft />
+            </div>
+            <div
+              className={classNames(styles.owls_wing, styles.owls_wing_right)}
+            >
+              <OwlWingRight />
+            </div>
+          </div>
         </div>
-        <OwlIcon />
-        <p className={styles.owls_title_text}>Owls Letters</p>
+        <h1 className={styles.owls_title_text}>Owls Letters</h1>
       </div>
-      <button
-        className={styles.signup_btn}
-        onClick={() => {
-          navigate('/signup');
-        }}
-      >
-        <p>회원가입</p>
-      </button>
-      <button
-        className={styles.login_btn}
-        onClick={() => {
-          navigate('/login');
-        }}
-      >
-        <p>로그인</p>
-      </button>
+      <div className={styles.btn_wrapper}>
+        <button
+          className={styles.signup_btn}
+          onClick={() => {
+            navigate('/signup');
+          }}
+        >
+          <p>회원가입</p>
+        </button>
+        <button
+          className={styles.login_btn}
+          onClick={() => {
+            navigate('/login');
+          }}
+        >
+          <p>로그인</p>
+        </button>
+      </div>
     </div>
   );
 };

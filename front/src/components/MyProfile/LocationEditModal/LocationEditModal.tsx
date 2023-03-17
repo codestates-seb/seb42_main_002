@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { userLocationState } from '../../../recoil/atoms';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import useModals from '../../../hooks/useModals';
+import { userFirstState, userLocationState } from '../../../recoil/atoms';
 import { LocationIcons, locationTypes } from '../../../utils';
 import { locationTransformer } from '../../../utils/common';
 import {
@@ -12,12 +13,16 @@ import LabelButton from '../../Common/LabelButton/LabelButton';
 import FullPageModal, {
   FullPageModalProps,
 } from '../../Common/Modal/FullPageModal';
+import SummaryTitle from '../../Common/SummaryTitle/SummaryTitle';
+import LanguageEditModal from '../LanguageEditModal/LanguageEditModal';
 import styles from './LocationEditModal.module.scss';
 
 const LocationEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
+  const { openModal } = useModals();
   const [selectedUserLocation, setSelectedUserLocation] =
     useRecoilState(userLocationState);
-  const [locationList, setLocationList] = useState([...CONST_LOCATION_CODE]);
+  const setselectedUserFirstState = useSetRecoilState<any>(userFirstState);
+  const [locationList] = useState([...CONST_LOCATION_CODE]);
   const [changeLocation, setChangeLocation] = useState(selectedUserLocation);
 
   const onSelectLocationHandler = (selectedLocation: LOCATION_CODE) => {
@@ -26,10 +31,15 @@ const LocationEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
 
   const onSubmitHandler = () => {
     if (onSubmit) {
-      setSelectedUserLocation(changeLocation);
-    }
-    if (onClose) {
-      onClose();
+      if (!selectedUserLocation) {
+        // 첫 설정일 때
+        setselectedUserFirstState(changeLocation);
+        openModal(LanguageEditModal);
+      } else {
+        // 수정일 때
+        setSelectedUserLocation(changeLocation);
+        onClose && onClose();
+      }
     }
   };
 
@@ -37,8 +47,14 @@ const LocationEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
     <FullPageModal
       onSubmit={onSubmitHandler}
       onClose={onClose}
-      labelSubmit="수정"
+      labelSubmit={!selectedUserLocation ? '다음' : '수정'}
     >
+      {!selectedUserLocation && (
+        <SummaryTitle>
+          국적 혹은 <br />
+          현재 사는 곳을 선택하세요
+        </SummaryTitle>
+      )}
       <Flex gap="sm" wrap="wrap">
         {locationList &&
           locationList.map((location) => (

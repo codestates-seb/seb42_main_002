@@ -12,10 +12,10 @@ export type DefaultProps = {
 };
 
 export type LanguageDataType = {
-  languageId?: number;
+  languageId: number;
+  nation: LANGUAGE_CODE;
   name?: string;
   englishName?: string;
-  nation: LANGUAGE_CODE;
   level?: number | null | undefined;
   filterTag?: string;
 };

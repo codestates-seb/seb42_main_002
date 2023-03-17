@@ -1,7 +1,7 @@
 import styles from './SearchTag.module.scss';
 
 type SearchTagProps = {
-  tag: string;
+  tag?: string;
   type: 'lang' | 'default';
 };
 const SearchTag = ({ tag, type }: SearchTagProps) => {

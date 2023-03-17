@@ -13,7 +13,6 @@ import Button from '../../Common/Button/Button';
 import Flex from '../../Common/Flex/Flex';
 import LabelButton from '../../Common/LabelButton/LabelButton';
 import LanguageLevelModal from '../LanguageLevelModal/LanguageLevelModal';
-import LanguageEditModal from './LanguageEditModal';
 import styles from './LanguageListItem.module.scss';
 
 type LanguageListItemProps = {
@@ -21,7 +20,7 @@ type LanguageListItemProps = {
 };
 
 const LanguageListItem = ({ item }: LanguageListItemProps) => {
-  const { openModal, closeModal } = useModals();
+  const { openModal } = useModals();
   const setSelectedUserLanguageNation = useSetRecoilState(
     userLanguageNationState
   );
@@ -36,7 +35,6 @@ const LanguageListItem = ({ item }: LanguageListItemProps) => {
     setSelectedUserLanguages((prevState) =>
       prevState.filter((lang) => lang.nation !== nation)
     );
-    closeModal(LanguageEditModal);
   };
 
   return (

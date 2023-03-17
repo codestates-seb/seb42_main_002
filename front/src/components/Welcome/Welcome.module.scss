@@ -5,39 +5,40 @@
   align-items: center;
   height: 100%;
   max-width: 40rem;
-  margin: 0 auto;
-  padding-top: 6rem;
-  overflow-x: hidden;
 }
 .stamp_icon {
   position: absolute;
-  left: 18.75rem;
-  top: -11.25rem;
+  right: 1rem;
+  top: 3rem;
+  width: 8rem;
+  height: 6rem;
 }
 .fly_owl_container {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   margin-bottom: 3.125rem;
+  width: 14rem;
+  height: 8rem;
 }
 .cloud_1 {
   position: absolute;
-  left: -6.25rem;
-  top: -2.5rem;
+  left: -3rem;
+  top: -2rem;
+  width: 4rem;
+  height: 3rem;
 }
 .cloud_2 {
   position: absolute;
-  left: 20rem;
-  top: 8.75rem;
+  right: -3rem;
+  bottom: -1rem;
+  width: 4rem;
+  height: 3rem;
 }
 .text_container {
   text-align: center;
   margin-bottom: 3.125rem;
   .text_Head {
     font-size: 1.25rem;
-    color: var(--title-secondary-color);
+    color: var(--title-primary-color);
     margin-bottom: 1.25rem;
   }
   .text_body {
@@ -47,5 +48,5 @@
   }
 }
 .start_btn {
-  width: 18.75rem;
+  max-width: 18rem;
 }

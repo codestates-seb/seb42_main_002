@@ -1,13 +1,8 @@
+import { LanguageDataType } from './../../../utils/types/common/common.type';
 import { LANGUAGE_CODE } from './../../../utils/enums/common/common.enum';
 import { atom } from 'recoil';
 
-type selectedSearchLangTagStateType = {
-  languageId: number;
-  name: string;
-  englishName: string;
-  nation: LANGUAGE_CODE;
-  filterTag: string;
-};
+type selectedSearchLangTagStateType = LanguageDataType;
 
 export const selectedSearchLangTagState = atom<
   selectedSearchLangTagStateType[]

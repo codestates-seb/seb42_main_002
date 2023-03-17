@@ -8,7 +8,7 @@ export type TagDataType = {
 
 export type LangTagDataType = {
   languageId: number;
-  name: string;
+  name?: string;
   englishName: string;
   nation: LANGUAGE_CODE;
   filterTag: string;

@@ -11,7 +11,6 @@ import LabelButton from '../../Common/LabelButton/LabelButton';
 import FullPageModal, {
   FullPageModalProps,
 } from '../../Common/Modal/FullPageModal';
-import LanguageEditModal from '../LanguageEditModal/LanguageEditModal';
 import LanguageSearchModal from '../LanguageSearchModal/LanguageSearchModal';
 
 /**
@@ -61,7 +60,6 @@ const LanguageLevelModal = ({
         ]);
       }
       closeModal(LanguageSearchModal);
-      closeModal(LanguageEditModal);
       onClose && onClose();
     }
   };

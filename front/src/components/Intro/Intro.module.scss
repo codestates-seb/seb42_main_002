@@ -14,48 +14,133 @@
   text-align: center;
   p {
     color: var(--button-secondary-color);
-    font-size: .875rem;
-    margin-bottom: .5rem;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
   }
 }
 .mail_icon {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.3rem;
 }
 .intro_main {
   position: relative;
   margin-bottom: 3rem;
   margin-top: 2.5rem;
+  .owls_character {
+    position: relative;
+    max-width: 8.5rem;
+    margin: 0 auto;
+    .speech_bubble {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: -4rem;
+      left: calc(100% - 1rem);
+      width: 6rem;
+      height: 5rem;
+      background-image: url('../../assets/img/intro/speech_bubble.svg');
+      background-size: cover;
+      .speech_bubble_text {
+        color: var(--white);
+        font-size: var(--font-size-xs);
+        margin-top: -0.5rem;
+        line-height: 1.5;
+      }
+    }
+    .owls_head {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      animation: moveHead 2s cubic-bezier(0.075, 0.82, 0.165, 1) 0.4s infinite
+        forwards;
+    }
+    .owls_body {
+      position: relative;
+      max-width: 7rem;
+      margin: 0 auto;
+    }
+    .owls_wing {
+      position: absolute;
+      top: 4rem;
+      width: 1.3rem;
+      height: 5rem;
+      margin: 0 auto;
+
+      &.owls_wing_left {
+        left: 0;
+        transform-origin: left top;
+        animation: flywingLeft 2s cubic-bezier(0.075, 0.82, 0.165, 1) 0.4s
+          infinite forwards;
+      }
+      &.owls_wing_right {
+        left: auto;
+        right: 0;
+        transform-origin: right top;
+        animation: flywingRight 2s cubic-bezier(0.075, 0.82, 0.165, 1) 0.4s
+          infinite forwards;
+      }
+    }
+  }
   .owls_title_text {
     margin-top: 1rem;
     font-size: 2.25rem;
+    font-family: 'MV Boil';
     color: var(--title-primary-color);
   }
 }
-.speech_bubble {
-  position: absolute;
-  top: -3.75rem;
-  left: 8.75rem;
+@keyframes moveHead {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-0.25rem);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
-.speech_bubble_text {
-  margin: 0 auto;
-  position: absolute;
-  min-width: 6rem;
-  color: var(--white);
-  font-size: .75rem;
-  top: -2rem;
-  left: 9rem;
+
+@keyframes flywingLeft {
+  0% {
+    transform: rotate(0);
+  }
+  50% {
+    transform: rotate(45deg);
+  }
+  100% {
+    transform: rotate(0);
+  }
 }
-.signup_btn {
-  margin-top: 1rem;
+
+@keyframes flywingRight {
+  0% {
+    transform: rotate(0);
+  }
+  50% {
+    transform: rotate(-45deg);
+  }
+  100% {
+    transform: rotate(0);
+  }
+}
+
+.btn_wrapper {
   width: 100%;
-  color: white;
-  font-size: 1.25rem;
-  padding: .9375rem;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-image: url(../../assets/DarkBtn.svg);
-}
-.login_btn {
-  @extend .signup_btn;
-  background-image: url(../../assets/grayBtn.svg);
+  max-width: 18rem;
+  margin: 0 auto;
+  .signup_btn {
+    margin-top: 1rem;
+    width: 100%;
+    color: white;
+    font-size: 1.25rem;
+    padding: 0.9375rem;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url('../../assets/img/common/btn_primary.svg');
+  }
+  .login_btn {
+    @extend .signup_btn;
+    background-image: url('../../assets/img/common/btn_secondary.svg');
+  }
 }

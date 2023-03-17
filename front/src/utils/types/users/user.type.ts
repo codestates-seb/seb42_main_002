@@ -7,7 +7,7 @@ export type UserData = {
   email: string;
   name: string;
   gender: GENDER_TYPE;
-  location?: LOCATION_CODE;
+  location?: LOCATION_CODE | null;
   birthday?: string;
   language: LanguageDataType[];
   tag?: TagDataType[];
@@ -23,20 +23,6 @@ type Language = {
 };
 
 export type Gender = 'MALE' | 'FEMALE' | 'OTHER';
-
-export type UserProfileData = {
-  memberId: number;
-  name: string;
-  email: string;
-  gender: Gender;
-  location: LOCATION_CODE;
-  birthday: string;
-  introduce: string;
-  profile: string | null;
-  createdAt: string;
-  language: Language[];
-  tag: string[];
-};
 
 export type BlackUserData = {
   memberId: number;

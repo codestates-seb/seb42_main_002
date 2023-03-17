@@ -3,5 +3,5 @@ import { profileUser } from '../../../dummy/users';
 
 export const userLocationState = atom({
   key: 'selectedUserLocation',
-  default: profileUser.location,
+  default: profileUser.location ? profileUser.location : null,
 });
