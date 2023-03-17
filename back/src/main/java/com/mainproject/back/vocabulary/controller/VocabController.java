@@ -95,4 +95,16 @@ public class VocabController {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
-}
+
+
+  @GetMapping("/today/{vocab-id}")
+  public ResponseEntity todayVocab(@PathVariable("vocab-id") long vocabId , @PageableDefault(size = 1 ) Pageable pageable) {
+    Member member = memberService.findMember(vocabId);
+    Page<Vocabulary> page = vocabService.todayVocab(member.getMemberId(), pageable);
+    Page<VocabDto.Response> vocabResponseDto = mapper.pageVocabToPageVocabResponsePage(page);
+    return new ResponseEntity<>(vocabResponseDto, HttpStatus.OK);
+  }
+
+  }
+
+
