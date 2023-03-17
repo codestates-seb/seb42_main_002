@@ -44,9 +44,7 @@ const MyProfile = () => {
   };
 
   const onChangeGenderHandler = (value: string) => {
-    console.log('성별 선택');
     setSelectedGender(value);
-    console.log(value);
   };
 
   const onSubmitChangeBaseInfo = (event: React.FormEvent<HTMLFormElement>) => {

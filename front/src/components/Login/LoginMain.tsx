@@ -1,8 +1,11 @@
-import InputForm from '../SignUp/InputForm';
-import styles from './LoginMain.module.scss';
 import { MdOutlineAttachEmail } from 'react-icons/md';
 import { AiOutlineLock } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import { useRecoilValue } from 'recoil';
+import { userLocationState } from '../../recoil/atoms';
+import InputForm from '../SignUp/InputForm';
+import styles from './LoginMain.module.scss';
 import {
   emailValidation,
   passwordValidation,
@@ -11,8 +14,10 @@ import { useState } from 'react';
 // import axios from 'axios';
 
 const LoginMain = () => {
-  // const { login } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
+  const selectedUserLocation = useRecoilValue(userLocationState);
+
   const [isError, setIsError] = useState({
     eamil: false,
     password: false,
@@ -21,6 +26,16 @@ const LoginMain = () => {
     eamil: '',
     password: '',
   });
+
+  // TODO : 추후 수정 예정 (RIA)
+  const onLoginHandler = async () => {
+    await login({ email: 'rockbell89@gmail.com', password: '1234' });
+    if (!selectedUserLocation) {
+      navigate('/start');
+    } else {
+      navigate('/main');
+    }
+  };
 
   const loginValidation = (email: string, password: string) => {
     let result = true;
@@ -95,31 +110,37 @@ const LoginMain = () => {
   };
 
   return (
-    <form className={styles.login_container} onSubmit={loginSubmitHandler}>
-      <InputForm
-        htmlfor="email"
-        labelInner="이메일"
-        name="loginEmail"
-        isError={isError.eamil}
-        errorText={errorText.eamil}
-        validation={loginValidation}
-      >
-        <MdOutlineAttachEmail className={styles.icon} />
-      </InputForm>
-      <InputForm
-        htmlfor="passWord"
-        labelInner="비밀번호"
-        name="Loginpassword"
-        isError={isError.password}
-        errorText={errorText.password}
-        validation={loginValidation}
-      >
-        <AiOutlineLock className={styles.icon} />
-      </InputForm>
-      <button type="submit" className={styles.signUp_Btn}>
-        로그인
+    <>
+      <form className={styles.login_container} onSubmit={loginSubmitHandler}>
+        <InputForm
+          htmlfor="email"
+          labelInner="이메일"
+          name="loginEmail"
+          isError={isError.eamil}
+          errorText={errorText.eamil}
+          validation={loginValidation}
+        >
+          <MdOutlineAttachEmail className={styles.icon} />
+        </InputForm>
+        <InputForm
+          htmlfor="passWord"
+          labelInner="비밀번호"
+          name="Loginpassword"
+          isError={isError.password}
+          errorText={errorText.password}
+          validation={loginValidation}
+        >
+          <AiOutlineLock className={styles.icon} />
+        </InputForm>
+        <button type="submit" className={styles.signUp_Btn}>
+          로그인
+        </button>
+      </form>
+      {/** 추후 삭제 예정 */}
+      <button className={styles.signUp_Btn} onClick={onLoginHandler}>
+        임시 로그인
       </button>
-    </form>
+    </>
   );
 };
 export default LoginMain;

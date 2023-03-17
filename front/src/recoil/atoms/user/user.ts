@@ -6,3 +6,8 @@ export const userState = atom({
   key: 'userState',
   default: profileUser as UserData,
 });
+
+export const userFirstState = atom({
+  key: 'userFirstState',
+  default: null,
+});
