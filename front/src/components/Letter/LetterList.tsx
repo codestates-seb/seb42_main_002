@@ -51,6 +51,8 @@ const LetterList = () => {
         <UserCard
           key={user.memberId}
           {...user}
+          // TODO: 백엔드 수정까지 임시
+          birthday={String(new Date())}
           date={user.lastLetter.createdAt}
         >
           {/* UserCard에 사용할 아이콘을 children으로 전달 */}
