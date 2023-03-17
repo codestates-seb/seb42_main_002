@@ -12,6 +12,7 @@ import {
   selectedSearchLangTagState,
   selectedSearchTagState,
 } from '../../../recoil/atoms/search';
+import SummaryTitle from '../../Common/SummaryTitle/SummaryTitle';
 import styles from './SearchHeader.module.scss';
 
 const SearchHeader = () => {
@@ -20,21 +21,18 @@ const SearchHeader = () => {
   const searchLangTags = useRecoilValue(selectedSearchLangTagState);
   const searchTags = useRecoilValue(selectedSearchTagState);
 
-  const openLangFilterModal = () => {
-    console.log('언어 필터');
-  };
-  // 자신의 언어, 태그 정보를 가져와야한다.
-
   const openFilterModalHandler = () => {
     openModal(SearchFilterModal);
   };
 
   return (
     <header>
-      <h2 className={styles.title}>
-        관심 있는 태그와 <br />
-        언어를 설정해주세요.
-      </h2>
+      <SummaryTitle>
+        관심 있는 언어와
+        <br />
+        태그를 선택하세요
+        <div className={styles.sub_info}>반드시 하나 이상 선택해야합니다.</div>
+      </SummaryTitle>
       <div className={styles.wrapper}>
         <Button
           variant="primary"
