@@ -25,7 +25,7 @@ const LetterPictureWrapper = ({
         {/* 이미지 key을 어떤 값으로 변경할지 */}
         {pictures.length > 0 &&
           pictures.map((picture, idx) => (
-            <SwiperSlide key={picture}>
+            <SwiperSlide key={picture} className={styles.swiper_slide}>
               <LetterPicture
                 pic={picture}
                 rotate={idx}

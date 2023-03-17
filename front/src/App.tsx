@@ -18,6 +18,7 @@ import FollowingPage from './pages/FollowingPage';
 import VocaPage from './pages/VocaPage';
 import BlackListPage from './pages/BlackListPage';
 import ProfilePage from './pages/ProfilePage';
+import SearchPage from './pages/SearchPage';
 import StartPage from './pages/StartPage';
 
 function App() {
@@ -49,10 +50,10 @@ function App() {
                   path="/letters/:memberId/:letterId"
                   element={<LetterDetailPage />}
                 />
+                <Route path="/search" element={<SearchPage />} />
                 <Route path="/followings" element={<FollowingPage />} />
                 <Route path="/blacklist" element={<BlackListPage />} />
                 <Route path="/newLetter" element={<NewLetterPage />} />
-                <Route path="/followings" element={<MainPage />} />
                 <Route path="/voca" element={<VocaPage />} />
                 <Route path="/my-profile" element={<MyProfilePage />} />
                 <Route path="/profile/:memberId" element={<ProfilePage />} />
