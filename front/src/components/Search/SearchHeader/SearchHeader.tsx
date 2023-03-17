@@ -1,6 +1,6 @@
 import { BsFilterRight } from 'react-icons/bs';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { Scrollbar } from 'swiper';
 import Button from '../../Common/Button/Button';
 import SearchTag from '../SearchTag/SearchTag';
@@ -17,10 +17,8 @@ import styles from './SearchHeader.module.scss';
 const SearchHeader = () => {
   const { openModal } = useModals();
 
-  const [searchLangTags, setSearchLangTags] = useRecoilState(
-    selectedSearchLangTagState
-  );
-  const [searchTags, setSearchTags] = useRecoilState(selectedSearchTagState);
+  const searchLangTags = useRecoilValue(selectedSearchLangTagState);
+  const searchTags = useRecoilValue(selectedSearchTagState);
 
   const openLangFilterModal = () => {
     console.log('언어 필터');
@@ -54,31 +52,25 @@ const SearchHeader = () => {
           <Swiper
             className={styles.swiper}
             modules={[Scrollbar]}
-            spaceBetween={16}
-            slidesPerView={4}
-            scrollbar={{ draggable: true }}
+            spaceBetween={10}
+            slidesPerView={'auto'}
+            scrollbar={{
+              draggable: true,
+            }}
           >
-            <SwiperSlide className={styles.swiper_slide}>
-              <SearchTag type="lang" tag={'일본어'} />
-            </SwiperSlide>
-            <SwiperSlide className={styles.swiper_slide}>
-              <SearchTag type="lang" tag={'중국어'} />
-            </SwiperSlide>
-            <SwiperSlide className={styles.swiper_slide}>
-              <SearchTag type="lang" tag={'한국어'} />
-            </SwiperSlide>
-            <SwiperSlide className={styles.swiper_slide}>
-              <SearchTag type="default" tag={'어쩌구저쩌구'} />
-            </SwiperSlide>
-            <SwiperSlide className={styles.swiper_slide}>
-              <SearchTag type="default" tag={'게임'} />
-            </SwiperSlide>
-            <SwiperSlide className={styles.swiper_slide}>
-              <SearchTag type="default" tag={'게임'} />
-            </SwiperSlide>
-            <SwiperSlide className={styles.swiper_slide}>
-              <SearchTag type="default" tag={'게임'} />
-            </SwiperSlide>
+            {/* Language */}
+            {searchLangTags.map((tag) => (
+              <SwiperSlide key={tag.languageId} className={styles.swiper_slide}>
+                <SearchTag type="lang" tag={tag.name} />
+              </SwiperSlide>
+            ))}
+
+            {/* Tags */}
+            {searchTags.map((tag) => (
+              <SwiperSlide key={tag.tagId} className={styles.swiper_slide}>
+                <SearchTag type="default" tag={tag.name} />
+              </SwiperSlide>
+            ))}
           </Swiper>
         </div>
       </div>

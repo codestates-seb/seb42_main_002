@@ -5,6 +5,7 @@
   display: inline-block;
   white-space: nowrap;
   font-size: var(--font-size-sm);
+  cursor: grab;
 }
 .default {
   background-color: var(--title-secondary-color);
