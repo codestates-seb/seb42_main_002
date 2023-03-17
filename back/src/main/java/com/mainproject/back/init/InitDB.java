@@ -16,7 +16,7 @@ public class InitDB {
 
   private final Init init;
 
-  @PostConstruct
+//  @PostConstruct
   public void initTag() {
     init.initTag();
     init.initLanguage();
