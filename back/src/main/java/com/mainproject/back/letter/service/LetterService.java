@@ -92,6 +92,7 @@ public class LetterService {
           Member receiver = letter.getReceiver();
           return MemberLetterDto.builder().memberId(receiver.getMemberId())
               .name(receiver.getName())
+              .birthday(receiver.getBirthday())
               .profile(receiver.getProfile())
               .location(receiver.getLocation())
               .lastLetter(
@@ -106,6 +107,7 @@ public class LetterService {
           return MemberLetterDto.builder().memberId(sender.getMemberId())
               .name(sender.getName())
               .profile(sender.getProfile())
+              .birthday(sender.getBirthday())
               .location(sender.getLocation())
               .lastLetter(
                   LetterSimpleDto.builder().isRead(letter.getIsRead()).status(LetterStatus.RECEIVED)
