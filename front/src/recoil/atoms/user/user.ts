@@ -1,10 +1,9 @@
 import { atom } from 'recoil';
-import { profileUser } from '../../../dummy/users';
 import { UserData } from '../../../utils';
 
-export const userState = atom({
+export const userState = atom<UserData>({
   key: 'userState',
-  default: profileUser as UserData,
+  default: {} as UserData,
 });
 
 export const userFirstState = atom({
