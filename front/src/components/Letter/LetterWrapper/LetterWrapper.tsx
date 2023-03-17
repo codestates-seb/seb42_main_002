@@ -59,6 +59,7 @@ const LetterWrapper = () => {
         name={selectedUser.name}
         profile={selectedUser.profile}
         memberId={selectedUser.memberId}
+        cursor={false}
       />
       <div className={styles.letter_wrapper}>
         {userLetterList.map((letter) => (
