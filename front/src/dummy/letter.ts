@@ -1,6 +1,6 @@
 import {
   LetterDataType,
-  SeletedLetterData,
+  SeletedLetterDataType,
 } from './../utils/types/letter/letter.type';
 
 export const lettersData: LetterDataType[] = [
@@ -62,11 +62,10 @@ export const lettersData: LetterDataType[] = [
   },
 ];
 
-export const seletedLetter: SeletedLetterData = {
+export const seletedLetter: SeletedLetterDataType = {
   letterId: 1,
   sender: '하루히',
   receiver: '안아영',
-  // title: "",
   type: 1,
   body: `
   ありがとうと君に言われるとなんだか切ないさようならの後も解けぬ魔法淡くほろ苦い友達でも恋人でもない中間地点で収穫の時を夢見てる青いフルーツあと一歩が踏み出せないせいで
@@ -78,7 +77,7 @@ export const seletedLetter: SeletedLetterData = {
   素直に喜びたいよダイヤモンドよりも軟らかくて温かな未来手にしたいよ限りある時間を君と過ごした.`,
   availableAt: '2023-02-28T19:12:01',
   createdAt: '2023-02-28T19:12:01',
-  pic: [
+  photoUrl: [
     'https://images.unsplash.com/photo-1678565555430-f8640bf41628?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80',
     'https://images.unsplash.com/photo-1678582911712-43934e3fe86d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80',
     'https://images.unsplash.com/photo-1674574124649-778f9afc0e9c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',

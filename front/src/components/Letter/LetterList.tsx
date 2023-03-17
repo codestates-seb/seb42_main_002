@@ -67,14 +67,16 @@ const LetterList = () => {
           {...user}
           date={user.lastLetter.createdAt}
         >
-          {/* UserCard에 사용할 아이콘을 children으로 전달 */}
-          <LetterStatusIcon
-            status={user.lastLetter.status}
+          <button
             onClick={(event) => {
               onClickHandler(event, user.memberId, user.name);
             }}
-            isRead={user.lastLetter.isRead}
-          />
+          >
+            <LetterStatusIcon
+              status={user.lastLetter.status}
+              isRead={user.lastLetter.isRead}
+            />
+          </button>
         </UserCard>
       ))}
     </ul>

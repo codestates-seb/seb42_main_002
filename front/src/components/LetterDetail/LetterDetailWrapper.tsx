@@ -1,26 +1,37 @@
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { selectedLetterState, selectedPictureIdx } from '../../recoil/atoms';
+import { useEffect } from 'react';
 import LetterContent from './LetterContent/LetterContent';
 import LetterPictureWrapper from './LetterPicture/LetterPictureWrapper';
 import Button from '../Common/Button/Button';
+import useModals from '../../hooks/useModals';
+import PictureModal from '../PictureModal/PictureModal';
 
-import { SeletedLetterData } from '../../utils';
 import { seletedLetter } from '../../dummy/letter';
-
-// Import Swiper styles
-import 'swiper/css';
 import styles from './LetterDetailWrapper.module.scss';
 
-// 임시 타입
-type LetterDetailWrapperProps = SeletedLetterData;
-
 const LetterDetailWrapper = () => {
+  const { openModal } = useModals();
+
+  const setSelectedPictureIdx = useSetRecoilState(selectedPictureIdx);
+
+  // API 호출 후, 설정하기
+  const [selectedLetter, setSelectedLetter] =
+    useRecoilState(selectedLetterState);
+
+  useEffect(() => {
+    setSelectedLetter(seletedLetter);
+  }, []);
+
   // 파파고 번역 기능
   const translateHandler = () => {
     console.log('번역중...');
   };
 
   // 사진 확대 핸들러
-  const pictureClickHandler = (pic: string) => {
-    console.log('사진 확대', pic);
+  const pictureClickHandler = (idx: number) => {
+    setSelectedPictureIdx(idx);
+    openModal(PictureModal);
   };
 
   return (
@@ -33,14 +44,14 @@ const LetterDetailWrapper = () => {
       </div>
       {/* 편지 내용 */}
       <LetterContent
-        receiver={seletedLetter.receiver}
-        body={seletedLetter.body}
+        receiver={selectedLetter.receiver}
+        body={selectedLetter.body}
         // 임의
         type="1"
       />
       {/* 편지 사진 */}
       <LetterPictureWrapper
-        pictures={seletedLetter.pic}
+        pictures={selectedLetter.photoUrl}
         onClick={pictureClickHandler}
         isRead
       />
