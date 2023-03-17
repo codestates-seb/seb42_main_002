@@ -3,8 +3,10 @@
   flex-wrap: nowrap;
   margin-bottom: 0.5rem;
 }
-
 .swiper {
-  padding: 1rem;
+  padding: 1rem !important;
   width: 100%;
+}
+.swiper_slide {
+  width: auto !important;
 }

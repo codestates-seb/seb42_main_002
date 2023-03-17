@@ -1,12 +1,12 @@
 import LetterPicture from '../LetterPicture/LetterPicture';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { Scrollbar } from 'swiper';
 
 import styles from './LetterPictureWrapper.module.scss';
-import 'swiper/css';
 
 type LetterPictureWrapperProps = {
-  pictures: string[];
-  onClick?: (pic: string) => void;
+  pictures: string[] | null;
+  onClick?: (idx: number) => void;
   onRemove?: (idx: number) => void;
   onAdd?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   isRead: boolean;
@@ -21,21 +21,29 @@ const LetterPictureWrapper = ({
 }: LetterPictureWrapperProps) => {
   return (
     <div className={styles.pictures}>
-      <Swiper spaceBetween={0} slidesPerView={4} className={styles.swiper}>
-        {/* 이미지 key을 어떤 값으로 변경할지 */}
-        {pictures.length > 0 &&
+      <Swiper
+        modules={[Scrollbar]}
+        spaceBetween={16}
+        slidesPerView={'auto'}
+        scrollbar={{ draggable: true }}
+        className={styles.swiper}
+      >
+        {pictures &&
+          pictures.length > 0 &&
           pictures.map((picture, idx) => (
-            <SwiperSlide key={picture}>
+            <SwiperSlide key={picture} className={styles.swiper_slide}>
               <LetterPicture
                 pic={picture}
                 rotate={idx}
-                onClick={isRead ? onClick : onRemove?.bind(null, idx)}
+                onClick={
+                  isRead ? onClick?.bind(null, idx) : onRemove?.bind(null, idx)
+                }
               />
             </SwiperSlide>
           ))}
         {/* 글쓰기 모드 */}
         {!isRead && (
-          <SwiperSlide>
+          <SwiperSlide className={styles.swiper_slide}>
             <LetterPicture pic={''} isAdd rotate={1} onAdd={onAdd} />
           </SwiperSlide>
         )}

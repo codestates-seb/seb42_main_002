@@ -19,7 +19,7 @@ const MainPage = () => {
         <MainLetter />
       </MainSection>
       <MainSection>
-        <Button variant="primary" size="lg" full to="/letters">
+        <Button variant="primary" size="lg" full to="/search">
           친구 찾으러 가기
         </Button>
       </MainSection>
