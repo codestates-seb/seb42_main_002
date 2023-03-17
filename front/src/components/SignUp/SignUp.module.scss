@@ -1,3 +1,9 @@
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0rem 62.5rem white inset;
+}
+
 .container {
   max-width: 40rem;
   background-color: var(--white);
@@ -18,13 +24,17 @@
   width: 100%;
   margin-bottom: 0.3125rem;
 }
-
+.inputform_error_lable {
+  @extend .inputform_lable;
+  color: var(--danger-color);
+}
 .inputform_input {
+  background-color: white;
   height: 1.875rem;
   width: 100%;
   border: none;
   border-bottom: 0.125rem solid black;
-  margin-bottom: 0.625rem;
+  margin-bottom: 1.5rem;
   padding: 0.125rem;
   padding-left: 1.5625rem;
   border-color: var(--text-primary-color);
@@ -33,7 +43,20 @@
     outline-color: var(--text-primary-color);
   }
 }
+.inputform_error_input {
+  @extend .inputform_input;
+  border-color: var(--danger-color);
+  color: var(--danger-color);
+  &:focus {
+    outline-color: var(--danger-color);
+  }
+}
 
+.error_text {
+  color: var(--danger-color);
+  position: absolute;
+  top: 3.4375rem;
+}
 .input_container {
   position: relative;
   margin-bottom: 0.625rem;
@@ -67,15 +90,34 @@
   height: 1.125rem;
 }
 
-.button_Container {
+.button_container {
+  position: relative;
   display: flex;
   width: 100%;
   justify-content: space-between;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.7rem;
   border: 0.125rem solid var(--text-primary-color);
   border-right: none;
   border-radius: 0.25rem;
   font-size: 0.875rem;
+}
+.button_error_container {
+  @extend .button_container;
+  border-color: var(--danger-color);
+  button {
+    border-color: var(--danger-color);
+  }
+}
+
+.error_text_gender {
+  position: absolute;
+  top: 2.8125rem;
+  font-size: 0.75rem;
+  color: var(--danger-color);
+}
+
+.btn_error_text {
+  color: var(--danger-color);
 }
 
 .not_clicked {
