@@ -14,6 +14,8 @@ import { useState } from 'react';
 import { POST } from '../../utils/axios/fetch';
 import { setCookie } from '../../utils/cookie';
 
+type UserDataType = { username: string; password: string };
+
 const LoginMain = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -77,7 +79,7 @@ const LoginMain = () => {
     }
   };
 
-  async function loginRequest(userData: any) {
+  async function loginRequest(userData: UserDataType) {
     try {
       const response = await POST('/login', userData);
       setCookie('accessJwtToken', response.headers.authorization);
@@ -97,7 +99,7 @@ const LoginMain = () => {
     if (
       loginValidation(data.loginEmail as string, data.Loginpassword as string)
     ) {
-      const userData = {
+      const userData: UserDataType = {
         // 일단 회원가입 작업안해서 임시로 하드코딩으로 넣음.
         username: 'test@test.com',
         password: 'test123!',
