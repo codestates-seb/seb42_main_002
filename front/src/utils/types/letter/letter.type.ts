@@ -1,4 +1,4 @@
-export type LetterData = {
+export type LetterDataType = {
   letterId: number;
   sender: {
     memberId: number;
@@ -16,15 +16,15 @@ export type LetterData = {
   hasPic: boolean; // 이미지 첨부 여부
 };
 
-export type SeletedLetterData = {
-  letterId: number;
+export type SeletedLetterDataType = {
+  letterId?: number;
   sender: string;
   type: number;
   receiver: string;
   body: string;
   availableAt: string;
   createdAt: string;
-  pic: string[];
+  photoUrl: string[] | null;
 };
 
 /**
