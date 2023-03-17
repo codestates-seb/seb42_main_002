@@ -15,10 +15,8 @@ const RecomandUserList = () => {
     <Swiper
       modules={[Navigation, Pagination, Scrollbar, A11y]}
       spaceBetween={16}
-      slidesPerView={5}
+      slidesPerView={'auto'}
       scrollbar={{ draggable: true }}
-      onSwiper={(swiper) => console.log(swiper)}
-      onSlideChange={() => console.log('slide change')}
       className={styles.swiper_list}
     >
       {recomandUserData.content.map((user) => (
