@@ -1,0 +1,35 @@
+.sub_info {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary-color);
+  margin-top: 0.4rem;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.button_wrapper {
+  min-width: 8rem;
+}
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  & .text {
+    font-size: var(--font-size-md);
+    margin-right: 0.5rem;
+  }
+}
+.swiper {
+  padding: 1rem 0;
+}
+.tags {
+  margin-left: 1rem;
+}
+.swiper_slide {
+  width: auto !important;
+}

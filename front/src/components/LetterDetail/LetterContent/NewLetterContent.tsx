@@ -1,16 +1,22 @@
+import { useRecoilState } from 'recoil';
+import { newLetterState } from '../../../recoil/atoms';
 import styles from './NewLetterContent.module.scss';
 
 type NewLetterContentProps = {
-  body: string;
-  onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
   receiver: string;
 };
 
-const NewLetterContent = ({
-  body,
-  onChange,
-  receiver,
-}: NewLetterContentProps) => {
+const NewLetterContent = ({ receiver }: NewLetterContentProps) => {
+  // 새로 생성할 편지 데이터
+  const [newLetter, setNewLetter] = useRecoilState(newLetterState);
+
+  const onChangeHandler = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ): void => {
+    console.log('편지 내용 작성');
+    setNewLetter((prev) => ({ ...prev, body: event.target.value }));
+  };
+
   return (
     <div className={styles.letter}>
       <div className={styles.receiver_info}>
@@ -18,7 +24,11 @@ const NewLetterContent = ({
         <span className={styles.receiver}>{receiver}</span>
       </div>
       {/* 임시 textarea */}
-      <textarea className={styles.body} onChange={onChange} value={body} />
+      <textarea
+        className={styles.body}
+        onChange={onChangeHandler}
+        value={newLetter.body}
+      />
     </div>
   );
 };

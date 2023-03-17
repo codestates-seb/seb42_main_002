@@ -9,7 +9,6 @@ $sub-font-size: var(--font-size-sm);
 .user {
   & .name {
     font-size: $main-font-size;
-    font-weight: 700;
     color: var(--text-primary-color);
     margin-bottom: 0.25rem;
   }

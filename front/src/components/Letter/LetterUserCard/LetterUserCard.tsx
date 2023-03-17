@@ -2,11 +2,9 @@ import { ReactComponent as ProfileIcon } from '../../../assets/img/user.svg';
 import { formatDateToMonth, getAge } from '../../../utils';
 import { ko } from 'date-fns/locale';
 import { LOCATION_CODE } from '../../../utils/enums/common/common.enum';
-
-import RoundProfile from '../../Common/RoundProfile/RoundProfile';
-
-import styles from './LetterUserCard.module.scss';
 import { locationTransformer } from '../../../utils/common';
+import RoundProfile from '../../Common/RoundProfile/RoundProfile';
+import styles from './LetterUserCard.module.scss';
 
 export type LetterUserCardProps = {
   birthday: string;
