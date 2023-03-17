@@ -3,6 +3,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import styles from './LetterPictureWrapper.module.scss';
 import 'swiper/css';
+import 'swiper/css/scrollbar';
+import { Scrollbar } from 'swiper';
 
 type LetterPictureWrapperProps = {
   pictures: string[];
@@ -21,11 +23,17 @@ const LetterPictureWrapper = ({
 }: LetterPictureWrapperProps) => {
   return (
     <div className={styles.pictures}>
-      <Swiper spaceBetween={0} slidesPerView={4} className={styles.swiper}>
+      <Swiper
+        modules={[Scrollbar]}
+        spaceBetween={16}
+        slidesPerView={'auto'}
+        scrollbar={{ draggable: true }}
+        className={styles.swiper}
+      >
         {/* 이미지 key을 어떤 값으로 변경할지 */}
         {pictures.length > 0 &&
           pictures.map((picture, idx) => (
-            <SwiperSlide key={picture}>
+            <SwiperSlide key={picture} className={styles.slide}>
               <LetterPicture
                 pic={picture}
                 rotate={idx}
@@ -35,7 +43,7 @@ const LetterPictureWrapper = ({
           ))}
         {/* 글쓰기 모드 */}
         {!isRead && (
-          <SwiperSlide>
+          <SwiperSlide className={styles.slide}>
             <LetterPicture pic={''} isAdd rotate={1} onAdd={onAdd} />
           </SwiperSlide>
         )}
