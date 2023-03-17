@@ -37,12 +37,12 @@ const LetterList = () => {
 
   // 렌더링 시, 데이터 fetch
   const onClickHandler = (
-    e: React.MouseEvent<Element, MouseEvent>,
+    event: React.MouseEvent<Element, MouseEvent>,
     memberId: number,
     receiver: string
   ) => {
     // 이벤트 전파 방지
-    e.stopPropagation();
+    event.stopPropagation();
     setNewLetter((prev) => ({
       ...prev,
       memberId,
