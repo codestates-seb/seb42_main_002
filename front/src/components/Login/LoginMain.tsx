@@ -11,7 +11,8 @@ import {
   passwordValidation,
 } from '../../utils/signup/function';
 import { useState } from 'react';
-// import axios from 'axios';
+import { POST } from '../../utils/axios/fetch';
+import { setCookie } from '../../utils/cookie';
 
 const LoginMain = () => {
   const { login } = useAuth();
@@ -76,6 +77,16 @@ const LoginMain = () => {
     }
   };
 
+  async function loginRequest(userData: any) {
+    try {
+      const response = await POST('/login', userData);
+      setCookie('accessJwtToken', response.headers.authorization);
+      // 첫 회원인지 아닌지 분기 갈라서 navigate
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const loginSubmitHandler = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
@@ -86,27 +97,16 @@ const LoginMain = () => {
     if (
       loginValidation(data.loginEmail as string, data.Loginpassword as string)
     ) {
+      const userData = {
+        // 일단 회원가입 작업안해서 임시로 하드코딩으로 넣음.
+        username: 'test@test.com',
+        password: 'test123!',
+      };
+      loginRequest(userData);
       console.log(`아이디: ${data.loginEmail} 비밀번호: ${data.Loginpassword}`);
-      navigate('/welcome');
     } else {
       alert('아이디와 비밀번호를 확인해주세요.');
     }
-    //백엔드로 보낼 데이터
-
-    // 로그인 요청 로직
-    // try {
-    //   const response1 = await axios.post('/login', {
-    //     username: data.email,
-    //     password: data.passWord,
-    //   });
-    //   console.log(response1.data);
-    //   // 1) 토큰 쿠키에 저장
-    //   // 2) 첫 이용자인지 확인 (토큰에서 맴버정보로 확인)
-    //   // 3) 첫 이용자 일시 /welcom 페이지 이동 else /main 페이지 이동
-    // } catch (error) {
-    //   console.log(error);
-    // }
-    // navigate('/welcome');
   };
 
   return (
