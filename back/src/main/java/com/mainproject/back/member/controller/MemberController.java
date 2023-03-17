@@ -1,10 +1,12 @@
 package com.mainproject.back.member.controller;
 
+import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.helper.UriCreator;
 import com.mainproject.back.member.dto.MemberDto;
 import com.mainproject.back.member.dto.MemberRecommendDto;
 import com.mainproject.back.member.dto.MemberSearchDto;
 import com.mainproject.back.member.entity.Member;
+import com.mainproject.back.member.exception.MemberExceptionCode;
 import com.mainproject.back.member.mapper.MemberMapper;
 import com.mainproject.back.member.service.MemberConvertService;
 import com.mainproject.back.member.service.MemberService;
@@ -75,6 +77,9 @@ public class MemberController {
       @PathVariable("member-id") @Positive long memberId, Principal principal) {
     Member findMember = memberService.findMember(memberId);
     log.info("## 사용자 정보 조회: {}", findMember.toString());
+    if (principal.getName() == null) {
+      throw new BusinessLogicException(MemberExceptionCode.MEMBER_NOT_FOUND);
+    }
     long id = memberService.findMemberIdByEmail(principal.getName());
 
     return new ResponseEntity<>(memberConvertService.memberToResponseDto(findMember, id),
@@ -94,8 +99,10 @@ public class MemberController {
   @GetMapping("/recommend")
   public ResponseEntity getRecommended(Principal principal) {
     log.info("## 사용자 태그 기반 추천 친구: {}", principal.getName());
+    if (principal.getName() == null) {
+      throw new BusinessLogicException(MemberExceptionCode.MEMBER_NOT_FOUND);
+    }
     Member currentMember = memberService.findMemberByEmail(principal.getName());
-
     Page<Member> memberPage = memberService.findRecommendedMember(
         currentMember.getMemberId(), PageRequest.of(0, 10));
     Page<MemberRecommendDto> memberRecommendDtoPage = mapper.pageMemberToMemberRecommendDtoPage(
@@ -106,6 +113,9 @@ public class MemberController {
   @GetMapping("/tag/{tags}")
   public ResponseEntity searchMembers(@PathVariable("tags") String tags,
       @PageableDefault Pageable pageable, Principal principal) {
+    if (principal.getName() == null) {
+      throw new BusinessLogicException(MemberExceptionCode.MEMBER_NOT_FOUND);
+    }
     long memberId = memberService.findMemberIdByEmail(principal.getName());
     List<Tag> tagList = memberConvertService.getTags(tags);
     log.info("## 태그로 사용자 검색: {}", tagList.toString());

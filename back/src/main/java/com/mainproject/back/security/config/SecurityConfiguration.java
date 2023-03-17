@@ -43,6 +43,8 @@ public class SecurityConfiguration {
         .csrf().disable()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
+        .cors().configurationSource(corsConfigurationSource())
+        .and()
         .formLogin().disable()
         .httpBasic().disable()
         .exceptionHandling()
@@ -52,7 +54,7 @@ public class SecurityConfiguration {
         .apply(new CustomFilterConfigurer())
         .and()
         .authorizeHttpRequests(authorize -> authorize
-            .antMatchers("/*").permitAll()
+                .antMatchers("/*").permitAll()
 //            .antMatchers(HttpMethod.POST, "⁄members").permitAll()
 //            .antMatchers("/bans").hasAnyRole("USER","ADMIN")
 //            .antMatchers("/members/*").hasAnyRole("USER","ADMIN")
@@ -66,21 +68,26 @@ public class SecurityConfiguration {
 
   public class CustomFilterConfigurer extends
       AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
+
     @Override
     public void configure(HttpSecurity builder) throws Exception {
 
-      AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
+      AuthenticationManager authenticationManager = builder.getSharedObject(
+          AuthenticationManager.class);
 
-      JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
+      JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(
+          authenticationManager, jwtTokenizer);
       jwtAuthenticationFilter.setFilterProcessesUrl("/login");
-      jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());  // (3) 추가
-      jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
+      jwtAuthenticationFilter.setAuthenticationSuccessHandler(
+          new MemberAuthenticationSuccessHandler());  // (3) 추가
+      jwtAuthenticationFilter.setAuthenticationFailureHandler(
+          new MemberAuthenticationFailureHandler());
 
       JwtVerificationFilter jwtVerificationFilter =
           new JwtVerificationFilter(jwtTokenizer, authorityUtils);
 
       builder.addFilter(jwtAuthenticationFilter)
-       .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
+          .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
     }
   }
 
@@ -100,7 +107,7 @@ public class SecurityConfiguration {
     // 2. 이거는 1번과 동일한 역할을 함.
 //        configuration.setAllowedOrigins(Arrays.asList("*"));
     // 3. 여기에는 pre-flight를 위해 OPTIONS을 추가.
-    configuration.setAllowedMethods(Arrays.asList("POST","GET","PATCH","DELETE","OPTIONS"));
+    configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PATCH", "DELETE", "OPTIONS"));
 
     // BE 정하는 규칙.(Arrays.asList) "Authrorization",
     // 4. request에 어떤 헤더값을 우리(BE)가 응답에 넣어서 보내줄지 ex) 회원가입하면 JWT auth를 넣어주듯.
