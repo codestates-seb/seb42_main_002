@@ -10,6 +10,7 @@ import com.mainproject.back.letter.service.LetterService;
 import com.mainproject.back.member.dto.MemberLetterDto;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.service.MemberService;
+import com.mainproject.back.util.Check;
 import com.mainproject.back.util.UriCreator;
 import java.net.URI;
 import java.security.Principal;
@@ -42,7 +43,7 @@ public class LetterController {
     log.info("## 편지 보내기: {}", receiverId);
     letterPostDto.setReceiverId(receiverId);
 
-    Member member = memberService.findMemberByEmail(principal.getName());
+    Member member = memberService.findMemberByEmail(Check.checkPrincipal(principal));
     letterPostDto.setSenderId(member.getMemberId());
 
     Letter letter = letterMapper.LetterPostDtoToLetter(letterPostDto);
@@ -63,8 +64,9 @@ public class LetterController {
   public ResponseEntity getLettersByMember(@PathVariable("member-id") long targetId,
       @PageableDefault Pageable pageable, Principal principal) {
     log.info("## 특정 멤버와 주고 받은 편지 리스트 조회: {}", targetId);
+
     Page<Letter> letterPage = letterService.findLettersByMemberAndTarget(targetId, pageable,
-        principal);
+        Check.checkPrincipal(principal));
     Page<LetterListDto> letterListDtoPage = letterMapper.pageLetterToPageLetterListDtoPage(
         letterPage);
     return ResponseEntity.ok().body(letterListDtoPage);
@@ -75,7 +77,7 @@ public class LetterController {
       @PageableDefault(sort = "lastLetter.createdAt") Pageable pageable, Principal principal) {
     log.info("## 나와 편지를 주고 받은 멤버 리스트 조회");
     Page<MemberLetterDto> memberLetterDtoPage = letterService.findMembersByLetter(pageable,
-        memberService.findMemberIdByEmail(principal.getName()));
+        memberService.findMemberIdByEmail(Check.checkPrincipal(principal)));
     return ResponseEntity.ok().body(memberLetterDtoPage);
   }
 
@@ -83,7 +85,7 @@ public class LetterController {
   public ResponseEntity getArrivedLetterCount(Principal principal) {
     log.info("## 도착한 편지 개수 조회");
     LetterCountDto letterCountDto = letterService.getArrivedLettersCount(
-        memberService.findMemberIdByEmail(principal.getName()));
+        memberService.findMemberIdByEmail(Check.checkPrincipal(principal)));
     return ResponseEntity.ok().body(letterCountDto);
   }
 }
