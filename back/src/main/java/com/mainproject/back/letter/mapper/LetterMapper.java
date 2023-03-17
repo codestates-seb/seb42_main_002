@@ -20,7 +20,7 @@ public interface LetterMapper {
       return null;
     } else {
       Letter.LetterBuilder letter = Letter.builder();
-      letter.body(letterPostDto.getBody());
+      letter.body(letterPostDto.getBody()).type(letterPostDto.getType());
       ArrayList<String> arrayList = letterPostDto.getPhotoUrl();
       if (arrayList != null) {
         letter.photoUrl(new ArrayList<>(arrayList));
@@ -37,6 +37,7 @@ public interface LetterMapper {
     }
     LetterResponseDto.LetterResponseDtoBuilder builder = LetterResponseDto.builder()
         .letterId(letter.getLetterId())
+        .type(letter.getType())
         .createdAt(letter.getCreatedAt())
         .availableAt(letter.getAvailableAt());
     if (letter.getSender() == null) {
@@ -49,7 +50,9 @@ public interface LetterMapper {
     } else {
       builder.receiver(letter.getReceiver().getName());
     }
-    if(letter.getAvailableAt().isBefore(LocalDateTime.now())) builder.body(letter.getBody());
+    if (letter.getAvailableAt().isBefore(LocalDateTime.now())) {
+      builder.body(letter.getBody());
+    }
 
     return builder.build();
   }
