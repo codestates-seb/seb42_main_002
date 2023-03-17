@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 import { SlEnvolopeLetter } from 'react-icons/sl';
+import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+import { newLetterState } from '../../recoil/atoms';
 import { LetterUserData } from '../../utils';
 import { GET } from '../../utils/axios';
 import Empty from '../Common/Empty/Empty';
@@ -10,8 +13,10 @@ import styles from './LetterList.module.scss';
 // import { userData } from '../../dummy/userList';
 
 const LetterList = () => {
+  const setNewLetter = useSetRecoilState(newLetterState);
   const [userList, setUserList] = useState<LetterUserData[]>([]);
   const [page, setPage] = useState<number>(0);
+  const navigate = useNavigate();
 
   /**
    * @description API
@@ -31,10 +36,19 @@ const LetterList = () => {
   }, []);
 
   // 렌더링 시, 데이터 fetch
-  const onClickHandler = (e: React.MouseEvent<Element, MouseEvent>) => {
-    console.log('아이콘 클릭');
+  const onClickHandler = (
+    e: React.MouseEvent<Element, MouseEvent>,
+    memberId: number,
+    receiver: string
+  ) => {
     // 이벤트 전파 방지
     e.stopPropagation();
+    setNewLetter((prev) => ({
+      ...prev,
+      memberId,
+      receiver,
+    }));
+    navigate('/newLetter');
   };
 
   if (userList.length === 0) {
@@ -58,7 +72,9 @@ const LetterList = () => {
           {/* UserCard에 사용할 아이콘을 children으로 전달 */}
           <LetterStatusIcon
             status={user.lastLetter.status}
-            onClick={onClickHandler}
+            onClick={(event) => {
+              onClickHandler(event, user.memberId, user.name);
+            }}
             isRead={user.lastLetter.isRead}
           />
         </UserCard>

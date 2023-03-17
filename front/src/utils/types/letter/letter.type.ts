@@ -35,4 +35,5 @@ export type newLetterType = {
   photoUrl: string[];
   type?: number;
   receiver: string;
+  memberId: null | number;
 };
