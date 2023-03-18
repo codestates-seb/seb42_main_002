@@ -88,9 +88,9 @@ public class FollowController {
 
   }
 
-  @DeleteMapping("/{follow-id}")
-  public ResponseEntity deleteBlock(@PathVariable("follow-id") long followId) {
-    followService.deleteFollow(followId);
+  @DeleteMapping("/{following-id}")
+  public ResponseEntity deleteBlock(@PathVariable("following-id") long followingId) {
+    followService.deleteFollow(followingId);
     return ResponseEntity.noContent().build();
   }
 }
