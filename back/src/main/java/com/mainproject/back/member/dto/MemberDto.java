@@ -48,8 +48,11 @@ public class MemberDto {
     private String location;
     private String birthday;
     private String profile;
+    private String introduce;
     @Setter
     private boolean isFriend;
+    @Setter
+    private boolean isBlock;
     private List<MemberLanguageDto> language;
     private List<TagSimpleDto> tag;
     private Member.MemberStatus memberStatus;
