@@ -6,9 +6,7 @@ const RecomandUser = () => {
   return (
     <>
       <MainTitle title="추천친구" />
-      <div className={styles.recomand_user}>
-        <RecomandUserList />
-      </div>
+      <RecomandUserList />
     </>
   );
 };
