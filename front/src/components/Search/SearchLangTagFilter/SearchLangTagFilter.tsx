@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { languageTags } from '../../../dummy/Tags';
+import { languageTags } from '../../../dummy/languages';
 import { selectedSearchLangTagState } from '../../../recoil/atoms/search';
 import { LanguageDataType } from '../../../utils';
-import { LangTagDataType } from '../../../utils/types/tags/tags';
 import Flex from '../../Common/Flex/Flex';
 import LabelButton from '../../Common/LabelButton/LabelButton';
 import FullPageModal, {

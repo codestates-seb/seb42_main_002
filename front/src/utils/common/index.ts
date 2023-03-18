@@ -49,9 +49,9 @@ export const langTransformer = (value: LANGUAGE_CODE, isEnglish?: boolean) => {
       case LANGUAGE_CODE.ES:
         return 'Spanish';
       case LANGUAGE_CODE.FR:
-        return 'France';
+        return 'French';
       case LANGUAGE_CODE.IT:
-        return 'italien';
+        return 'Italian';
       case LANGUAGE_CODE.RU:
         return 'Russian';
       case LANGUAGE_CODE.TR:
@@ -73,7 +73,7 @@ export const locationTransformer = (
   isEnglish?: boolean
 ) => {
   if (!isEnglish) {
-    // 해당 언어 표기
+    // 해당 국가 표기
     switch (value) {
       case LOCATION_CODE.KR:
         return '한국';
@@ -90,15 +90,15 @@ export const locationTransformer = (
     // 영문 표기
     switch (value) {
       case LOCATION_CODE.KR:
-        return 'Korean';
+        return 'Korea';
       case LOCATION_CODE.JP:
-        return 'Japanese';
+        return 'Japan';
       case LOCATION_CODE.CN:
-        return 'Chinese';
+        return 'China';
       case LOCATION_CODE.US:
-        return 'English';
+        return 'America';
       case LOCATION_CODE.ES:
-        return 'Castellano';
+        return 'Spain';
     }
   }
 };

@@ -11,15 +11,15 @@ export const instance = axios.create({
   withCredentials: true,
 });
 
-instance.interceptors.request.use(
-  (config) => {
-    const token = getCookie('accessJwtToken');
-    if (token) {
-      config.headers['Authorization'] = token;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+// instance.interceptors.request.use(
+//   (config) => {
+//     const token = getCookie('accessJwtToken');
+//     if (token) {
+//       config.headers['Authorization'] = token;
+//     }
+//     return config;
+//   },
+//   (error) => {
+//     return Promise.reject(error);
+//   }
+// );

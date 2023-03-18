@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { languageLevels } from '../../../dummy/Tags';
+import { languageLevels } from '../../../dummy/languages';
 import useModals from '../../../hooks/useModals';
 import {
   userLanguageNationState,

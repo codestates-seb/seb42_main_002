@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { hobbyTags } from '../../../dummy/Tags';
 import useModals from '../../../hooks/useModals';
 import { userFirstState, userLocationState } from '../../../recoil/atoms';
 import { userTagState } from '../../../recoil/atoms/user/userTag';
+import { allTagState } from '../../../recoil/selectors';
 import { PATCH } from '../../../utils/axios';
 import { TagDataType } from '../../../utils/types/tags/tags';
 import Flex from '../../Common/Flex/Flex';
@@ -24,6 +24,7 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
     useRecoilState(userLocationState);
   const [selectedUserTags, setSelectedUserTags] = useRecoilState(userTagState);
   const selectedUserFirstState = useRecoilValue(userFirstState);
+  const hobbyTags = useRecoilValue(allTagState);
   const [changeTagIds, setChangeTags] = useState<TagDataType[]>([
     ...selectedUserTags,
   ]);

@@ -11,10 +11,10 @@ import {
   userLanguageNationState,
   userLanguageState,
 } from '../../../recoil/atoms/user/userLanguage';
-import { languageTags } from '../../../dummy/Tags';
+import { languageTags } from '../../../dummy/languages';
 
 type LanguageSearchListProps = {
-  languages: any[];
+  languages: LanguageDataType[];
 };
 
 const LanguageSearchList = ({ languages }: LanguageSearchListProps) => {
