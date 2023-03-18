@@ -5,6 +5,7 @@ import { hobbyTags } from '../../../dummy/Tags';
 import useModals from '../../../hooks/useModals';
 import { userFirstState, userLocationState } from '../../../recoil/atoms';
 import { userTagState } from '../../../recoil/atoms/user/userTag';
+import { PATCH } from '../../../utils/axios';
 import { TagDataType } from '../../../utils/types/tags/tags';
 import Flex from '../../Common/Flex/Flex';
 import LabelButton from '../../Common/LabelButton/LabelButton';
@@ -44,20 +45,31 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
     setTagList(filteredItems);
   };
 
-  const onSubmitHandler = () => {
+  const onSubmitHandler = async () => {
     if (onSubmit) {
-      if (!selectedUserLocation) {
-        // 첫 설정일 때
-        setSelectedUserLocation(selectedUserFirstState);
-        setSelectedUserTags(changeTagIds);
-        closeModal(LanguageEditModal);
-        closeModal(LocationEditModal);
-        onClose && onClose();
-        navigate('/welcome');
-      } else {
-        // 수정일 때
-        setSelectedUserTags(changeTagIds);
-        onClose && onClose();
+      try {
+        const prevState = selectedUserTags.map((tag) => tag.name);
+        const newValue = changeTagIds.map((tag) => tag.name);
+        const { status } = await PATCH('/members', {
+          tag: [...prevState, ...newValue],
+        });
+        if (status === 200) {
+          if (!selectedUserLocation) {
+            // 첫 설정일 때
+            setSelectedUserLocation(selectedUserFirstState);
+            setSelectedUserTags(changeTagIds);
+            closeModal(LanguageEditModal);
+            closeModal(LocationEditModal);
+            onClose && onClose();
+            navigate('/welcome');
+          } else {
+            // 수정일 때
+            setSelectedUserTags(changeTagIds);
+            onClose && onClose();
+          }
+        }
+      } catch (error) {
+        console.log(error);
       }
     }
   };

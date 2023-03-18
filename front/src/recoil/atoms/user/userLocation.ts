@@ -1,7 +1,7 @@
 import { atom } from 'recoil';
-import { profileUser } from '../../../dummy/users';
+import { LOCATION_CODE } from '../../../utils';
 
-export const userLocationState = atom({
+export const userLocationState = atom<LOCATION_CODE | null | undefined>({
   key: 'selectedUserLocation',
-  default: profileUser.location ? profileUser.location : null,
+  default: null,
 });

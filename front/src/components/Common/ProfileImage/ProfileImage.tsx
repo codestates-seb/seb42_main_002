@@ -37,9 +37,16 @@ const ProfileImage = ({
             />
           </button>
         )}
-        <figure className={classNames({ [styles.default_profile]: !profile })}>
-          {profile && <img src={profile} alt="프로필 이미지" />}
-          {!profile && <img src={defaultProfile} alt="프로필 기본 이미지" />}
+        <figure
+          className={classNames({
+            [styles.default_profile]: !profile || profile === 'image',
+          })}
+        >
+          {!profile || profile !== 'image' ? (
+            <img src={profile || ''} alt="프로필 이미지" />
+          ) : (
+            <img src={defaultProfile} alt="프로필 기본 이미지" />
+          )}
         </figure>
       </div>
     </div>

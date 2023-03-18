@@ -1,10 +1,9 @@
 import { atom } from 'recoil';
-import { profileUser } from '../../../dummy/users';
 import { LanguageDataType } from '../../../utils/types/common/common.type';
 
 export const userLanguageState = atom({
   key: 'selectedUserLanguages',
-  default: profileUser.language as LanguageDataType[],
+  default: [] as LanguageDataType[],
 });
 
 export const userLanguageNationState = atom({

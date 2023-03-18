@@ -13,7 +13,7 @@ export type FullPageModalProps = {
   title?: string;
   labelSubmit?: string;
   labelClose?: string;
-  onSubmit?: (...props: any) => void | undefined;
+  onSubmit?: () => void | undefined | Promise<void>;
   onClose?: () => void | undefined;
   noFooter?: boolean;
   children?: ReactNode;

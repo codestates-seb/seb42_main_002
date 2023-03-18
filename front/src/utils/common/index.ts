@@ -1,4 +1,8 @@
-import { LANGUAGE_CODE, LOCATION_CODE } from '../enums/common/common.enum';
+import {
+  GENDER_TYPE,
+  LANGUAGE_CODE,
+  LOCATION_CODE,
+} from '../enums/common/common.enum';
 
 /**
  * @description 언어코드 표기명 변환하는 함수
@@ -96,5 +100,21 @@ export const locationTransformer = (
       case LOCATION_CODE.ES:
         return 'Castellano';
     }
+  }
+};
+
+/**
+ *
+ * @param gender 성별 표기명 변환하는 함수
+ * @returns
+ */
+export const genderTransformer = (gender: GENDER_TYPE) => {
+  switch (gender) {
+    case GENDER_TYPE.MALE:
+      return '남자';
+    case GENDER_TYPE.FEMALE:
+      return '여자';
+    case GENDER_TYPE.OTHER:
+      return '기타';
   }
 };

@@ -1,12 +1,13 @@
-import { useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useState, useEffect } from 'react';
+import { useRecoilState } from 'recoil';
 import { FaMars, FaTransgender, FaVenus } from 'react-icons/fa';
+import { BiEdit, BiSave } from 'react-icons/bi';
 import { useAuth } from '../../context/AuthContext';
 import useModals from '../../hooks/useModals';
 import Button from '../Common/Button/Button';
 import LanguageEditModal from './LanguageEditModal/LanguageEditModal';
 import Label from '../Common/Label/Label';
-import { langTransformer } from '../../utils/common';
+import { genderTransformer, langTransformer } from '../../utils/common';
 import TagEditModal from './TagEditModal/TagEditModal';
 import { userState } from '../../recoil/atoms/user/user';
 import { userTagState } from '../../recoil/atoms/user/userTag';
@@ -22,13 +23,14 @@ import TextAreaFeild from '../Common/TextAreaFeild/TextAreaFeild';
 import MyProfileImage from './MyProfileImage';
 import LocationEditModal from './LocationEditModal/LocationEditModal';
 import styles from './MyProfile.module.scss';
+import { GET } from '../../utils/axios';
 
 const MyProfile = () => {
   const { logout } = useAuth();
   const { openModal } = useModals();
   const [userInfo, setUserInfo] = useRecoilState(userState);
-  const userTags = useRecoilValue(userTagState);
-  const userLanguages = useRecoilValue(userLanguageState);
+  const [userTags, setUserTags] = useRecoilState(userTagState);
+  const [userLanguages, setUserLanguages] = useRecoilState(userLanguageState);
   const [isEditBaseInfo, setIsEditBaseInfo] = useState(false);
   const [isEditIntroduce, setIsEditIntroduce] = useState(false);
   const [selectedGender, setSelectedGender] = useState<string>(userInfo.gender);
@@ -38,6 +40,24 @@ const MyProfile = () => {
     FEMALE: <FaVenus color="#932f42" />,
     OTHER: <FaTransgender color="#505050" />,
   };
+
+  const getMyProfile = async () => {
+    try {
+      const { data } = await GET(`/members`);
+      if (data) {
+        setUserInfo(data);
+        setUserLanguages(data.language);
+        setUserTags(data.tag);
+      }
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getMyProfile();
+  }, []);
 
   const onChangeEditBaseInfo = () => {
     setIsEditBaseInfo((prevState) => !prevState);
@@ -130,7 +150,7 @@ const MyProfile = () => {
                         <InfoGroup>
                           <InfoGroup.Label>성별</InfoGroup.Label>
                           <InfoGroup.Content>
-                            <p>{userInfo.gender}</p>
+                            <p>{genderTransformer(userInfo.gender)}</p>
                           </InfoGroup.Content>
                         </InfoGroup>
                         <InfoGroup>
@@ -145,6 +165,8 @@ const MyProfile = () => {
                           <Button
                             size="sm"
                             variant="secondary"
+                            iconBtn
+                            icon={<BiEdit />}
                             onClick={onChangeEditBaseInfo}
                           >
                             수정
@@ -182,16 +204,14 @@ const MyProfile = () => {
                               isSet
                             >
                               {CONST_GENDER_TYPE.map((gender, index) => (
-                                <>
-                                  <RadioGroup.Item
-                                    key={index}
-                                    value={gender}
-                                    id={`gender_${gender}`}
-                                    icon={GenderIcons[gender]}
-                                  >
-                                    {gender}
-                                  </RadioGroup.Item>
-                                </>
+                                <RadioGroup.Item
+                                  key={index}
+                                  value={gender}
+                                  id={`gender_${gender}`}
+                                  icon={GenderIcons[gender]}
+                                >
+                                  {genderTransformer(gender)}
+                                </RadioGroup.Item>
                               ))}
                             </RadioGroup>
                           </InfoGroup.Content>
@@ -214,7 +234,12 @@ const MyProfile = () => {
                       </Flex.Col>
                       <Flex.Col>
                         <ButtonGroup justify="end">
-                          <Button size="sm" variant="primary" type="submit">
+                          <Button
+                            size="sm"
+                            variant="primary"
+                            type="submit"
+                            icon={<BiSave />}
+                          >
                             저장
                           </Button>
                         </ButtonGroup>
@@ -239,6 +264,8 @@ const MyProfile = () => {
                           <Button
                             size="sm"
                             variant="secondary"
+                            iconBtn
+                            icon={<BiEdit />}
                             onClick={onChangeEditIntroduce}
                           >
                             수정
@@ -263,7 +290,12 @@ const MyProfile = () => {
                         </Flex.Col>
                         <Flex.Col>
                           <ButtonGroup justify="end">
-                            <Button size="sm" variant="primary" type="submit">
+                            <Button
+                              size="sm"
+                              variant="primary"
+                              type="submit"
+                              icon={<BiSave />}
+                            >
                               저장
                             </Button>
                           </ButtonGroup>

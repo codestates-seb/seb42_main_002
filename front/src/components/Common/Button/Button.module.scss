@@ -67,6 +67,17 @@
     color: var(--white);
   }
 
+  // text color
+  &.text_primary {
+    color: var(--text-primary-color);
+  }
+  &.text_secondary {
+    color: var(--text-secondary-color);
+  }
+  &.text_danger {
+    color: var(--danger-color);
+  }
+
   // full size
   &.is_full {
     width: 100%;
