@@ -21,74 +21,7 @@ public interface MemberMapper {
 
   Member memberPostToMember(MemberDto.Post memberPostDto);
 
-//  default Member memberPostToMember(MemberDto.Post requestBody) {
-//    if (requestBody == null) {
-//      return null;
-//    }
-//    Member member = new Member();
-//
-//    List<MemberTag> memberTags = requestBody.getMemberTags().stream()
-//        .map(memberTagDto -> {
-//          MemberTag memberTag = new MemberTag();
-//          Tag tag = Tag.builder().tagId(memberTagDto.getTagId()).build();
-//          memberTag.addTag(tag);
-//          memberTag.addMember(member);
-//          return memberTag;
-//        }).collect(Collectors.toList());
-//
-//    member.setName(requestBody.getName());
-//    member.setEmail(requestBody.getEmail());
-//    member.setPassword(requestBody.getPassword());
-//    member.setBirthday(requestBody.getBirthday());
-//    member.setIntroduce(requestBody.getIntroduce());
-//    member.setLocation(requestBody.getLocation());
-//    member.setGender(requestBody.getGender());
-//    member.setProfile(requestBody.getProfile());
-//    member.setMemberTags(memberTags);
-//
-//    return member;
-//  }
-
   Member memberPatchToMember(MemberDto.Patch memberPatchDto);
-
-//  default Member memberPatchToMember(MemberDto.Patch requestBody) {
-//    if (requestBody == null) {
-//      return null;
-//    }
-//
-////    Member.MemberBuilder member = Member.builder();
-////
-////    member.memberId(requestBody.getMemberId());
-////    member.name(requestBody.getName());
-////    member.introduce(requestBody.getIntroduce());
-////    member.profile(requestBody.getProfile());
-////    member.memberStatus(requestBody.getMemberStatus());
-////    member.memberTags(requestBody.getMemberTags().stream()
-////        .map(memberTagDto -> {
-////          MemberTag memberTag = new MemberTag();
-////          Tag tag = Tag.builder().tagId(memberTagDto.getTagId()).build();
-////          memberTag.addTag(tag);
-////          Member member1 = new Member();
-////          member1.setMemberId(requestBody.getMemberId());
-////          memberTag.addMember(member1);
-////          return memberTag;
-////        }).collect(Collectors.toList())
-////    );
-////
-////    return member.build();
-//
-////    if (requestBody == null) {
-////      return null;
-////    }
-////    Member member = new Member();
-////    member.setMemberId(requestBody.getMemberId());
-////    member.setName(requestBody.getName());
-////    member.setIntroduce(requestBody.getIntroduce());
-////    member.setProfile(requestBody.getProfile());
-////    member.setMemberStatus(requestBody.getMemberStatus());
-////
-////    return member;
-//  }
 
   default MemberDto.Response memberToMemberResponse(Member member) {
     MemberDto.Response.ResponseBuilder builder = MemberDto.Response.builder()
@@ -98,6 +31,7 @@ public interface MemberMapper {
         .location(member.getLocation())
         .email(member.getEmail())
         .birthday(member.getBirthday())
+        .introduce(member.getIntroduce())
         .location(member.getLocation())
         .gender(member.getGender())
         .profile(member.getProfile())
