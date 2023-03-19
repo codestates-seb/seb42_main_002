@@ -17,13 +17,6 @@ export type UserData = {
   friend?: boolean;
 };
 
-type Language = {
-  nation: string;
-  level: number;
-};
-
-export type Gender = 'MALE' | 'FEMALE' | 'OTHER';
-
 export type BlackUserData = {
   memberId: number;
   name: string;

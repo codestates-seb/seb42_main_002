@@ -24,11 +24,12 @@ import MyProfileImage from './MyProfileImage';
 import LocationEditModal from './LocationEditModal/LocationEditModal';
 import styles from './MyProfile.module.scss';
 import { GET } from '../../utils/axios';
+import { userSeletor } from '../../recoil/selectors/user/user';
 
 const MyProfile = () => {
   const { logout } = useAuth();
   const { openModal } = useModals();
-  const [userInfo, setUserInfo] = useRecoilState(userState);
+  const [userInfo, setUserInfo] = useRecoilState(userSeletor);
   const [userTags, setUserTags] = useRecoilState(userTagState);
   const [userLanguages, setUserLanguages] = useRecoilState(userLanguageState);
   const [isEditBaseInfo, setIsEditBaseInfo] = useState(false);
@@ -100,14 +101,12 @@ const MyProfile = () => {
     const requestData = {
       introduce: formData.get('introduce'),
     };
-    console.log(requestData);
     if (requestData) {
       setIsEditIntroduce((prevState) => !prevState);
       setUserInfo((prevState: any) => ({
         ...prevState,
         introduce: requestData.introduce,
       }));
-      console.log(userInfo);
     }
   };
 
