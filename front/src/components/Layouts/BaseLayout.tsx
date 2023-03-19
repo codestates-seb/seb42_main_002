@@ -19,8 +19,11 @@ const BaseLayout = ({ isAuth, noTitle }: BaseLayouProps): JSX.Element => {
       <article
         className={classNames(styles.article, { [styles.noTitle]: noTitle })}
       >
-        <Outlet />
+        <div className="layout_container">
+          <Outlet />
+        </div>
       </article>
+
       {isAuth && <BottomNav />}
     </main>
   );

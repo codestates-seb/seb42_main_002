@@ -8,7 +8,9 @@ const NoneLayout = () => {
   return (
     <main className={styles.baselayout}>
       <article className={styles.article}>
-        <Outlet />
+        <div className="layout_container">
+          <Outlet />
+        </div>
       </article>
     </main>
   );
