@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { RecoilRoot } from 'recoil';
+import Spinner from './components/Common/Spinner/Spinner';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -11,7 +12,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <RecoilRoot>
-      <React.Suspense fallback={<div>Loading...</div>}>
+      <React.Suspense fallback={<Spinner />}>
         <App />
       </React.Suspense>
     </RecoilRoot>

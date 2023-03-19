@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import useModals from '../../../hooks/useModals';
-import { userFirstState, userLocationState } from '../../../recoil/atoms';
+import {
+  userLocationValueState,
+  userLocationState,
+} from '../../../recoil/atoms';
 import { LocationIcons, locationTypes } from '../../../utils';
 import { locationTransformer } from '../../../utils/common';
 import {
@@ -21,7 +24,9 @@ const LocationEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
   const { openModal } = useModals();
   const [selectedUserLocation, setSelectedUserLocation] =
     useRecoilState(userLocationState);
-  const setselectedUserFirstState = useSetRecoilState<any>(userFirstState);
+  const setselectedUserLocationValueState = useSetRecoilState<any>(
+    userLocationValueState
+  );
   const [locationList] = useState([...CONST_LOCATION_CODE]);
   const [changeLocation, setChangeLocation] = useState(selectedUserLocation);
 
@@ -33,7 +38,7 @@ const LocationEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
     if (onSubmit) {
       if (!selectedUserLocation) {
         // 첫 설정일 때
-        setselectedUserFirstState(changeLocation);
+        setselectedUserLocationValueState(changeLocation);
         openModal(LanguageEditModal);
       } else {
         // 수정일 때

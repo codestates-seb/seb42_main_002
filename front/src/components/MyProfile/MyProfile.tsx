@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { FaMars, FaTransgender, FaVenus } from 'react-icons/fa';
 import { BiEdit, BiSave } from 'react-icons/bi';
 import { useAuth } from '../../context/AuthContext';
@@ -310,7 +310,7 @@ const MyProfile = () => {
                 <InfoGroup.Content>
                   <Flex gap="sm" wrap="wrap">
                     {userLanguages &&
-                      userLanguages.map((language) => (
+                      userLanguages.map((language: any) => (
                         <Flex.Col key={language.nation}>
                           <Label>
                             {langTransformer(language.nation)} Lv.

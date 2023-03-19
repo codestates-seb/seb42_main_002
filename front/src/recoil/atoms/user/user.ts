@@ -6,7 +6,7 @@ export const userState = atom<UserData>({
   default: {} as UserData,
 });
 
-export const userFirstState = atom({
-  key: 'userFirstState',
+export const userLocationValueState = atom({
+  key: 'userLocationValueState',
   default: null,
 });

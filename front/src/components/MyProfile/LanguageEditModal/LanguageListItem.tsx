@@ -1,17 +1,18 @@
+import { useCallback } from 'react';
 import { BiEdit } from 'react-icons/bi';
 import { FiTrash2 } from 'react-icons/fi';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import useModals from '../../../hooks/useModals';
-import {
-  userLanguageNationState,
-  userLanguageState,
-} from '../../../recoil/atoms';
+import { userLanguageNationState } from '../../../recoil/atoms';
+import { userLanguageSeletor } from '../../../recoil/selectors';
+import { PATCH } from '../../../utils/axios';
 import { langTransformer } from '../../../utils/common';
 import { LANGUAGE_CODE } from '../../../utils/enums/common/common.enum';
 import { LanguageDataType } from '../../../utils/types/common/common.type';
 import Button from '../../Common/Button/Button';
 import Flex from '../../Common/Flex/Flex';
 import LabelButton from '../../Common/LabelButton/LabelButton';
+import AlertModal, { AlertModalProps } from '../../Common/Modal/AlertModal';
 import LanguageLevelModal from '../LanguageLevelModal/LanguageLevelModal';
 import styles from './LanguageListItem.module.scss';
 
@@ -19,12 +20,43 @@ type LanguageListItemProps = {
   item: LanguageDataType;
 };
 
+const confirmRemoveLanguageaModal = ({
+  onSubmit,
+  onClose,
+}: AlertModalProps) => {
+  const [selectedUserLanguages, setSelectedUserLanguages] =
+    useRecoilState<LanguageDataType[]>(userLanguageSeletor);
+  const selectedUserLanguageNation = useRecoilValue(userLanguageNationState);
+
+  const onSubmitHandler = useCallback(() => {
+    setSelectedUserLanguages((prevState) => {
+      return prevState.filter(
+        (lang) => lang.nation !== selectedUserLanguageNation
+      );
+    });
+    onSubmit && onSubmit();
+  }, []);
+
+  const onCloseHandler = () => {
+    onClose && onClose();
+  };
+
+  return (
+    <AlertModal
+      title="언어 삭제"
+      onSubmit={onSubmitHandler}
+      onClose={onCloseHandler}
+    >
+      <p className="align_center">정말 삭제 하시겠습니까?</p>
+    </AlertModal>
+  );
+};
+
 const LanguageListItem = ({ item }: LanguageListItemProps) => {
   const { openModal } = useModals();
   const setSelectedUserLanguageNation = useSetRecoilState(
     userLanguageNationState
   );
-  const setSelectedUserLanguages = useSetRecoilState<any[]>(userLanguageState);
 
   const onEditLanguageHandler = (nation: LANGUAGE_CODE) => {
     openModal(LanguageLevelModal);
@@ -32,9 +64,8 @@ const LanguageListItem = ({ item }: LanguageListItemProps) => {
   };
 
   const onDeleteLanguageHandler = (nation: LANGUAGE_CODE) => {
-    setSelectedUserLanguages((prevState) =>
-      prevState.filter((lang) => lang.nation !== nation)
-    );
+    setSelectedUserLanguageNation(nation);
+    openModal(confirmRemoveLanguageaModal);
   };
 
   return (
