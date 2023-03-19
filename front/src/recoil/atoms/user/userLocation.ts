@@ -5,3 +5,8 @@ export const userLocationState = atom<LOCATION_CODE | null | undefined>({
   key: 'userLocationState',
   default: null,
 });
+
+export const userLocationValueState = atom({
+  key: 'userLocationValueState',
+  default: null,
+});
