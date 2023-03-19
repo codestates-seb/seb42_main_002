@@ -2,7 +2,8 @@ import { NavLink } from 'react-router-dom';
 import styles from './BottomNavBar.module.scss';
 import { IoSettingsOutline } from 'react-icons/io5';
 import { BsFillJournalBookmarkFill } from 'react-icons/bs';
-import { FiUsers, FiHome, FiMail } from 'react-icons/fi';
+import { FiUsers, FiMail } from 'react-icons/fi';
+import { ReactComponent as OwlHome } from '../../../assets/img/common/btn_owl_home.svg';
 import classNames from 'classnames';
 
 const BottomNavArr = [
@@ -18,7 +19,7 @@ const BottomNavArr = [
   },
   {
     path: '/main',
-    icons: <FiHome />,
+    icons: <OwlHome />,
     label: '메인',
   },
   {
