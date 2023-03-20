@@ -5,7 +5,7 @@ import com.mainproject.back.member.exception.MemberExceptionCode;
 import com.mainproject.back.vocabulary.entity.Vocabulary;
 import com.mainproject.back.vocabulary.exception.VocabExceptionCode;
 import com.mainproject.back.vocabulary.repository.VocabRepository;
-import java.util.NoSuchElementException;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -63,4 +63,10 @@ public class VocabService {
     vocabRepository.deleteById(vocabId);
   }
 
+  public Vocabulary randomVocab(long memberId) {
+    List<Vocabulary> page = vocabRepository.findAllByMemberIdOrderByRand(memberId);
+    if(page.isEmpty()) return null;
+    return page.get(0);
+  }
 }
+

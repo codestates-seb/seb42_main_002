@@ -70,6 +70,7 @@ public class MemberDto {
     private String introduce;
     private String profile;
     private String location;
+    private String gender;
     private List<MemberLanguageDto> language;
     private List<String> tag;
     private Member.MemberStatus memberStatus;

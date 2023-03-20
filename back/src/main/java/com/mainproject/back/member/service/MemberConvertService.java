@@ -19,6 +19,7 @@ import com.mainproject.back.member.dto.MemberDto;
 import com.mainproject.back.member.dto.MemberLetterDto;
 import com.mainproject.back.member.dto.MemberSearchDto;
 import com.mainproject.back.member.entity.Member;
+import com.mainproject.back.member.entity.Member.Gender;
 import com.mainproject.back.member.mapper.MemberMapper;
 import com.mainproject.back.tag.entity.MemberTag;
 import com.mainproject.back.tag.entity.Tag;
@@ -52,6 +53,13 @@ public class MemberConvertService {
   @Transactional
   public Member memberPatchDtoToMember(MemberDto.Patch memberPatchDto) {
     Member member = memberMapper.memberPatchToMember(memberPatchDto);
+    Optional.ofNullable(memberPatchDto.getGender()).ifPresent(gender -> {
+      for (Gender g : Gender.values()) {
+        if (g.getChoseGender().equals(gender)) {
+          member.setGender(g);
+        }
+      }
+    });
     Optional.ofNullable(memberPatchDto.getTag()).ifPresent((tags) -> getMemberTag(member, tags));
     Optional.ofNullable(memberPatchDto.getLanguage())
         .ifPresent((languages) -> getMemberLanguage(member, languages));
