@@ -1,13 +1,11 @@
 package com.mainproject.back.member.controller;
 
-import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.helper.UriCreator;
 import com.mainproject.back.language.entity.Language;
 import com.mainproject.back.member.dto.MemberDto;
 import com.mainproject.back.member.dto.MemberRecommendDto;
 import com.mainproject.back.member.dto.MemberSearchDto;
 import com.mainproject.back.member.entity.Member;
-import com.mainproject.back.member.exception.MemberExceptionCode;
 import com.mainproject.back.member.mapper.MemberMapper;
 import com.mainproject.back.member.service.MemberConvertService;
 import com.mainproject.back.member.service.MemberService;
@@ -25,7 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -69,8 +66,8 @@ public class MemberController {
   public ResponseEntity patchMember(
       Principal principal,
       @Valid @RequestBody MemberDto.Patch requestBody) {
-    Member currentMember = memberService.findMemberByEmail(Check.checkPrincipal(principal));
-    requestBody.setMemberId(currentMember.getMemberId());
+    Long currentId = memberService.findMemberIdByEmail(Check.checkPrincipal(principal));
+    requestBody.setMemberId(currentId);
     Member member = memberConvertService.memberPatchDtoToMember(requestBody);
     log.info("## 사용자 정보 수정: {}", member.toString());
     Member updateMember = memberService.updateMember(member);

@@ -1,6 +1,7 @@
 package com.mainproject.back.vocabulary.repository;
 
 import com.mainproject.back.vocabulary.entity.Vocabulary;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,8 +13,7 @@ public interface VocabRepository extends JpaRepository<Vocabulary, Long> {
   @Query("select v from Vocabulary v join v.member m where m.memberId = :memberId")
   Page<Vocabulary> findAllByMemberId(@Param("memberId") long memberId, Pageable pageable);
 
-  @Query("select v from Vocabulary v join v.member m where m.memberId = :memberId order by RAND()")
-  Page<Vocabulary> findAllByMemberIdOrderByRand(@Param("memberId") long memberId,
-      Pageable pageable);
+  @Query(value = "select * from Vocabulary as q where q.member_id = :memberId order by rand() limit 1", nativeQuery = true)
+  List<Vocabulary> findAllByMemberIdOrderByRand(@Param("memberId") long memberId);
 
 }
