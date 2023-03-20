@@ -22,3 +22,9 @@
     }
   }
 }
+
+@media screen and (min-width: 1024px) {
+  .bottom_nav_bar {
+    display: none;
+  }
+}

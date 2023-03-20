@@ -14,7 +14,7 @@ export const userLanguageSeletor = selector({
       if (response) return data;
     } catch (error: any) {
       alert(error && error?.response.data.message);
-      window.location.reload();
+      // window.location.reload();
       return error;
     }
   },

@@ -107,6 +107,15 @@ button {
   --font-size-xxl: 1.25rem; /* 24px */
 }
 
+@mixin container {
+  position: relative;
+  max-width: 640px;
+  margin: 0 auto;
+  @media screen and (min-width: 1024px) {
+    max-width: 900px;
+  }
+}
+
 .blind {
   position: absolute;
   overflow: hidden;
@@ -115,10 +124,12 @@ button {
   height: 1px;
   margin: -1px;
 }
+.inner_container {
+  @include container;
+}
 
 .layout_container {
-  max-width: 640px;
-  margin: 0 auto;
+  @include container;
   height: 100%;
   overflow-y: auto;
   padding: 0 1rem;
@@ -170,4 +181,12 @@ button {
 .slideInUp-exit {
   transform: translateY(100%);
   transition: transform 0.3s ease-out;
+}
+
+@media screen and (min-width: 1024px) {
+  .layout_container {
+    overflow-y: inherit;
+    padding: 0;
+    min-height: calc(100vh - 10rem);
+  }
 }

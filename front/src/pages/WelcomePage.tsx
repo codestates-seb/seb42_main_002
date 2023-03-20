@@ -1,6 +1,6 @@
 import Welcome from '../components/Welcome/Welcome';
 
-export default function WelcomPage() {
+export default function WelcomePage() {
   return (
     <>
       <Welcome />
