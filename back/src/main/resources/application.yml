@@ -4,6 +4,7 @@ cloud:
       static: ap-northeast-2
     stack:
       auto: false
+
 spring:
   security:
     oauth2:
@@ -12,8 +13,7 @@ spring:
           google:
             client-id: ${google.clientId}
             client-secret: ${google.clientSecret}
-            scope: profile,email
-            redirect-uri: ${google.redirectUri}
+            scope: profile, email
 
   s3:
     bucket: ${s3.bucket}

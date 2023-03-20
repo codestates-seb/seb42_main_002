@@ -8,10 +8,10 @@ import com.mainproject.back.security.handler.MemberAuthenticationEntryPoint;
 import com.mainproject.back.security.handler.MemberAuthenticationFailureHandler;
 import com.mainproject.back.security.handler.MemberAuthenticationSuccessHandler;
 import com.mainproject.back.security.jwt.JwtTokenizer;
+import com.mainproject.back.security.oauth.CustomOAuth2UserService;
+import com.mainproject.back.security.oauth.OAuth2LoginFailureHandler;
+import com.mainproject.back.security.oauth.OAuth2LoginSuccessHandler;
 import com.mainproject.back.security.utils.AuthorityUtils;
-import com.mainproject.oauth.CustomOAuth2UserService;
-import com.mainproject.oauth.OAuth2LoginFailureHandler;
-import com.mainproject.oauth.OAuth2LoginSuccessHandler;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -35,6 +35,7 @@ public class SecurityConfiguration {
 
   private final AuthorityUtils authorityUtils;
   private final JwtTokenizer jwtTokenizer;
+  private final CustomOAuth2UserService customOAuth2UserService;
   private final MemberRepository memberRepository;
 
   @Bean
@@ -68,7 +69,7 @@ public class SecurityConfiguration {
         .oauth2Login()
         .successHandler(new OAuth2LoginSuccessHandler(jwtTokenizer))
         .failureHandler(new OAuth2LoginFailureHandler())
-        .userInfoEndpoint().userService(new CustomOAuth2UserService(memberRepository));
+        .userInfoEndpoint().userService(customOAuth2UserService);
 
     return http.build();
   }

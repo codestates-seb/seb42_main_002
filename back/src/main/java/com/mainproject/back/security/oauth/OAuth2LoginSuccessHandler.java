@@ -1,4 +1,4 @@
-package com.mainproject.oauth;
+package com.mainproject.back.security.oauth;
 
 import com.mainproject.back.security.jwt.JwtTokenizer;
 import java.io.IOException;

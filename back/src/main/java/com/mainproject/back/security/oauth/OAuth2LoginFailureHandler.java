@@ -1,4 +1,4 @@
-package com.mainproject.oauth;
+package com.mainproject.back.security.oauth;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
