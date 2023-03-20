@@ -1,4 +1,19 @@
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
 spring:
+  s3:
+    bucket: ${s3.bucket}
+    access-key: ${s3.accessKey}
+    secret-key: ${s3.secretKey}
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 100MB
   datasource:
     url: ${datasource.url}
     password: ${datasource.password}
@@ -23,7 +38,11 @@ spring:
 logging:
   level:
     org.hibernate.sql: info
-  #    org.hibernate.type: trace
+    #    org.hibernate.type: trace
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error
 mail:
   address:
     admin: ${admin.address}
