@@ -1,12 +1,11 @@
-import { NavLink } from 'react-router-dom';
 import classNames from 'classnames';
-import { IoSettingsOutline } from 'react-icons/io5';
 import { BsFillJournalBookmarkFill } from 'react-icons/bs';
-import { FiUsers, FiMail } from 'react-icons/fi';
-import { ReactComponent as OwlHome } from '../../../assets/img/common/owls_logo_w.svg';
-import styles from './BottomNavBar.module.scss';
+import { FiMail, FiUsers } from 'react-icons/fi';
+import { IoSettingsOutline } from 'react-icons/io5';
+import { NavLink } from 'react-router-dom';
+import styles from './TopNavBar.module.scss';
 
-const BottomNavArr = [
+const navArr = [
   {
     path: '/letters',
     icons: <FiMail />,
@@ -16,11 +15,6 @@ const BottomNavArr = [
     path: '/followings',
     icons: <FiUsers />,
     label: '친구목록',
-  },
-  {
-    path: '/main',
-    icons: <OwlHome />,
-    label: '메인',
   },
   {
     path: '/voca',
@@ -34,10 +28,10 @@ const BottomNavArr = [
   },
 ];
 
-const BottomNav = () => {
+const TopNavBar = () => {
   return (
-    <nav className={styles.bottom_nav_bar}>
-      {BottomNavArr.map((nav, index) => (
+    <nav className={styles.top_nav_bar}>
+      {navArr.map((nav, index) => (
         <NavLink
           key={index}
           to={nav.path}
@@ -47,12 +41,12 @@ const BottomNav = () => {
               : styles.nav_item
           }
         >
-          {nav.icons}
-          <span className="blind">{nav.label}</span>
+          <span className="blind">{nav.icons}</span>
+          <span>{nav.label}</span>
         </NavLink>
       ))}
     </nav>
   );
 };
 
-export default BottomNav;
+export default TopNavBar;

@@ -1,6 +1,6 @@
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import useModals from '../../../hooks/useModals';
-import { userFirstState, userLocationState } from '../../../recoil/atoms';
+import { userLocationState } from '../../../recoil/atoms';
 import { userLanguageState } from '../../../recoil/atoms/user/userLanguage';
 import Button from '../../Common/Button/Button';
 import FullPageModal, {

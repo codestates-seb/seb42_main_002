@@ -1,12 +1,10 @@
 import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { languageLevels } from '../../../dummy/Tags';
+import { languageLevels } from '../../../dummy/languages';
 import useModals from '../../../hooks/useModals';
-import {
-  userLanguageNationState,
-  userLanguageState,
-} from '../../../recoil/atoms/user/userLanguage';
-import { PATCH } from '../../../utils/axios';
+import { userLanguageNationState } from '../../../recoil/atoms/user/userLanguage';
+import { userLanguageSeletor } from '../../../recoil/selectors';
+import { LanguageDataType, LANGUAGE_CODE } from '../../../utils';
 import Flex from '../../Common/Flex/Flex';
 import LabelButton from '../../Common/LabelButton/LabelButton';
 import FullPageModal, {
@@ -28,62 +26,47 @@ const LanguageLevelModal = ({
   const [selectedLevel, setSeletedLevel] = useState<number>();
   const selectedUserLanguageNation = useRecoilValue(userLanguageNationState);
   const [selectedUserLanguages, setSelectedUserLanguages] =
-    useRecoilState<any[]>(userLanguageState);
+    useRecoilState<LanguageDataType[]>(userLanguageSeletor);
 
+  // 언어 레벨 선택
   const onSelectLevelHandler = (level: number) => {
     setSeletedLevel(level);
   };
 
-  const onSubmitHandler = async () => {
+  const onSubmitHandler = () => {
     if (onSubmit) {
       const findIdx = selectedUserLanguages.findIndex(
-        (lang) => lang.nation === selectedUserLanguageNation
+        (lang: LanguageDataType) => lang.nation === selectedUserLanguageNation
       );
-      try {
-        const prevState = selectedUserLanguages.map((lang) => ({
-          nation: lang.nation,
-          level: lang.level,
-        }));
-        const { status } = await PATCH('/members', {
-          language: [
-            ...prevState,
-            {
-              nation: selectedUserLanguageNation,
-              level: selectedLevel,
-            },
-          ],
+      if (findIdx < 0) {
+        // 언어 추가
+        const newLanguages: LanguageDataType = {
+          nation: selectedUserLanguageNation as LANGUAGE_CODE,
+          level: selectedLevel,
+        };
+        setSelectedUserLanguages((prevState) => {
+          const oldLanguages = prevState.map((lang) => ({
+            nation: lang.nation,
+            level: lang.level,
+          }));
+          return [...oldLanguages, newLanguages];
         });
-        if (status === 200) {
-          // 언어 추가
-          if (findIdx < 0) {
-            const newLanguages = {
-              nation: selectedUserLanguageNation,
-              level: selectedLevel,
-            };
-            setSelectedUserLanguages((prevState) => [
-              ...prevState,
-              newLanguages,
-            ]);
-          } else {
-            // 언어 레벨 수정
-            setSelectedUserLanguages((prevState) => [
-              ...prevState.map((lang) => {
-                if (lang.nation === selectedUserLanguageNation) {
-                  return {
-                    ...lang,
-                    level: selectedLevel,
-                  };
-                }
-                return lang;
-              }),
-            ]);
-          }
-          closeModal(LanguageSearchModal);
-          onClose && onClose();
-        }
-      } catch (error) {
-        console.error(error);
+      } else {
+        // 언어 레벨 수정
+        setSelectedUserLanguages((prevState) => [
+          ...prevState.map((lang) => {
+            if (lang.nation === selectedUserLanguageNation) {
+              return {
+                ...lang,
+                level: selectedLevel,
+              };
+            }
+            return lang;
+          }),
+        ]);
       }
+      closeModal(LanguageSearchModal);
+      onClose && onClose();
     }
   };
 

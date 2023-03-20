@@ -1,15 +1,14 @@
-import { selector } from 'recoil';
-import { UserData } from '../../../utils';
+import { DefaultValue, selector } from 'recoil';
 import { PATCH } from '../../../utils/axios';
-import { userState } from '../../atoms';
+import { userLanguageState } from '../../atoms';
 
-export const userSeletor = selector<UserData>({
-  key: 'user/patch',
+export const userLanguageSeletor = selector({
+  key: 'userLanguage/patch',
   get: async ({ get }) => {
-    const data = get(userState);
+    const data = get(userLanguageState);
     try {
       const response = await PATCH('/members', {
-        ...data,
+        language: data,
       });
       if (!response) throw Error;
       if (response) return data;
@@ -18,9 +17,12 @@ export const userSeletor = selector<UserData>({
       // window.location.reload();
       return error;
     }
-    return null;
   },
   set: ({ set }, newValue) => {
-    set(userState, newValue);
+    if (newValue instanceof DefaultValue) {
+      set(userLanguageState, []);
+    } else {
+      set(userLanguageState, newValue);
+    }
   },
 });

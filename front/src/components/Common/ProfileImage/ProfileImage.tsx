@@ -39,10 +39,10 @@ const ProfileImage = ({
         )}
         <figure
           className={classNames({
-            [styles.default_profile]: !profile || profile === 'image',
+            [styles.default_profile]: !profile,
           })}
         >
-          {!profile || profile !== 'image' ? (
+          {profile ? (
             <img src={profile || ''} alt="프로필 이미지" />
           ) : (
             <img src={defaultProfile} alt="프로필 기본 이미지" />

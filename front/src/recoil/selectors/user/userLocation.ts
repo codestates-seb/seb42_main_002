@@ -1,15 +1,14 @@
-import { selector } from 'recoil';
-import { UserData } from '../../../utils';
+import { DefaultValue, selector } from 'recoil';
 import { PATCH } from '../../../utils/axios';
-import { userState } from '../../atoms';
+import { userLocationState } from '../../atoms';
 
-export const userSeletor = selector<UserData>({
-  key: 'user/patch',
+export const userLocationSeletor = selector({
+  key: 'userLocation/patch',
   get: async ({ get }) => {
-    const data = get(userState);
+    const data = get(userLocationState);
     try {
       const response = await PATCH('/members', {
-        ...data,
+        location: data,
       });
       if (!response) throw Error;
       if (response) return data;
@@ -18,9 +17,13 @@ export const userSeletor = selector<UserData>({
       // window.location.reload();
       return error;
     }
-    return null;
+    return [];
   },
   set: ({ set }, newValue) => {
-    set(userState, newValue);
+    if (newValue instanceof DefaultValue) {
+      set(userLocationState, null);
+    } else {
+      set(userLocationState, newValue);
+    }
   },
 });

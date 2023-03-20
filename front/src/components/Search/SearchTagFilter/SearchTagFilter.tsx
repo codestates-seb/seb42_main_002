@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { hobbyTags } from '../../../dummy/Tags';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { selectedSearchTagState } from '../../../recoil/atoms/search';
+import { allTagState } from '../../../recoil/selectors';
 import { TagDataType } from '../../../utils/types/tags/tags';
 import Flex from '../../Common/Flex/Flex';
 import LabelButton from '../../Common/LabelButton/LabelButton';
@@ -12,6 +12,7 @@ import SearchInput from '../../Common/SearchInput/SearchInput';
 
 const SearchTagFilter = ({ onSubmit, onClose }: FullPageModalProps) => {
   const [searchTags, setSearchTags] = useRecoilState(selectedSearchTagState);
+  const hobbyTags = useRecoilValue(allTagState);
 
   // 고정된 태그 데이터
   const [tagList, setTagList] = useState([...hobbyTags]);

@@ -54,7 +54,7 @@ const MyProfileImage = ({ onChangeLocation }: MyProfileImageProps) => {
       <Flex.Col>
         <ButtonGroup>
           <Flex dir="column" gap="sm">
-            {!photoURL || photoURL === 'image' ? (
+            {!photoURL ? (
               <>
                 <Button size="sm" variant="primary">
                   <label htmlFor="profile">

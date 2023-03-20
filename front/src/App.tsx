@@ -1,4 +1,5 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { ReactNode } from 'react';
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 import AuthProvider from './context/AuthContext';
 import NoneLayout from './components/Layouts/NoneLayout';
 import IntroPage from './pages/IntroPage';
@@ -13,7 +14,7 @@ import GuidePage from './pages/GuidePage';
 import ModalProvider from './context/ModalContext';
 import LetterDetailPage from './pages/LetterDetailPage';
 import NewLetterPage from './pages/NewLetterPage';
-import WelcomPage from './pages/WelcomPage';
+import WelcomePage from './pages/WelcomePage';
 import FollowingPage from './pages/FollowingPage';
 import VocaPage from './pages/VocaPage';
 import BlackListPage from './pages/BlackListPage';
@@ -26,49 +27,142 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
+import NotFoundPage from './pages/NotFoundPage';
+
+type RouterElement = {
+  path: string;
+  element: ReactNode;
+  isAuth: boolean;
+  meta?: {
+    title?: string;
+    subTitle?: string;
+  };
+  children?: RouterElement[];
+};
+
+const routerData: RouterElement[] = [
+  {
+    path: '/',
+    element: <IntroPage />,
+    isAuth: false,
+  },
+  {
+    path: '/login',
+    element: <LoginPage />,
+    isAuth: false,
+  },
+  {
+    path: '/signup',
+    element: <SignUpPage />,
+    isAuth: false,
+  },
+  {
+    path: '/start',
+    element: <StartPage />,
+    isAuth: false,
+  },
+  {
+    path: '/welcome',
+    element: <WelcomePage />,
+    isAuth: false,
+  },
+  {
+    path: '/main',
+    element: <MainPage />,
+    isAuth: true,
+  },
+  {
+    path: '/letters',
+    element: <LetterListPage />,
+    isAuth: true,
+  },
+  {
+    path: '/letters/:memberId',
+    element: <UserLetterListPage />,
+    isAuth: true,
+  },
+  {
+    path: '/letters/:memberId/:letterId',
+    element: <LetterDetailPage />,
+    isAuth: true,
+  },
+  {
+    path: '/newLetter',
+    element: <NewLetterPage />,
+    isAuth: true,
+  },
+  {
+    path: '/followings',
+    element: <FollowingPage />,
+    isAuth: true,
+  },
+  {
+    path: '/search',
+    element: <SearchPage />,
+    isAuth: true,
+  },
+  {
+    path: '/blacklist',
+    element: <BlackListPage />,
+    isAuth: true,
+  },
+  {
+    path: '/voca',
+    element: <VocaPage />,
+    isAuth: true,
+  },
+  {
+    path: '/profile/:memberId',
+    element: <ProfilePage />,
+    isAuth: true,
+  },
+  {
+    path: '/my-profile',
+    element: <MyProfilePage />,
+    isAuth: true,
+  },
+  {
+    path: '/guide',
+    element: <GuidePage />,
+    isAuth: true,
+  },
+  {
+    path: '*',
+    element: <NotFoundPage />,
+    isAuth: false,
+  },
+];
+
+const routers = createBrowserRouter(
+  routerData.map((router) => {
+    if (router.isAuth) {
+      return {
+        path: router.path,
+        element: (
+          <AuthProvider>
+            <BaseLayout isAuth={router.isAuth}>{router.element}</BaseLayout>
+          </AuthProvider>
+        ),
+      };
+    } else {
+      return {
+        path: router.path,
+        element: (
+          <AuthProvider>
+            <NoneLayout>{router.element}</NoneLayout>
+          </AuthProvider>
+        ),
+      };
+    }
+  })
+);
 
 function App() {
   return (
     <>
-      <BrowserRouter>
-        <AuthProvider>
-          <ModalProvider>
-            <Routes>
-              <Route element={<NoneLayout />}>
-                <Route path="/" element={<IntroPage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/signup" element={<SignUpPage />} />
-              </Route>
-              {/** TODO : 첫 로그인 이후 접근 안되게 처리 필요 */}
-              <Route element={<BaseLayout />}>
-                <Route path="/start" element={<StartPage />} />
-                <Route path="/welcome" element={<WelcomPage />} />
-              </Route>
-              {/** TODO : 첫 프로필 작성 하고나서 접근 처리 필요 */}
-              <Route element={<BaseLayout isAuth />}>
-                <Route path="/main" element={<MainPage />} />
-                <Route path="/letters" element={<LetterListPage />} />
-                <Route
-                  path="/letters/:memberId"
-                  element={<UserLetterListPage />}
-                />
-                <Route
-                  path="/letters/:memberId/:letterId"
-                  element={<LetterDetailPage />}
-                />
-                <Route path="/search" element={<SearchPage />} />
-                <Route path="/followings" element={<FollowingPage />} />
-                <Route path="/blacklist" element={<BlackListPage />} />
-                <Route path="/newLetter" element={<NewLetterPage />} />
-                <Route path="/voca" element={<VocaPage />} />
-                <Route path="/my-profile" element={<MyProfilePage />} />
-                <Route path="/profile/:memberId" element={<ProfilePage />} />
-                <Route path="/guide" element={<GuidePage />} />
-              </Route>
-            </Routes>
-          </ModalProvider>
-        </AuthProvider>
-      </BrowserRouter>
+      <ModalProvider>
+        <RouterProvider router={routers} />
+      </ModalProvider>
     </>
   );
 }

@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { hobbyTags } from '../../../dummy/Tags';
 import useModals from '../../../hooks/useModals';
-import { userFirstState, userLocationState } from '../../../recoil/atoms';
-import { userTagState } from '../../../recoil/atoms/user/userTag';
-import { PATCH } from '../../../utils/axios';
+import { userLocationValueState } from '../../../recoil/atoms';
+import { allTagState } from '../../../recoil/selectors';
+import { userLocationSeletor } from '../../../recoil/selectors/user/userLocation';
+import { userTagSeletor } from '../../../recoil/selectors/user/userTag';
 import { TagDataType } from '../../../utils/types/tags/tags';
 import Flex from '../../Common/Flex/Flex';
 import LabelButton from '../../Common/LabelButton/LabelButton';
@@ -21,22 +21,22 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
   const navigate = useNavigate();
   const { closeModal } = useModals();
   const [selectedUserLocation, setSelectedUserLocation] =
-    useRecoilState(userLocationState);
-  const [selectedUserTags, setSelectedUserTags] = useRecoilState(userTagState);
-  const selectedUserFirstState = useRecoilValue(userFirstState);
-  const [changeTagIds, setChangeTags] = useState<TagDataType[]>([
+    useRecoilState(userLocationSeletor);
+  const [selectedUserTags, setSelectedUserTags] =
+    useRecoilState<any[]>(userTagSeletor);
+  const selectedUserLocationValue = useRecoilValue(userLocationValueState);
+  const hobbyTags = useRecoilValue(allTagState);
+  const [changeTags, setChangeTags] = useState<TagDataType[]>([
     ...selectedUserTags,
   ]);
   const [tagList, setTagList] = useState([...hobbyTags]);
 
   // 태그 선택
-  const onSelectTagHandler = (selectedTag: TagDataType) => {
-    if (!changeTagIds.map((tag) => tag.tagId).includes(selectedTag.tagId)) {
-      setChangeTags((currentState) => [...currentState, selectedTag]);
+  const onSelectTagHandler = (selectTag: TagDataType) => {
+    if (!changeTags.map((tag) => tag.name).includes(selectTag.name)) {
+      setChangeTags((currentState) => [...currentState, selectTag]);
     } else {
-      setChangeTags(
-        changeTagIds.filter((tag) => tag.tagId !== selectedTag.tagId)
-      );
+      setChangeTags(changeTags.filter((tag) => tag.name !== selectTag.name));
     }
   };
 
@@ -47,30 +47,15 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
 
   const onSubmitHandler = async () => {
     if (onSubmit) {
-      try {
-        const prevState = selectedUserTags.map((tag) => tag.name);
-        const newValue = changeTagIds.map((tag) => tag.name);
-        const { status } = await PATCH('/members', {
-          tag: [...prevState, ...newValue],
-        });
-        if (status === 200) {
-          if (!selectedUserLocation) {
-            // 첫 설정일 때
-            setSelectedUserLocation(selectedUserFirstState);
-            setSelectedUserTags(changeTagIds);
-            closeModal(LanguageEditModal);
-            closeModal(LocationEditModal);
-            onClose && onClose();
-            navigate('/welcome');
-          } else {
-            // 수정일 때
-            setSelectedUserTags(changeTagIds);
-            onClose && onClose();
-          }
-        }
-      } catch (error) {
-        console.log(error);
+      setSelectedUserTags(changeTags);
+      setSelectedUserLocation(selectedUserLocationValue);
+      if (!selectedUserLocation) {
+        // 첫 설정일 때
+        closeModal(LanguageEditModal);
+        closeModal(LocationEditModal);
+        navigate('/welcome');
       }
+      onClose && onClose();
     }
   };
 
@@ -98,9 +83,7 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
               <LabelButton
                 full
                 onClick={() => onSelectTagHandler(tag)}
-                isActive={changeTagIds
-                  .map((tag) => tag.tagId)
-                  .includes(tag.tagId)}
+                isActive={changeTags.map((tag) => tag.name).includes(tag.name)}
               >
                 <LabelButton.Content>{tag.name}</LabelButton.Content>
               </LabelButton>
