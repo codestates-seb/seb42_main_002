@@ -19,7 +19,7 @@
         width: 100%;
         height: 100%;
         z-index: 2;
-        background-image: url('../../../assets/img/main_envelope_cover.svg');
+        background-image: url('../../../assets/img/main/main_envelope_cover.svg');
       }
       .envelope_letter {
         position: absolute;
@@ -30,7 +30,7 @@
 
         div {
           background-color: var(--button-primary-color);
-          background-image: url('../../../assets/img/main_letter_card.svg');
+          background-image: url('../../../assets/img/main/main_letter_card.svg');
           background-color: cover;
           width: 100%;
           height: 100%;
@@ -51,14 +51,14 @@
 
   .envelope {
     padding-bottom: 71.25%;
-    background-image: url('../../../assets/img/main_envelope_empty.svg');
+    background-image: url('../../../assets/img/main/main_envelope_empty.svg');
     background-repeat: no-repeat;
     background-size: 100%;
     img {
       position: absolute;
       left: 1rem;
       bottom: 1rem;
-      width: 20%;
+      width: 30%;
       max-width: 8rem;
     }
     p {

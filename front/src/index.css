@@ -116,6 +116,25 @@ button {
   margin: -1px;
 }
 
+/* text color */
+.text_active {
+  color: var(--active-color);
+}
+.text_danger {
+  color: var(--active-color);
+}
+
+/* text align */
+.align_left {
+  text-align: left;
+}
+.align_center {
+  text-align: center;
+}
+.align_right {
+  text-align: right;
+}
+
 /* transition animation */
 .slideInUp-enter {
   transform: translateY(100%);

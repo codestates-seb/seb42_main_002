@@ -1,7 +1,8 @@
-import { useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useState, useEffect } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { userLocationState } from '../../recoil/atoms';
 import { userState } from '../../recoil/atoms/user/user';
+import { LOCATION_CODE } from '../../utils';
 import Button from '../Common/Button/Button';
 import ButtonGroup from '../Common/Button/ButtonGroup';
 import Flex from '../Common/Flex/Flex';
@@ -12,10 +13,17 @@ type MyProfileImageProps = {
 };
 
 const MyProfileImage = ({ onChangeLocation }: MyProfileImageProps) => {
-  const { profile } = useRecoilValue(userState);
-  const userLcation = useRecoilValue(userLocationState);
-  // TODO : 이미지 미리보기 로직 수정 필요
-  const [photoURL, setPhotoURL] = useState<string | null>(profile as string);
+  const { profile, location } = useRecoilValue(userState);
+  const [userLcation, setUserLocation] = useRecoilState(userLocationState);
+  const [photoURL, setPhotoURL] = useState<string | null>();
+
+  useEffect(() => {
+    setUserLocation(location);
+  }, [location]);
+
+  useEffect(() => {
+    setPhotoURL(profile);
+  }, [profile]);
 
   // 이미지 변경
   const onChangeImageHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +39,7 @@ const MyProfileImage = ({ onChangeLocation }: MyProfileImageProps) => {
 
   // 이미지 제거
   const onRemoveImageHandler = () => {
-    setPhotoURL(null);
+    setPhotoURL(profile);
   };
 
   return (
@@ -46,7 +54,7 @@ const MyProfileImage = ({ onChangeLocation }: MyProfileImageProps) => {
       <Flex.Col>
         <ButtonGroup>
           <Flex dir="column" gap="sm">
-            {!photoURL ? (
+            {!photoURL || photoURL === 'image' ? (
               <>
                 <Button size="sm" variant="primary">
                   <label htmlFor="profile">

@@ -6,6 +6,7 @@ import {
   userLanguageNationState,
   userLanguageState,
 } from '../../../recoil/atoms/user/userLanguage';
+import { PATCH } from '../../../utils/axios';
 import Flex from '../../Common/Flex/Flex';
 import LabelButton from '../../Common/LabelButton/LabelButton';
 import FullPageModal, {
@@ -33,34 +34,56 @@ const LanguageLevelModal = ({
     setSeletedLevel(level);
   };
 
-  const onSubmitHandler = () => {
+  const onSubmitHandler = async () => {
     if (onSubmit) {
       const findIdx = selectedUserLanguages.findIndex(
         (lang) => lang.nation === selectedUserLanguageNation
       );
-      // 언어 추가
-      if (findIdx < 0) {
-        const newLanguages = {
-          nation: selectedUserLanguageNation,
-          level: selectedLevel,
-        };
-        setSelectedUserLanguages((prevState) => [...prevState, newLanguages]);
-      } else {
-        // 언어 레벨 수정
-        setSelectedUserLanguages((prevState) => [
-          ...prevState.map((lang) => {
-            if (lang.nation === selectedUserLanguageNation) {
-              return {
-                ...lang,
-                level: selectedLevel,
-              };
-            }
-            return lang;
-          }),
-        ]);
+      try {
+        const prevState = selectedUserLanguages.map((lang) => ({
+          nation: lang.nation,
+          level: lang.level,
+        }));
+        const { status } = await PATCH('/members', {
+          language: [
+            ...prevState,
+            {
+              nation: selectedUserLanguageNation,
+              level: selectedLevel,
+            },
+          ],
+        });
+        if (status === 200) {
+          // 언어 추가
+          if (findIdx < 0) {
+            const newLanguages = {
+              nation: selectedUserLanguageNation,
+              level: selectedLevel,
+            };
+            setSelectedUserLanguages((prevState) => [
+              ...prevState,
+              newLanguages,
+            ]);
+          } else {
+            // 언어 레벨 수정
+            setSelectedUserLanguages((prevState) => [
+              ...prevState.map((lang) => {
+                if (lang.nation === selectedUserLanguageNation) {
+                  return {
+                    ...lang,
+                    level: selectedLevel,
+                  };
+                }
+                return lang;
+              }),
+            ]);
+          }
+          closeModal(LanguageSearchModal);
+          onClose && onClose();
+        }
+      } catch (error) {
+        console.error(error);
       }
-      closeModal(LanguageSearchModal);
-      onClose && onClose();
     }
   };
 
