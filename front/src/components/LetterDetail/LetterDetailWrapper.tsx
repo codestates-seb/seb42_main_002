@@ -1,7 +1,11 @@
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { selectedLetterState, selectedPictureIdx } from '../../recoil/atoms';
+import {
+  newLetterState,
+  selectedLetterState,
+  selectedPictureIdx,
+} from '../../recoil/atoms';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { GET } from '../../utils/axios';
 import { SeletedLetterDataType } from '../../utils';
 import LetterContent from './LetterContent/LetterContent';
