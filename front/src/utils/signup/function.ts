@@ -80,14 +80,22 @@ export const birthdayValidation = (
   }
 };
 
+const specialCharacterRegex =
+  /^(?=.*[!@#$%^&*])(?=.*[a-zA-Z])[a-zA-Z0-9!@#$%^&*]{8,}$/;
 export const passwordValidation = (
   password: string
 ): { isErrorPassword: boolean; passwordErrorText: string } | undefined => {
   if (!(password === undefined)) {
-    if (password.length < 7 || password.length > 20) {
+    if (password.length < 8 || password.length > 20) {
       return {
         isErrorPassword: true,
-        passwordErrorText: '7글자이상 20글자 이하만 사용 가능합니다.',
+        passwordErrorText: '8글자이상 20글자 이하만 사용 가능합니다.',
+      };
+    }
+    if (!specialCharacterRegex.test(password)) {
+      return {
+        isErrorPassword: true,
+        passwordErrorText: '영문, 특수문자가 포함되어야 합니다.',
       };
     } else {
       return {
@@ -106,10 +114,16 @@ export const passwordCheckValidation = (
   | { isErrorPasswordCheck: boolean; passwordCheckErrorText: string }
   | undefined => {
   if (!(passwordCheck === undefined)) {
-    if (passwordCheck.length < 7 || passwordCheck.length > 20) {
+    if (passwordCheck.length < 8 || passwordCheck.length > 20) {
       return {
         isErrorPasswordCheck: true,
-        passwordCheckErrorText: '7글자이상 20글자 이하만 사용 가능합니다.',
+        passwordCheckErrorText: '8글자이상 20글자 이하만 사용 가능합니다.',
+      };
+    }
+    if (!specialCharacterRegex.test(password)) {
+      return {
+        isErrorPasswordCheck: true,
+        passwordCheckErrorText: '영문, 특수문자가 포함되어야 합니다.',
       };
     }
     if (!(passwordCheck === password)) {
