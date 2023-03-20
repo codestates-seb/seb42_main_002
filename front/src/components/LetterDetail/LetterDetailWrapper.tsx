@@ -1,26 +1,47 @@
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { selectedLetterState, selectedPictureIdx } from '../../recoil/atoms';
-import { useEffect } from 'react';
+import {
+  newLetterState,
+  selectedLetterState,
+  selectedPictureIdx,
+} from '../../recoil/atoms';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { GET } from '../../utils/axios';
+import { SeletedLetterDataType } from '../../utils';
 import LetterContent from './LetterContent/LetterContent';
 import LetterPictureWrapper from './LetterPicture/LetterPictureWrapper';
 import Button from '../Common/Button/Button';
 import useModals from '../../hooks/useModals';
 import PictureModal from '../PictureModal/PictureModal';
 
-import { seletedLetter } from '../../dummy/letter';
 import styles from './LetterDetailWrapper.module.scss';
 
 const LetterDetailWrapper = () => {
   const { openModal } = useModals();
+  const { letterId } = useParams();
 
   const setSelectedPictureIdx = useSetRecoilState(selectedPictureIdx);
-
-  // API 호출 후, 설정하기
+  // TODO: 리코일 setter사용 시, 페이지 접속 시 바로 렌더링이 되지않음.
   const [selectedLetter, setSelectedLetter] =
     useRecoilState(selectedLetterState);
+  const [letter, setLetter] = useState<SeletedLetterDataType>(selectedLetter);
+
+  /**
+   * @description API
+   */
+  const getDetailLetter = async () => {
+    try {
+      const { data } = await GET(`/letters/${letterId}`);
+      setSelectedLetter(data);
+      setLetter(data);
+    } catch (error) {
+      console.log('error');
+      // TODO: ERROR 처리 방법
+    }
+  };
 
   useEffect(() => {
-    setSelectedLetter(seletedLetter);
+    getDetailLetter();
   }, []);
 
   // 파파고 번역 기능
@@ -44,14 +65,14 @@ const LetterDetailWrapper = () => {
       </div>
       {/* 편지 내용 */}
       <LetterContent
-        receiver={selectedLetter.receiver}
-        body={selectedLetter.body}
+        receiver={letter.receiver}
+        body={letter.body}
         // 임의
         type="1"
       />
       {/* 편지 사진 */}
       <LetterPictureWrapper
-        pictures={selectedLetter.photoUrl}
+        pictures={letter.photoUrl}
         onClick={pictureClickHandler}
         isRead
       />

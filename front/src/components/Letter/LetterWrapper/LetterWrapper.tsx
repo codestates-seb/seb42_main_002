@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import { selectedUserInfoState } from '../../../recoil/atoms';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { newLetterState, selectedUserInfoState } from '../../../recoil/atoms';
 import { SlEnvolopeLetter } from 'react-icons/sl';
 import { useNavigate } from 'react-router-dom';
 import { GET } from '../../../utils/axios';
@@ -15,6 +15,7 @@ import styles from './LetterWrapper.module.scss';
 const LetterWrapper = () => {
   const navigate = useNavigate();
   const selectedUser = useRecoilValue(selectedUserInfoState);
+  const setNewLetter = useSetRecoilState(newLetterState);
   const [page, setPage] = useState<number>(0);
   const [userLetterList, setUserLetterList] = useState<LetterDataType[]>([]);
 
@@ -41,6 +42,15 @@ const LetterWrapper = () => {
       return;
     }
     getUserLetterList(selectedUser.memberId);
+  }, []);
+
+  // 선택한 유저 정보 저장
+  useEffect(() => {
+    setNewLetter((prev) => ({
+      ...prev,
+      memberId: selectedUser.memberId,
+      receiver: selectedUser.name,
+    }));
   }, []);
 
   if (userLetterList.length === 0) {

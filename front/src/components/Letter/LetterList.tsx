@@ -35,7 +35,6 @@ const LetterList = () => {
     getLetterUserList();
   }, []);
 
-  // 렌더링 시, 데이터 fetch
   const onClickHandler = (
     event: React.MouseEvent<Element, MouseEvent>,
     memberId: number,
