@@ -53,7 +53,7 @@ public class Member extends Auditable {
   @JsonProperty(access = Access.WRITE_ONLY)
   @Column(nullable = false)
   private String password;
-  @Column(nullable = false)
+  //  @Column(nullable = false)
   private String birthday;
   @Column
   @Lob
@@ -63,7 +63,7 @@ public class Member extends Auditable {
   @Setter
   private String location;
   @Enumerated(value = EnumType.STRING)
-  @Column(nullable = false)
+//  @Column(nullable = false)
   @Setter
   private Gender gender;
   @Column
