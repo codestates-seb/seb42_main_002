@@ -16,6 +16,17 @@ import {
   passwordValidation,
   passwordCheckValidation,
 } from '../../utils/signup/function';
+import { POST } from '../../utils/axios';
+import { useNavigate } from 'react-router-dom';
+import AlertModal from '../Common/Modal/AlertModal';
+
+type UserDataType = {
+  email: string;
+  name: string;
+  birthday: string;
+  password: string;
+  gender: string;
+};
 
 const SignUpMain = (): JSX.Element => {
   const [isBtnClick, setIsBtnClick] = useState([false, false, false]);
@@ -36,7 +47,8 @@ const SignUpMain = (): JSX.Element => {
     passwordCheck: '',
   });
   const [passwordCheckData, setPasswordCheckData] = useState('');
-
+  const [isSuccess, setIsSuccess] = useState(false);
+  const navigate = useNavigate();
   // 성별 버튼 유효성 검사
   useEffect(() => {
     if (
@@ -63,14 +75,18 @@ const SignUpMain = (): JSX.Element => {
   };
 
   const genderCheck = (): string | void => {
-    if (isBtnClick[0] === true) return '남자';
-    else if (isBtnClick[1] === true) return '여자';
-    else if (isBtnClick[2] === true) return '기타';
+    if (isBtnClick[0] === true) return 'MALE';
+    else if (isBtnClick[1] === true) return 'FEMALE';
+    else if (isBtnClick[2] === true) return 'OTHER';
     else {
       setIsError({ ...isError, gender: true });
       setErrorText({ ...errorText, gender: '성별을 선택하세요.' });
     }
   };
+
+  function passWordProps(passwordData: string) {
+    setPasswordCheckData(passwordData);
+  }
 
   // 유효성 검사
   const signupValidation = (
@@ -180,6 +196,15 @@ const SignUpMain = (): JSX.Element => {
     }
   };
 
+  async function signupRequest(userData: UserDataType) {
+    try {
+      const response = await POST('/members', userData);
+      setIsSuccess(true);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const signupSubmitHandler = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
@@ -198,124 +223,136 @@ const SignUpMain = (): JSX.Element => {
       )
     ) {
       const gender = genderCheck();
-      const sentData = {
-        name: data.name,
-        email: data.email,
-        password: data.signup_password,
-        birthday: data.birthday,
-        gender: gender,
+      const sentData: UserDataType = {
+        name: data.name as string,
+        email: data.email as string,
+        password: data.signup_password as string,
+        birthday: data.birthday as string,
+        gender: gender as string,
       };
       console.log(sentData);
-      //  서버로 보낼 데이터
+      signupRequest(sentData);
     }
   };
 
-  function passWordProps(passwordData: string) {
-    setPasswordCheckData(passwordData);
-  }
-
   return (
-    <form className={styles.container} onSubmit={signupSubmitHandler}>
-      <InputForm
-        htmlfor="email"
-        labelInner="이메일"
-        name="email"
-        isError={isError.eamil}
-        errorText={errorText.eamil}
-        validation={signupValidation}
-      >
-        <MdOutlineAttachEmail className={styles.icon} />
-      </InputForm>
-      <InputForm
-        htmlfor="text"
-        labelInner="별명"
-        name="name"
-        isError={isError.name}
-        errorText={errorText.name}
-        validation={signupValidation}
-      >
-        <BsPencil className={styles.icon} />
-      </InputForm>
-      <p className={isError.gender ? styles.btn_error_text : styles.btn_text}>
-        성별
-      </p>
-      <div
-        className={
-          isError.gender
-            ? styles.button_error_container
-            : styles.button_container
-        }
-      >
-        {isError.gender ? (
-          <p className={styles.error_text_gender}>{errorText.gender}</p>
-        ) : null}
-        <button
-          type="button"
-          onClick={() => {
-            isBtnClickHandler(0);
+    <>
+      {isSuccess ? (
+        <AlertModal
+          labelClose="수정예정"
+          onSubmit={() => {
+            setIsSuccess(false);
+            navigate('/login');
           }}
-          className={isBtnClick[0] ? styles.clicked : styles.not_clicked}
         >
-          <FaMars className={styles.male_icon} /> 남자
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            isBtnClickHandler(1);
-          }}
+          회원가입이 완료되었습니다.🎉 <br />
+          로그인 페이지로 이동하겠습니다.
+        </AlertModal>
+      ) : (
+        <></>
+      )}
+      <form className={styles.container} onSubmit={signupSubmitHandler}>
+        <InputForm
+          htmlfor="email"
+          labelInner="이메일"
+          name="email"
+          isError={isError.eamil}
+          errorText={errorText.eamil}
+          validation={signupValidation}
+        >
+          <MdOutlineAttachEmail className={styles.icon} />
+        </InputForm>
+        <InputForm
+          htmlfor="text"
+          labelInner="별명"
+          name="name"
+          isError={isError.name}
+          errorText={errorText.name}
+          validation={signupValidation}
+        >
+          <BsPencil className={styles.icon} />
+        </InputForm>
+        <p className={isError.gender ? styles.btn_error_text : styles.btn_text}>
+          성별
+        </p>
+        <div
           className={
-            isBtnClick[1] ? `${styles.clicked}` : `${styles.not_clicked}`
+            isError.gender
+              ? styles.button_error_container
+              : styles.button_container
           }
         >
-          <FaVenus className={styles.female_icon} /> 여자
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            isBtnClickHandler(2);
-          }}
-          className={
-            isBtnClick[2] ? `${styles.clicked}` : `${styles.not_clicked}`
-          }
+          {isError.gender ? (
+            <p className={styles.error_text_gender}>{errorText.gender}</p>
+          ) : null}
+          <button
+            type="button"
+            onClick={() => {
+              isBtnClickHandler(0);
+            }}
+            className={isBtnClick[0] ? styles.clicked : styles.not_clicked}
+          >
+            <FaMars className={styles.male_icon} /> 남자
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              isBtnClickHandler(1);
+            }}
+            className={
+              isBtnClick[1] ? `${styles.clicked}` : `${styles.not_clicked}`
+            }
+          >
+            <FaVenus className={styles.female_icon} /> 여자
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              isBtnClickHandler(2);
+            }}
+            className={
+              isBtnClick[2] ? `${styles.clicked}` : `${styles.not_clicked}`
+            }
+          >
+            <FaTransgender className={styles.ambiguous_icon} /> 기타
+          </button>
+        </div>
+        <InputForm
+          htmlfor="date"
+          labelInner="생년월일"
+          name="birthday"
+          isError={isError.birthday}
+          errorText={errorText.birthday}
+          validation={signupValidation}
         >
-          <FaTransgender className={styles.ambiguous_icon} /> 기타
+          <BsCalendar2Date className={styles.icon} />
+        </InputForm>
+        <InputForm
+          htmlfor="password"
+          labelInner="비밀번호"
+          name="signup_password"
+          isError={isError.password}
+          errorText={errorText.password}
+          validation={signupValidation}
+          passwordProps={passWordProps}
+        >
+          <AiOutlineLock className={styles.icon} />
+        </InputForm>
+        <InputForm
+          htmlfor="password"
+          labelInner="비밀번호 확인"
+          name="passwordCheck"
+          isError={isError.passwordCheck}
+          errorText={errorText.passwordCheck}
+          validation={signupValidation}
+        >
+          <AiOutlineLock className={styles.icon} />
+        </InputForm>
+        <button type="submit" className={styles.signUp_Btn}>
+          회원가입
         </button>
-      </div>
-      <InputForm
-        htmlfor="date"
-        labelInner="생년월일"
-        name="birthday"
-        isError={isError.birthday}
-        errorText={errorText.birthday}
-        validation={signupValidation}
-      >
-        <BsCalendar2Date className={styles.icon} />
-      </InputForm>
-      <InputForm
-        htmlfor="password"
-        labelInner="비밀번호"
-        name="signup_password"
-        isError={isError.password}
-        errorText={errorText.password}
-        validation={signupValidation}
-        passwordProps={passWordProps}
-      >
-        <AiOutlineLock className={styles.icon} />
-      </InputForm>
-      <InputForm
-        htmlfor="password"
-        labelInner="비밀번호 확인"
-        name="passwordCheck"
-        isError={isError.passwordCheck}
-        errorText={errorText.passwordCheck}
-        validation={signupValidation}
-      >
-        <AiOutlineLock className={styles.icon} />
-      </InputForm>
-      <button type="submit" className={styles.signUp_Btn}>
-        회원가입
-      </button>
-    </form>
+      </form>
+    </>
   );
 };
 

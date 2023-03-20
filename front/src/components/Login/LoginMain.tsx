@@ -13,12 +13,14 @@ import {
 import { useState } from 'react';
 import { POST } from '../../utils/axios/fetch';
 import { setCookie } from '../../utils/cookie';
+import AlertModal from '../Common/Modal/AlertModal';
 
 type UserDataType = { username: string; password: string };
 
 const LoginMain = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [isFailed, setIsFailed] = useState(false);
   const selectedUserLocation = useRecoilValue(userLocationState);
 
   const [isError, setIsError] = useState({
@@ -83,8 +85,10 @@ const LoginMain = () => {
     try {
       const response = await POST('/login', userData);
       setCookie('accessJwtToken', response.headers.authorization);
+      console.log('로그인 성공!');
       // 첫 회원인지 아닌지 분기 갈라서 navigate
     } catch (error) {
+      setIsFailed(true);
       console.log(error);
     }
   }
@@ -100,19 +104,29 @@ const LoginMain = () => {
       loginValidation(data.loginEmail as string, data.Loginpassword as string)
     ) {
       const userData: UserDataType = {
-        // 일단 회원가입 작업안해서 임시로 하드코딩으로 넣음.
-        username: 'test@test.com',
-        password: 'test123!',
+        username: data.loginEmail as string,
+        password: data.Loginpassword as string,
       };
       loginRequest(userData);
-      console.log(`아이디: ${data.loginEmail} 비밀번호: ${data.Loginpassword}`);
-    } else {
-      alert('아이디와 비밀번호를 확인해주세요.');
+      // console.log(`아이디: ${data.loginEmail} 비밀번호: ${data.Loginpassword}`);
     }
   };
 
   return (
     <>
+      {isFailed ? (
+        <AlertModal
+          labelClose="닫기"
+          labelSubmit="수정예정"
+          onClose={() => {
+            setIsFailed(false);
+          }}
+        >
+          일치하는 회원정보가 없습니다.
+        </AlertModal>
+      ) : (
+        <></>
+      )}
       <form className={styles.login_container} onSubmit={loginSubmitHandler}>
         <InputForm
           htmlfor="email"
