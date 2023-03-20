@@ -24,12 +24,12 @@ import MyProfileImage from './MyProfileImage';
 import LocationEditModal from './LocationEditModal/LocationEditModal';
 import styles from './MyProfile.module.scss';
 import { GET } from '../../utils/axios';
-import { userSeletor } from '../../recoil/selectors/user/user';
+import { LanguageDataType } from '../../utils';
 
 const MyProfile = () => {
   const { logout } = useAuth();
   const { openModal } = useModals();
-  const [userInfo, setUserInfo] = useRecoilState(userSeletor);
+  const [userInfo, setUserInfo] = useRecoilState(userState);
   const [userTags, setUserTags] = useRecoilState(userTagState);
   const [userLanguages, setUserLanguages] = useRecoilState(userLanguageState);
   const [isEditBaseInfo, setIsEditBaseInfo] = useState(false);
@@ -309,7 +309,7 @@ const MyProfile = () => {
                 <InfoGroup.Content>
                   <Flex gap="sm" wrap="wrap">
                     {userLanguages &&
-                      userLanguages.map((language: any) => (
+                      userLanguages.map((language: LanguageDataType) => (
                         <Flex.Col key={language.nation}>
                           <Label>
                             {langTransformer(language.nation)} Lv.
