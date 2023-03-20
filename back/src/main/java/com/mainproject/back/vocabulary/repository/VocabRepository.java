@@ -12,4 +12,8 @@ public interface VocabRepository extends JpaRepository<Vocabulary, Long> {
   @Query("select v from Vocabulary v join v.member m where m.memberId = :memberId")
   Page<Vocabulary> findAllByMemberId(@Param("memberId") long memberId, Pageable pageable);
 
+  @Query("select v from Vocabulary v join v.member m where m.memberId = :memberId order by RAND()")
+  Page<Vocabulary> findAllByMemberIdOrderByRand(@Param("memberId") long memberId,
+      Pageable pageable);
+
 }

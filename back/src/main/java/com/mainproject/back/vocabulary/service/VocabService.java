@@ -5,13 +5,14 @@ import com.mainproject.back.member.exception.MemberExceptionCode;
 import com.mainproject.back.vocabulary.entity.Vocabulary;
 import com.mainproject.back.vocabulary.exception.VocabExceptionCode;
 import com.mainproject.back.vocabulary.repository.VocabRepository;
-import java.util.NoSuchElementException;
 import java.util.Optional;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Service
 @Transactional(readOnly = true)
@@ -62,5 +63,9 @@ public class VocabService {
         .orElseThrow(() -> new BusinessLogicException(VocabExceptionCode.VOCAB_NOT_FOUND));
     vocabRepository.deleteById(vocabId);
   }
+  public Page<Vocabulary> todayVocab(long memberId , Pageable pageable) {
 
-}
+    return vocabRepository.findAllByMemberIdOrderByRand(memberId, pageable);
+  }
+  }
+

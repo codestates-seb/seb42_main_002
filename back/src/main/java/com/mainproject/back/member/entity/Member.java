@@ -110,6 +110,11 @@ public class Member extends Auditable {
   @Exclude
   private List<Vocabulary> vocabularies = new ArrayList<>();
 
+  public void addVocabulary(Vocabulary vocabulary) {
+    this.vocabularies.add(vocabulary);
+    vocabulary.setMember(this);
+  }
+
   @RequiredArgsConstructor
   public enum MemberStatus {
     MEMBER_ACTIVE("활동중"),
