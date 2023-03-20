@@ -1,6 +1,7 @@
 package com.mainproject.back.member.service;
 
 import com.mainproject.back.block.entity.Block;
+import com.mainproject.back.block.service.BlockService;
 import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.follow.entity.Follow;
 import com.mainproject.back.follow.service.FollowService;
@@ -44,6 +45,7 @@ public class MemberConvertService {
   private final MemberMapper memberMapper;
   private final LanguageService languageService;
   private final FollowService followService;
+  private final BlockService blockService;
   private final MemberService memberService;
   private final LetterService letterService;
 
@@ -125,7 +127,9 @@ public class MemberConvertService {
   public MemberDto.Response memberToResponseDto(Member member, long memberId) {
     MemberDto.Response response = memberMapper.memberToMemberResponse(member);
     List<Long> followingIdList = followService.findFollowingId(memberId);
-    response.setFriend(findIsFriend(followingIdList, member.getMemberId()));
+    List<Long> blockIdList = blockService.findBlockIdList(memberId);
+    response.setFriend(findIs(followingIdList, member.getMemberId()));
+    response.setBlock(findIs(blockIdList, member.getMemberId()));
     return response;
   }
 
@@ -137,11 +141,11 @@ public class MemberConvertService {
 
   private MemberSearchDto memberToMemberSearchDto(Member member, List<Long> followingIdList) {
     MemberSearchDto memberSearchDto = memberMapper.memberToMemberSearchDto(member);
-    memberSearchDto.setFriend(findIsFriend(followingIdList, member.getMemberId()));
+    memberSearchDto.setFriend(findIs(followingIdList, member.getMemberId()));
     return memberSearchDto;
   }
 
-  private boolean findIsFriend(List<Long> followingIdList, Long memberId) {
+  private boolean findIs(List<Long> followingIdList, Long memberId) {
     for (Long followingId : followingIdList) {
       if (followingId.equals(memberId)) {
         return true;

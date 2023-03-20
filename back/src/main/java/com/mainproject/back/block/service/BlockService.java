@@ -5,13 +5,6 @@ import com.mainproject.back.block.exception.BlockExceptionCode;
 import com.mainproject.back.block.repository.BlockRepository;
 import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.follow.service.FollowService;
-import com.mainproject.back.letter.dto.LetterSimpleDto;
-import com.mainproject.back.letter.dto.LetterSimpleDto.LetterStatus;
-import com.mainproject.back.letter.entity.Letter;
-import com.mainproject.back.letter.service.LetterService;
-import com.mainproject.back.member.dto.MemberLetterDto;
-import com.mainproject.back.member.entity.Member;
-import com.mainproject.back.member.service.MemberService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,16 +22,17 @@ public class BlockService {
 
   @Transactional
   public Block createBlock(Block block) {
-    followService.deleteFollowByBlock(block.getMember().getMemberId(), block.getTarget().getMemberId());
+    followService.deleteFollowByBlock(block.getMember().getMemberId(),
+        block.getTarget().getMemberId());
     return blockRepository.save(block);
   }
 
   @Transactional
-  public void deleteBlock(long blockId) {
-    long foundId = blockRepository.findBlockIdByBlockId(blockId)
+  public void deleteBlock(long targetId) {
+    Block findBlock = blockRepository.findBlockIdByTargetId(targetId)
         .orElseThrow(() -> new BusinessLogicException(
             BlockExceptionCode.BLOCK_NOT_FOUND));
-    blockRepository.deleteById(foundId);
+    blockRepository.delete(findBlock);
   }
 
   public Page<Block> findBlocks(long memberId, Pageable pageable) {
