@@ -22,7 +22,8 @@ const NewLetterWrapper = () => {
     try {
       const response = await POST(`/letters/${newLetter.memberId}`, letter);
       // TODO: 서버에서 CORS 요청 수정 후에 location 설정
-      const location = response.headers.location;
+      const location =
+        response.headers.location && response.headers.location.split('/');
 
       // 편지 내용 초기화
       setNewLetter((prev) => ({
@@ -31,7 +32,11 @@ const NewLetterWrapper = () => {
         photoUrl: [],
       }));
 
-      navigate(`/letters/${newLetter.memberId}`);
+      if (location[2]) {
+        navigate(`/letters/${newLetter.memberId}/${location[2]}`);
+      } else {
+        navigate(`/letters/${newLetter.memberId}`);
+      }
     } catch (error) {
       console.log('error');
       // TODO: ERROR 처리 방법
