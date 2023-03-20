@@ -64,6 +64,7 @@ public class MemberService {
     Optional.ofNullable(member.getLocation()).ifPresent(findMember::setLocation);
     Optional.ofNullable(member.getProfile())
         .ifPresent(findMember::setProfile);
+    Optional.ofNullable(member.getGender()).ifPresent(findMember::setGender);
     if (!member.getMemberLanguages().isEmpty()) {
       findMember.setMemberLanguages(member.getMemberLanguages());
     }

@@ -15,6 +15,7 @@ public interface VocabMapper {
   Vocabulary vocabPostToVocab(VocabDto.Post requestBody);
 
   Vocabulary vocabPatchToVocab(VocabDto.Patch requestBody);
+  VocabDto.Response vocabToResponse(Vocabulary vocabulary);
 
   default Page<VocabDto.Response> pageVocabToPageVocabResponsePage(Page<Vocabulary> vocabPage) {
     return vocabPage.map(this::vocabToVocabResponse);

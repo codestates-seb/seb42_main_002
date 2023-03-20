@@ -132,10 +132,9 @@ public class Member extends Auditable {
 
   @RequiredArgsConstructor
   public enum Gender {
-    MALE("남"),
-    FEMALE("여"),
-
-    OTHER("기타");
+    MALE("MALE"),
+    FEMALE("FEMALE"),
+    OTHER("OTHER");
     @Getter
     private final String choseGender;
   }
