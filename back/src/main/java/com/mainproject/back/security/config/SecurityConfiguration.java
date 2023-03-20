@@ -111,7 +111,7 @@ public class SecurityConfiguration {
 
     // BE 정하는 규칙.(Arrays.asList) "Authrorization",
     // 4. request에 어떤 헤더값을 우리(BE)가 응답에 넣어서 보내줄지 ex) 회원가입하면 JWT auth를 넣어주듯.
-    configuration.setExposedHeaders(Arrays.asList("*"));
+    configuration.setExposedHeaders(Arrays.asList("Authorization", "Location"));
     // 5. request에 어떤 헤더값을 받아들이는데 성공할지
     configuration.setAllowedHeaders(Arrays.asList("*"));
 
