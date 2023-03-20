@@ -19,7 +19,6 @@ public class LetterPostDto {
   private long receiverId;
   private String body;
   private ArrayList<String> photoUrl;
-
   private int type;
 
 }

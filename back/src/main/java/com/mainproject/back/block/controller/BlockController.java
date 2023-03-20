@@ -49,7 +49,7 @@ public class BlockController {
   @PostMapping
   public ResponseEntity postBlock(@Valid @RequestBody BlockDto.Post requestBody,
       Principal principal) {
-
+    log.info("## 차단 생성: {}", requestBody.getTargetId());
     Member member = memberService.findMemberByEmail(principal.getName());
     Member target = memberService.findMember(requestBody.getTargetId());
 
@@ -65,6 +65,7 @@ public class BlockController {
   @GetMapping
   public ResponseEntity getBlocks(@PageableDefault(sort = "block_id") Pageable pageable,
       Principal principal) {
+    log.info("## 차단 목록 조회: {}", principal.getName());
     Member member = memberService.findMemberByEmail(principal.getName());
     Page<Block> blockPage = blockService.findBlocks(member.getMemberId(), pageable);
     Page<MemberBlockDto> responses = memberConvertService.blockPageToMemberBlockPage(blockPage);
@@ -72,9 +73,10 @@ public class BlockController {
 
   }
 
-  @DeleteMapping("/{block-id}")
-  public ResponseEntity deleteBlock(@PathVariable("block-id") long blockId) {
-    blockService.deleteBlock(blockId);
+  @DeleteMapping("/{target-id}")
+  public ResponseEntity deleteBlock(@PathVariable("target-id") long targetId) {
+    log.info("## 차단 목록 삭제: {}", targetId);
+    blockService.deleteBlock(targetId);
     return ResponseEntity.noContent().build();
   }
 }

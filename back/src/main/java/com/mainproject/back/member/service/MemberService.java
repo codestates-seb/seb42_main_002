@@ -3,20 +3,14 @@ package com.mainproject.back.member.service;
 
 import com.mainproject.back.block.service.BlockService;
 import com.mainproject.back.exception.BusinessLogicException;
-import com.mainproject.back.follow.entity.Follow;
 import com.mainproject.back.follow.service.FollowService;
-import com.mainproject.back.letter.dto.LetterSimpleDto;
-import com.mainproject.back.letter.dto.LetterSimpleDto.LetterStatus;
-import com.mainproject.back.letter.entity.Letter;
-import com.mainproject.back.letter.service.LetterService;
-import com.mainproject.back.member.dto.MemberLetterDto;
-import com.mainproject.back.member.dto.MemberSearchDto;
+import com.mainproject.back.language.entity.Language;
 import com.mainproject.back.member.entity.Member;
-import com.mainproject.back.member.entity.Member.MemberStatus;
 import com.mainproject.back.member.exception.MemberExceptionCode;
 import com.mainproject.back.member.repository.MemberRepository;
 import com.mainproject.back.security.utils.AuthorityUtils;
 import com.mainproject.back.tag.entity.Tag;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -70,9 +64,12 @@ public class MemberService {
     Optional.ofNullable(member.getLocation()).ifPresent(findMember::setLocation);
     Optional.ofNullable(member.getProfile())
         .ifPresent(findMember::setProfile);
-    Optional.ofNullable(member.getMemberLanguages())
-        .ifPresent(findMember::setMemberLanguages);
-    Optional.ofNullable(member.getMemberTags()).ifPresent(findMember::setMemberTags);
+    if (!member.getMemberLanguages().isEmpty()) {
+      findMember.setMemberLanguages(member.getMemberLanguages());
+    }
+    if (!member.getMemberTags().isEmpty()) {
+      findMember.setMemberTags(member.getMemberTags());
+    }
     Member savedMember = memberRepository.save(findMember);
     log.info("## updated member: {}", savedMember);
     return savedMember;
@@ -132,9 +129,19 @@ public class MemberService {
     return new PageImpl<>(result, pageable, result.size());
   }
 
-  public Page<Member> searchMembersByTag(List<Tag> tagList, Pageable pageable, long memberId) {
-    Page<Member> memberPage = memberRepository.getMemberByTags(tagList, pageable);
-    List<Long> blockIdList = blockService.findBlockIdList(memberId);
+  public Page<Member> searchMembersByTag(List<Tag> tagList, List<Language> languageList,
+      Pageable pageable, long memberId) {
+    Page<Member> memberPage;
+    if (tagList.isEmpty() && !languageList.isEmpty()) {
+      memberPage = memberRepository.getMemberByLang(languageList, pageable);
+    } else if (languageList.isEmpty() && !tagList.isEmpty()) {
+      memberPage = memberRepository.getMemberByTags(tagList, pageable);
+    } else {
+      memberPage = memberRepository.getMemberByTagsAndLang(tagList, languageList, pageable);
+    }
+
+    List<Long> blockIdList =
+        memberId == 0 ? new ArrayList<>() : blockService.findBlockIdList(memberId);
 
     List<Member> distinct = memberPage.stream().filter(distinctByKey(Member::getMemberId))
         .filter(member -> member.getMemberId() != memberId)

@@ -65,8 +65,8 @@ public class LetterService {
   }
 
   public Page<Letter> findLettersByMemberAndTarget(long targetId, Pageable pageable,
-      Principal principal) {
-    long memberId = memberService.findMemberByEmail(principal.getName()).getMemberId();
+      String email) {
+    long memberId = memberService.findMemberIdByEmail(email);
     Page<Letter> letterPage = letterRepository.findLettersByMemberAndTarget(memberId, targetId,
         pageable);
     return letterPage;
@@ -92,6 +92,7 @@ public class LetterService {
           Member receiver = letter.getReceiver();
           return MemberLetterDto.builder().memberId(receiver.getMemberId())
               .name(receiver.getName())
+              .birthday(receiver.getBirthday())
               .profile(receiver.getProfile())
               .location(receiver.getLocation())
               .lastLetter(
@@ -106,6 +107,7 @@ public class LetterService {
           return MemberLetterDto.builder().memberId(sender.getMemberId())
               .name(sender.getName())
               .profile(sender.getProfile())
+              .birthday(sender.getBirthday())
               .location(sender.getLocation())
               .lastLetter(
                   LetterSimpleDto.builder().isRead(letter.getIsRead()).status(LetterStatus.RECEIVED)
@@ -120,9 +122,9 @@ public class LetterService {
   public LetterCountDto getArrivedLettersCount(long memberId) {
     Long count;
     List<Long> blockIdList = blockService.findBlockIdList(memberId);
-    if(blockIdList.isEmpty()) {
+    if (blockIdList.isEmpty()) {
       count = letterRepository.countByIsReadAndReceiver(memberId);
-    }else{
+    } else {
       count = letterRepository.countByIsReadAndReceiverAndBlock(memberId, blockIdList);
     }
 

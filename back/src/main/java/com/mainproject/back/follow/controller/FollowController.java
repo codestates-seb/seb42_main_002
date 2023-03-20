@@ -10,6 +10,7 @@ import com.mainproject.back.member.dto.MemberSearchDto;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.service.MemberConvertService;
 import com.mainproject.back.member.service.MemberService;
+import com.mainproject.back.util.Check;
 import com.mainproject.back.util.UriCreator;
 import java.net.URI;
 import java.security.Principal;
@@ -48,7 +49,7 @@ public class FollowController {
   public ResponseEntity postFollow(@Valid @RequestBody FollowDto.Post requestBody,
       Principal principal) {
 
-    Member follower = memberService.findMemberByEmail(principal.getName());
+    Member follower = memberService.findMemberByEmail(Check.checkPrincipal(principal));
     Member following = memberService.findMember(requestBody.getFollowingId());
 
     Follow follow = new Follow();
@@ -63,7 +64,7 @@ public class FollowController {
   @GetMapping("/follower")
   public ResponseEntity getFollower(@PageableDefault(sort = "follow_id") Pageable pageable,
       Principal principal) {
-    Member currentMember = memberService.findMemberByEmail(principal.getName());
+    Member currentMember = memberService.findMemberByEmail(Check.checkPrincipal(principal));
 
     Page<Follow> followPage = followService.findFollower(currentMember.getMemberId(), pageable);
 
@@ -77,7 +78,7 @@ public class FollowController {
   @GetMapping("/following")
   public ResponseEntity getFollowing(@PageableDefault(sort = "follow_id") Pageable pageable,
       Principal principal) {
-    Member currentMember = memberService.findMemberByEmail(principal.getName());
+    Member currentMember = memberService.findMemberByEmail(Check.checkPrincipal(principal));
 
     Page<Follow> followPage = followService.findFollowing(currentMember.getMemberId(), pageable);
 
@@ -87,9 +88,9 @@ public class FollowController {
 
   }
 
-  @DeleteMapping("/{follow-id}")
-  public ResponseEntity deleteBlock(@PathVariable("follow-id") long followId) {
-    followService.deleteFollow(followId);
+  @DeleteMapping("/{following-id}")
+  public ResponseEntity deleteBlock(@PathVariable("following-id") long followingId) {
+    followService.deleteFollow(followingId);
     return ResponseEntity.noContent().build();
   }
 }

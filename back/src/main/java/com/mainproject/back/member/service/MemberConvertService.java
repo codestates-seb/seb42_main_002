@@ -1,6 +1,7 @@
 package com.mainproject.back.member.service;
 
 import com.mainproject.back.block.entity.Block;
+import com.mainproject.back.block.service.BlockService;
 import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.follow.entity.Follow;
 import com.mainproject.back.follow.service.FollowService;
@@ -23,6 +24,7 @@ import com.mainproject.back.tag.entity.MemberTag;
 import com.mainproject.back.tag.entity.Tag;
 import com.mainproject.back.tag.exception.TagExceptionCode;
 import com.mainproject.back.tag.service.TagService;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -43,6 +45,7 @@ public class MemberConvertService {
   private final MemberMapper memberMapper;
   private final LanguageService languageService;
   private final FollowService followService;
+  private final BlockService blockService;
   private final MemberService memberService;
   private final LetterService letterService;
 
@@ -55,7 +58,6 @@ public class MemberConvertService {
     return member;
   }
 
-  @Transactional
   private void getMemberLanguage(Member member, List<MemberLanguageDto> languageDtoList) {
     List<Language> allLanguages = languageService.findAllLanguages();
     List<MemberLanguage> memberLanguageList = languageDtoList.stream().map(languageDto -> {
@@ -99,19 +101,35 @@ public class MemberConvertService {
     throw new BusinessLogicException(TagExceptionCode.TAG_NOT_FOUND);
   }
 
-  @Transactional
   public List<Tag> getTags(String tagNames) {
-    String[] tagNameArr = tagNames.split("[+]");
+    if (tagNames.isEmpty()) {
+      return new ArrayList<>();
+    }
+    String[] tagNameArr = tagNames.split(" ");
     List<Tag> allTags = tagService.findAllTags();
     List<Tag> tagList = Arrays.stream(tagNameArr).map(name -> findTag(allTags, name)).collect(
         Collectors.toList());
     return tagList;
   }
 
+  public List<Language> getLanguages(String languageNations) {
+    if (languageNations.isEmpty()) {
+      return new ArrayList<>();
+    }
+    String[] nationArr = languageNations.split(" ");
+    List<Language> allLanguages = languageService.findAllLanguages();
+    List<Language> languageList = Arrays.stream(nationArr)
+        .map(nation -> findLanguage(allLanguages, nation))
+        .collect(Collectors.toList());
+    return languageList;
+  }
+
   public MemberDto.Response memberToResponseDto(Member member, long memberId) {
     MemberDto.Response response = memberMapper.memberToMemberResponse(member);
     List<Long> followingIdList = followService.findFollowingId(memberId);
-    response.setFriend(findIsFriend(followingIdList, member.getMemberId()));
+    List<Long> blockIdList = blockService.findBlockIdList(memberId);
+    response.setFriend(findIs(followingIdList, member.getMemberId()));
+    response.setBlock(findIs(blockIdList, member.getMemberId()));
     return response;
   }
 
@@ -123,11 +141,11 @@ public class MemberConvertService {
 
   private MemberSearchDto memberToMemberSearchDto(Member member, List<Long> followingIdList) {
     MemberSearchDto memberSearchDto = memberMapper.memberToMemberSearchDto(member);
-    memberSearchDto.setFriend(findIsFriend(followingIdList, member.getMemberId()));
+    memberSearchDto.setFriend(findIs(followingIdList, member.getMemberId()));
     return memberSearchDto;
   }
 
-  private boolean findIsFriend(List<Long> followingIdList, Long memberId) {
+  private boolean findIs(List<Long> followingIdList, Long memberId) {
     for (Long followingId : followingIdList) {
       if (followingId.equals(memberId)) {
         return true;

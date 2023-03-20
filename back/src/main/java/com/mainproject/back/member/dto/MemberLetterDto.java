@@ -15,6 +15,7 @@ public class MemberLetterDto {
   private String name;
   private String location;
   private String profile;
+  private String birthday;
   private LetterSimpleDto lastLetter;
 
   @Override
