@@ -19,17 +19,23 @@ type LetterProps = {
   createdAt: string; // 편지 생성 날짜
   availableAt: string; // 편지 읽을 수 있는 날짜
   letterId: number;
+  selectedUser: string;
 };
 
 type LetterStatusProps = {
-  user?: string;
+  selectedUser: string;
   sender: string;
   isRead: boolean;
   hasPic: boolean;
 };
 
-const LetterStatus = ({ user, sender, isRead, hasPic }: LetterStatusProps) => {
-  if (user === sender) {
+const LetterStatus = ({
+  selectedUser,
+  sender,
+  isRead,
+  hasPic,
+}: LetterStatusProps) => {
+  if (selectedUser !== sender) {
     return (
       <>
         <Send />
@@ -55,9 +61,8 @@ const Letter = ({
   createdAt,
   availableAt,
   letterId,
+  selectedUser,
 }: LetterProps) => {
-  const { user } = useAuth();
-
   // 편지 열람이 불가능한 경우
   if (!body) {
     return (
@@ -88,7 +93,7 @@ const Letter = ({
       {/* 편지 상태 */}
       <div className={styles.letter_status}>
         <LetterStatus
-          user={user?.email}
+          selectedUser={selectedUser}
           sender={sender}
           isRead={isRead}
           hasPic={hasPic}

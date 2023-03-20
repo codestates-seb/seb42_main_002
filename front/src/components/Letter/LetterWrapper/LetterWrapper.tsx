@@ -74,6 +74,7 @@ const LetterWrapper = () => {
       <div className={styles.letter_wrapper}>
         {userLetterList.map((letter) => (
           <Letter
+            selectedUser={selectedUser.name}
             sender={letter.sender.name}
             receiver={letter.receiver.name}
             body={letter.body}
