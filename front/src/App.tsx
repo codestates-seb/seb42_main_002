@@ -140,7 +140,9 @@ const routers = createBrowserRouter(
         path: router.path,
         element: (
           <AuthProvider>
-            <BaseLayout isAuth={router.isAuth}>{router.element}</BaseLayout>
+            <ModalProvider>
+              <BaseLayout isAuth={router.isAuth}>{router.element}</BaseLayout>
+            </ModalProvider>
           </AuthProvider>
         ),
       };
@@ -149,7 +151,9 @@ const routers = createBrowserRouter(
         path: router.path,
         element: (
           <AuthProvider>
-            <NoneLayout>{router.element}</NoneLayout>
+            <ModalProvider>
+              <NoneLayout>{router.element}</NoneLayout>
+            </ModalProvider>
           </AuthProvider>
         ),
       };
@@ -160,9 +164,7 @@ const routers = createBrowserRouter(
 function App() {
   return (
     <>
-      <ModalProvider>
-        <RouterProvider router={routers} />
-      </ModalProvider>
+      <RouterProvider router={routers} />
     </>
   );
 }

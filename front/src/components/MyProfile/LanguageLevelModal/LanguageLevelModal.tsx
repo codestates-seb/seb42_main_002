@@ -84,7 +84,7 @@ const LanguageLevelModal = ({
       });
       if (response) {
         setSelectedUserLanguages(changeLanguages);
-        console.log('언어 설정 완료');
+        console.log('언어 수정 완료');
       }
     } catch (error) {
       console.log(error);
