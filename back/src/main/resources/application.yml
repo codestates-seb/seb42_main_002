@@ -5,6 +5,16 @@ cloud:
     stack:
       auto: false
 spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${google.clientId}
+            client-secret: ${google.clientSecret}
+            scope: profile,email
+            redirect-uri: ${google.redirectUri}
+
   s3:
     bucket: ${s3.bucket}
     access-key: ${s3.accessKey}
