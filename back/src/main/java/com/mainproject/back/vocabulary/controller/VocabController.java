@@ -108,6 +108,9 @@ public class VocabController {
   public ResponseEntity randomVocab(Principal principal) {
     Member member = memberService.findMemberByEmail(Check.checkPrincipal(principal));
     Vocabulary vocab = vocabService.randomVocab(member.getMemberId());
+    if (vocab == null) {
+      return ResponseEntity.noContent().build();
+    }
     VocabDto.Response vocabResponseDto = mapper.vocabToResponse(vocab);
     return new ResponseEntity<>(vocabResponseDto, HttpStatus.OK);
   }

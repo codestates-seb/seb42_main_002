@@ -65,6 +65,7 @@ public class VocabService {
 
   public Vocabulary randomVocab(long memberId) {
     List<Vocabulary> page = vocabRepository.findAllByMemberIdOrderByRand(memberId);
+    if(page.isEmpty()) return null;
     return page.get(0);
   }
 }
