@@ -1,16 +1,45 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { newLetterState } from '../../recoil/atoms';
+import { newLetterType } from '../../utils';
+import { POST } from '../../utils/axios';
 import Button from '../Common/Button/Button';
 import NewLetterContent from './LetterContent/NewLetterContent';
 import LetterPictureWrapper from './LetterPicture/LetterPictureWrapper';
 import LetterType from './LetterType/LetterType';
+import styles from './NewLetterWrapper.module.scss';
 
 const NewLetterWrapper = () => {
   const [newLetter, setNewLetter] = useRecoilState(newLetterState);
+  const [isValid, setIsValid] = useState<boolean>(true);
+  const navigate = useNavigate();
+
+  /**
+   * @description 새 편지 등록 API
+   */
+  const postNewLetter = async (letter: newLetterType) => {
+    try {
+      const response = await POST(`/letters/${newLetter.memberId}`, letter);
+      // TODO: 서버에서 CORS 요청 수정 후에 location 설정
+      const location = response.headers.location;
+
+      // 편지 내용 초기화
+      setNewLetter((prev) => ({
+        ...prev,
+        body: '',
+        photoUrl: [],
+      }));
+
+      navigate(`/letters/${newLetter.memberId}`);
+    } catch (error) {
+      console.log('error');
+      // TODO: ERROR 처리 방법
+    }
+  };
 
   // TODO : 이미지 삭제 시, 모달로 확인하기?
   const pictureRemoveHandler = (idx: number) => {
-    console.log('현재 사진 삭제', idx);
     const removedPhotoArr = newLetter.photoUrl.filter(
       (_, photoIdx) => photoIdx !== idx
     );
@@ -35,7 +64,12 @@ const NewLetterWrapper = () => {
   };
 
   const onSubmitHandler = () => {
-    console.log('편지 제출', newLetter);
+    // 유효성 검사
+    if (!newLetter.body.trim()) {
+      setIsValid(false);
+      return;
+    }
+    postNewLetter(newLetter);
   };
 
   return (
@@ -44,6 +78,9 @@ const NewLetterWrapper = () => {
       <LetterType />
       {/* 편지 내용 */}
       <NewLetterContent receiver={newLetter.receiver} />
+      {!isValid && (
+        <div className={styles.valid}>편지 내용을 입력해 주세요.</div>
+      )}
       {/* 이미지 선택 */}
       <LetterPictureWrapper
         pictures={newLetter.photoUrl}

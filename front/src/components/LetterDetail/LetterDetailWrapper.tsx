@@ -1,11 +1,11 @@
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   newLetterState,
   selectedLetterState,
   selectedPictureIdx,
 } from '../../recoil/atoms';
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { GET } from '../../utils/axios';
 import { SeletedLetterDataType } from '../../utils';
 import LetterContent from './LetterContent/LetterContent';
@@ -24,7 +24,9 @@ const LetterDetailWrapper = () => {
   // TODO: 리코일 setter사용 시, 페이지 접속 시 바로 렌더링이 되지않음.
   const [selectedLetter, setSelectedLetter] =
     useRecoilState(selectedLetterState);
+  const newLetter = useRecoilValue(newLetterState);
   const [letter, setLetter] = useState<SeletedLetterDataType>(selectedLetter);
+  const [isShowButton, setIsShowButton] = useState<boolean>(false);
 
   /**
    * @description API
@@ -34,6 +36,11 @@ const LetterDetailWrapper = () => {
       const { data } = await GET(`/letters/${letterId}`);
       setSelectedLetter(data);
       setLetter(data);
+      if (data.receiver !== newLetter.receiver) {
+        setIsShowButton(true);
+      } else {
+        setIsShowButton(false);
+      }
     } catch (error) {
       console.log('error');
       // TODO: ERROR 처리 방법
@@ -78,9 +85,11 @@ const LetterDetailWrapper = () => {
       />
       {/* 답장 */}
       {/* 버튼 고민 */}
-      <Button variant="primary" size="lg" full to="/newletter">
-        답장하기
-      </Button>
+      {isShowButton && (
+        <Button variant="primary" size="lg" full to="/newletter">
+          답장하기
+        </Button>
+      )}
     </div>
   );
 };
