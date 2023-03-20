@@ -1,4 +1,4 @@
-export type VocaData = {
+export type VocaDataType = {
   vocabId: number;
   word: string;
   meaning: string;

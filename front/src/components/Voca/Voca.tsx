@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
+import { VocaDataType } from '../../utils/types/voca';
 import VocaCard from './VocaCard/VocaCard';
 import Button from '../Common/Button/Button';
 import VocaModal from './VocaModal/VocaModal';
@@ -10,6 +11,7 @@ import { vocaArr } from '../../dummy/voca';
 const Voca = () => {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
+  const [vocaList, setVocaList] = useState<VocaDataType[]>([...vocaArr]);
 
   const onAddModalHandler = () => {
     console.log('생성 모달');
@@ -27,17 +29,22 @@ const Voca = () => {
     console.log('삭제', vocabId);
   };
 
+  const setNewVocaList = (newVoca: VocaDataType) => {
+    setVocaList((prev) => [...prev, newVoca]);
+  };
+
   return (
     <>
       {isOpenModal && (
         <VocaModal
           isEditMode={isEditMode}
           onModalClose={() => setIsOpenModal(false)}
+          onAddNewVoca={setNewVocaList}
         />
       )}
       {/* 단어 리스트 */}
       <ul className={styles.card_list}>
-        {vocaArr.map((voca) => (
+        {vocaList.map((voca) => (
           <VocaCard
             key={voca.vocabId}
             vocabId={voca.vocabId}

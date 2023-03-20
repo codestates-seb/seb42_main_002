@@ -1,15 +1,22 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { TiDeleteOutline } from 'react-icons/ti';
+import { POST } from '../../../utils/axios';
+import { VocaDataType } from '../../../utils/types/voca';
 import Button from '../../Common/Button/Button';
 import styles from './VocaModal.module.scss';
 
 type VocaModalPros = {
   onModalClose: (event?: React.MouseEvent<HTMLButtonElement>) => void;
   isEditMode: boolean;
+  onAddNewVoca: (newVoca: VocaDataType) => void;
 };
 
-const VocaModal = ({ onModalClose, isEditMode }: VocaModalPros) => {
+const VocaModal = ({
+  onModalClose,
+  isEditMode,
+  onAddNewVoca,
+}: VocaModalPros) => {
   // 보카 수정 - 리코일에서 가져오기
   const [editVoca, setEditVoca] = useState({
     word: 'Orange',
@@ -40,6 +47,19 @@ const VocaModal = ({ onModalClose, isEditMode }: VocaModalPros) => {
     }));
   };
 
+  const addNewVoca = async () => {
+    try {
+      const result = await POST('/vocabs', {
+        newVoca,
+        nation: 'EN',
+      });
+      console.log('결과', result);
+      onModalClose();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const onEditVocaHandler = (): void => {
     console.log('보카 수정', editVoca);
     onModalClose();
@@ -47,7 +67,9 @@ const VocaModal = ({ onModalClose, isEditMode }: VocaModalPros) => {
 
   const onAddNewVocaHandler = (): void => {
     console.log('보카 생성', newVoca);
-    onModalClose();
+    // 유효성 검사
+    if (!newVoca.meaning || !newVoca.word) return;
+    addNewVoca();
   };
 
   return createPortal(

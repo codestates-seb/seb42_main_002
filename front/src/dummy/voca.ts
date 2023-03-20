@@ -1,6 +1,6 @@
-import { VocaData } from './../utils/types/voca/voca.type';
+import { VocaDataType } from './../utils/types/voca/voca.type';
 
-export const vocaArr: VocaData[] = [
+export const vocaArr: VocaDataType[] = [
   {
     vocabId: 1,
     word: 'Apple',
