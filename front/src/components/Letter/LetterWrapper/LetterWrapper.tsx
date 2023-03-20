@@ -1,17 +1,33 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { selectedUserInfo } from '../../../recoil/atoms';
+import { selectedUserInfoState } from '../../../recoil/atoms';
+import { SlEnvolopeLetter } from 'react-icons/sl';
 import { useNavigate } from 'react-router-dom';
-
+import { GET } from '../../../utils/axios';
+import { LetterDataType } from '../../../utils';
 import Letter from '../Letter/Letter';
 import LetterUserCard from '../LetterUserCard/LetterUserCard';
+import Empty from '../../Common/Empty/Empty';
 
-import { lettersData } from '../../../dummy/letter';
 import styles from './LetterWrapper.module.scss';
+// import { lettersData } from '../../../dummy/letter';
 
 const LetterWrapper = () => {
   const navigate = useNavigate();
-  const selectedUser = useRecoilValue(selectedUserInfo);
+  const selectedUser = useRecoilValue(selectedUserInfoState);
+  const [page, setPage] = useState<number>(0);
+  const [userLetterList, setUserLetterList] = useState<LetterDataType[]>([]);
+
+  const getUserLetterList = async (memberId: number) => {
+    try {
+      // TODO: 페이지네이션 보류
+      const { data } = await GET(`letters/members/${memberId}`);
+      setUserLetterList(data.content);
+    } catch (error) {
+      console.log('error');
+      // TODO: ERROR 처리 방법
+    }
+  };
 
   useEffect(() => {
     // 리다이렉트
@@ -20,6 +36,21 @@ const LetterWrapper = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (!selectedUser.memberId) {
+      return;
+    }
+    getUserLetterList(selectedUser.memberId);
+  }, []);
+
+  if (userLetterList.length === 0) {
+    return (
+      <Empty title="아직 편지가 없어요.">
+        <SlEnvolopeLetter className={styles.icon} size={'6rem'} />
+      </Empty>
+    );
+  }
+
   return (
     <>
       <LetterUserCard
@@ -27,15 +58,16 @@ const LetterWrapper = () => {
         location={selectedUser.location}
         name={selectedUser.name}
         profile={selectedUser.profile}
+        memberId={selectedUser.memberId}
+        cursor={false}
       />
       <div className={styles.letter_wrapper}>
-        {lettersData.map((letter) => (
+        {userLetterList.map((letter) => (
           <Letter
             sender={letter.sender.name}
             receiver={letter.receiver.name}
             body={letter.body}
             createdAt={letter.createdAt}
-            canRead={letter.canRead}
             hasPic={letter.hasPic}
             isRead={letter.isRead}
             key={letter.letterId}

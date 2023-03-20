@@ -9,13 +9,14 @@ import { LetterUserCardProps } from './../../../components/Letter/LetterUserCard
 
 type selectedUserInfo = LetterUserCardProps;
 
-export const selectedUserInfo = atom<selectedUserInfo>({
-  key: 'selectedUserInfo',
+export const selectedUserInfoState = atom<selectedUserInfo>({
+  key: 'selectedUserInfoState',
   default: {
     birthday: String(new Date()),
     location: 'KR' as LOCATION_CODE,
     name: '',
     profile: '',
+    memberId: null,
   },
 });
 
@@ -29,6 +30,7 @@ export const newLetterState = atom<newLetterType>({
     body: '',
     type: 0, // 일단 0으로 고정
     receiver: '',
+    memberId: null,
   },
 });
 

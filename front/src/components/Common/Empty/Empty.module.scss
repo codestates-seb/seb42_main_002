@@ -1,0 +1,16 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 50%;
+}
+
+.title {
+  color: var(--text-primary-color);
+  font-size: var(--font-size-xl);
+}
+
+.children {
+  margin-top: 1rem;
+}

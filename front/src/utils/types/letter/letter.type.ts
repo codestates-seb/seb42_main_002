@@ -11,7 +11,6 @@ export type LetterDataType = {
   body: string;
   isRead: boolean; // 읽음 여부
   availableAt: string;
-  canRead: boolean;
   createdAt: string;
   hasPic: boolean; // 이미지 첨부 여부
 };
@@ -35,4 +34,5 @@ export type newLetterType = {
   photoUrl: string[];
   type?: number;
   receiver: string;
+  memberId: null | number;
 };

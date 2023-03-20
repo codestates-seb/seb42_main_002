@@ -7,6 +7,9 @@ $sub-font-size: var(--font-size-sm);
   width: 100%;
   cursor: pointer;
 }
+.cursor {
+  cursor: default !important;
+}
 
 .usercard {
   display: flex;

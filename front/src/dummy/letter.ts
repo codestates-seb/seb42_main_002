@@ -19,7 +19,6 @@ export const lettersData: LetterDataType[] = [
     ありがとうと君に言われるとなんだか切ないさようならの後も解けぬ魔法淡くほろ苦い友達でも恋人でもない中間地点で収穫の時を夢見てる青いフルーツあと一歩が踏み出せないせいで じれったいの何のって ありがとうと君に言われるとなんだか切ないさようならの後も解けぬ魔法淡くほろ苦い甘いだけの誘い文句味気のないTalkそんなものには興味をそそられない思い通りにいかない時だって人生捨てたもんじゃないって「どうしたの」と急に聞かれると「ううん、何でもない」さようならの後に消える笑顔私らしくない信じたいと願えば願うほどなんだか切ない「愛してるよ」よりも「大好き」の方が君らしいんじゃない忘れかけてた人の香りを突然思い出す頃降り積もる雪の白さをもっと素直に喜びたいよダイヤモンドよりも軟らかくて温かな未来手にしたいよ限りある時間を君と過ごした`,
     isRead: false,
     availableAt: '2023-03-12T11:12:01',
-    canRead: true,
     createdAt: '2023-02-28T19:12:01',
     hasPic: true,
   },
@@ -35,7 +34,6 @@ export const lettersData: LetterDataType[] = [
     },
     // title: 'test',
     isRead: true,
-    canRead: true,
     body: `ありがとうと君に言われると
 何だか切ないサヨナラの後も
 解けぬ魔法淡くほろ苦い
@@ -57,7 +55,6 @@ export const lettersData: LetterDataType[] = [
     },
     // title: 'test',
     isRead: true,
-    canRead: false,
     body: 'test',
     availableAt: '2023-03-12T12:12:01',
     createdAt: '2023-02-28T19:12:01',

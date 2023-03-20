@@ -14,7 +14,6 @@ type LetterProps = {
   sender: string; // 보낸 사람
   receiver: string; // 받는 사람
   isRead: boolean; // 읽음 여부
-  canRead: boolean; // 읽을수 있는 여부
   hasPic: boolean; // 이미지 첨부 확인
   body: string; // 내용
   createdAt: string; // 편지 생성 날짜
@@ -50,10 +49,8 @@ const LetterStatus = ({ user, sender, isRead, hasPic }: LetterStatusProps) => {
 // 유저별 단일 카드 컴포넌트
 const Letter = ({
   sender,
-  receiver,
   body,
   isRead,
-  canRead,
   hasPic,
   createdAt,
   availableAt,
@@ -62,7 +59,7 @@ const Letter = ({
   const { user } = useAuth();
 
   // 편지 열람이 불가능한 경우
-  if (!canRead) {
+  if (!body) {
     return (
       <div className={`${styles.letter} ${styles.lock}`}>
         <div className={styles.open_time}>
