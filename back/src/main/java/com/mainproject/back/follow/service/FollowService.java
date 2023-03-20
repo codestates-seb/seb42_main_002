@@ -26,15 +26,15 @@ public class FollowService {
   }
 
   @Transactional
-  public void deleteFollow(long followId) {
-    long id = followRepository.findFollowIdById(followId)
+  public void deleteFollow(long followingId) {
+    Follow findFollow = followRepository.findFollowIdById(followingId)
         .orElseThrow(() -> new BusinessLogicException(
             FollowExceptionCode.FOLLOW_NOT_FOUND));
-    followRepository.deleteById(id);
+    followRepository.delete(findFollow);
   }
 
   @Transactional
-  public void deleteFollowByBlock(long memberId,long targetId) {
+  public void deleteFollowByBlock(long memberId, long targetId) {
     Optional<Long> optionalFollowId = followRepository.findFollowIdByUsers(memberId, targetId);
     optionalFollowId.ifPresent(followRepository::deleteById);
   }
@@ -48,7 +48,7 @@ public class FollowService {
     return followRepository.findAllFollowingsByFollowerId(memberId, pageable);
   }
 
-  public List<Long> findFollowingId(long memberId){
+  public List<Long> findFollowingId(long memberId) {
     return followRepository.findAllFollowingId(memberId);
   }
 
