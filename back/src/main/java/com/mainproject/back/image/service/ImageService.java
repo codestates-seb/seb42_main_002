@@ -31,7 +31,7 @@ public class ImageService {
 
     String originalFileName = multipartFile.getOriginalFilename();
     String uploadFileName = getUuidFileName(originalFileName);
-    String uploadFileUrl = "";
+    String uploadFileUrl;
 
     ObjectMetadata objectMetadata = new ObjectMetadata();
     objectMetadata.setContentLength(multipartFile.getSize());
@@ -40,14 +40,10 @@ public class ImageService {
     try (InputStream inputStream = multipartFile.getInputStream()) {
 
       String keyName = uploadFilePath + uploadFileName;
-
-      // S3에 폴더 및 파일 업로드
-      // 외부에 공개하는 파일인 경우 Public Read 권한을 추가, ACL 확인
       amazonS3Client.putObject(
           new PutObjectRequest(bucketName, keyName, inputStream, objectMetadata)
               .withCannedAcl(CannedAccessControlList.PublicRead));
 
-      // S3에 업로드한 폴더 및 파일 URL
       uploadFileUrl = amazonS3Client.getUrl(bucketName, keyName).toString();
 
     } catch (IOException e) {
@@ -75,6 +71,6 @@ public class ImageService {
 
   public String getUuidFileName(String fileName) {
     String ext = fileName.substring(fileName.indexOf(".") + 1);
-    return UUID.randomUUID().toString() + "." + ext;
+    return UUID.randomUUID() + "." + ext;
   }
 }
