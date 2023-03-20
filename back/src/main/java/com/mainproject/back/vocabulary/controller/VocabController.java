@@ -12,12 +12,15 @@ import com.mainproject.back.vocabulary.mapper.VocabMapper;
 import com.mainproject.back.vocabulary.service.VocabService;
 import java.net.URI;
 import java.security.Principal;
+import java.util.Random;
+import javax.validation.constraints.Positive;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -105,9 +108,12 @@ public class VocabController {
 
 
 
-  @GetMapping("/today/{vocab-id}")
-  public ResponseEntity todayVocab(@PathVariable("vocab-id") long vocabId , @PageableDefault(size = 1 ) Pageable pageable) {
-    Member member = memberService.findMember(vocabId);
+  @GetMapping("/random")
+  public ResponseEntity todayVocab(Principal principal , @PageableDefault(size = 1 ) Pageable pageable) {
+    if (principal.getName() == null) {
+      throw new BusinessLogicException(MemberExceptionCode.MEMBER_NOT_FOUND);
+    }
+    Member member = memberService.findMemberByEmail(Check.checkPrincipal(principal));
     Page<Vocabulary> page = vocabService.todayVocab(member.getMemberId(), pageable);
     Page<VocabDto.Response> vocabResponseDto = mapper.pageVocabToPageVocabResponsePage(page);
     return new ResponseEntity<>(vocabResponseDto, HttpStatus.OK);

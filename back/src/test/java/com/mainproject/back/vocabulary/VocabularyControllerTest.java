@@ -179,4 +179,19 @@ public class VocabularyControllerTest {
 
   }
 
+  @Test
+  public void todayVocab() throws Exception {
+    when(principal.getName()).thenReturn("test1@test");
+
+    ResultActions actions =
+        mockMvc.perform(get("/vocabs/random")
+            .accept(MediaType.APPLICATION_JSON)
+            .principal(principal)
+        );
+
+    actions
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.content").isArray());
+  }
+
 }
