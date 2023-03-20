@@ -3,7 +3,10 @@ import { BiEdit } from 'react-icons/bi';
 import { FiTrash2 } from 'react-icons/fi';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import useModals from '../../../hooks/useModals';
-import { userLanguageNationState } from '../../../recoil/atoms';
+import {
+  userLanguageNationState,
+  userLanguageState,
+} from '../../../recoil/atoms';
 import { userLanguageSeletor } from '../../../recoil/selectors';
 import { PATCH } from '../../../utils/axios';
 import { langTransformer } from '../../../utils/common';
@@ -25,15 +28,28 @@ const confirmRemoveLanguageaModal = ({
   onClose,
 }: AlertModalProps) => {
   const [selectedUserLanguages, setSelectedUserLanguages] =
-    useRecoilState<LanguageDataType[]>(userLanguageSeletor);
+    useRecoilState<LanguageDataType[]>(userLanguageState);
   const selectedUserLanguageNation = useRecoilValue(userLanguageNationState);
 
+  const deleteLanguage = async () => {
+    const filterdLanguages = selectedUserLanguages.filter(
+      (lang) => lang.nation !== selectedUserLanguageNation
+    );
+    try {
+      const response = await PATCH('/members', {
+        language: filterdLanguages,
+      });
+      if (response) {
+        setSelectedUserLanguages(filterdLanguages);
+        console.log('언어 삭제');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const onSubmitHandler = useCallback(() => {
-    setSelectedUserLanguages((prevState) => {
-      return prevState.filter(
-        (lang) => lang.nation !== selectedUserLanguageNation
-      );
-    });
+    deleteLanguage();
     onSubmit && onSubmit();
   }, []);
 

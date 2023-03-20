@@ -6,6 +6,7 @@ import {
   userLocationState,
 } from '../../../recoil/atoms';
 import { LocationIcons, locationTypes } from '../../../utils';
+import { PATCH } from '../../../utils/axios';
 import { locationTransformer } from '../../../utils/common';
 import {
   CONST_LOCATION_CODE,
@@ -34,6 +35,20 @@ const LocationEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
     setChangeLocation(() => selectedLocation);
   };
 
+  const updateLocation = async () => {
+    try {
+      const response = await PATCH('/members', {
+        location: changeLocation,
+      });
+      if (response) {
+        setSelectedUserLocation(changeLocation);
+        console.log('국가 수정 완료');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const onSubmitHandler = () => {
     if (onSubmit) {
       if (!selectedUserLocation) {
@@ -42,7 +57,7 @@ const LocationEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
         openModal(LanguageEditModal);
       } else {
         // 수정일 때
-        setSelectedUserLocation(changeLocation);
+        updateLocation();
         onClose && onClose();
       }
     }

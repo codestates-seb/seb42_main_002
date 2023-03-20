@@ -2,6 +2,7 @@ import { useRecoilValue } from 'recoil';
 import useModals from '../../../hooks/useModals';
 import { userLocationState } from '../../../recoil/atoms';
 import { userLanguageState } from '../../../recoil/atoms/user/userLanguage';
+import { PATCH } from '../../../utils/axios';
 import Button from '../../Common/Button/Button';
 import FullPageModal, {
   FullPageModalProps,
