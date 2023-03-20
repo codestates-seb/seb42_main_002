@@ -22,7 +22,7 @@ const LetterWrapper = () => {
   const getUserLetterList = async (memberId: number) => {
     try {
       // TODO: 페이지네이션 보류
-      const { data } = await GET(`letters/members/${memberId}`);
+      const { data } = await GET(`letters/members/${memberId}?page=0&size=20`);
       setUserLetterList(data.content);
     } catch (error) {
       console.log('error');
@@ -74,6 +74,7 @@ const LetterWrapper = () => {
       <div className={styles.letter_wrapper}>
         {userLetterList.map((letter) => (
           <Letter
+            selectedUser={selectedUser.name}
             sender={letter.sender.name}
             receiver={letter.receiver.name}
             body={letter.body}
