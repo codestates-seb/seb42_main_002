@@ -31,10 +31,10 @@ public class Vocabulary extends Auditable {
   @Column(nullable = false)
   private String word;
 
-  @Column(nullable = false)
+//  @Column(nullable = false)
   private String meaning;
 
-  @Column(nullable = false)
+//  @Column(nullable = false)
   private String nation;
 
   @ManyToOne
