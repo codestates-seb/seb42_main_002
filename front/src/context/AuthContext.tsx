@@ -3,12 +3,11 @@ import {
   ReactNode,
   useContext,
   useMemo,
-  useEffect,
+  useCallback,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
-import useLocalStorage from '../hooks/useLocalStorage';
-import { userState } from '../recoil/atoms';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { userLocationState, userState } from '../recoil/atoms';
 import { SignInData, UserData } from '../utils';
 import { GET, POST } from '../utils/axios';
 import { removeCookie, setCookie } from '../utils/cookie';
@@ -21,16 +20,19 @@ type AuthContextProps = {
   user: UserData | null;
   login: (data: SignInData) => void;
   logout: () => void;
+  getCurrentUserInfo: () => Promise<UserData | null>;
 };
 
 const AuthContext = createContext<AuthContextProps>({
   user: null,
   login: () => undefined,
   logout: () => undefined,
+  getCurrentUserInfo: async () => null,
 });
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const [userInfo, setUserInfo] = useRecoilState(userState);
+  const selectUserLocation = useSetRecoilState(userLocationState);
   const navigate = useNavigate();
   const TOKEN_NAME = 'accessJwtToken';
 
@@ -49,7 +51,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   // 본인 정보 얻기
-  const getUserInfo = async () => {
+  const getCurrentUserInfo = useCallback(async (): Promise<UserData | null> => {
     try {
       const { data } = await GET('/members');
       if (data) {
@@ -58,16 +60,16 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       }
     } catch (error) {
       setUserInfo(null);
-      return null;
     }
-  };
+    return null;
+  }, []);
 
   const login = async (data: SignInData) => {
     try {
       const response = await loginRequest(data);
       if (response === 'SUCCESS') {
-        const user = await getUserInfo();
-        if (!user.location) {
+        const user = await getCurrentUserInfo();
+        if (user?.location === null) {
           navigate('/start');
         } else {
           navigate('/main');
@@ -80,6 +82,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const logout = () => {
     setUserInfo(null);
+    selectUserLocation(null);
     removeCookie(TOKEN_NAME);
     navigate('/', { replace: true });
   };
@@ -89,6 +92,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       user: userInfo,
       login,
       logout,
+      getCurrentUserInfo,
     }),
     [userInfo]
   );

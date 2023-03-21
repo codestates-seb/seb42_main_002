@@ -240,6 +240,7 @@ const SignUpMain = (): JSX.Element => {
       {isSuccess ? (
         <AlertModal
           labelClose="수정예정"
+          hideClose
           onSubmit={() => {
             setIsSuccess(false);
             navigate('/login');

@@ -33,6 +33,7 @@ type RouterElement = {
   path: string;
   element: ReactNode;
   isAuth: boolean;
+  isFirstLogin?: boolean;
   meta?: {
     title?: string;
     subTitle?: string;
@@ -45,91 +46,109 @@ const routerData: RouterElement[] = [
     path: '/',
     element: <IntroPage />,
     isAuth: false,
+    isFirstLogin: false,
   },
   {
     path: '/login',
     element: <LoginPage />,
     isAuth: false,
+    isFirstLogin: false,
   },
   {
     path: '/signup',
     element: <SignUpPage />,
     isAuth: false,
+    isFirstLogin: false,
   },
   {
     path: '/start',
     element: <StartPage />,
     isAuth: true,
+    isFirstLogin: true,
   },
   {
     path: '/welcome',
     element: <WelcomePage />,
     isAuth: true,
+    isFirstLogin: true,
   },
   {
     path: '/main',
     element: <MainPage />,
     isAuth: true,
+    isFirstLogin: false,
   },
   {
     path: '/letters',
     element: <LetterListPage />,
     isAuth: true,
+    isFirstLogin: false,
   },
   {
     path: '/letters/:memberId',
     element: <UserLetterListPage />,
     isAuth: true,
+    isFirstLogin: false,
   },
   {
     path: '/letters/:memberId/:letterId',
     element: <LetterDetailPage />,
     isAuth: true,
+    isFirstLogin: false,
   },
   {
     path: '/newLetter',
     element: <NewLetterPage />,
     isAuth: true,
+    isFirstLogin: false,
   },
   {
     path: '/followings',
     element: <FollowingPage />,
     isAuth: true,
+    isFirstLogin: false,
   },
   {
     path: '/search',
     element: <SearchPage />,
     isAuth: true,
+    isFirstLogin: false,
   },
   {
     path: '/blacklist',
     element: <BlackListPage />,
     isAuth: true,
+    isFirstLogin: false,
   },
   {
     path: '/voca',
     element: <VocaPage />,
     isAuth: true,
+    isFirstLogin: false,
   },
   {
     path: '/profile/:memberId',
     element: <ProfilePage />,
     isAuth: true,
+    isFirstLogin: false,
   },
   {
     path: '/my-profile',
     element: <MyProfilePage />,
     isAuth: true,
+    isFirstLogin: false,
   },
   {
     path: '/guide',
     element: <GuidePage />,
     isAuth: true,
+    isFirstLogin: false,
   },
   {
     path: '*',
     element: <NotFoundPage />,
     isAuth: false,
+    isFirstLogin: false,
   },
 ];
 
@@ -141,7 +160,12 @@ const routers = createBrowserRouter(
         element: (
           <AuthProvider>
             <ModalProvider>
-              <BaseLayout isAuth={router.isAuth}>{router.element}</BaseLayout>
+              <BaseLayout
+                isAuth={router.isAuth}
+                isFirstLogin={router.isFirstLogin}
+              >
+                {router.element}
+              </BaseLayout>
             </ModalProvider>
           </AuthProvider>
         ),

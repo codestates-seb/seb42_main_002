@@ -6,7 +6,7 @@ export type UserData = {
   memberId: number;
   email: string;
   name: string;
-  gender: GENDER_TYPE;
+  gender: GENDER_TYPE | null;
   location?: LOCATION_CODE | null;
   birthday?: string;
   language: LanguageDataType[];

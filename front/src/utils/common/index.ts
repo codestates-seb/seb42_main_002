@@ -108,7 +108,7 @@ export const locationTransformer = (
  * @param gender 성별 표기명 변환하는 함수
  * @returns
  */
-export const genderTransformer = (gender: GENDER_TYPE) => {
+export const genderTransformer = (gender: GENDER_TYPE | null) => {
   switch (gender) {
     case GENDER_TYPE.MALE:
       return '남자';
