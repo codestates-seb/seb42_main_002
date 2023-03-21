@@ -10,7 +10,6 @@ import LetterStatusIcon from '../Common/LetterStatusIcon/LetterStatusIcon';
 import UserCard from '../Common/UserCard/UserCard';
 
 import styles from './LetterList.module.scss';
-// import { userData } from '../../dummy/userList';
 
 const LetterList = () => {
   const setNewLetter = useSetRecoilState(newLetterState);
@@ -23,7 +22,7 @@ const LetterList = () => {
    */
   const getLetterUserList = async () => {
     try {
-      const { data } = await GET(`/letters?page=${page}&size=5`);
+      const { data } = await GET(`/letters?page=${page}&size=10`);
       setUserList(data.content);
     } catch (error) {
       console.log('error');
