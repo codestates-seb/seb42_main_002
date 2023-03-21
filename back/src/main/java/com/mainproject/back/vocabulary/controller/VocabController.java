@@ -4,6 +4,7 @@ import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.exception.MemberExceptionCode;
 import com.mainproject.back.member.service.MemberService;
+import com.mainproject.back.util.ApiManager;
 import com.mainproject.back.util.Check;
 import com.mainproject.back.util.UriCreator;
 import com.mainproject.back.vocabulary.dto.VocabDto;
@@ -39,13 +40,11 @@ public class VocabController {
   private final VocabMapper mapper;
 
   public VocabController(MemberService memberService,
-      VocabService vocabService, VocabMapper mapper) {
+      VocabService vocabService, VocabMapper mapper, ApiManager apiManager) {
     this.memberService = memberService;
     this.vocabService = vocabService;
     this.mapper = mapper;
   }
-
-
   @PostMapping
   public ResponseEntity postVocab(@RequestBody VocabDto.Post requestBody, Principal principal) {
     log.info("## 단어 생성: {}", requestBody);
@@ -53,7 +52,7 @@ public class VocabController {
 
     Vocabulary vocab = mapper.vocabPostToVocab(requestBody);
     vocab.setMember(member);
-    Vocabulary createdVocab = vocabService.createVocab(vocab);
+    Vocabulary createdVocab = vocabService.createVocab(vocab, requestBody.getTarget());
 
     VocabDto.Response response = mapper.vocabToVocabResponse(createdVocab);
 

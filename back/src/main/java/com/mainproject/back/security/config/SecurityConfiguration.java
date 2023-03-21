@@ -1,5 +1,6 @@
 package com.mainproject.back.security.config;
 
+import com.mainproject.back.member.repository.MemberRepository;
 import com.mainproject.back.security.filter.JwtAuthenticationFilter;
 import com.mainproject.back.security.filter.JwtVerificationFilter;
 import com.mainproject.back.security.handler.MemberAccessDeniedHandler;
@@ -8,7 +9,12 @@ import com.mainproject.back.security.handler.MemberAuthenticationFailureHandler;
 import com.mainproject.back.security.handler.MemberAuthenticationSuccessHandler;
 import com.mainproject.back.security.jwt.JwtTokenizer;
 import com.mainproject.back.security.utils.AuthorityUtils;
+import com.mainproject.oauth.CustomOAuth2UserService;
+import com.mainproject.oauth.OAuth2LoginFailureHandler;
+import com.mainproject.oauth.OAuth2LoginSuccessHandler;
 import java.util.Arrays;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,16 +30,13 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfiguration {
 
   private final AuthorityUtils authorityUtils;
   private final JwtTokenizer jwtTokenizer;
-
-  public SecurityConfiguration(AuthorityUtils authorityUtils, JwtTokenizer jwtTokenizer) {
-    this.authorityUtils = authorityUtils;
-    this.jwtTokenizer = jwtTokenizer;
-  }
+  private final MemberRepository memberRepository;
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -62,7 +65,12 @@ public class SecurityConfiguration {
 //            .antMatchers("/vocabs/*").hasAnyRole("USER","ADMIN")
 //            .antMatchers("/blocks/*").hasAnyRole("USER","ADMIN")
 //            .antMatchers("/follows/*").hasAnyRole("USER","ADMIN")
-        );
+        )
+        .oauth2Login()
+        .successHandler(new OAuth2LoginSuccessHandler(jwtTokenizer))
+        .failureHandler(new OAuth2LoginFailureHandler())
+        .userInfoEndpoint().userService(new CustomOAuth2UserService(memberRepository));
+
     return http.build();
   }
 
