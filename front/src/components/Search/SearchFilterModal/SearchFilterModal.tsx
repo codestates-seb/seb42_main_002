@@ -1,41 +1,34 @@
+import { useRecoilValue } from 'recoil';
 import useModals from '../../../hooks/useModals';
 import Button from '../../Common/Button/Button';
 import FullPageModal, {
   FullPageModalProps,
 } from '../../Common/Modal/FullPageModal';
 import SearchTagFilter from '../SearchTagFilter/SearchTagFilter';
-// 더미 데이터
-import { profileUser } from '../../../dummy/users';
-import { useRecoilState } from 'recoil';
-import {
-  selectedSearchLangTagState,
-  selectedSearchTagState,
-} from '../../../recoil/atoms/search';
+import { selectedSearchLangTagState } from '../../../recoil/atoms/search';
 import InfoGroup from '../../Common/InfoGroup/InfoGroup';
 import Flex from '../../Common/Flex/Flex';
 import Label from '../../Common/Label/Label';
 
 import styles from './SearchFilterModal.module.scss';
 import SearchLangTagFilter from '../SearchLangTagFilter/SearchLangTagFilter';
+import { TagDataType } from '../../../utils/types/tags/tags';
+import { searchUserTagSelector } from '../../../recoil/selectors/search';
 
 const SearchFilterModal = ({ onSubmit, onClose }: FullPageModalProps) => {
   const { openModal } = useModals();
 
   // 언어 태그들
-  const [searchLangTags, setSearchLangTags] = useRecoilState(
-    selectedSearchLangTagState
-  );
+  const searchLangTags = useRecoilValue(selectedSearchLangTagState);
 
   // 취미 태그들
-  const [searchTags, setSearchTags] = useRecoilState(selectedSearchTagState);
+  const searchTags = useRecoilValue(searchUserTagSelector);
 
   const openLangFilterModal = () => {
-    console.log('언어 필터');
     openModal(SearchLangTagFilter);
   };
 
   const openTagFilterModal = () => {
-    console.log('태그 필터');
     openModal(SearchTagFilter);
   };
 
@@ -69,7 +62,7 @@ const SearchFilterModal = ({ onSubmit, onClose }: FullPageModalProps) => {
         <InfoGroup.Content>
           <Flex gap="sm" wrap="wrap">
             {searchTags &&
-              searchTags.map((tag) => (
+              searchTags.map((tag: TagDataType) => (
                 <Flex.Col key={tag.tagId}>
                   <Label>{tag.name}</Label>
                 </Flex.Col>
