@@ -27,14 +27,14 @@ import { GET, PATCH } from '../../utils/axios';
 import { LanguageDataType } from '../../utils';
 
 const MyProfile = () => {
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const { openModal } = useModals();
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [userTags, setUserTags] = useRecoilState(userTagState);
   const [userLanguages, setUserLanguages] = useRecoilState(userLanguageState);
   const [isEditBaseInfo, setIsEditBaseInfo] = useState(false);
   const [isEditIntroduce, setIsEditIntroduce] = useState(false);
-  const [selectedGender, setSelectedGender] = useState<string>(userInfo.gender);
+  const [selectedGender, setSelectedGender] = useState<string | null>(null);
 
   const GenderIcons = {
     MALE: <FaMars color="#253c63" />,
@@ -45,12 +45,12 @@ const MyProfile = () => {
   const getMyProfile = async () => {
     try {
       const { data } = await GET(`/members`);
+      console.log('data', data);
       if (data) {
         setUserInfo(data);
         setUserLanguages(data.language);
         setUserTags(data.tag);
       }
-      console.log(data);
     } catch (error) {
       console.error(error);
     }
@@ -163,6 +163,12 @@ const MyProfile = () => {
                           <InfoGroup.Label>별명</InfoGroup.Label>
                           <InfoGroup.Content>
                             <p>{userInfo.name}</p>
+                          </InfoGroup.Content>
+                        </InfoGroup>
+                        <InfoGroup>
+                          <InfoGroup.Label>이메일</InfoGroup.Label>
+                          <InfoGroup.Content>
+                            <p>{userInfo.email}</p>
                           </InfoGroup.Content>
                         </InfoGroup>
                         <InfoGroup>

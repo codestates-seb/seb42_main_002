@@ -59,12 +59,12 @@ const routerData: RouterElement[] = [
   {
     path: '/start',
     element: <StartPage />,
-    isAuth: false,
+    isAuth: true,
   },
   {
     path: '/welcome',
     element: <WelcomePage />,
-    isAuth: false,
+    isAuth: true,
   },
   {
     path: '/main',

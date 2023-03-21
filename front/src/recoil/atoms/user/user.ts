@@ -1,7 +1,7 @@
 import { atom } from 'recoil';
 import { UserData } from '../../../utils';
 
-export const userState = atom<UserData>({
+export const userState = atom<UserData | null | any>({
   key: 'userState',
-  default: {} as UserData,
+  default: ({} as UserData) || null,
 });

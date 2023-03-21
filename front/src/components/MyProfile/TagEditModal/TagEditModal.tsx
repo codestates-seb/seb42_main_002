@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { useAuth } from '../../../context/AuthContext';
 import useModals from '../../../hooks/useModals';
 import {
   userLanguageState,
@@ -96,9 +97,7 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
     if (onSubmit) {
       if (!selectedUserLocation) {
         // 첫 설정 일때
-        updateLocation();
-        updateLanguage();
-        updateTag();
+        Promise.all([updateLocation(), updateLanguage(), updateTag()]);
         // 첫 설정 후 전체 모달 닫고 Welcome 페이지로 이동
         closeModal(LocationEditModal);
         closeModal(LanguageEditModal);

@@ -2,11 +2,6 @@ import { UserData } from '../utils';
 import { GENDER_TYPE, LANGUAGE_CODE, USER_STATUS } from '../utils/enums';
 import { SignInData } from '../utils/types/auth';
 
-export const signInUser: SignInData = {
-  email: 'rockbell89',
-  password: '1234',
-};
-
 export const profileUser: UserData = {
   memberId: 1,
   name: '록벨',
