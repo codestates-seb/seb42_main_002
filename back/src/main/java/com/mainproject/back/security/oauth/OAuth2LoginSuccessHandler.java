@@ -2,6 +2,7 @@ package com.mainproject.back.security.oauth;
 
 import com.mainproject.back.security.jwt.JwtTokenizer;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Slf4j
 @Component
@@ -34,13 +38,24 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
       response.setHeader("Authorization", "Bearer " + accessToken);
       response.setHeader("Refresh", refreshToken);
       response.addHeader("Access-Control-Expose-Headers", "Authorization, Refresh");
-      String redirectURI = "http://localhost:3000";
+      URI redirectURI = createURI(accessToken, refreshToken);
       log.info("## {} 리다이렉트", redirectURI);
-      getRedirectStrategy().sendRedirect(request, response, redirectURI);
+      getRedirectStrategy().sendRedirect(request, response, redirectURI.toString());
 
     } catch (Exception e) {
       throw e;
     }
+  }
+
+  private URI createURI(String accessToken, String refreshToken) {
+    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.add("access", accessToken);
+    params.add("refresh", refreshToken);
+    return UriComponentsBuilder
+        .newInstance()
+        .path("http://localhost:3000")
+        .queryParams(params)
+        .build().toUri();
   }
 
   private String delegateAccessToken(CustomOAuth2User oAuth2User) {
