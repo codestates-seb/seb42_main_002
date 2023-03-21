@@ -4,6 +4,7 @@ import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.exception.MemberExceptionCode;
 import com.mainproject.back.member.service.MemberService;
+import com.mainproject.back.util.ApiManager;
 import com.mainproject.back.util.Check;
 import com.mainproject.back.util.UriCreator;
 import com.mainproject.back.vocabulary.dto.VocabDto;
@@ -49,7 +50,7 @@ public class VocabController {
 
     Vocabulary vocab = mapper.vocabPostToVocab(requestBody);
     vocab.setMember(member);
-    Vocabulary createdVocab = vocabService.createVocab(vocab);
+    Vocabulary createdVocab = vocabService.createVocab(vocab, requestBody.getTargetNation());
 
     VocabDto.Response response = mapper.vocabToVocabResponse(createdVocab);
 
