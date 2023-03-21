@@ -23,8 +23,6 @@ const SearchTagFilter = ({ onSubmit, onClose }: FullPageModalProps) => {
 
   // 태그 선택
   const onSelectTagHandler = (selectedTag: TagDataType) => {
-    console.log('태그', selectedTag);
-
     if (
       !tempTagList
         .map((tag: TagDataType) => tag.tagId)
