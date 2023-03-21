@@ -1,9 +1,6 @@
 package com.mainproject.oauth;
 
-import com.mainproject.back.member.entity.Member;
-import com.mainproject.back.member.repository.MemberRepository;
 import com.mainproject.back.security.jwt.JwtTokenizer;
-import com.mainproject.back.security.utils.AuthorityUtils;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
