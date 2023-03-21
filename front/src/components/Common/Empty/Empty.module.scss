@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  height: 50%;
+  height: calc(100% - 4rem);
 }
 
 .title {
@@ -13,4 +13,11 @@
 
 .children {
   margin-top: 1rem;
+  color: var(--text-secondary-color);
+}
+
+@media screen and (min-width: 1024px) {
+  .wrapper {
+    height: calc(100vh - 22.4rem);
+  }
 }

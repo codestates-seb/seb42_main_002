@@ -83,12 +83,12 @@ const Profile = () => {
 
   /**
    * 친구차단
-   * @param taregetId
+   * @param targetId
    */
-  const postBlockUser = async (taregetId: number) => {
+  const postBlockUser = async (targetId: number) => {
     try {
       const request = await POST(`/blocks`, {
-        taregetId: taregetId,
+        targetId: targetId,
       });
       if (request) {
         console.log(request);
@@ -100,11 +100,11 @@ const Profile = () => {
 
   /**
    * 친구차단해제
-   * @param taregetId
+   * @param targetId
    */
-  const deleteBlockUser = async (taregetId: number) => {
+  const deleteBlockUser = async (targetId: number) => {
     try {
-      const request = await DELETE(`/blocks/${taregetId}`);
+      const request = await DELETE(`/blocks/${targetId}`);
       if (request) {
         console.log(request);
       }
@@ -164,25 +164,43 @@ const Profile = () => {
                   <Flex.Col>
                     <ButtonGroup>
                       <Flex dir="column" gap="sm">
-                        {/** TODO: 친구 여부에 따른 조건 걸어주기 */}
-                        {!userInfo.friend ? (
-                          <Button
-                            size="sm"
-                            variant="primary"
-                            full
-                            onClick={() => postFollowing(userInfo.memberId)}
-                          >
-                            친구추가
-                          </Button>
-                        ) : (
+                        {/** 차단된 친구 일 경우 */}
+                        {userInfo.block && (
                           <Button
                             size="sm"
                             variant="secondary"
                             full
-                            onClick={() => deleteFollowing(userInfo.memberId)}
+                            onClick={() => deleteBlockUser(userInfo.memberId)}
                           >
-                            친구삭제
+                            차단해제
                           </Button>
+                        )}
+                        {/** 차단되지않은 친구 일 경우 */}
+                        {!userInfo.block && (
+                          <>
+                            {/** 팔로잉 친구 조건 분기 */}
+                            {!userInfo.friend ? (
+                              <Button
+                                size="sm"
+                                variant="primary"
+                                full
+                                onClick={() => postFollowing(userInfo.memberId)}
+                              >
+                                친구추가
+                              </Button>
+                            ) : (
+                              <Button
+                                size="sm"
+                                variant="secondary"
+                                full
+                                onClick={() =>
+                                  deleteFollowing(userInfo.memberId)
+                                }
+                              >
+                                친구삭제
+                              </Button>
+                            )}
+                          </>
                         )}
                       </Flex>
                     </ButtonGroup>
@@ -209,7 +227,7 @@ const Profile = () => {
                   </InfoGroup.Content>
                 </InfoGroup>
                 <div className={styles.btn_accuse}>
-                  {true && (
+                  {!userInfo?.block && (
                     <Button
                       size="sm"
                       variant="default"
@@ -224,7 +242,6 @@ const Profile = () => {
                       친구차단
                     </Button>
                   )}
-
                   <Button
                     size="sm"
                     variant="default"
