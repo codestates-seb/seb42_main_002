@@ -1,6 +1,6 @@
 import { BsFilterRight } from 'react-icons/bs';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { Scrollbar } from 'swiper';
 import Button from '../../Common/Button/Button';
 import SearchTag from '../SearchTag/SearchTag';

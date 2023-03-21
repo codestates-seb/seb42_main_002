@@ -49,5 +49,7 @@
   width: 100%;
   min-height: 15rem;
   margin-bottom: 1rem;
-  font-size: var(--font-size-s);
+  font-size: var(--font-size-sm);
+  outline: var(--button-secondary-color) solid 1px;
+  border-radius: 2px;
 }
