@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { AiOutlineAlert } from 'react-icons/ai';
 import { HiOutlineBan } from 'react-icons/hi';
 import { DELETE, GET, POST } from '../../utils/axios';
@@ -15,13 +15,15 @@ import styles from './Profile.module.scss';
 import { UserData } from '../../utils';
 import useModals from '../../hooks/useModals';
 import AlertModal, { AlertModalProps } from '../Common/Modal/AlertModal';
-import { userState } from '../../recoil/atoms';
-import { useRecoilValue } from 'recoil';
+import { newLetterState } from '../../recoil/atoms';
+import { useSetRecoilState } from 'recoil';
+import { BiEdit } from 'react-icons/bi';
 
 const Profile = () => {
   const { openModal } = useModals();
   const { memberId } = useParams();
-  // const userInfo = useRecoilValue(userState);
+  const navigate = useNavigate();
+  const setNewLetter = useSetRecoilState(newLetterState);
   const [userInfo, setUserInfo] = useState<UserData | null>(null);
   const [changeFollowing, setChangeFollowing] = useState(userInfo?.friend);
 
@@ -81,12 +83,12 @@ const Profile = () => {
 
   /**
    * 친구차단
-   * @param taregetId
+   * @param targetId
    */
-  const postBlockUser = async (taregetId: number) => {
+  const postBlockUser = async (targetId: number) => {
     try {
       const request = await POST(`/blocks`, {
-        taregetId: taregetId,
+        targetId: targetId,
       });
       if (request) {
         console.log(request);
@@ -98,11 +100,11 @@ const Profile = () => {
 
   /**
    * 친구차단해제
-   * @param taregetId
+   * @param targetId
    */
-  const deleteBlockUser = async (taregetId: number) => {
+  const deleteBlockUser = async (targetId: number) => {
     try {
-      const request = await DELETE(`/blocks/${taregetId}`);
+      const request = await DELETE(`/blocks/${targetId}`);
       if (request) {
         console.log(request);
       }
@@ -130,6 +132,21 @@ const Profile = () => {
     });
   };
 
+  const onClickHandler = (
+    event: React.MouseEvent<Element, MouseEvent>,
+    memberId: number,
+    receiver: string
+  ) => {
+    // 이벤트 전파 방지
+    event.stopPropagation();
+    setNewLetter((prev) => ({
+      ...prev,
+      memberId,
+      receiver,
+    }));
+    navigate('/newLetter');
+  };
+
   return (
     <>
       <ProfileCard>
@@ -147,25 +164,43 @@ const Profile = () => {
                   <Flex.Col>
                     <ButtonGroup>
                       <Flex dir="column" gap="sm">
-                        {/** TODO: 친구 여부에 따른 조건 걸어주기 */}
-                        {!userInfo.friend ? (
-                          <Button
-                            size="sm"
-                            variant="primary"
-                            full
-                            onClick={() => postFollowing(userInfo.memberId)}
-                          >
-                            친구추가
-                          </Button>
-                        ) : (
+                        {/** 차단된 친구 일 경우 */}
+                        {userInfo.block && (
                           <Button
                             size="sm"
                             variant="secondary"
                             full
-                            onClick={() => deleteFollowing(userInfo.memberId)}
+                            onClick={() => deleteBlockUser(userInfo.memberId)}
                           >
-                            친구삭제
+                            차단해제
                           </Button>
+                        )}
+                        {/** 차단되지않은 친구 일 경우 */}
+                        {!userInfo.block && (
+                          <>
+                            {/** 팔로잉 친구 조건 분기 */}
+                            {!userInfo.friend ? (
+                              <Button
+                                size="sm"
+                                variant="primary"
+                                full
+                                onClick={() => postFollowing(userInfo.memberId)}
+                              >
+                                친구추가
+                              </Button>
+                            ) : (
+                              <Button
+                                size="sm"
+                                variant="secondary"
+                                full
+                                onClick={() =>
+                                  deleteFollowing(userInfo.memberId)
+                                }
+                              >
+                                친구삭제
+                              </Button>
+                            )}
+                          </>
                         )}
                       </Flex>
                     </ButtonGroup>
@@ -192,7 +227,7 @@ const Profile = () => {
                   </InfoGroup.Content>
                 </InfoGroup>
                 <div className={styles.btn_accuse}>
-                  {true && (
+                  {!userInfo?.block && (
                     <Button
                       size="sm"
                       variant="default"
@@ -207,7 +242,6 @@ const Profile = () => {
                       친구차단
                     </Button>
                   )}
-
                   <Button
                     size="sm"
                     variant="default"
@@ -260,6 +294,20 @@ const Profile = () => {
           </>
         )}
       </ProfileCard>
+      <Button
+        variant="primary"
+        size="md"
+        iconBtn
+        icon={<BiEdit />}
+        className={styles.btn_newLetter}
+        onClick={(event) => {
+          onClickHandler(
+            event,
+            userInfo?.memberId as number,
+            userInfo?.name as string
+          );
+        }}
+      />
     </>
   );
 };

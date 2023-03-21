@@ -7,7 +7,7 @@ import styles from './UserCardInfo.module.scss';
 type UserCardInfoProps = {
   name: string;
   location: LOCATION_CODE; // 국가코드 2글자
-  date: string | null; // 2023-02-28T19:12:01
+  date?: string | null; // 2023-02-28T19:12:01
 };
 
 const UserCardInfo = ({ name, location, date }: UserCardInfoProps) => {

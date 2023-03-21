@@ -9,7 +9,7 @@ type LetterStatusIconProps = {
 };
 
 const LetterStatusIcon = ({
-  status = 'SENT',
+  status,
   isRead = false,
 }: LetterStatusIconProps) => {
   // 조건부 렌더링 같은 경우 어떤 식으로 하는 게 좋을지
@@ -24,10 +24,15 @@ const LetterStatusIcon = ({
   };
 
   return (
-    <div className={styles.letter_state}>
-      {/* 상태에 따른 아이콘 */}
-      <div>{Icons[status]}</div>
-    </div>
+    <>
+      {/** 편지 상태 정보 있을 경우에만 노출 */}
+      {status && (
+        <div className={styles.letter_state}>
+          {/* 상태에 따른 아이콘 */}
+          <div>{Icons[status]}</div>
+        </div>
+      )}
+    </>
   );
 };
 
