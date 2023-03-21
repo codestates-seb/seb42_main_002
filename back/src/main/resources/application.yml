@@ -1,13 +1,24 @@
 spring:
+  profiles:
+    include : oauth
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "local"
+---
+spring:
   datasource:
     url: jdbc:mysql://localhost:3306/MPT
     password: 1234
     username: root
     driver-class-name: com.mysql.cj.jdbc.Driver
+
   jpa:
     database-platform: org.hibernate.dialect.MySQL5Dialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     #ddl-auto: none
     properties:
       hibernate:
@@ -29,3 +40,11 @@ jwt:
   key: zxcasdlqwealksjdioqywejkashdjkhj1k23hjkhsd87382h
   access-token-expiration-minutes: 1440
   refresh-token-expiration-minutes: 1440
+#OAuth2:
+#  google:
+#    url: https://accounts.google.com/o/oauth2/v2/auth
+#    client-id: 988521621363-hd142j8vnlgtpa86hqmehi8uos0e17m7.apps.googleusercontent.com
+#    client-secret: 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
+#    redirect-url: http://localhost:8080/auth/login/redirect
+#    scope : profile,email
+#    auth-url : //oauth2.googleapis.com
