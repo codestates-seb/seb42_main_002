@@ -63,7 +63,7 @@ const confirmRemoveLanguageaModal = ({
       onSubmit={onSubmitHandler}
       onClose={onCloseHandler}
     >
-      <p className="align_center">정말 삭제 하시겠습니까?</p>
+      <p className="text_center">정말 삭제 하시겠습니까?</p>
     </AlertModal>
   );
 };

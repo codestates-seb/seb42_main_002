@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { useAuth } from '../../../context/AuthContext';
 import useModals from '../../../hooks/useModals';
 import {
+  userLanguageState,
   userLocationState,
   userLocationValueState,
   userTagState,
 } from '../../../recoil/atoms';
 import { allTagState } from '../../../recoil/selectors';
-import { LOCATION_CODE } from '../../../utils';
 import { PATCH } from '../../../utils/axios';
 import { TagDataType } from '../../../utils/types/tags/tags';
 import Flex from '../../Common/Flex/Flex';
@@ -17,13 +18,16 @@ import FullPageModal, {
   FullPageModalProps,
 } from '../../Common/Modal/FullPageModal';
 import SearchInput from '../../Common/SearchInput/SearchInput';
+import SummaryTitle from '../../Common/SummaryTitle/SummaryTitle';
 import LanguageEditModal from '../LanguageEditModal/LanguageEditModal';
 import LocationEditModal from '../LocationEditModal/LocationEditModal';
 
 const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
   const { closeModal } = useModals();
-  // const navigate = useNavigate();
-  const hobbyTags = useRecoilValue(allTagState);
+  const navigate = useNavigate();
+  const hobbyTags = useRecoilValue(allTagState); // 취미 전체 목록
+  const selectedUserLangauges = useRecoilValue(userLanguageState); // 선택한 언어
+  const selectedUserLocationValue = useRecoilValue(userLocationValueState); // 첫 설정시 국가
   const [selectedUserTags, setSelectedUserTags] =
     useRecoilState<TagDataType[]>(userTagState);
   const [changeTags, setChangeTags] = useState<TagDataType[]>([
@@ -31,7 +35,6 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
   ]);
   const [selectedUserLocation, setSelectedUserLocation] =
     useRecoilState(userLocationState);
-  const selectedUserLocationValue = useRecoilValue(userLocationValueState); // 첫 설정시 국가
   const [tagList, setTagList] = useState([...hobbyTags]);
 
   // 태그 선택
@@ -77,16 +80,28 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
     }
   };
 
+  const updateLanguage = async () => {
+    try {
+      const response = await PATCH('/members', {
+        language: selectedUserLangauges,
+      });
+      if (response) {
+        console.log('언어 설정 완료');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const onSubmitHandler = async () => {
     if (onSubmit) {
       if (!selectedUserLocation) {
         // 첫 설정 일때
-        updateLocation();
-        updateTag();
+        Promise.all([updateLocation(), updateLanguage(), updateTag()]);
         // 첫 설정 후 전체 모달 닫고 Welcome 페이지로 이동
         closeModal(LocationEditModal);
         closeModal(LanguageEditModal);
-        // navigate('/welcome');
+        navigate('/welcome');
       } else {
         // 수정 일때
         updateTag();
@@ -101,6 +116,12 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
       onClose={onClose}
       labelSubmit={!selectedUserLocation ? '설정 완료' : '수정'}
     >
+      {!selectedUserLocation && (
+        <SummaryTitle>
+          관심 있는 <br />
+          주제의 태그를 선택하세요
+        </SummaryTitle>
+      )}
       <SearchInput
         items={hobbyTags}
         filterKey="name"

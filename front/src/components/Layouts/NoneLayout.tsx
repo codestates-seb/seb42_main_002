@@ -1,11 +1,13 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { DefaultProps } from '../../utils';
+import { getCookie } from '../../utils/cookie';
 import styles from './BaseLayout.module.scss';
 
 const NoneLayout = ({ children }: DefaultProps) => {
-  const { user } = useAuth();
-  if (user) return <Navigate to="/main" />;
+  const token = getCookie('accessJwtToken');
+  if (token) return <Navigate to="/main" />;
+
   return (
     <main className={styles.baselayout}>
       <article className={styles.article}>

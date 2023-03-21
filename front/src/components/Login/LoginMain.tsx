@@ -32,16 +32,6 @@ const LoginMain = () => {
     password: '',
   });
 
-  // TODO : 추후 수정 예정 (RIA)
-  const onLoginHandler = async () => {
-    await login({ email: 'rockbell89@gmail.com', password: '1234' });
-    if (!selectedUserLocation) {
-      navigate('/start');
-    } else {
-      navigate('/main');
-    }
-  };
-
   const loginValidation = (email: string, password: string) => {
     let result = true;
     switch (1) {
@@ -107,7 +97,8 @@ const LoginMain = () => {
         username: data.loginEmail as string,
         password: data.Loginpassword as string,
       };
-      loginRequest(userData);
+      login(userData);
+      // loginRequest(userData);
       // console.log(`아이디: ${data.loginEmail} 비밀번호: ${data.Loginpassword}`);
     }
   };
@@ -152,10 +143,6 @@ const LoginMain = () => {
           로그인
         </button>
       </form>
-      {/** 추후 삭제 예정 */}
-      <button className={styles.signUp_Btn} onClick={onLoginHandler}>
-        임시 로그인
-      </button>
     </>
   );
 };

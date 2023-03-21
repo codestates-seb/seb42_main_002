@@ -1,0 +1,11 @@
+.container {
+  display: grid;
+  width: 100%;
+  height: calc(100% - 4rem);
+  align-items: center;
+  .form {
+    max-width: 400px;
+    width: 100%;
+    margin: 0 auto;
+  }
+}

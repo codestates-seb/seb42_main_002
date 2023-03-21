@@ -23,18 +23,18 @@ import TextAreaFeild from '../Common/TextAreaFeild/TextAreaFeild';
 import MyProfileImage from './MyProfileImage';
 import LocationEditModal from './LocationEditModal/LocationEditModal';
 import styles from './MyProfile.module.scss';
-import { GET } from '../../utils/axios';
+import { GET, PATCH } from '../../utils/axios';
 import { LanguageDataType } from '../../utils';
 
 const MyProfile = () => {
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const { openModal } = useModals();
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [userTags, setUserTags] = useRecoilState(userTagState);
   const [userLanguages, setUserLanguages] = useRecoilState(userLanguageState);
   const [isEditBaseInfo, setIsEditBaseInfo] = useState(false);
   const [isEditIntroduce, setIsEditIntroduce] = useState(false);
-  const [selectedGender, setSelectedGender] = useState<string>(userInfo.gender);
+  const [selectedGender, setSelectedGender] = useState<string | null>(null);
 
   const GenderIcons = {
     MALE: <FaMars color="#253c63" />,
@@ -45,12 +45,12 @@ const MyProfile = () => {
   const getMyProfile = async () => {
     try {
       const { data } = await GET(`/members`);
+      console.log('data', data);
       if (data) {
         setUserInfo(data);
         setUserLanguages(data.language);
         setUserTags(data.tag);
       }
-      console.log(data);
     } catch (error) {
       console.error(error);
     }
@@ -68,7 +68,9 @@ const MyProfile = () => {
     setSelectedGender(value);
   };
 
-  const onSubmitChangeBaseInfo = (event: React.FormEvent<HTMLFormElement>) => {
+  const onSubmitChangeBaseInfo = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const requestData = {
@@ -76,16 +78,24 @@ const MyProfile = () => {
       gender: formData.get('gender'),
       birthDay: formData.get('birthDay'),
     };
-    console.log(requestData);
+
     if (requestData) {
-      setIsEditBaseInfo((prevState) => !prevState);
-      setUserInfo((prevState: any) => ({
-        ...prevState,
-        name: requestData.name,
-        gender: requestData.gender,
-        birthday: requestData.birthDay,
-      }));
-      console.log(userInfo);
+      try {
+        const response = await PATCH('/members', {
+          ...requestData,
+        });
+        if (response) {
+          setIsEditBaseInfo((prevState) => !prevState);
+          setUserInfo((prevState: any) => ({
+            ...prevState,
+            name: requestData.name,
+            gender: requestData.gender,
+            birthday: requestData.birthDay,
+          }));
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -93,7 +103,7 @@ const MyProfile = () => {
     setIsEditIntroduce((prevState) => !prevState);
   };
 
-  const onSubmitChangeIntroduceHandler = (
+  const onSubmitChangeIntroduceHandler = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
@@ -102,11 +112,20 @@ const MyProfile = () => {
       introduce: formData.get('introduce'),
     };
     if (requestData) {
-      setIsEditIntroduce((prevState) => !prevState);
-      setUserInfo((prevState: any) => ({
-        ...prevState,
-        introduce: requestData.introduce,
-      }));
+      try {
+        const response = await PATCH('/members', {
+          ...requestData,
+        });
+        if (response) {
+          setIsEditIntroduce((prevState) => !prevState);
+          setUserInfo((prevState: any) => ({
+            ...prevState,
+            introduce: requestData.introduce,
+          }));
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -144,6 +163,12 @@ const MyProfile = () => {
                           <InfoGroup.Label>별명</InfoGroup.Label>
                           <InfoGroup.Content>
                             <p>{userInfo.name}</p>
+                          </InfoGroup.Content>
+                        </InfoGroup>
+                        <InfoGroup>
+                          <InfoGroup.Label>이메일</InfoGroup.Label>
+                          <InfoGroup.Content>
+                            <p>{userInfo.email}</p>
                           </InfoGroup.Content>
                         </InfoGroup>
                         <InfoGroup>
@@ -232,13 +257,16 @@ const MyProfile = () => {
                         </InfoGroup>
                       </Flex.Col>
                       <Flex.Col>
-                        <ButtonGroup justify="end">
+                        <ButtonGroup gap="sm" justify="end">
                           <Button
                             size="sm"
-                            variant="primary"
-                            type="submit"
-                            icon={<BiSave />}
+                            variant="secondary"
+                            type="button"
+                            onClick={onChangeEditBaseInfo}
                           >
+                            취소
+                          </Button>
+                          <Button size="sm" variant="primary" type="submit">
                             저장
                           </Button>
                         </ButtonGroup>
@@ -288,13 +316,16 @@ const MyProfile = () => {
                           />
                         </Flex.Col>
                         <Flex.Col>
-                          <ButtonGroup justify="end">
+                          <ButtonGroup gap="sm" justify="end">
                             <Button
                               size="sm"
-                              variant="primary"
-                              type="submit"
-                              icon={<BiSave />}
+                              variant="secondary"
+                              type="button"
+                              onClick={onChangeEditIntroduce}
                             >
+                              취소
+                            </Button>
+                            <Button size="sm" variant="primary" type="submit">
                               저장
                             </Button>
                           </ButtonGroup>

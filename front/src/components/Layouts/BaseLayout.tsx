@@ -1,4 +1,5 @@
-import { Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
 import { useAuth } from '../../context/AuthContext';
 import BottomNav from './Nav/BottomNavBar';
@@ -8,6 +9,8 @@ import PrevButton from '../Common/PrevButton/PrevButton';
 import Footer from './Footer/Footer';
 import styles from './BaseLayout.module.scss';
 import Header from './Header/Header';
+import { getCookie } from '../../utils/cookie';
+import { GET } from '../../utils/axios';
 
 type BaseLayouProps = DefaultProps & {
   isAuth?: boolean;
@@ -23,8 +26,10 @@ const BaseLayout = ({
   noTitle,
   children,
 }: BaseLayouProps) => {
-  const { user } = useAuth();
-  if (!user) return <Navigate to="/" />;
+  const navigate = useNavigate();
+  const token = getCookie('accessJwtToken');
+  if (!token) return <Navigate to="/" />;
+
   return (
     <main
       className={classNames(styles.baselayout, { [styles.is_auth]: isAuth })}

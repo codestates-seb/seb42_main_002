@@ -3,12 +3,17 @@ import useModals from '../../hooks/useModals';
 import Button from '../../components/Common/Button/Button';
 import LocationEditModal from '../../components/MyProfile/LocationEditModal/LocationEditModal';
 import styles from './Start.module.scss';
+import { useRecoilValue } from 'recoil';
+import { userState } from '../../recoil/atoms';
 
 const Start = () => {
   const { openModal } = useModals();
+  const userInfo = useRecoilValue(userState);
   useEffect(() => {
-    openModal(LocationEditModal);
-  }, []);
+    if (!userInfo.location) {
+      openModal(LocationEditModal);
+    }
+  }, [userInfo]);
 
   return (
     <div className={styles.container}>

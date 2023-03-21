@@ -114,7 +114,7 @@ const Profile = () => {
   const confirmBlockUserModal = ({ onSubmit, onClose }: AlertModalProps) => {
     return (
       <AlertModal title="친구 차단" onSubmit={onSubmit} onClose={onClose}>
-        <p className="align_center">
+        <p className="text_center">
           <span className="text_active">{userInfo?.name}</span>
           &nbsp;님을 차단하시겠습니까?
         </p>
