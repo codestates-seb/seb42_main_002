@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { FaMars, FaTransgender, FaVenus } from 'react-icons/fa';
-import { BiEdit, BiSave } from 'react-icons/bi';
+import { BiEdit } from 'react-icons/bi';
 import { useAuth } from '../../context/AuthContext';
 import useModals from '../../hooks/useModals';
 import Button from '../Common/Button/Button';
@@ -17,24 +17,28 @@ import ProfileCard from '../Common/ProfileCard/ProfileCard.module';
 import Flex from '../Common/Flex/Flex';
 import InfoGroup from '../Common/InfoGroup/InfoGroup';
 import RadioGroup from '../Common/RadioButton/RadioButtonGroup';
-import { CONST_GENDER_TYPE } from '../../utils/enums/common/common.enum';
+import {
+  CONST_GENDER_TYPE,
+  GENDER_TYPE,
+} from '../../utils/enums/common/common.enum';
 import InputFeild from '../Common/InputFeild/InputFeild';
 import TextAreaFeild from '../Common/TextAreaFeild/TextAreaFeild';
 import MyProfileImage from './MyProfileImage';
 import LocationEditModal from './LocationEditModal/LocationEditModal';
 import styles from './MyProfile.module.scss';
-import { GET, PATCH } from '../../utils/axios';
+import { PATCH } from '../../utils/axios';
 import { LanguageDataType } from '../../utils';
+import { TagDataType } from '../../utils/types/tags/tags';
 
 const MyProfile = () => {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const { openModal } = useModals();
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [userTags, setUserTags] = useRecoilState(userTagState);
   const [userLanguages, setUserLanguages] = useRecoilState(userLanguageState);
   const [isEditBaseInfo, setIsEditBaseInfo] = useState(false);
   const [isEditIntroduce, setIsEditIntroduce] = useState(false);
-  const [selectedGender, setSelectedGender] = useState<string | null>(null);
+  const [selectedGender, setSelectedGender] = useState(userInfo?.gender);
 
   const GenderIcons = {
     MALE: <FaMars color="#253c63" />,
@@ -42,22 +46,9 @@ const MyProfile = () => {
     OTHER: <FaTransgender color="#505050" />,
   };
 
-  const getMyProfile = async () => {
-    try {
-      const { data } = await GET(`/members`);
-      console.log('data', data);
-      if (data) {
-        setUserInfo(data);
-        setUserLanguages(data.language);
-        setUserTags(data.tag);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
-    getMyProfile();
+    setUserLanguages(userInfo?.language as LanguageDataType[]);
+    setUserTags(userInfo?.tag as TagDataType[]);
   }, []);
 
   const onChangeEditBaseInfo = () => {
@@ -65,7 +56,7 @@ const MyProfile = () => {
   };
 
   const onChangeGenderHandler = (value: string) => {
-    setSelectedGender(value);
+    setSelectedGender(value as GENDER_TYPE);
   };
 
   const onSubmitChangeBaseInfo = async (
@@ -224,7 +215,7 @@ const MyProfile = () => {
                             <RadioGroup
                               name="gender"
                               onChange={onChangeGenderHandler}
-                              value={selectedGender}
+                              value={selectedGender as GENDER_TYPE}
                               isSet
                             >
                               {CONST_GENDER_TYPE.map((gender, index) => (

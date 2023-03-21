@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { userLocationState } from '../../recoil/atoms';
 import { userState } from '../../recoil/atoms/user/user';
-import { LOCATION_CODE } from '../../utils';
 import Button from '../Common/Button/Button';
 import ButtonGroup from '../Common/Button/ButtonGroup';
 import Flex from '../Common/Flex/Flex';
@@ -13,17 +12,17 @@ type MyProfileImageProps = {
 };
 
 const MyProfileImage = ({ onChangeLocation }: MyProfileImageProps) => {
-  const { profile, location } = useRecoilValue(userState);
+  const userInfo = useRecoilValue(userState);
   const [userLcation, setUserLocation] = useRecoilState(userLocationState);
   const [photoURL, setPhotoURL] = useState<string | null>();
 
   useEffect(() => {
-    setUserLocation(location);
+    setUserLocation(userInfo?.location);
   }, [location]);
 
   useEffect(() => {
-    setPhotoURL(profile);
-  }, [profile]);
+    setPhotoURL(userInfo?.profile);
+  }, [userInfo?.profile]);
 
   // 이미지 변경
   const onChangeImageHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,7 +38,7 @@ const MyProfileImage = ({ onChangeLocation }: MyProfileImageProps) => {
 
   // 이미지 제거
   const onRemoveImageHandler = () => {
-    setPhotoURL(profile);
+    setPhotoURL(userInfo?.profile);
   };
 
   return (

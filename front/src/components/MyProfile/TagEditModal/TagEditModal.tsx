@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { useAuth } from '../../../context/AuthContext';
 import useModals from '../../../hooks/useModals';
 import {
   userLanguageState,
   userLocationState,
   userLocationValueState,
+  userState,
   userTagState,
 } from '../../../recoil/atoms';
 import { allTagState } from '../../../recoil/selectors';
@@ -25,6 +25,7 @@ import LocationEditModal from '../LocationEditModal/LocationEditModal';
 const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
   const { closeModal } = useModals();
   const navigate = useNavigate();
+  const userInfo = useRecoilValue(userState);
   const hobbyTags = useRecoilValue(allTagState); // 취미 전체 목록
   const selectedUserLangauges = useRecoilValue(userLanguageState); // 선택한 언어
   const selectedUserLocationValue = useRecoilValue(userLocationValueState); // 첫 설정시 국가
@@ -95,7 +96,7 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
 
   const onSubmitHandler = async () => {
     if (onSubmit) {
-      if (!selectedUserLocation) {
+      if (userInfo?.location === null) {
         // 첫 설정 일때
         Promise.all([updateLocation(), updateLanguage(), updateTag()]);
         // 첫 설정 후 전체 모달 닫고 Welcome 페이지로 이동
@@ -114,9 +115,9 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
     <FullPageModal
       onSubmit={onSubmitHandler}
       onClose={onClose}
-      labelSubmit={!selectedUserLocation ? '설정 완료' : '수정'}
+      labelSubmit={userInfo?.location === null ? '설정 완료' : '수정'}
     >
-      {!selectedUserLocation && (
+      {userInfo?.location === null && (
         <SummaryTitle>
           관심 있는 <br />
           주제의 태그를 선택하세요

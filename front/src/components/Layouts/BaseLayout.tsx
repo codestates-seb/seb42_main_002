@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useEffect, useCallback } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
 import { useAuth } from '../../context/AuthContext';
 import BottomNav from './Nav/BottomNavBar';
@@ -9,26 +9,55 @@ import PrevButton from '../Common/PrevButton/PrevButton';
 import Footer from './Footer/Footer';
 import styles from './BaseLayout.module.scss';
 import Header from './Header/Header';
-import { getCookie } from '../../utils/cookie';
-import { GET } from '../../utils/axios';
+import { useSetRecoilState } from 'recoil';
+import { userState } from '../../recoil/atoms';
 
 type BaseLayouProps = DefaultProps & {
   isAuth?: boolean;
   title?: string;
   subTitle?: string;
   noTitle?: boolean;
+  isFirstLogin?: boolean;
 };
 
 const BaseLayout = ({
   isAuth,
+  isFirstLogin,
   title,
   subTitle,
   noTitle,
   children,
 }: BaseLayouProps) => {
+  const { getCurrentUserInfo } = useAuth();
   const navigate = useNavigate();
-  const token = getCookie('accessJwtToken');
-  if (!token) return <Navigate to="/" />;
+  const { pathname } = useLocation();
+  const setUserInfoProfile = useSetRecoilState(userState);
+
+  const fetchUserInfo = useCallback(async () => {
+    const userInfo = await getCurrentUserInfo();
+    console.log(userInfo);
+    if (userInfo === null) {
+      navigate('/');
+      return;
+    }
+    // TODO : 다른 방법 찾아보기
+    if (userInfo) {
+      if (userInfo.location) {
+        return;
+      }
+      if (userInfo.location === null) {
+        const pathArr = ['/start', '/welcome'];
+        if (!pathArr.includes(pathname)) {
+          navigate('/start', { replace: true });
+        }
+      }
+      setUserInfoProfile(userInfo);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchUserInfo();
+  }, [children]);
 
   return (
     <main
@@ -49,7 +78,7 @@ const BaseLayout = ({
           {children}
         </div>
       </article>
-      {isAuth && <BottomNav />}
+      {isAuth && !isFirstLogin && <BottomNav />}
       <Footer />
     </main>
   );

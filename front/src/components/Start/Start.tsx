@@ -5,15 +5,19 @@ import LocationEditModal from '../../components/MyProfile/LocationEditModal/Loca
 import styles from './Start.module.scss';
 import { useRecoilValue } from 'recoil';
 import { userState } from '../../recoil/atoms';
+import { useNavigate } from 'react-router-dom';
 
 const Start = () => {
   const { openModal } = useModals();
+  const navigate = useNavigate();
   const userInfo = useRecoilValue(userState);
   useEffect(() => {
-    if (!userInfo.location) {
+    if (userInfo?.location === null) {
       openModal(LocationEditModal);
+    } else {
+      navigate('/main');
     }
-  }, [userInfo]);
+  }, []);
 
   return (
     <div className={styles.container}>

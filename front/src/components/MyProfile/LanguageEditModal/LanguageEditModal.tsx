@@ -1,6 +1,6 @@
 import { useRecoilValue } from 'recoil';
 import useModals from '../../../hooks/useModals';
-import { userLocationState } from '../../../recoil/atoms';
+import { userLocationState, userState } from '../../../recoil/atoms';
 import { userLanguageState } from '../../../recoil/atoms/user/userLanguage';
 import { PATCH } from '../../../utils/axios';
 import Button from '../../Common/Button/Button';
@@ -19,6 +19,7 @@ import LanguageList from './LanguageList';
  */
 const LanguageEditModal = ({ onClose }: FullPageModalProps) => {
   const { openModal } = useModals();
+  const userInfo = useRecoilValue(userState);
   const selectedUserLanguages = useRecoilValue(userLanguageState);
   const selectedUserLocation = useRecoilValue(userLocationState);
 
@@ -42,9 +43,9 @@ const LanguageEditModal = ({ onClose }: FullPageModalProps) => {
     <FullPageModal
       onSubmit={onSubmitHandler}
       onClose={onClose}
-      labelSubmit={!selectedUserLocation ? '다음' : '닫기'}
+      labelSubmit={userInfo?.location === null ? '다음' : '닫기'}
     >
-      {!selectedUserLocation && (
+      {userInfo?.location === null && (
         <SummaryTitle>
           배우고싶거나
           <br />

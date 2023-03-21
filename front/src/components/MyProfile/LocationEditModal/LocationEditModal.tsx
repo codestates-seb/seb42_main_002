@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import useModals from '../../../hooks/useModals';
 import {
   userLocationValueState,
   userLocationState,
+  userState,
 } from '../../../recoil/atoms';
 import { LocationIcons, locationTypes } from '../../../utils';
 import { PATCH } from '../../../utils/axios';
@@ -23,6 +24,7 @@ import styles from './LocationEditModal.module.scss';
 
 const LocationEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
   const { openModal } = useModals();
+  const userInfo = useRecoilValue(userState);
   const [selectedUserLocation, setSelectedUserLocation] =
     useRecoilState(userLocationState);
   const setselectedUserLocationValueState = useSetRecoilState<any>(
@@ -51,7 +53,7 @@ const LocationEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
 
   const onSubmitHandler = () => {
     if (onSubmit) {
-      if (!selectedUserLocation) {
+      if (userInfo?.location === null) {
         // 첫 설정일 때
         setselectedUserLocationValueState(changeLocation);
         openModal(LanguageEditModal);
@@ -62,14 +64,14 @@ const LocationEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
       }
     }
   };
-
+  console.log(selectedUserLocation);
   return (
     <FullPageModal
       onSubmit={onSubmitHandler}
       onClose={onClose}
-      labelSubmit={!selectedUserLocation ? '다음' : '수정'}
+      labelSubmit={userInfo?.location === null ? '다음' : '수정'}
     >
-      {!selectedUserLocation && (
+      {userInfo?.location === null && (
         <SummaryTitle>
           국적 혹은 <br />
           현재 사는 곳을 선택하세요
