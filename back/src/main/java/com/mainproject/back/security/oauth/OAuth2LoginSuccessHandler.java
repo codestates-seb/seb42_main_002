@@ -11,13 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
+public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
   private final JwtTokenizer jwtTokenizer;
 
@@ -34,6 +34,9 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
       response.setHeader("Authorization", "Bearer " + accessToken);
       response.setHeader("Refresh", refreshToken);
       response.addHeader("Access-Control-Expose-Headers", "Authorization, Refresh");
+      String redirectURI = "http://localhost:3000";
+      log.info("## {} 리다이렉트", redirectURI);
+      getRedirectStrategy().sendRedirect(request, response, redirectURI);
 
     } catch (Exception e) {
       throw e;
