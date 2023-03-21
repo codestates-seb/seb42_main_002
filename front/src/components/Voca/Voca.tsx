@@ -6,7 +6,6 @@ import Button from '../Common/Button/Button';
 import VocaModal from './VocaModal/VocaModal';
 import styles from './Voca.module.scss';
 
-import { vocaArr } from '../../dummy/voca';
 import { DELETE, GET } from '../../utils/axios';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { deleteVocaState, selectedVocaState } from '../../recoil/atoms/voca';
@@ -18,7 +17,7 @@ const Voca = () => {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
-  const [vocaList, setVocaList] = useState<VocaDataType[]>([...vocaArr]);
+  const [vocaList, setVocaList] = useState<VocaDataType[]>([]);
   const [page, setPage] = useState<number>(0);
   const SIZE = 10;
 

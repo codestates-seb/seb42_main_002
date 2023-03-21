@@ -6,6 +6,8 @@ import { VocaDataType } from '../../../utils/types/voca';
 import { LANGUAGE_CODE } from '../../../utils';
 import { useSetRecoilState } from 'recoil';
 import { deleteVocaState } from '../../../recoil/atoms/voca';
+import { useEffect, useState } from 'react';
+import { useRef } from 'react';
 
 type VocaCardProps = {
   word: string;
@@ -25,13 +27,37 @@ const VocaCard = ({
   onDelete,
 }: VocaCardProps) => {
   const setDeleteVocaIdx = useSetRecoilState(deleteVocaState);
+  const [isClick, setIsClick] = useState(false);
+  const scrollRef: any = useRef(null);
+
+  useEffect(() => {
+    if (!isClick) {
+      scrollRef.current.scrollTop = 0;
+    }
+  }, [isClick]);
+
+  const onClickHandler = () => {
+    setIsClick(!isClick);
+  };
 
   return (
-    <li className={styles.card}>
+    <li
+      className={styles.card}
+      onClick={onClickHandler}
+      onKeyUp={(event) => {
+        event.preventDefault();
+      }}
+      role="presentation"
+    >
       {/* Word */}
       <div className={styles.word}>{word}</div>
       {/* Meaning */}
-      <div className={styles.meaning}>{meaning}</div>
+      <div
+        className={isClick ? styles.meaning : styles.meaning_beforeclick}
+        ref={scrollRef}
+      >
+        {meaning}
+      </div>
       {/* 버튼들 */}
       <div className={styles.buttons}>
         {/* 수정 */}
