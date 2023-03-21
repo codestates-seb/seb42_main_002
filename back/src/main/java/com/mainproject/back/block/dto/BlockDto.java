@@ -3,6 +3,7 @@ package com.mainproject.back.block.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.mainproject.back.member.dto.MemberSimpleDto;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,8 +17,7 @@ public class BlockDto {
   @JsonInclude(Include.NON_NULL)
   public static class Post {
 
-    private long memberId;
-
+    @NotNull
     private long targetId;
 
   }

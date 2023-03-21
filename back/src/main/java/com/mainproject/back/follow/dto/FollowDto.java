@@ -1,6 +1,7 @@
 package com.mainproject.back.follow.dto;
 
 import com.mainproject.back.member.dto.MemberSimpleDto;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,8 +17,7 @@ public class FollowDto {
 
   public static class Post {
 
-    private Long followerId;
-
+    @NotNull
     private Long followingId;
   }
 

@@ -6,7 +6,6 @@ import com.mainproject.back.follow.entity.Follow;
 import com.mainproject.back.follow.mapper.FollowMapper;
 import com.mainproject.back.follow.service.FollowService;
 import com.mainproject.back.member.dto.MemberLetterDto;
-import com.mainproject.back.member.dto.MemberSearchDto;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.service.MemberConvertService;
 import com.mainproject.back.member.service.MemberService;
@@ -15,6 +14,7 @@ import com.mainproject.back.util.UriCreator;
 import java.net.URI;
 import java.security.Principal;
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -89,7 +89,7 @@ public class FollowController {
   }
 
   @DeleteMapping("/{following-id}")
-  public ResponseEntity deleteBlock(@PathVariable("following-id") long followingId) {
+  public ResponseEntity deleteBlock(@PathVariable("following-id") @Positive long followingId) {
     followService.deleteFollow(followingId);
     return ResponseEntity.noContent().build();
   }

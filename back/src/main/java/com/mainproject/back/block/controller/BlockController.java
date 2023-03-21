@@ -4,8 +4,6 @@ import com.mainproject.back.block.dto.BlockDto;
 import com.mainproject.back.block.entity.Block;
 import com.mainproject.back.block.service.BlockService;
 import com.mainproject.back.member.dto.MemberBlockDto;
-import com.mainproject.back.member.dto.MemberLetterDto;
-import com.mainproject.back.member.dto.MemberSearchDto;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.service.MemberConvertService;
 import com.mainproject.back.member.service.MemberService;
@@ -13,6 +11,7 @@ import com.mainproject.back.util.UriCreator;
 import java.net.URI;
 import java.security.Principal;
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -74,7 +73,7 @@ public class BlockController {
   }
 
   @DeleteMapping("/{target-id}")
-  public ResponseEntity deleteBlock(@PathVariable("target-id") long targetId) {
+  public ResponseEntity deleteBlock(@PathVariable("target-id") @Positive long targetId) {
     log.info("## 차단 목록 삭제: {}", targetId);
     blockService.deleteBlock(targetId);
     return ResponseEntity.noContent().build();

@@ -22,9 +22,7 @@ public class VocabDto {
   public static class Post {
     @NotNull
     private String word;
-    @Setter
     private String meaning;
-    @Setter
     private String nation;
     @Setter
     private long memberId;
