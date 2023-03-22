@@ -23,8 +23,6 @@ const SearchLangTagFilter = ({ onSubmit, onClose }: FullPageModalProps) => {
 
   // 태그 선택
   const onSelectTagHandler = (selectedTag: LanguageDataType) => {
-    console.log('태그', selectedTag);
-
     if (
       !tempTagList.map((tag) => tag.languageId).includes(selectedTag.languageId)
     ) {

@@ -2,6 +2,10 @@ import { FiTrash2 } from 'react-icons/fi';
 import { BiEdit } from 'react-icons/bi';
 
 import styles from './VocaCard.module.scss';
+import { VocaDataType } from '../../../utils/types/voca';
+import { LANGUAGE_CODE } from '../../../utils';
+import { useSetRecoilState } from 'recoil';
+import { deleteVocaState } from '../../../recoil/atoms/voca';
 import { useEffect, useState } from 'react';
 import { useRef } from 'react';
 
@@ -9,17 +13,20 @@ type VocaCardProps = {
   word: string;
   vocabId: number;
   meaning: string;
-  onEdit: () => void;
-  onDelete: (vocabId: number) => void;
+  nation: string | LANGUAGE_CODE;
+  onEdit: (voca: VocaDataType) => void;
+  onDelete: () => void;
 };
 
 const VocaCard = ({
   word,
   meaning,
+  vocabId,
+  nation,
   onEdit,
   onDelete,
-  vocabId,
 }: VocaCardProps) => {
+  const setDeleteVocaIdx = useSetRecoilState(deleteVocaState);
   const [isClick, setIsClick] = useState(false);
   const scrollRef: any = useRef(null);
 
@@ -56,19 +63,16 @@ const VocaCard = ({
         {/* 수정 */}
         <button
           className={styles.button}
-          onClick={(event) => {
-            event.stopPropagation();
-            onEdit();
-          }}
+          onClick={onEdit.bind(null, { word, meaning, vocabId, nation })}
         >
           <BiEdit size="1.125rem" />
         </button>
         {/* 삭제 */}
         <button
           className={styles.button}
-          onClick={(event) => {
-            event.stopPropagation();
-            onDelete.bind(null, vocabId)();
+          onClick={() => {
+            onDelete();
+            setDeleteVocaIdx(vocabId);
           }}
         >
           <FiTrash2 size="1.125rem" />

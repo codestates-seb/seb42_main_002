@@ -1,6 +1,6 @@
 import { BsFilterRight } from 'react-icons/bs';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { Scrollbar } from 'swiper';
 import Button from '../../Common/Button/Button';
 import SearchTag from '../SearchTag/SearchTag';
@@ -8,18 +8,17 @@ import useModals from '../../../hooks/useModals';
 import 'swiper/css';
 import 'swiper/css/scrollbar';
 import SearchFilterModal from '../SearchFilterModal/SearchFilterModal';
-import {
-  selectedSearchLangTagState,
-  selectedSearchTagState,
-} from '../../../recoil/atoms/search';
+import { selectedSearchLangTagState } from '../../../recoil/atoms/search';
 import SummaryTitle from '../../Common/SummaryTitle/SummaryTitle';
 import styles from './SearchHeader.module.scss';
+import { TagDataType } from '../../../utils/types/tags/tags';
+import { searchUserTagSelector } from '../../../recoil/selectors/search';
 
 const SearchHeader = () => {
   const { openModal } = useModals();
 
   const searchLangTags = useRecoilValue(selectedSearchLangTagState);
-  const searchTags = useRecoilValue(selectedSearchTagState);
+  const searchTags = useRecoilValue(searchUserTagSelector);
 
   const openFilterModalHandler = () => {
     openModal(SearchFilterModal);
@@ -64,7 +63,7 @@ const SearchHeader = () => {
             ))}
 
             {/* Tags */}
-            {searchTags.map((tag) => (
+            {searchTags.map((tag: TagDataType) => (
               <SwiperSlide key={tag.tagId} className={styles.swiper_slide}>
                 <SearchTag type="default" tag={tag.name} />
               </SwiperSlide>

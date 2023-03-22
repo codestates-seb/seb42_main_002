@@ -15,7 +15,7 @@ type UserCardProps = {
   profile: string | null;
   birthday?: string;
   children?: React.ReactNode;
-  date: string | null;
+  date?: string | null;
   onClick?: (id: number) => void;
 };
 

@@ -15,6 +15,7 @@ export type UserData = {
   profile?: string | null;
   memberStatus?: USER_STATUS;
   friend?: boolean;
+  block?: boolean;
 };
 
 export type BlackUserData = {

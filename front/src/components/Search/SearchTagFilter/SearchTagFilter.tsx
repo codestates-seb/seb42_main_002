@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { selectedSearchTagState } from '../../../recoil/atoms/search';
 import { allTagState } from '../../../recoil/selectors';
+import { searchUserTagSelector } from '../../../recoil/selectors/search';
 import { TagDataType } from '../../../utils/types/tags/tags';
 import Flex from '../../Common/Flex/Flex';
 import LabelButton from '../../Common/LabelButton/LabelButton';
@@ -9,21 +9,25 @@ import FullPageModal, {
   FullPageModalProps,
 } from '../../Common/Modal/FullPageModal';
 import SearchInput from '../../Common/SearchInput/SearchInput';
+import styles from './SearchTagFilter.module.scss';
 
 const SearchTagFilter = ({ onSubmit, onClose }: FullPageModalProps) => {
-  const [searchTags, setSearchTags] = useRecoilState(selectedSearchTagState);
+  const [searchTags, setSearchTags] = useRecoilState(searchUserTagSelector);
+  const [isValid, setIsValid] = useState<boolean>(true);
   const hobbyTags = useRecoilValue(allTagState);
 
   // 고정된 태그 데이터
   const [tagList, setTagList] = useState([...hobbyTags]);
   // 수정 전 임시 태그 데이터
-  const [tempTagList, setTempTagList] = useState(searchTags);
+  const [tempTagList, setTempTagList] = useState<TagDataType[]>(searchTags);
 
   // 태그 선택
   const onSelectTagHandler = (selectedTag: TagDataType) => {
-    console.log('태그', selectedTag);
-
-    if (!tempTagList.map((tag) => tag.tagId).includes(selectedTag.tagId)) {
+    if (
+      !tempTagList
+        .map((tag: TagDataType) => tag.tagId)
+        .includes(selectedTag.tagId)
+    ) {
       setTempTagList((currentState) => [...currentState, selectedTag]);
     } else {
       setTempTagList(
@@ -38,6 +42,11 @@ const SearchTagFilter = ({ onSubmit, onClose }: FullPageModalProps) => {
   };
 
   const onSubmitHandler = () => {
+    if (tempTagList.length === 0) {
+      setIsValid(false);
+      return;
+    }
+
     if (onSubmit) {
       setSearchTags(tempTagList);
       onSubmit();
@@ -59,6 +68,9 @@ const SearchTagFilter = ({ onSubmit, onClose }: FullPageModalProps) => {
       onClose={onCloseHandler}
       labelSubmit="수정"
     >
+      <div className={styles.valid}>
+        {!isValid && <span>하나 이상의 태그를 선택해주세요.</span>}
+      </div>
       <SearchInput
         items={hobbyTags}
         filterKey="name"
