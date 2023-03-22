@@ -61,10 +61,10 @@ public class VocabController {
   public ResponseEntity patchVocab(@PathVariable("vocab-id") @Positive long vocabId,
       @RequestBody VocabDto.Patch requestBody, Principal principal) {
     log.info("## 단어 수정: {}", requestBody);
-    Member member = memberService.findMemberByEmail(Check.checkPrincipal(principal));
+    Long memberId = memberService.findMemberIdByEmail(Check.checkPrincipal(principal));
     requestBody.setVocabId(vocabId);
     Vocabulary vocab = mapper.vocabPatchToVocab(requestBody);
-    Vocabulary updatedVocab = vocabService.updateVocab(member.getMemberId(), vocab);
+    Vocabulary updatedVocab = vocabService.updateVocab(memberId, vocab);
 
     VocabDto.Response response = mapper.vocabToVocabResponse(updatedVocab);
 

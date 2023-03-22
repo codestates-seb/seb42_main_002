@@ -1,5 +1,9 @@
 package com.mainproject.back.util;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
@@ -76,7 +80,10 @@ public class RequestFilter<Map> extends GenericFilterBean {
       byte[] buf = wrapper.getContentAsByteArray();
       if (buf.length > 0) {
         try {
-          return new String(buf, 0, buf.length, wrapper.getCharacterEncoding());
+          String json = new String(buf, 0, buf.length, wrapper.getCharacterEncoding());
+          Gson gson = new GsonBuilder().setPrettyPrinting().create();
+          JsonElement element = JsonParser.parseString(json);
+          return gson.toJson(element);
         } catch (UnsupportedEncodingException e) {
           return " - ";
         }
@@ -94,6 +101,9 @@ public class RequestFilter<Map> extends GenericFilterBean {
       byte[] buf = wrapper.getContentAsByteArray();
       if (buf.length > 0) {
         payload = new String(buf, 0, buf.length, wrapper.getCharacterEncoding());
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        JsonElement element = JsonParser.parseString(payload);
+        payload = gson.toJson(element);
         wrapper.copyBodyToResponse();
       }
     }

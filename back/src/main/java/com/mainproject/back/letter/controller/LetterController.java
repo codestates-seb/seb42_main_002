@@ -4,6 +4,7 @@ import com.mainproject.back.letter.dto.LetterCountDto;
 import com.mainproject.back.letter.dto.LetterListDto;
 import com.mainproject.back.letter.dto.LetterPostDto;
 import com.mainproject.back.letter.dto.LetterResponseDto;
+import com.mainproject.back.letter.dto.LetterTranslateDto;
 import com.mainproject.back.letter.entity.Letter;
 import com.mainproject.back.letter.mapper.LetterMapper;
 import com.mainproject.back.letter.service.LetterService;
@@ -42,8 +43,9 @@ public class LetterController {
   private final MemberService memberService;
 
   @PostMapping("/{receiver-id}")
-  public ResponseEntity postLetter(@PathVariable("receiver-id") @Positive long receiverId, @RequestBody @Valid
-  LetterPostDto letterPostDto, Principal principal) {
+  public ResponseEntity postLetter(@PathVariable("receiver-id") @Positive long receiverId,
+      @RequestBody @Valid
+      LetterPostDto letterPostDto, Principal principal) {
     log.info("## 편지 보내기: {}", receiverId);
     letterPostDto.setReceiverId(receiverId);
 
@@ -91,5 +93,12 @@ public class LetterController {
     LetterCountDto letterCountDto = letterService.getArrivedLettersCount(
         memberService.findMemberIdByEmail(Check.checkPrincipal(principal)));
     return ResponseEntity.ok().body(letterCountDto);
+  }
+
+  @GetMapping("/translate")
+  public ResponseEntity<Object> getTranslated(@RequestBody LetterTranslateDto body) {
+    log.info("## 편지 번역");
+    LetterTranslateDto result = letterService.translate(body);
+    return ResponseEntity.ok().body(result);
   }
 }

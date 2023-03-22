@@ -1,7 +1,6 @@
 package com.mainproject.back.vocabulary.service;
 
 import com.mainproject.back.exception.BusinessLogicException;
-import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.exception.MemberExceptionCode;
 import com.mainproject.back.util.ApiManager;
 import com.mainproject.back.vocabulary.entity.Vocabulary;
@@ -27,7 +26,7 @@ public class VocabService {
   public Vocabulary createVocab(Vocabulary vocab, String target) {
     // nation 추가
     String nation = apiManager.getWordLang(vocab.getWord());
-    vocab.setNation(nation);
+    vocab.setNation(nation.toUpperCase());
 
     // 단어 뜻 번역
     String translated = apiManager.getWordMeaning(vocab.getWord(), target, nation);

@@ -2,7 +2,7 @@ package com.mainproject.back.util;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -12,11 +12,12 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 @Component
+@Slf4j
 public class ApiManager {
 
   // 네이버 api client id와 secret키
   private final String clientID = "MQkZ2_q6xDvEI_5gMj3v";
-  private String SECRET= "2hZ0USmSfI";
+  private String SECRET = "2hZ0USmSfI";
 
   // 네이버 api 주소
   private final String DETECT_URL = "https://openapi.naver.com/v1/papago/detectLangs?query=";
@@ -24,7 +25,7 @@ public class ApiManager {
 
 
   // 1. 입력 단어의 언어인식
-  public String getWordLang(String word){
+  public String getWordLang(String word) {
     String langCode = null;
 
     try {
@@ -39,7 +40,7 @@ public class ApiManager {
       langCode = (String) resultMap1.getBody().get("langCode");
 
     } catch (RestClientException e) {
-      e.printStackTrace();
+      log.info(e.getMessage());
     }
 
     return langCode;
@@ -48,26 +49,22 @@ public class ApiManager {
   // 2. 입력 단어 번역
   public String getWordMeaning(String word, String target, String langCode) {
     String meaning = null;
+    target = target.toLowerCase();
+    langCode = langCode.toLowerCase();
 
-    try {
+    String apiUrl = TRANSLATE_URL + "source=" + langCode + "&target=" + target + "&text=" + word;
+    RestTemplate restTemplate = new RestTemplate();
+    HttpHeaders headers = new HttpHeaders();
+    HttpEntity<?> entity = new HttpEntity<>(headers);
+    headers.set("X-Naver-Client-Id", clientID);
+    headers.set("X-Naver-Client-Secret", SECRET);
+    ResponseEntity<Map> resultMap2 = restTemplate.exchange(apiUrl, HttpMethod.POST, entity,
+        Map.class);
 
-      String apiUrl = TRANSLATE_URL + "source=" + langCode + "&target=" + target + "&text=" + word;
-      RestTemplate restTemplate = new RestTemplate();
-      HttpHeaders headers = new HttpHeaders();
-      HttpEntity<?> entity = new HttpEntity<>(headers);
-      headers.set("X-Naver-Client-Id", clientID);
-      headers.set("X-Naver-Client-Secret", SECRET);
-      ResponseEntity<Map> resultMap2 = restTemplate.exchange(apiUrl, HttpMethod.POST, entity,
-          Map.class);
+    LinkedHashMap message = (LinkedHashMap) resultMap2.getBody().get("message");
+    LinkedHashMap result = (LinkedHashMap) message.get("result");
 
-      LinkedHashMap message = (LinkedHashMap) resultMap2.getBody().get("message");
-      LinkedHashMap result = (LinkedHashMap) message.get("result");
-
-      meaning = (String) result.get("translatedText");
-
-    } catch (RestClientException e) {
-      e.printStackTrace();
-    }
+    meaning = (String) result.get("translatedText");
 
     return meaning;
   }
