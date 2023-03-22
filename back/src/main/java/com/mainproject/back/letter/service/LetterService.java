@@ -16,6 +16,7 @@ import com.mainproject.back.member.service.MemberService;
 import com.mainproject.back.util.ApiManager;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -116,10 +117,26 @@ public class LetterService {
                       .createdAt(letter.getCreatedAt()).build())
               .build();
         }).collect(Collectors.toSet()));
-    Page<MemberLetterDto> memberLetterDtoPage = new PageImpl<>(new ArrayList<>(memberLetterDtoSet),
-        pageable, memberLetterDtoSet.size());
+    int start = (int) pageable.getOffset();
+    int end = Math.min((start + pageable.getPageSize()), memberLetterDtoSet.size());
+    Comparator<MemberLetterDto> comparator = (o1, o2) -> {
+      if (o1.getLastLetter().getCreatedAt().isAfter(o2.getLastLetter().getCreatedAt())) {
+        return -1;
+      } else if (o1.getLastLetter().getCreatedAt().isEqual(o2.getLastLetter().getCreatedAt())) {
+        return 0;
+      } else {
+        return 1;
+      }
+    };
+
+    List<MemberLetterDto> list = new ArrayList<>(memberLetterDtoSet);
+    list.sort(comparator);
+
+    Page<MemberLetterDto> memberLetterDtoPage = new PageImpl<>(list.subList(start, end), pageable,
+        list.size());
     return memberLetterDtoPage;
   }
+
 
   public LetterCountDto getArrivedLettersCount(long memberId) {
     Long count;
