@@ -5,10 +5,21 @@ import LoginMain from './LoginMain';
 import styles from './Login.module.scss';
 
 const Login = () => {
+
+  function googleLoginClick() {
+    window.location.href = process.env.REACT_APP_GOOGLE_LOGIN_URL as string;
+  }
+  
   return (
     <div className={styles.container}>
       <div className={styles.form}>
-        <Button variant="secondary" size="lg" icon={<FcGoogle />} full>
+        <Button
+          variant="secondary"
+          size="lg"
+          icon={<FcGoogle />}
+          full
+          onClick={googleLoginClick}
+        >
           <span>구글이메일로 로그인하기</span>
         </Button>
         <LoginMain />
