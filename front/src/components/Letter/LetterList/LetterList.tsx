@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { newLetterState, selectedUserInfoState } from '../../../recoil/atoms';
 import { SlEnvolopeLetter } from 'react-icons/sl';
@@ -8,27 +8,39 @@ import { LetterDataType } from '../../../utils';
 import Letter from '../Letter/Letter';
 import LetterUserCard from '../LetterUserCard/LetterUserCard';
 import Empty from '../../Common/Empty/Empty';
+import useInfiniteScroll from '../../../hooks/useInfiniteScroll';
+import styles from './LetterList.module.scss';
 
-import styles from './LetterWrapper.module.scss';
-// import { lettersData } from '../../../dummy/letter';
-
-const LetterWrapper = () => {
+const LetterList = () => {
   const navigate = useNavigate();
   const selectedUser = useRecoilValue(selectedUserInfoState);
   const setNewLetter = useSetRecoilState(newLetterState);
-  const [page, setPage] = useState<number>(0);
   const [userLetterList, setUserLetterList] = useState<LetterDataType[]>([]);
+  const pageRef = useRef<number>(0);
+  const isStopRef = useRef<boolean>(false);
 
-  const getUserLetterList = async (memberId: number) => {
+  const getUserLetterList = async (memberId: number, page: number) => {
+    if (isStopRef.current) return;
     try {
       // TODO: 페이지네이션 보류
-      const { data } = await GET(`letters/members/${memberId}?page=0&size=20`);
-      setUserLetterList(data.content);
+      const { data } = await GET(
+        `letters/members/${memberId}?page=${page}&size=10`
+      );
+      isStopRef.current = data.last;
+      setUserLetterList((prev) => [...prev, ...data.content]);
     } catch (error) {
       console.log('error');
       // TODO: ERROR 처리 방법
     }
   };
+
+  const sentinelRef = useInfiniteScroll(async (page: number) => {
+    if (!selectedUser.memberId) {
+      return;
+    }
+    await getUserLetterList(selectedUser.memberId, page);
+    pageRef.current++;
+  }, pageRef.current);
 
   useEffect(() => {
     // 리다이렉트
@@ -37,14 +49,6 @@ const LetterWrapper = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (!selectedUser.memberId) {
-      return;
-    }
-    getUserLetterList(selectedUser.memberId);
-  }, []);
-
-  // 선택한 유저 정보 저장
   useEffect(() => {
     setNewLetter((prev) => ({
       ...prev,
@@ -55,9 +59,12 @@ const LetterWrapper = () => {
 
   if (userLetterList.length === 0) {
     return (
-      <Empty title="아직 편지가 없어요.">
-        <SlEnvolopeLetter className={styles.icon} size={'6rem'} />
-      </Empty>
+      <>
+        <Empty title="아직 편지가 없어요.">
+          <SlEnvolopeLetter className={styles.icon} size={'6rem'} />
+        </Empty>
+        <div ref={sentinelRef}>마지막</div>
+      </>
     );
   }
 
@@ -87,8 +94,9 @@ const LetterWrapper = () => {
           />
         ))}
       </div>
+      <div ref={sentinelRef}></div>
     </>
   );
 };
 
-export default LetterWrapper;
+export default LetterList;

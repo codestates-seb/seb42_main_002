@@ -1,5 +1,5 @@
-import LetterList from '../components/Letter/LetterList';
 import LetterListHeader from '../components/Letter/LetterListHeader/LetterListHeader';
+import LetterList from '../components/Letter/LetterList/LetterList';
 
 const LetterListPage = () => {
   return (
