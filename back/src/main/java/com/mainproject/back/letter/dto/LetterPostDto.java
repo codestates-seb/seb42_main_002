@@ -1,6 +1,7 @@
 package com.mainproject.back.letter.dto;
 
 import java.util.ArrayList;
+import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,8 +18,9 @@ public class LetterPostDto {
   private long senderId;
   @Setter
   private long receiverId;
+  @NotBlank
   private String body;
   private ArrayList<String> photoUrl;
-  private int type;
+  private int type = 1;
 
 }

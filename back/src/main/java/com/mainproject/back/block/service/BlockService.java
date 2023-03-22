@@ -22,14 +22,16 @@ public class BlockService {
 
   @Transactional
   public Block createBlock(Block block) {
+    blockRepository.findBlockByTargetIdAndMemberId(block.getTarget().getMemberId(),
+        block.getMember().getMemberId()).ifPresent(b -> {throw new BusinessLogicException(BlockExceptionCode.BLOCK_EXISTS);});
     followService.deleteFollowByBlock(block.getMember().getMemberId(),
         block.getTarget().getMemberId());
     return blockRepository.save(block);
   }
 
   @Transactional
-  public void deleteBlock(long targetId) {
-    Block findBlock = blockRepository.findBlockIdByTargetId(targetId)
+  public void deleteBlock(long targetId, long memberId) {
+    Block findBlock = blockRepository.findBlockByTargetIdAndMemberId(targetId, memberId)
         .orElseThrow(() -> new BusinessLogicException(
             BlockExceptionCode.BLOCK_NOT_FOUND));
     blockRepository.delete(findBlock);

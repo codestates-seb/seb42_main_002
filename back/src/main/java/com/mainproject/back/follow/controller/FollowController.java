@@ -6,7 +6,6 @@ import com.mainproject.back.follow.entity.Follow;
 import com.mainproject.back.follow.mapper.FollowMapper;
 import com.mainproject.back.follow.service.FollowService;
 import com.mainproject.back.member.dto.MemberLetterDto;
-import com.mainproject.back.member.dto.MemberSearchDto;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.service.MemberConvertService;
 import com.mainproject.back.member.service.MemberService;
@@ -15,6 +14,7 @@ import com.mainproject.back.util.UriCreator;
 import java.net.URI;
 import java.security.Principal;
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -48,6 +48,7 @@ public class FollowController {
   @PostMapping
   public ResponseEntity postFollow(@Valid @RequestBody FollowDto.Post requestBody,
       Principal principal) {
+    log.info("## 팔로우 요청");
 
     Member follower = memberService.findMemberByEmail(Check.checkPrincipal(principal));
     Member following = memberService.findMember(requestBody.getFollowingId());
@@ -64,6 +65,7 @@ public class FollowController {
   @GetMapping("/follower")
   public ResponseEntity getFollower(@PageableDefault(sort = "follow_id") Pageable pageable,
       Principal principal) {
+    log.info("## 팔로워 조회");
     Member currentMember = memberService.findMemberByEmail(Check.checkPrincipal(principal));
 
     Page<Follow> followPage = followService.findFollower(currentMember.getMemberId(), pageable);
@@ -78,6 +80,7 @@ public class FollowController {
   @GetMapping("/following")
   public ResponseEntity getFollowing(@PageableDefault(sort = "follow_id") Pageable pageable,
       Principal principal) {
+    log.info("## 팔로잉 조회");
     Member currentMember = memberService.findMemberByEmail(Check.checkPrincipal(principal));
 
     Page<Follow> followPage = followService.findFollowing(currentMember.getMemberId(), pageable);
@@ -89,8 +92,10 @@ public class FollowController {
   }
 
   @DeleteMapping("/{following-id}")
-  public ResponseEntity deleteBlock(@PathVariable("following-id") long followingId) {
-    followService.deleteFollow(followingId);
+  public ResponseEntity deleteBlock(@PathVariable("following-id") @Positive long followingId,
+      Principal principal) {
+    log.info("## 팔로우 삭제");
+    followService.deleteFollow(followingId, memberService.findMemberIdByEmail(Check.checkPrincipal(principal)));
     return ResponseEntity.noContent().build();
   }
 }

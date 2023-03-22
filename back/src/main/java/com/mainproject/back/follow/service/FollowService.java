@@ -22,15 +22,19 @@ public class FollowService {
 
   @Transactional
   public Follow createFollow(Follow follow) {
+    followRepository.findFollowIdByUsers(follow.getFollower().getMemberId(),
+        follow.getFollowing().getMemberId()).ifPresent(f -> {
+      throw new BusinessLogicException(FollowExceptionCode.FOLLOW_EXISTS);
+    });
     return followRepository.save(follow);
   }
 
   @Transactional
-  public void deleteFollow(long followingId) {
-    Follow findFollow = followRepository.findFollowIdById(followingId)
+  public void deleteFollow(long followingId, long memberId) {
+    Long findFollow = followRepository.findFollowIdByUsers(memberId, followingId)
         .orElseThrow(() -> new BusinessLogicException(
             FollowExceptionCode.FOLLOW_NOT_FOUND));
-    followRepository.delete(findFollow);
+    followRepository.deleteById(findFollow);
   }
 
   @Transactional

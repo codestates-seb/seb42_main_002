@@ -51,7 +51,7 @@ public interface LetterMapper {
       builder.receiver(letter.getReceiver().getName());
     }
     if (letter.getAvailableAt().isBefore(LocalDateTime.now())) {
-      builder.body(letter.getBody());
+      builder.body(letter.getBody()).photoUrl(letter.getPhotoUrl());
     }
 
     return builder.build();
@@ -74,11 +74,7 @@ public interface LetterMapper {
     if (LocalDateTime.now().isAfter(letter.getAvailableAt())) {
       builder.body(letter.getBody());
     }
-    if (letter.getPhotoUrl() == null || letter.getPhotoUrl().isEmpty()) {
-      builder.hasPic(false);
-    } else {
-      builder.hasPic(true);
-    }
+    builder.hasPic(letter.getPhotoUrl() != null && !letter.getPhotoUrl().isEmpty());
     return builder.build();
   }
 }
