@@ -26,7 +26,7 @@ public class VocabService {
   public Vocabulary createVocab(Vocabulary vocab, String target) {
     // nation 추가
     String nation = apiManager.getWordLang(vocab.getWord());
-    vocab.setNation(nation.toUpperCase());
+    vocab.setNation(nation.equals("zh-CN") || nation.equals("zh-TW") ? "CN" : nation.toUpperCase());
 
     // 단어 뜻 번역
     String translated = apiManager.getWordMeaning(vocab.getWord(), target, nation);

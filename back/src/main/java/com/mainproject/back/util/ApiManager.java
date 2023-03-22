@@ -52,8 +52,16 @@ public class ApiManager {
   // 2. 입력 단어 번역
   public String getWordMeaning(String word, String target, String langCode) {
     String meaning = null;
-    target = target.toLowerCase();
-    langCode = langCode.toLowerCase();
+    if (target.equals("CN")) {
+      target = "zh-CN";
+    } else {
+      target = target.toLowerCase();
+    }
+    if (langCode.equals("CN")) {
+      langCode = "zh-CN";
+    } else {
+      langCode = langCode.toLowerCase();
+    }
 
     String apiUrl = TRANSLATE_URL + "source=" + langCode + "&target=" + target + "&text=" + word;
     RestTemplate restTemplate = new RestTemplate();
