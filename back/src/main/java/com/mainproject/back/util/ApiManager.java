@@ -52,12 +52,12 @@ public class ApiManager {
   // 2. 입력 단어 번역
   public String getWordMeaning(String word, String target, String langCode) {
     String meaning = null;
-    if (target.equals("CN")) {
+    if (target.equals("CN") || target.equals("cn")) {
       target = "zh-CN";
     } else {
       target = target.toLowerCase();
     }
-    if (langCode.equals("CN")) {
+    if (langCode.equals("CN") || langCode.equals("cn")) {
       langCode = "zh-CN";
     } else {
       langCode = langCode.toLowerCase();
