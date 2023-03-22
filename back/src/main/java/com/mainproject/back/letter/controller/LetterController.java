@@ -4,7 +4,6 @@ import com.mainproject.back.letter.dto.LetterCountDto;
 import com.mainproject.back.letter.dto.LetterListDto;
 import com.mainproject.back.letter.dto.LetterPostDto;
 import com.mainproject.back.letter.dto.LetterResponseDto;
-import com.mainproject.back.letter.dto.LetterTranslateDto;
 import com.mainproject.back.letter.entity.Letter;
 import com.mainproject.back.letter.mapper.LetterMapper;
 import com.mainproject.back.letter.service.LetterService;
@@ -95,10 +94,5 @@ public class LetterController {
     return ResponseEntity.ok().body(letterCountDto);
   }
 
-  @GetMapping("/translate")
-  public ResponseEntity<Object> getTranslated(@RequestBody LetterTranslateDto body) {
-    log.info("## 편지 번역");
-    LetterTranslateDto result = letterService.translate(body);
-    return ResponseEntity.ok().body(result);
-  }
+
 }
