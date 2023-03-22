@@ -27,10 +27,11 @@ public class VocabService {
     // nation 추가
     String nation = apiManager.getWordLang(vocab.getWord());
     vocab.setNation(nation.toUpperCase());
-
     // 단어 뜻 번역
-    String translated = apiManager.getWordMeaning(vocab.getWord(), target, nation);
-    vocab.setMeaning(translated);
+    if(!target.isEmpty()) {
+      String translated = apiManager.getWordMeaning(vocab.getWord(), target, nation);
+      vocab.setMeaning(translated);
+    }
 
     Vocabulary savedVocab = vocabRepository.save(vocab);
     return savedVocab;
