@@ -53,11 +53,10 @@ const VocaModal = ({
    */
   const addNewVocaAPI = async () => {
     try {
-      const result = await POST('/vocabs', {
+      const { data } = await POST('/vocabs', {
         ...newVoca,
       });
-      console.log('결과', result); // TODO: 받은 결과를 바로 LIST에 추가
-      // onAddNewVoca()
+      onAddNewVoca(data);
       onModalClose();
       setNewVoca({
         word: '',
