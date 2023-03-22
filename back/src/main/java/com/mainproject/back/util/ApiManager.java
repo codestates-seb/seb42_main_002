@@ -3,6 +3,7 @@ package com.mainproject.back.util;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -16,8 +17,10 @@ import org.springframework.web.client.RestTemplate;
 public class ApiManager {
 
   // 네이버 api client id와 secret키
-  private final String clientID = "MQkZ2_q6xDvEI_5gMj3v";
-  private String SECRET = "2hZ0USmSfI";
+  @Value("${papago.client-id}")
+  private String clientID;
+  @Value("${papago.client-secret}")
+  private String SECRET;
 
   // 네이버 api 주소
   private final String DETECT_URL = "https://openapi.naver.com/v1/papago/detectLangs?query=";

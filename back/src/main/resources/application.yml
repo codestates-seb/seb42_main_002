@@ -4,6 +4,9 @@ cloud:
       static: ap-northeast-2
     stack:
       auto: false
+papago:
+  client-id: ${papago.clientId}
+  client-secret: ${papago.clientSecret}
 
 spring:
   security:
@@ -36,9 +39,9 @@ spring:
     #ddl-auto: none
     properties:
       hibernate:
-#        highlight_sql: true
-#        show_sql: true
-#        format_sql: true
+        #        highlight_sql: true
+        #        show_sql: true
+        #        format_sql: true
         default_batch_fetch_size: 100
     database: mysql
     generate-ddl: true
