@@ -1,16 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { VocaDataType } from '../../utils/types/voca';
 import VocaCard from './VocaCard/VocaCard';
 import Button from '../Common/Button/Button';
 import VocaModal from './VocaModal/VocaModal';
-import styles from './Voca.module.scss';
-
 import { DELETE, GET } from '../../utils/axios';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { deleteVocaState, selectedVocaState } from '../../recoil/atoms/voca';
 import AlertModal from '../Common/Modal/AlertModal';
 import useInfiniteScroll from '../../hooks/useInfiniteScroll';
+import styles from './Voca.module.scss';
 
 const Voca = () => {
   const setSelectedVoca = useSetRecoilState(selectedVocaState);
