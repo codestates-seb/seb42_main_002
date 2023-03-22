@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.lang.Nullable;
 
 
 public class VocabDto {
@@ -35,6 +36,7 @@ public class VocabDto {
     @Setter
     private long vocabId;
     private String word;
+    @Nullable
     private String nation;
     private String meaning;
   }

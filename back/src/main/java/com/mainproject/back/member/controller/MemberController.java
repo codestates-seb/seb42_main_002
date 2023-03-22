@@ -52,7 +52,7 @@ public class MemberController {
 
   @PostMapping
   public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post requestBody) {
-
+    log.info("## 회원 가입");
     Member member = mapper.memberPostToMember(requestBody);
 
     Member createdMember = memberService.createMember(member);
@@ -76,6 +76,7 @@ public class MemberController {
 
   @GetMapping
   public ResponseEntity getMemberBySelf(Principal principal) {
+    log.info("## 내 정보 조회");
     Member findMember = memberService.findMemberByEmail(Check.checkPrincipal(principal));
 
     return ResponseEntity.ok().body(mapper.memberToMemberResponse(findMember));
