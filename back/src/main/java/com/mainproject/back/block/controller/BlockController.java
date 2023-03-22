@@ -7,6 +7,7 @@ import com.mainproject.back.member.dto.MemberBlockDto;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.service.MemberConvertService;
 import com.mainproject.back.member.service.MemberService;
+import com.mainproject.back.util.Check;
 import com.mainproject.back.util.UriCreator;
 import java.net.URI;
 import java.security.Principal;
@@ -73,9 +74,11 @@ public class BlockController {
   }
 
   @DeleteMapping("/{target-id}")
-  public ResponseEntity deleteBlock(@PathVariable("target-id") @Positive long targetId) {
+  public ResponseEntity deleteBlock(@PathVariable("target-id") @Positive long targetId,
+      Principal principal) {
     log.info("## 차단 목록 삭제: {}", targetId);
-    blockService.deleteBlock(targetId);
+    blockService.deleteBlock(targetId,
+        memberService.findMemberIdByEmail(Check.checkPrincipal(principal)));
     return ResponseEntity.noContent().build();
   }
 }

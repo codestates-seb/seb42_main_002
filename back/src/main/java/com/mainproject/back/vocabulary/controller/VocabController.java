@@ -4,7 +4,6 @@ import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.exception.MemberExceptionCode;
 import com.mainproject.back.member.service.MemberService;
-import com.mainproject.back.util.ApiManager;
 import com.mainproject.back.util.Check;
 import com.mainproject.back.util.UriCreator;
 import com.mainproject.back.vocabulary.dto.VocabDto;
@@ -55,16 +54,14 @@ public class VocabController {
     VocabDto.Response response = mapper.vocabToVocabResponse(createdVocab);
 
     URI uri = UriCreator.createUri("/vocabs", createdVocab.getVocabId());
-    return ResponseEntity.created(uri).build();
+    return ResponseEntity.created(uri).body(response);
   }
 
   @PatchMapping("/{vocab-id}")
   public ResponseEntity patchVocab(@PathVariable("vocab-id") @Positive long vocabId,
       @RequestBody VocabDto.Patch requestBody, Principal principal) {
-    if (principal.getName() == null) {
-      throw new BusinessLogicException(MemberExceptionCode.MEMBER_NOT_FOUND);
-    }
-    Member member = memberService.findMemberByEmail(principal.getName());
+    log.info("## 단어 수정: {}", requestBody);
+    Member member = memberService.findMemberByEmail(Check.checkPrincipal(principal));
     requestBody.setVocabId(vocabId);
     Vocabulary vocab = mapper.vocabPatchToVocab(requestBody);
     Vocabulary updatedVocab = vocabService.updateVocab(member.getMemberId(), vocab);
@@ -76,6 +73,7 @@ public class VocabController {
 
   @GetMapping("/{vocab-id}")
   public ResponseEntity getVocab(@PathVariable("vocab-id") @Positive long vocabId) {
+    log.info("## 특정 단어 생성: {}", vocabId);
     Vocabulary vocab = vocabService.findVerifiedVocab(vocabId);
     VocabDto.Response response = mapper.vocabToVocabResponse(vocab);
 
@@ -84,6 +82,7 @@ public class VocabController {
 
   @GetMapping
   public ResponseEntity getVocabs(@PageableDefault Pageable pageable, Principal principal) {
+    log.info("## 전체 단어 조회: {}", principal);
     if (principal.getName() == null) {
       throw new BusinessLogicException(MemberExceptionCode.MEMBER_NOT_FOUND);
     }
@@ -96,6 +95,7 @@ public class VocabController {
 
   @DeleteMapping("/{vocab-id}")
   public ResponseEntity deleteVocab(@PathVariable("vocab-id") @Positive long vocabId) {
+    log.info("## 단어 삭제: {}", vocabId);
     vocabService.deleteVocab(vocabId);
     return new ResponseEntity<>(HttpStatus.OK);
   }
@@ -103,6 +103,7 @@ public class VocabController {
 
   @GetMapping("/random")
   public ResponseEntity randomVocab(Principal principal) {
+    log.info("## 랜덤 단어 생성: {}", principal);
     Member member = memberService.findMemberByEmail(Check.checkPrincipal(principal));
     Vocabulary vocab = vocabService.randomVocab(member.getMemberId());
     if (vocab == null) {
