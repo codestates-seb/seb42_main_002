@@ -79,8 +79,7 @@ public class LetterController {
   }
 
   @GetMapping()
-  public ResponseEntity getMembersByLetter(
-      @PageableDefault(sort = "lastLetter.createdAt") Pageable pageable, Principal principal) {
+  public ResponseEntity getMembersByLetter(Pageable pageable, Principal principal) {
     log.info("## 나와 편지를 주고 받은 멤버 리스트 조회");
     Page<MemberLetterDto> memberLetterDtoPage = letterService.findMembersByLetter(pageable,
         memberService.findMemberIdByEmail(Check.checkPrincipal(principal)));
