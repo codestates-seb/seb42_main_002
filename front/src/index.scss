@@ -105,6 +105,8 @@ button {
   --font-size-lg: 1.125rem; /* 18px */
   --font-size-xl: 1.25rem; /* 20px */
   --font-size-xxl: 1.25rem; /* 24px */
+
+  --layout-container-height: 18.4rem;
 }
 
 @mixin container {
@@ -187,6 +189,6 @@ button {
   .layout_container {
     overflow-y: inherit;
     padding: 0;
-    min-height: calc(100vh - 18.4rem);
+    min-height: calc(100vh - var(--layout-container-height));
   }
 }

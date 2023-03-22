@@ -18,7 +18,7 @@
     z-index: 2;
   }
 
-  &.is_auth {
+  &.has_bottom_nav {
     grid-template-rows: calc(100vh - 4rem) 4rem;
   }
 
@@ -30,11 +30,13 @@
 
 @media screen and (min-width: 1024px) {
   .baselayout {
-    display: block;
-    overflow-y: inherit;
-    article {
+    &:not(.nonelayout) {
+      display: block;
       overflow-y: inherit;
-      padding-bottom: 4rem;
+      article {
+        overflow-y: inherit;
+        padding-bottom: 4rem;
+      }
     }
   }
 }

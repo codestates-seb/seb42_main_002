@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { Navigate } from 'react-router-dom';
 import { DefaultProps } from '../../utils';
 import { getCookie } from '../../utils/cookie';
@@ -8,7 +9,7 @@ const NoneLayout = ({ children }: DefaultProps) => {
   if (token) return <Navigate to="/main" />;
 
   return (
-    <main className={styles.baselayout}>
+    <main className={classNames(styles.baselayout, styles.nonelayout)}>
       <article className={styles.article}>
         <div className="layout_container">{children}</div>
       </article>
