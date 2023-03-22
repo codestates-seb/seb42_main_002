@@ -22,6 +22,10 @@ public class FollowService {
 
   @Transactional
   public Follow createFollow(Follow follow) {
+    followRepository.findFollowIdByUsers(follow.getFollower().getMemberId(),
+        follow.getFollowing().getMemberId()).ifPresent(f -> {
+      throw new BusinessLogicException(FollowExceptionCode.FOLLOW_EXISTS);
+    });
     return followRepository.save(follow);
   }
 
