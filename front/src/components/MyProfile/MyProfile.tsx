@@ -26,12 +26,16 @@ import TextAreaFeild from '../Common/TextAreaFeild/TextAreaFeild';
 import MyProfileImage from './MyProfileImage';
 import LocationEditModal from './LocationEditModal/LocationEditModal';
 import styles from './MyProfile.module.scss';
-import { PATCH } from '../../utils/axios';
+import { DELETE, PATCH } from '../../utils/axios';
 import { getAge, LanguageDataType } from '../../utils';
 import { TagDataType } from '../../utils/types/tags/tags';
+import { useNavigate } from 'react-router-dom';
+import AlertModal, { AlertModalProps } from '../Common/Modal/AlertModal';
+import { removeCookie } from '../../utils/cookie';
 
 const MyProfile = () => {
-  const { logout } = useAuth();
+  const navigate = useNavigate();
+  const { logout, removeToken } = useAuth();
   const { openModal } = useModals();
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [userTags, setUserTags] = useRecoilState(userTagState);
@@ -59,7 +63,7 @@ const MyProfile = () => {
     setSelectedGender(value as GENDER_TYPE);
   };
 
-  const onSubmitChangeBaseInfo = async (
+  const onSubmitChangeBaseInfoHandler = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
@@ -85,12 +89,12 @@ const MyProfile = () => {
           }));
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }
   };
 
-  const onChangeEditIntroduce = () => {
+  const onChangeEditIntroduceHandler = () => {
     setIsEditIntroduce((prevState) => !prevState);
   };
 
@@ -115,8 +119,41 @@ const MyProfile = () => {
           }));
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
+    }
+  };
+
+  // 탈퇴하기
+  const confirmWithdrawrModal = ({ onSubmit, onClose }: AlertModalProps) => {
+    return (
+      <AlertModal title="탈퇴하기" onSubmit={onSubmit} onClose={onClose}>
+        <p className="text_center">
+          탈퇴시 모든 정보가 사라지게됩니다
+          <br />
+          정말 <span className="text_danger">탈퇴</span>하시겠습니까?
+        </p>
+      </AlertModal>
+    );
+  };
+
+  const confirmWithdrawrModalHandler = () => {
+    openModal(confirmWithdrawrModal, {
+      onSubmit: () => {
+        deleteMembers();
+      },
+    });
+  };
+
+  const deleteMembers = async () => {
+    try {
+      const response = await DELETE('/members');
+      if (response) {
+        removeToken();
+        navigate('/');
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -199,7 +236,7 @@ const MyProfile = () => {
                   </>
                 ) : (
                   // 정보 수정 폼
-                  <form onSubmit={onSubmitChangeBaseInfo}>
+                  <form onSubmit={onSubmitChangeBaseInfoHandler}>
                     <Flex dir="column" gap="lg">
                       <Flex.Col>
                         <InfoGroup>
@@ -291,7 +328,7 @@ const MyProfile = () => {
                             variant="secondary"
                             iconBtn
                             icon={<BiEdit />}
-                            onClick={onChangeEditIntroduce}
+                            onClick={onChangeEditIntroduceHandler}
                           >
                             수정
                           </Button>
@@ -319,7 +356,7 @@ const MyProfile = () => {
                               size="sm"
                               variant="secondary"
                               type="button"
-                              onClick={onChangeEditIntroduce}
+                              onClick={onChangeEditIntroduceHandler}
                             >
                               취소
                             </Button>
@@ -380,14 +417,27 @@ const MyProfile = () => {
           </>
         )}
       </ProfileCard>
-      <ButtonGroup gap="sm" justify="end" className={styles.btns}>
-        <Button variant="secondary" size="sm" to="/guide">
-          스타일 가이드
-        </Button>
-        <Button variant="primary" size="sm" onClick={logout}>
-          로그아웃
-        </Button>
-      </ButtonGroup>
+      <Flex justify="between" align="center" className={styles.btns}>
+        <Flex.Col>
+          <Button
+            variant="dashed"
+            size="sm"
+            onClick={confirmWithdrawrModalHandler}
+          >
+            탈퇴하기
+          </Button>
+        </Flex.Col>
+        <Flex.Col>
+          <ButtonGroup gap="sm" justify="end">
+            <Button variant="secondary" size="sm" to="/guide">
+              스타일 가이드
+            </Button>
+            <Button variant="primary" size="sm" onClick={logout}>
+              로그아웃
+            </Button>
+          </ButtonGroup>
+        </Flex.Col>
+      </Flex>
     </>
   );
 };
