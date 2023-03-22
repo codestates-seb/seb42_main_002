@@ -63,6 +63,8 @@ public class ApiManager {
       langCode = langCode.toLowerCase();
     }
 
+    if(langCode.equals(target)) return word;
+
     String apiUrl = TRANSLATE_URL + "source=" + langCode + "&target=" + target + "&text=" + word;
     RestTemplate restTemplate = new RestTemplate();
     HttpHeaders headers = new HttpHeaders();
