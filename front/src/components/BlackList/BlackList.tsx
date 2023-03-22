@@ -51,7 +51,6 @@ const BlackList = () => {
   };
 
   const moveProfileHandler = (id: number): void => {
-    console.log('프로필로 이동');
     navigate(`/profile/${id}`);
   };
 
