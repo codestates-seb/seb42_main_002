@@ -21,10 +21,12 @@ public class VocabDto {
   @NoArgsConstructor
   @AllArgsConstructor
   public static class Post {
+
     @NotNull
     private String word;
-    @NotNull
     private String targetNation;
+    private String meaning;
+
   }
 
   @NoArgsConstructor

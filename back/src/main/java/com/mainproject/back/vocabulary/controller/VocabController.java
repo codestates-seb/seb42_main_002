@@ -49,7 +49,7 @@ public class VocabController {
 
     Vocabulary vocab = mapper.vocabPostToVocab(requestBody);
     vocab.setMember(member);
-    Vocabulary createdVocab = vocabService.createVocab(vocab, requestBody.getTargetNation());
+    Vocabulary createdVocab = vocabService.createVocab(vocab, requestBody.getTargetNation() == null ? "" : requestBody.getTargetNation());
 
     VocabDto.Response response = mapper.vocabToVocabResponse(createdVocab);
 
