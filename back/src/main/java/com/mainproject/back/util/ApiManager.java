@@ -52,18 +52,20 @@ public class ApiManager {
   // 2. 입력 단어 번역
   public String getWordMeaning(String word, String target, String langCode) {
     String meaning = null;
-    if (target.equals("CN") || target.equals("cn")) {
+    if (target.equals("CN") || target.equals("cn") || target.equals("zh-CN")) {
       target = "zh-CN";
     } else {
       target = target.toLowerCase();
     }
-    if (langCode.equals("CN") || langCode.equals("cn")) {
+    if (langCode.equals("CN") || langCode.equals("cn") || langCode.equals("zh-CN")) {
       langCode = "zh-CN";
     } else {
       langCode = langCode.toLowerCase();
     }
 
-    if(langCode.equals(target)) return word;
+    if (langCode.equals(target)) {
+      return word;
+    }
 
     String apiUrl = TRANSLATE_URL + "source=" + langCode + "&target=" + target + "&text=" + word;
     RestTemplate restTemplate = new RestTemplate();
