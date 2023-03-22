@@ -29,8 +29,10 @@ public class VocabService {
     vocab.setNation(nation.equals("zh-CN") || nation.equals("zh-TW") ? "CN" : nation.toUpperCase());
 
     // 단어 뜻 번역
-    String translated = apiManager.getWordMeaning(vocab.getWord(), target, nation);
-    vocab.setMeaning(translated);
+    if(!target.isEmpty()) {
+      String translated = apiManager.getWordMeaning(vocab.getWord(), target, nation);
+      vocab.setMeaning(translated);
+    }
 
     Vocabulary savedVocab = vocabRepository.save(vocab);
     return savedVocab;
