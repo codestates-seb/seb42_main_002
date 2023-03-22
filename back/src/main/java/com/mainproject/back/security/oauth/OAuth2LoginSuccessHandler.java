@@ -48,8 +48,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
     return UriComponentsBuilder.newInstance()
         .scheme("http")
-        .host("localhost")
-        .port(3000)
+        .host("mpt-front.s3-website.ap-northeast-2.amazonaws.com")
         .queryParams(queryParams).build().toUri();
   }
 
