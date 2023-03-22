@@ -8,10 +8,10 @@ import { LetterDataType } from '../../../utils';
 import Letter from '../Letter/Letter';
 import LetterUserCard from '../LetterUserCard/LetterUserCard';
 import Empty from '../../Common/Empty/Empty';
-import styles from './LetterWrapper.module.scss';
 import useInfiniteScroll from '../../../hooks/useInfiniteScroll';
+import styles from './LetterList.module.scss';
 
-const LetterWrapper = () => {
+const LetterList = () => {
   const navigate = useNavigate();
   const selectedUser = useRecoilValue(selectedUserInfoState);
   const setNewLetter = useSetRecoilState(newLetterState);
@@ -99,4 +99,4 @@ const LetterWrapper = () => {
   );
 };
 
-export default LetterWrapper;
+export default LetterList;

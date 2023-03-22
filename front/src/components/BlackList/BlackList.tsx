@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TiDeleteOutline } from 'react-icons/ti';
 import UserCard from '../Common/UserCard/UserCard';
@@ -18,7 +18,7 @@ const BlackList = () => {
   const getBlackList = async (page: number) => {
     if (isStopRef.current) return;
     try {
-      const { data } = await GET(`/blocks?page=${page}&size=5`);
+      const { data } = await GET(`/blocks?page=${page}&size=10`);
       if (data) {
         isStopRef.current = data.last;
         setBlackUserList((prev) => [...prev, ...data.content]);

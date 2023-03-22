@@ -6,8 +6,8 @@ import IntroPage from './pages/IntroPage';
 import BaseLayout from './components/Layouts/BaseLayout';
 import MainPage from './pages/MainPage';
 import MyProfilePage from './pages/MyProfilePage';
+import LetterUserListPage from './pages/LetterUserListPage';
 import LetterListPage from './pages/LetterListPage';
-import UserLetterListPage from './pages/UserLetterListPage';
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import GuidePage from './pages/GuidePage';
@@ -80,13 +80,13 @@ const routerData: RouterElement[] = [
   },
   {
     path: '/letters',
-    element: <LetterListPage />,
+    element: <LetterUserListPage />,
     isAuth: true,
     isFirstLogin: false,
   },
   {
     path: '/letters/:memberId',
-    element: <UserLetterListPage />,
+    element: <LetterListPage />,
     isAuth: true,
     isFirstLogin: false,
   },
