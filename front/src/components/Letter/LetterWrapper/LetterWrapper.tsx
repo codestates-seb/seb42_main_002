@@ -20,17 +20,13 @@ const LetterWrapper = () => {
   const isStopRef = useRef<boolean>(false);
 
   const getUserLetterList = async (memberId: number, page: number) => {
-    if (isStopRef.current) {
-      return;
-    }
+    if (isStopRef.current) return;
     try {
       // TODO: 페이지네이션 보류
       const { data } = await GET(
         `letters/members/${memberId}?page=${page}&size=10`
       );
-      if (data.last) {
-        isStopRef.current = true;
-      }
+      isStopRef.current = data.last;
       setUserLetterList((prev) => [...prev, ...data.content]);
     } catch (error) {
       console.log('error');
