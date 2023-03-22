@@ -5,11 +5,13 @@ import styles from './RecomandUserListItem.module.scss';
 
 type RecomandUserListItemProps = {
   memberId: number;
+  name: string;
   profile?: string | null;
 };
 
 const RecomandUserListItem = ({
   memberId,
+  name,
   profile,
 }: RecomandUserListItemProps) => {
   return (
@@ -17,11 +19,20 @@ const RecomandUserListItem = ({
       <Link to={`/profile/${memberId}`}>
         <figure>
           {profile ? (
-            <img src={profile} alt={`${memberId} profile`} />
+            <img
+              src={profile}
+              alt={`${name}님 프로필 이미지`}
+              title={`${name} 프로필`}
+            />
           ) : (
-            <img src={defaultOwl} alt={`${memberId} profile`} />
+            <img
+              src={defaultOwl}
+              alt={`${name}님 프로필 이미지`}
+              title={`${name}`}
+            />
           )}
         </figure>
+        <span className={styles.name}>{name}</span>
       </Link>
     </div>
   );

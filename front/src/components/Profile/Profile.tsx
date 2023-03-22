@@ -12,7 +12,7 @@ import Label from '../Common/Label/Label';
 import ProfileCard from '../Common/ProfileCard/ProfileCard.module';
 import ProfileImage from '../Common/ProfileImage/ProfileImage';
 import styles from './Profile.module.scss';
-import { UserData } from '../../utils';
+import { getAge, UserData } from '../../utils';
 import useModals from '../../hooks/useModals';
 import AlertModal, { AlertModalProps } from '../Common/Modal/AlertModal';
 import { newLetterState } from '../../recoil/atoms';
@@ -25,7 +25,8 @@ const Profile = () => {
   const navigate = useNavigate();
   const setNewLetter = useSetRecoilState(newLetterState);
   const [userInfo, setUserInfo] = useState<UserData | null>(null);
-  const [changeFollowing, setChangeFollowing] = useState(userInfo?.friend);
+  const [changeFollowing, setChangeFollowing] = useState(false);
+  const [changeBloks, setChangeBlocks] = useState(false);
 
   // const { friend }: any = userInfo;
 
@@ -36,9 +37,11 @@ const Profile = () => {
     try {
       const response = await GET(`/members/${memberId}`);
       if (response.data) {
-        setUserInfo(response.data);
+        const userInfo = response.data;
+        setUserInfo(userInfo);
+        setChangeBlocks(userInfo?.block);
+        setChangeFollowing(userInfo?.friend);
       }
-      console.log(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -46,7 +49,7 @@ const Profile = () => {
 
   useEffect(() => {
     getUser();
-  }, [changeFollowing]);
+  }, [changeFollowing, changeBloks]);
 
   /**
    * 친구 추가
@@ -58,7 +61,6 @@ const Profile = () => {
         followingId: followingId,
       });
       if (request) {
-        console.log(request);
         setChangeFollowing((prevState) => !prevState);
       }
     } catch (error) {
@@ -91,7 +93,7 @@ const Profile = () => {
         targetId: targetId,
       });
       if (request) {
-        console.log(request);
+        setChangeBlocks((prevState) => !prevState);
       }
     } catch (error) {
       console.error(error);
@@ -106,7 +108,7 @@ const Profile = () => {
     try {
       const request = await DELETE(`/blocks/${targetId}`);
       if (request) {
-        console.log(request);
+        setChangeBlocks((prevState) => !prevState);
       }
     } catch (error) {
       console.error(error);
@@ -124,7 +126,7 @@ const Profile = () => {
     );
   };
 
-  const onAddBlackUser = (targetId: number) => {
+  const confirmBlackUserHandler = (targetId: number) => {
     openModal(confirmBlockUserModal, {
       onSubmit: () => {
         postBlockUser(targetId);
@@ -165,7 +167,7 @@ const Profile = () => {
                     <ButtonGroup>
                       <Flex dir="column" gap="sm">
                         {/** 차단된 친구 일 경우 */}
-                        {userInfo.block && (
+                        {(userInfo.block || changeBloks) && (
                           <Button
                             size="sm"
                             variant="secondary"
@@ -179,7 +181,7 @@ const Profile = () => {
                         {!userInfo.block && (
                           <>
                             {/** 팔로잉 친구 조건 분기 */}
-                            {!userInfo.friend ? (
+                            {!userInfo.friend || !changeFollowing ? (
                               <Button
                                 size="sm"
                                 variant="primary"
@@ -214,18 +216,25 @@ const Profile = () => {
                     <p>{userInfo.name}</p>
                   </InfoGroup.Content>
                 </InfoGroup>
-                <InfoGroup>
-                  <InfoGroup.Label>성별</InfoGroup.Label>
-                  <InfoGroup.Content>
-                    <p>{genderTransformer(userInfo.gender)}</p>
-                  </InfoGroup.Content>
-                </InfoGroup>
-                <InfoGroup>
-                  <InfoGroup.Label>생년월일</InfoGroup.Label>
-                  <InfoGroup.Content>
-                    <p>{userInfo.birthday}</p>
-                  </InfoGroup.Content>
-                </InfoGroup>
+                {userInfo.gender && (
+                  <InfoGroup>
+                    <InfoGroup.Label>성별</InfoGroup.Label>
+                    <InfoGroup.Content>
+                      <p>{genderTransformer(userInfo.gender)}</p>
+                    </InfoGroup.Content>
+                  </InfoGroup>
+                )}
+                {userInfo.birthday && (
+                  <InfoGroup>
+                    <InfoGroup.Label>생년월일</InfoGroup.Label>
+                    <InfoGroup.Content>
+                      <p>
+                        {userInfo.birthday} (
+                        {getAge(new Date(userInfo.birthday || ''))}세)
+                      </p>
+                    </InfoGroup.Content>
+                  </InfoGroup>
+                )}
                 <div className={styles.btn_accuse}>
                   {!userInfo?.block && (
                     <Button
@@ -236,13 +245,13 @@ const Profile = () => {
                       icon={<HiOutlineBan />}
                       full
                       onClick={() => {
-                        onAddBlackUser(userInfo.memberId);
+                        confirmBlackUserHandler(userInfo.memberId);
                       }}
                     >
                       친구차단
                     </Button>
                   )}
-                  <Button
+                  {/* <Button
                     size="sm"
                     variant="default"
                     iconBtn
@@ -250,7 +259,7 @@ const Profile = () => {
                     icon={<AiOutlineAlert />}
                   >
                     신고
-                  </Button>
+                  </Button> */}
                 </div>
               </ProfileCard.BaseInfo.InfoArea>
             </ProfileCard.BaseInfo>

@@ -27,7 +27,7 @@ import MyProfileImage from './MyProfileImage';
 import LocationEditModal from './LocationEditModal/LocationEditModal';
 import styles from './MyProfile.module.scss';
 import { PATCH } from '../../utils/axios';
-import { LanguageDataType } from '../../utils';
+import { getAge, LanguageDataType } from '../../utils';
 import { TagDataType } from '../../utils/types/tags/tags';
 
 const MyProfile = () => {
@@ -162,18 +162,25 @@ const MyProfile = () => {
                             <p>{userInfo.email}</p>
                           </InfoGroup.Content>
                         </InfoGroup>
-                        <InfoGroup>
-                          <InfoGroup.Label>성별</InfoGroup.Label>
-                          <InfoGroup.Content>
-                            <p>{genderTransformer(userInfo.gender)}</p>
-                          </InfoGroup.Content>
-                        </InfoGroup>
-                        <InfoGroup>
-                          <InfoGroup.Label>생년월일</InfoGroup.Label>
-                          <InfoGroup.Content>
-                            <p>{userInfo.birthday}</p>
-                          </InfoGroup.Content>
-                        </InfoGroup>
+                        {userInfo.gender && (
+                          <InfoGroup>
+                            <InfoGroup.Label>성별</InfoGroup.Label>
+                            <InfoGroup.Content>
+                              <p>{genderTransformer(userInfo.gender)}</p>
+                            </InfoGroup.Content>
+                          </InfoGroup>
+                        )}
+                        {userInfo.birthday && (
+                          <InfoGroup>
+                            <InfoGroup.Label>생년월일</InfoGroup.Label>
+                            <InfoGroup.Content>
+                              <p>
+                                {userInfo.birthday} (
+                                {getAge(new Date(userInfo.birthday || ''))}세)
+                              </p>
+                            </InfoGroup.Content>
+                          </InfoGroup>
+                        )}
                       </Flex.Col>
                       <Flex.Col>
                         <ButtonGroup justify="end">
@@ -242,7 +249,7 @@ const MyProfile = () => {
                               type="text"
                               pattern="^\d{4}-\d{2}-\d{2}$"
                               placeholder="1989-12-24"
-                              value={userInfo.birthday}
+                              value={userInfo.birthday || ''}
                             />
                           </InfoGroup.Content>
                         </InfoGroup>
