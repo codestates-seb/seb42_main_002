@@ -1,7 +1,6 @@
 package com.mainproject.back.tag.controller;
 
 import com.mainproject.back.tag.dto.TagSimpleDto;
-import com.mainproject.back.tag.entity.Tag;
 import com.mainproject.back.tag.mapper.TagMapper;
 import com.mainproject.back.tag.service.TagService;
 import java.util.List;

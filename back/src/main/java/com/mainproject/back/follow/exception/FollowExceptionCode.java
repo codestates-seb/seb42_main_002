@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 public enum FollowExceptionCode implements ExceptionCode {
 
   FOLLOW_NOT_FOUND(HttpStatus.NOT_FOUND, "친구 목록에 없습니다."),
+  FOLLOW_EXISTS(HttpStatus.CONFLICT, "이미 친구 목록에 존재합니다."),
   ;
 
   private final HttpStatus status;

@@ -5,6 +5,7 @@ import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.letter.dto.LetterCountDto;
 import com.mainproject.back.letter.dto.LetterSimpleDto;
 import com.mainproject.back.letter.dto.LetterSimpleDto.LetterStatus;
+import com.mainproject.back.letter.dto.LetterTranslateDto;
 import com.mainproject.back.letter.entity.Letter;
 import com.mainproject.back.letter.entity.Nations;
 import com.mainproject.back.letter.exception.LetterExceptionCode;
@@ -12,7 +13,7 @@ import com.mainproject.back.letter.repository.LetterRepository;
 import com.mainproject.back.member.dto.MemberLetterDto;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.service.MemberService;
-import java.security.Principal;
+import com.mainproject.back.util.ApiManager;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,7 @@ public class LetterService {
   private final LetterRepository letterRepository;
   private final MemberService memberService;
   private final BlockService blockService;
+  private final ApiManager apiManager;
 
   @Transactional
   public Letter createLetter(Letter letter) {
@@ -138,5 +140,13 @@ public class LetterService {
       return null;
     }
     return letterPage.getContent().get(0);
+  }
+
+  public LetterTranslateDto translate(LetterTranslateDto letterTranslateDto) {
+    String nation = apiManager.getWordLang(letterTranslateDto.getContent());
+    String result = apiManager.getWordMeaning(letterTranslateDto.getContent(),
+        letterTranslateDto.getTargetNation(), nation);
+    letterTranslateDto.setContent(result);
+    return letterTranslateDto;
   }
 }

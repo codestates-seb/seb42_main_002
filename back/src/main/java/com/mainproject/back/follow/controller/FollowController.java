@@ -14,6 +14,7 @@ import com.mainproject.back.util.UriCreator;
 import java.net.URI;
 import java.security.Principal;
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -91,9 +92,10 @@ public class FollowController {
   }
 
   @DeleteMapping("/{following-id}")
-  public ResponseEntity deleteBlock(@PathVariable("following-id") long followingId) {
+  public ResponseEntity deleteBlock(@PathVariable("following-id") @Positive long followingId,
+      Principal principal) {
     log.info("## 팔로우 삭제");
-    followService.deleteFollow(followingId);
+    followService.deleteFollow(followingId, memberService.findMemberIdByEmail(Check.checkPrincipal(principal)));
     return ResponseEntity.noContent().build();
   }
 }

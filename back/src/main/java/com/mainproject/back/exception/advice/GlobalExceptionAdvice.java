@@ -1,6 +1,8 @@
 package com.mainproject.back.exception.advice;
 
+import com.google.gson.Gson;
 import com.mainproject.back.exception.BusinessLogicException;
+import java.util.Map;
 import javax.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
 
 @RestControllerAdvice
 @Slf4j
@@ -59,6 +62,15 @@ public class GlobalExceptionAdvice {
     final ErrorResponse response = ErrorResponse.of(HttpStatus.BAD_REQUEST,
         e.getMessage());
 
+    return response;
+  }
+
+  @ExceptionHandler
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public ErrorResponse handleHttpClientErrorException(HttpClientErrorException e){
+    Gson gson = new Gson();
+    Map<String, String> map = gson.fromJson(e.getResponseBodyAsString(), Map.class);
+    final ErrorResponse response = ErrorResponse.of(e.getStatusCode(), map.get("errorMessage"));
     return response;
   }
 
