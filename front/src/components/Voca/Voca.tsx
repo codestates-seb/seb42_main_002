@@ -55,7 +55,11 @@ const Voca = () => {
     if (!deleteVocaId) return;
     try {
       await DELETE(`vocabs/${deleteVocaId}`);
-      getVocaList(pageRef.current);
+      const newVocaList = vocaList.filter(
+        (voca: VocaDataType) => voca.vocabId !== deleteVocaId
+      );
+      setVocaList(newVocaList);
+
       setIsAlertOpen(false);
     } catch (error) {
       // TODO: 에러 처리
