@@ -9,18 +9,17 @@ import Letter from '../Letter/Letter';
 import LetterUserCard from '../LetterUserCard/LetterUserCard';
 import Empty from '../../Common/Empty/Empty';
 import styles from './LetterWrapper.module.scss';
+import useInfiniteScroll from '../../../hooks/useInfiniteScroll';
 
 const LetterWrapper = () => {
   const navigate = useNavigate();
   const selectedUser = useRecoilValue(selectedUserInfoState);
   const setNewLetter = useSetRecoilState(newLetterState);
   const [userLetterList, setUserLetterList] = useState<LetterDataType[]>([]);
-
-  const [page, setPage] = useState<number>(0);
-  const sentinelRef = useRef<any>();
+  const pageRef = useRef<number>(0);
   const isStopRef = useRef<boolean>(false);
 
-  const getUserLetterList = async (memberId: number) => {
+  const getUserLetterList = async (memberId: number, page: number) => {
     if (isStopRef.current) {
       return;
     }
@@ -29,17 +28,23 @@ const LetterWrapper = () => {
       const { data } = await GET(
         `letters/members/${memberId}?page=${page}&size=10`
       );
-      console.log('end', data.last);
       if (data.last) {
         isStopRef.current = true;
       }
       setUserLetterList((prev) => [...prev, ...data.content]);
-      setPage((prev) => prev + 1);
     } catch (error) {
       console.log('error');
       // TODO: ERROR 처리 방법
     }
   };
+
+  const sentinelRef = useInfiniteScroll(async (page: number) => {
+    if (!selectedUser.memberId) {
+      return;
+    }
+    await getUserLetterList(selectedUser.memberId, page);
+    pageRef.current++;
+  }, pageRef.current);
 
   useEffect(() => {
     // 리다이렉트
@@ -48,36 +53,6 @@ const LetterWrapper = () => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   if (!selectedUser.memberId) {
-  //     return;
-  //   }
-  //   getUserLetterList(selectedUser.memberId);
-  // }, []);
-
-  // 얘를 외부에서 받고
-  const handleObserver = useCallback(
-    (entries: any) => {
-      const target = entries[0];
-      if (target.isIntersecting && selectedUser.memberId) {
-        console.log('무한스크롤 호출 테스트');
-        getUserLetterList(selectedUser.memberId);
-      }
-    },
-    [getUserLetterList, selectedUser.memberId]
-  );
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(handleObserver, {});
-    if (sentinelRef.current) {
-      observer.observe(sentinelRef.current);
-    }
-    return () => {
-      observer.disconnect();
-    };
-  });
-
-  // 선택한 유저 정보 저장
   useEffect(() => {
     setNewLetter((prev) => ({
       ...prev,
