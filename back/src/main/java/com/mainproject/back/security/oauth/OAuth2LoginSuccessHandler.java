@@ -34,7 +34,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     String accessToken = delegateAccessToken(oAuth2User);
     String refreshToken = delegateRefreshToken(oAuth2User);
 
-    String redirectURI = "http://localhost:3000";
+    String redirectURI = "http://mpt-front.s3-website.ap-northeast-2.amazonaws.com/";
     log.info("## 리다이렉트 -> {}", redirectURI);
     log.info("## 토큰: {}", accessToken);
     getRedirectStrategy().sendRedirect(request, response, createURI(accessToken, refreshToken).toString());
