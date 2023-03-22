@@ -1,5 +1,8 @@
 import classNames from 'classnames';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { setCookie } from '../../utils/cookie';
+import { useAuth } from '../../context/AuthContext';
 import { ReactComponent as MailIcon } from '../../assets/img/intro/mailIcon.svg';
 import { ReactComponent as OwlHead } from '../../assets/img/intro/owls_head.svg';
 import { ReactComponent as OwlBody } from '../../assets/img/intro/owls_body.svg';
@@ -9,6 +12,34 @@ import styles from './Intro.module.scss';
 
 const Intro = (): JSX.Element => {
   const navigate = useNavigate();
+  const { getCurrentUserInfo } = useAuth();
+
+  useEffect(() => {
+    if (window.location.search) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const accessToken = urlParams.get('access_token');
+      if (accessToken) {
+        // const refreshToken = urlParams.get('refresh_token');
+        // 리프레쉬 토큰 보류
+        setCookie('accessJwtToken', 'Bearer ' + accessToken);
+        googlelogin();
+      }
+    }
+  }, []);
+
+  const googlelogin = async () => {
+    try {
+      const user = await getCurrentUserInfo();
+      if (user?.location === null) {
+        navigate('/start');
+      } else {
+        navigate('/main');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className={styles.intro_container}>
       <div className={styles.intro_title}>
