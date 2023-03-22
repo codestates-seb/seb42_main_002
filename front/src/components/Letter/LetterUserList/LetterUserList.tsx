@@ -24,7 +24,6 @@ const LetterUserList = () => {
    */
   const getLetterUserList = async (page: number) => {
     if (isStopRef.current) return;
-    // TODO: 페이지네이션 오류
     try {
       const { data } = await GET(`/letters?page=${page}&size=10`);
       isStopRef.current = data.last;
