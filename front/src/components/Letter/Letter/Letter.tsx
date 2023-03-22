@@ -7,6 +7,8 @@ import { ReactComponent as HasPick } from '../../../assets/img/letter_status/att
 import { ReactComponent as Unread } from '../../../assets/img/letter_status/unread.svg';
 import { ReactComponent as Read } from '../../../assets/img/letter_status/read.svg';
 import { ReactComponent as Send } from '../../../assets/img/letter_status/send.svg';
+import { ReactComponent as EmptyEnvelope } from '../../../assets/img/common/icon_empty_envelope.svg';
+import { ReactComponent as EmptyEnvelopeLocks } from '../../../assets/img/common/icon_locks.svg';
 
 import styles from './Letter.module.scss';
 
@@ -68,9 +70,16 @@ const Letter = ({
     return (
       <div className={`${styles.letter} ${styles.lock}`}>
         <div className={styles.open_time}>
-          {getLetterOpenTime(new Date(availableAt), 'KR')}
+          <span>{getLetterOpenTime(new Date(availableAt), 'KR')}</span>
         </div>
-        <div>자물쇠</div>
+        <div className={styles.locksLetter}>
+          <EmptyEnvelope />
+          <span className={styles.locks_wrapper}>
+            <span className={styles.locks}>
+              <EmptyEnvelopeLocks />
+            </span>
+          </span>
+        </div>
         <div className={styles.letter_info}>{sender}</div>
       </div>
     );
