@@ -25,7 +25,10 @@ const LetterUserList = () => {
   const getLetterUserList = async (page: number) => {
     if (isStopRef.current) return;
     try {
-      const { data } = await GET(`/letters?page=${page}&size=10`);
+      // const { data } = await GET(`/letters?page=${page}&size=10`);
+      const { data } = await GET(
+        `/users/me/letters/inbox?page=${page}&size=10`
+      );
       isStopRef.current = data.last;
       setUserList((prev) => [...prev, ...data.content]);
     } catch (error) {
