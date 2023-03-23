@@ -1,32 +1,34 @@
-import { useState, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FiUsers } from 'react-icons/fi';
 import LetterStatusIcon from '../Common/LetterStatusIcon/LetterStatusIcon';
 import UserCard from '../Common/UserCard/UserCard';
 import { LetterUserData } from '../../utils';
-import { userData } from '../../dummy/userList';
-import styles from './Following.module.scss';
 import { GET } from '../../utils/axios';
 import Button from '../Common/Button/Button';
 import ButtonGroup from '../Common/Button/ButtonGroup';
 import Flex from '../Common/Flex/Flex';
 import Empty from '../Common/Empty/Empty';
-import { FiUsers } from 'react-icons/fi';
+import useInfiniteScroll from '../../hooks/useInfiniteScroll';
+import styles from './Following.module.scss';
 
 const Following = () => {
   const navigate = useNavigate();
   const [followings, setFollowings] = useState<LetterUserData[]>([]);
-  const [page, setPage] = useState<number>(0);
+  const pageRef = useRef<number>(0);
+  const isStopRef = useRef<boolean>(false);
 
   const moveProfileHandler = (id: number): void => {
     navigate(`/profile/${id}`);
   };
 
-  const getFollowings = async () => {
+  const getFollowings = async (page: number) => {
+    if (isStopRef.current) return;
     try {
-      const { data } = await GET(`/follows/following?page=${page}&size=5`);
+      const { data } = await GET(`/follows/following?page=${page}&size=10`);
       if (data) {
-        setFollowings(data.content);
-        console.log(data.content);
+        setFollowings((prev) => [...prev, ...data.content]);
+        isStopRef.current = data.last;
       }
     } catch (error) {
       console.log('error');
@@ -34,9 +36,10 @@ const Following = () => {
     }
   };
 
-  useEffect(() => {
-    getFollowings();
-  }, []);
+  const sentinelRef = useInfiniteScroll(async (page: number) => {
+    await getFollowings(page);
+    pageRef.current++;
+  }, pageRef.current);
 
   if (followings.length === 0) {
     return (
@@ -51,6 +54,7 @@ const Following = () => {
                 친구 찾으러 가기
               </Button>
             </ButtonGroup>
+            <div ref={sentinelRef}></div>
           </Flex.Col>
         </Flex>
       </Empty>
@@ -85,6 +89,7 @@ const Following = () => {
                 </UserCard>
               ))}
           </ul>
+          <div ref={sentinelRef}></div>
         </Flex.Col>
       </Flex>
     </>

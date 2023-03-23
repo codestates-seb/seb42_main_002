@@ -1,13 +1,12 @@
-import { ReactNode } from 'react';
-import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import AuthProvider from './context/AuthContext';
 import NoneLayout from './components/Layouts/NoneLayout';
 import IntroPage from './pages/IntroPage';
 import BaseLayout from './components/Layouts/BaseLayout';
 import MainPage from './pages/MainPage';
 import MyProfilePage from './pages/MyProfilePage';
+import LetterUserListPage from './pages/LetterUserListPage';
 import LetterListPage from './pages/LetterListPage';
-import UserLetterListPage from './pages/UserLetterListPage';
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import GuidePage from './pages/GuidePage';
@@ -28,18 +27,8 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import NotFoundPage from './pages/NotFoundPage';
-
-type RouterElement = {
-  path: string;
-  element: ReactNode;
-  isAuth: boolean;
-  isFirstLogin?: boolean;
-  meta?: {
-    title?: string;
-    subTitle?: string;
-  };
-  children?: RouterElement[];
-};
+import RouterLayout from './components/Layouts/RouterLayout';
+import { RouterElement } from './utils';
 
 const routerData: RouterElement[] = [
   {
@@ -47,108 +36,162 @@ const routerData: RouterElement[] = [
     element: <IntroPage />,
     isAuth: false,
     isFirstLogin: false,
+    meta: {
+      title: '인트로',
+    },
   },
   {
     path: '/login',
     element: <LoginPage />,
     isAuth: false,
     isFirstLogin: false,
+    meta: {
+      title: '로그인',
+    },
   },
   {
     path: '/signup',
     element: <SignUpPage />,
     isAuth: false,
     isFirstLogin: false,
+    meta: {
+      title: '회원가입',
+    },
   },
   {
     path: '/start',
     element: <StartPage />,
     isAuth: true,
     isFirstLogin: true,
+    meta: {
+      title: '첫 프로필 설정',
+    },
   },
   {
     path: '/welcome',
     element: <WelcomePage />,
     isAuth: true,
     isFirstLogin: true,
+    meta: {
+      title: '프로필 설정 완료',
+    },
   },
   {
     path: '/main',
     element: <MainPage />,
     isAuth: true,
     isFirstLogin: false,
+    meta: {
+      title: '메인',
+    },
   },
   {
     path: '/letters',
-    element: <LetterListPage />,
+    element: <LetterUserListPage />,
     isAuth: true,
     isFirstLogin: false,
+    meta: {
+      title: '편지목록',
+    },
   },
   {
     path: '/letters/:memberId',
-    element: <UserLetterListPage />,
+    element: <LetterListPage />,
     isAuth: true,
     isFirstLogin: false,
+    meta: {
+      title: '편지목록',
+    },
   },
   {
     path: '/letters/:memberId/:letterId',
     element: <LetterDetailPage />,
     isAuth: true,
     isFirstLogin: false,
+    meta: {
+      title: '편지상세',
+    },
   },
   {
     path: '/newLetter',
     element: <NewLetterPage />,
     isAuth: true,
     isFirstLogin: false,
+    meta: {
+      title: '편지작성',
+    },
   },
   {
     path: '/followings',
     element: <FollowingPage />,
     isAuth: true,
     isFirstLogin: false,
+    meta: {
+      title: '친구목록',
+    },
   },
   {
     path: '/search',
     element: <SearchPage />,
     isAuth: true,
     isFirstLogin: false,
+    meta: {
+      title: '친구검색',
+    },
   },
   {
     path: '/blacklist',
     element: <BlackListPage />,
     isAuth: true,
     isFirstLogin: false,
+    meta: {
+      title: '차단친구목록',
+    },
   },
   {
     path: '/voca',
     element: <VocaPage />,
     isAuth: true,
     isFirstLogin: false,
+    meta: {
+      title: '단어장',
+    },
   },
   {
     path: '/profile/:memberId',
     element: <ProfilePage />,
     isAuth: true,
     isFirstLogin: false,
+    meta: {
+      title: '친구 프로필 상세',
+    },
   },
   {
     path: '/my-profile',
     element: <MyProfilePage />,
     isAuth: true,
     isFirstLogin: false,
+    meta: {
+      title: '마이프로필',
+    },
   },
   {
     path: '/guide',
     element: <GuidePage />,
     isAuth: true,
     isFirstLogin: false,
+    meta: {
+      title: '가이드',
+    },
   },
   {
     path: '*',
     element: <NotFoundPage />,
     isAuth: false,
     isFirstLogin: false,
+    meta: {
+      title: 'NOT FOUND',
+    },
   },
 ];
 
@@ -158,27 +201,31 @@ const routers = createBrowserRouter(
       return {
         path: router.path,
         element: (
-          <AuthProvider>
-            <ModalProvider>
-              <BaseLayout
-                isAuth={router.isAuth}
-                isFirstLogin={router.isFirstLogin}
-              >
-                {router.element}
-              </BaseLayout>
-            </ModalProvider>
-          </AuthProvider>
+          <RouterLayout router={router}>
+            <AuthProvider>
+              <ModalProvider>
+                <BaseLayout
+                  isAuth={router.isAuth}
+                  isFirstLogin={router.isFirstLogin}
+                >
+                  {router.element}
+                </BaseLayout>
+              </ModalProvider>
+            </AuthProvider>
+          </RouterLayout>
         ),
       };
     } else {
       return {
         path: router.path,
         element: (
-          <AuthProvider>
-            <ModalProvider>
-              <NoneLayout>{router.element}</NoneLayout>
-            </ModalProvider>
-          </AuthProvider>
+          <RouterLayout router={router}>
+            <AuthProvider>
+              <ModalProvider>
+                <NoneLayout>{router.element}</NoneLayout>
+              </ModalProvider>
+            </AuthProvider>
+          </RouterLayout>
         ),
       };
     }

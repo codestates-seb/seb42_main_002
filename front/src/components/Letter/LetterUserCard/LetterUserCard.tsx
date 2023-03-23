@@ -49,9 +49,10 @@ const LetterUserCard = ({
         </div>
         <div className={styles.user}>
           <h2 className={styles.name}>{name}</h2>
-          <div className={styles.info}>{`${locationTransformer(
-            location
-          )} / ${formatedDate} / ${age}세`}</div>
+          <div className={styles.info}>
+            {locationTransformer(location)}
+            {formatedDate && <> {`/ ${formatedDate} / ${age}세`}</>}
+          </div>
         </div>
       </div>
       <button className={styles.profile_button} onClick={onClickHandler}>

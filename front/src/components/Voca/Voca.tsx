@@ -1,15 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useRef, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { VocaDataType } from '../../utils/types/voca';
 import VocaCard from './VocaCard/VocaCard';
 import Button from '../Common/Button/Button';
 import VocaModal from './VocaModal/VocaModal';
-import styles from './Voca.module.scss';
-
 import { DELETE, GET } from '../../utils/axios';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { deleteVocaState, selectedVocaState } from '../../recoil/atoms/voca';
 import AlertModal from '../Common/Modal/AlertModal';
+import useInfiniteScroll from '../../hooks/useInfiniteScroll';
+import styles from './Voca.module.scss';
 
 const Voca = () => {
   const setSelectedVoca = useSetRecoilState(selectedVocaState);
@@ -18,16 +18,18 @@ const Voca = () => {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
   const [vocaList, setVocaList] = useState<VocaDataType[]>([]);
-  const [page, setPage] = useState<number>(0);
-  const SIZE = 10;
+  const pageRef = useRef<number>(0);
+  const isStopRef = useRef<boolean>(false);
 
   /**
    * @description Vocabs API
    */
-  const getVocaList = async () => {
+  const getVocaList = async (page: number) => {
+    if (isStopRef.current) return;
+
     try {
-      // TODO: 무한 스크롤
-      const { data } = await GET(`/vocabs?page=${page}&size=${SIZE}`);
+      const { data } = await GET(`/vocabs?page=${page}&size=10`);
+      isStopRef.current = data.last;
       const formattedVacaList = data.content.map((voca: VocaDataType) => ({
         vocabId: voca.vocabId,
         meaning: voca.meaning,
@@ -35,11 +37,16 @@ const Voca = () => {
         nation: voca.nation,
       }));
 
-      setVocaList(formattedVacaList);
+      setVocaList((prev) => [...prev, ...formattedVacaList]);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const sentinelRef = useInfiniteScroll(async (page: number) => {
+    await getVocaList(page);
+    pageRef.current++;
+  }, pageRef.current);
 
   /**
    * @description Vocabs 삭제 API
@@ -48,17 +55,17 @@ const Voca = () => {
     if (!deleteVocaId) return;
     try {
       await DELETE(`vocabs/${deleteVocaId}`);
-      getVocaList();
+      const newVocaList = vocaList.filter(
+        (voca: VocaDataType) => voca.vocabId !== deleteVocaId
+      );
+      setVocaList(newVocaList);
+
       setIsAlertOpen(false);
     } catch (error) {
       // TODO: 에러 처리
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    getVocaList();
-  }, []);
 
   const onAddModalHandler = () => {
     setIsOpenModal(true);
@@ -137,6 +144,7 @@ const Voca = () => {
         className={styles.button}
         onClick={onAddModalHandler}
       />
+      <div ref={sentinelRef}></div>
     </>
   );
 };

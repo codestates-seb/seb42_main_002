@@ -10,7 +10,7 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import { userLocationState, userState } from '../recoil/atoms';
 import { SignInData, UserData } from '../utils';
 import { GET, POST } from '../utils/axios';
-import { removeCookie, setCookie } from '../utils/cookie';
+import { getCookie, removeCookie, setCookie } from '../utils/cookie';
 
 type AuthProviderProps = {
   children?: ReactNode;
@@ -20,6 +20,9 @@ type AuthContextProps = {
   user: UserData | null;
   login: (data: SignInData) => void;
   logout: () => void;
+  getToken: () => void;
+  setToken: (value: string, options?: any) => void;
+  removeToken: () => void;
   getCurrentUserInfo: () => Promise<UserData | null>;
 };
 
@@ -27,6 +30,9 @@ const AuthContext = createContext<AuthContextProps>({
   user: null,
   login: () => undefined,
   logout: () => undefined,
+  getToken: () => undefined,
+  setToken: () => undefined,
+  removeToken: () => undefined,
   getCurrentUserInfo: async () => null,
 });
 
@@ -87,11 +93,26 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     navigate('/', { replace: true });
   };
 
+  const getToken = () => {
+    getCookie(TOKEN_NAME);
+  };
+
+  const setToken = (value: string, options?: any) => {
+    setCookie(TOKEN_NAME, value, options);
+  };
+
+  const removeToken = () => {
+    removeCookie(TOKEN_NAME);
+  };
+
   const value = useMemo(
     () => ({
       user: userInfo,
       login,
       logout,
+      setToken,
+      getToken,
+      removeToken,
       getCurrentUserInfo,
     }),
     [userInfo]
