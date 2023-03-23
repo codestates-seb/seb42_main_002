@@ -25,7 +25,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,7 +43,8 @@ public class LetterController {
   private final MemberService memberService;
 
   @PostMapping
-  public ResponseEntity postLetter(@RequestBody @Valid LetterPostDto letterPostDto, Principal principal) {
+  public ResponseEntity postLetter(@RequestBody @Valid LetterPostDto letterPostDto,
+      Principal principal) {
     log.info("## 편지 보내기: {}", letterPostDto.getReceiverId());
 
     Member member = memberService.findMemberByEmail(Check.checkPrincipal(principal));
@@ -56,7 +56,7 @@ public class LetterController {
     return ResponseEntity.created(uri).build();
   }
 
-  @GetMapping("")
+  @GetMapping(params = "letter")
   public ResponseEntity getLetter(@RequestParam("letter") @Positive long letterId) {
     log.info("## 특정 편지 조회: {}", letterId);
     Letter findLetter = letterService.findLetter(letterId);
@@ -64,18 +64,19 @@ public class LetterController {
     return ResponseEntity.ok().body(letterResponseDto);
   }
 
-  @GetMapping("/members/{member-id}")
-  public ResponseEntity getLettersByMember(@PathVariable("member-id") @Positive long targetId,
+  @GetMapping(params = "target")
+  public ResponseEntity getLettersByMember(@RequestParam("target") @Positive long targetId,
       @PageableDefault Pageable pageable, Principal principal) {
     log.info("## 특정 멤버와 주고 받은 편지 리스트 조회: {}", targetId);
     long memberId = memberService.findMemberIdByEmail(Check.checkPrincipal(principal));
-    Page<Letter> letterPage = letterService.findLettersByMemberAndTarget(targetId, pageable, memberId);
+    Page<Letter> letterPage = letterService.findLettersByMemberAndTarget(targetId, pageable,
+        memberId);
     Page<LetterListDto> letterListDtoPage = letterMapper.pageLetterToPageLetterListDtoPage(
         letterPage, memberId);
     return ResponseEntity.ok().body(letterListDtoPage);
   }
 
-  @GetMapping()
+  @GetMapping("/inbox")
   public ResponseEntity getMembersByLetter(Pageable pageable, Principal principal) {
     log.info("## 나와 편지를 주고 받은 멤버 리스트 조회");
     Page<MemberLetterDto> memberLetterDtoPage = letterService.findMembersByLetter(pageable,
