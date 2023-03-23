@@ -70,11 +70,10 @@ public class LetterController {
   public ResponseEntity getLettersByMember(@PathVariable("member-id") @Positive long targetId,
       @PageableDefault Pageable pageable, Principal principal) {
     log.info("## 특정 멤버와 주고 받은 편지 리스트 조회: {}", targetId);
-
-    Page<Letter> letterPage = letterService.findLettersByMemberAndTarget(targetId, pageable,
-        Check.checkPrincipal(principal));
+    long memberId = memberService.findMemberIdByEmail(Check.checkPrincipal(principal));
+    Page<Letter> letterPage = letterService.findLettersByMemberAndTarget(targetId, pageable, memberId);
     Page<LetterListDto> letterListDtoPage = letterMapper.pageLetterToPageLetterListDtoPage(
-        letterPage);
+        letterPage, memberId);
     return ResponseEntity.ok().body(letterListDtoPage);
   }
 
