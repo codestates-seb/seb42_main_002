@@ -10,6 +10,7 @@ import { deleteVocaState, selectedVocaState } from '../../recoil/atoms/voca';
 import AlertModal from '../Common/Modal/AlertModal';
 import useInfiniteScroll from '../../hooks/useInfiniteScroll';
 import styles from './Voca.module.scss';
+import LastInfinite from '../Common/LastInfinite/LastInfinite';
 
 const Voca = () => {
   const setSelectedVoca = useSetRecoilState(selectedVocaState);
@@ -144,7 +145,7 @@ const Voca = () => {
         className={styles.button}
         onClick={onAddModalHandler}
       />
-      <div ref={sentinelRef}></div>
+      <LastInfinite text="마지막 단어 입니다." ref={sentinelRef} />
     </>
   );
 };
