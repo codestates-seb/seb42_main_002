@@ -16,7 +16,6 @@ const PrevButton = () => {
   const naviagte = useNavigate();
 
   const onClickHandler = (): void => {
-    console.log('뒤로가기 버튼');
     naviagte('/');
   };
 

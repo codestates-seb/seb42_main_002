@@ -84,7 +84,6 @@ const LetterDetailWrapper = () => {
     setSelectLanguage({ ...selectLanguage, targetNation: event.target.value });
   };
 
-  console.log('ss', letter);
   return (
     <div className={styles.wrapper}>
       {/* 파파고 버튼 */}
