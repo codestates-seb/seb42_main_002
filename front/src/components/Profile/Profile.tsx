@@ -89,7 +89,7 @@ const Profile = () => {
    */
   const postBlockUser = async (targetId: number) => {
     try {
-      const request = await POST(`/blocks`, {
+      const request = await POST(`/users/me/blocks`, {
         targetId: targetId,
       });
       if (request) {
@@ -106,7 +106,7 @@ const Profile = () => {
    */
   const deleteBlockUser = async (targetId: number) => {
     try {
-      const request = await DELETE(`/blocks/${targetId}`);
+      const request = await DELETE(`/users/me/blocks?target=${targetId}`);
       if (request) {
         setChangeBlocks((prevState) => !prevState);
       }
