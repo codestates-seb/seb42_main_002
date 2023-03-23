@@ -40,9 +40,6 @@ const Intro = (): JSX.Element => {
     }
   };
 
-  console.log(process.env.REACT_APP_BASE_URL);
-  console.log(process.env.REACT_APP_NAME);
-
   return (
     <div className={styles.intro_container}>
       <div className={styles.intro_title}>
