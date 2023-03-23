@@ -3,6 +3,7 @@ package com.mainproject.back.util;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -16,8 +17,10 @@ import org.springframework.web.client.RestTemplate;
 public class ApiManager {
 
   // 네이버 api client id와 secret키
-  private final String clientID = "MQkZ2_q6xDvEI_5gMj3v";
-  private String SECRET = "2hZ0USmSfI";
+  @Value("${papago.client-id}")
+  private String clientID;
+  @Value("${papago.client-secret}")
+  private String SECRET;
 
   // 네이버 api 주소
   private final String DETECT_URL = "https://openapi.naver.com/v1/papago/detectLangs?query=";
@@ -49,8 +52,20 @@ public class ApiManager {
   // 2. 입력 단어 번역
   public String getWordMeaning(String word, String target, String langCode) {
     String meaning = null;
-    target = target.toLowerCase();
-    langCode = langCode.toLowerCase();
+    if (target.equals("CN") || target.equals("cn") || target.equals("zh-CN")) {
+      target = "zh-CN";
+    } else {
+      target = target.toLowerCase();
+    }
+    if (langCode.equals("CN") || langCode.equals("cn") || langCode.equals("zh-CN")) {
+      langCode = "zh-CN";
+    } else {
+      langCode = langCode.toLowerCase();
+    }
+
+    if (langCode.equals(target)) {
+      return word;
+    }
 
     String apiUrl = TRANSLATE_URL + "source=" + langCode + "&target=" + target + "&text=" + word;
     RestTemplate restTemplate = new RestTemplate();
