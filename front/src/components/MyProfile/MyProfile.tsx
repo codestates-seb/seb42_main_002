@@ -149,7 +149,7 @@ const MyProfile = () => {
 
   const deleteMembers = async () => {
     try {
-      const response = await DELETE('/members');
+      const response = await DELETE('/users/me');
       if (response) {
         removeToken();
         navigate('/');
