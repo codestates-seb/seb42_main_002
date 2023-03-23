@@ -26,8 +26,8 @@ jobs:
           REACT_APP_BASE_URL: ${{ secrets.REACT_APP_BASE_URL }}
           REACT_APP_GOOGLE_LOGIN_URL: ${{ secrets.REACT_APP_GOOGLE_LOGIN_URL }}
         run: |
-          echo "REACT_APP_BASE_URL=$REACT_APP_BASE_URL" >> .env.production
-          echo "REACT_APP_GOOGLE_LOGIN_URL=$REACT_APP_GOOGLE_LOGIN_URL" >> .env.production
+          echo "REACT_APP_BASE_URL=$REACT_APP_BASE_URL" >> .env
+          echo "REACT_APP_GOOGLE_LOGIN_URL=$REACT_APP_GOOGLE_LOGIN_URL" >> .env
 
       - name: Install Dependencies # 의존 파일 설치
         run: npm i
@@ -49,5 +49,5 @@ jobs:
             --region ap-northeast-2 \
             build s3://mpt-front
           aws s3 cp \
-            .env.production s3://mpt-front/.env.production
+            .env.production s3://mpt-front/.env
         working-directory: ./front
