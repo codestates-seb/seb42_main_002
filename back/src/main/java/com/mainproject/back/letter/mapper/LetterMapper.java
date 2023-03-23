@@ -13,9 +13,9 @@ import org.mapstruct.ReportingPolicy;
 import org.springframework.data.domain.Page;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public abstract class LetterMapper {
+public interface LetterMapper {
 
-  public Letter LetterPostDtoToLetter(LetterPostDto letterPostDto) {
+  default Letter LetterPostDtoToLetter(LetterPostDto letterPostDto) {
     if (letterPostDto == null) {
       return null;
     } else {
@@ -31,7 +31,7 @@ public abstract class LetterMapper {
     }
   }
 
-  public LetterResponseDto LetterToLetterResponseDto(Letter letter) {
+  default LetterResponseDto LetterToLetterResponseDto(Letter letter, long memberId) {
     if (letter == null) {
       return null;
     }
@@ -50,19 +50,19 @@ public abstract class LetterMapper {
     } else {
       builder.receiver(letter.getReceiver().getName());
     }
-    if (letter.getAvailableAt().isBefore(LocalDateTime.now())) {
+    if (letter.getAvailableAt().isBefore(LocalDateTime.now()) || letter.getSender().getMemberId() == memberId) {
       builder.body(letter.getBody()).photoUrl(letter.getPhotoUrl());
     }
 
     return builder.build();
   }
 
-  public Page<LetterListDto> pageLetterToPageLetterListDtoPage(Page<Letter> letterPage,
+  default Page<LetterListDto> pageLetterToPageLetterListDtoPage(Page<Letter> letterPage,
       long memberId) {
     return letterPage.map(letter -> letterToLetterListDto(letter, memberId));
   }
 
-  public LetterListDto letterToLetterListDto(Letter letter, long memberId) {
+  default LetterListDto letterToLetterListDto(Letter letter, long memberId) {
     Member sender = letter.getSender();
     Member receiver = letter.getReceiver();
     LetterListDto.LetterListDtoBuilder builder = LetterListDto.builder()

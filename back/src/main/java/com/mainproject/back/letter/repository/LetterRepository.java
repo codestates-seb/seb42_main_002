@@ -12,10 +12,10 @@ import org.springframework.data.repository.query.Param;
 public interface LetterRepository extends JpaRepository<Letter, Long> {
 
   // 특정 멤버와 주고 받은 편지 리스트
-  @Query("select l from Letter l "
-      + "join l.sender s join l.receiver r "
-      + "where (s.memberId = :memberId and r.memberId = :targetId) "
-      + "or (s.memberId = :targetId and r.memberId = :memberId)")
+  @Query(value = "select * from letter as l "
+      + "where (l.sender_id = :memberId and l.receiver_id = :targetId) "
+      + "or (l.sender_id = :targetId and l.receiver_id = :memberId) "
+      + "order by l.created_at desc", nativeQuery = true)
   Page<Letter> findLettersByMemberAndTarget(@Param("memberId") long memberId,
       @Param("targetId") long targetId, Pageable pageable);
 

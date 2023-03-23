@@ -15,13 +15,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/users/me")
+@RequestMapping("")
 @Slf4j
 public class ImageController {
 
   private final ImageService imageService;
 
-  @PostMapping("/profiles/upload")
+  @PostMapping("/users/me/profiles/upload")
   public ResponseEntity<Object> uploadProfile(
       @RequestPart(value = "image") MultipartFile multipartFile) {
     log.info("## 프로필 업로드: {}", multipartFile.getOriginalFilename());
@@ -29,7 +29,7 @@ public class ImageController {
     return ResponseEntity.ok().body(imageDto);
   }
 
-  @PostMapping("/letters/photos/upload")
+  @PostMapping("/users/me/letters/photos/upload")
   public ResponseEntity<Object> uploadLetterPhoto(
       @RequestPart(value = "image") MultipartFile multipartFile) {
     log.info("## 편지 이미지 업로드: {}", multipartFile.getOriginalFilename());

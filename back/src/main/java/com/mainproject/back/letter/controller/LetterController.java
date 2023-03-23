@@ -56,10 +56,13 @@ public class LetterController {
   }
 
   @GetMapping(params = "letter")
-  public ResponseEntity getLetter(@RequestParam("letter") @Positive long letterId) {
+  public ResponseEntity getLetter(@RequestParam("letter") @Positive long letterId,
+      Principal principal) {
     log.info("## 특정 편지 조회: {}", letterId);
+    long memberId = memberService.findMemberIdByEmail(Check.checkPrincipal(principal));
     Letter findLetter = letterService.findLetter(letterId);
-    LetterResponseDto letterResponseDto = letterMapper.LetterToLetterResponseDto(findLetter);
+    LetterResponseDto letterResponseDto = letterMapper.LetterToLetterResponseDto(findLetter,
+        memberId);
     return ResponseEntity.ok().body(letterResponseDto);
   }
 
