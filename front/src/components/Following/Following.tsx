@@ -26,7 +26,7 @@ const Following = () => {
   const getFollowings = async (page: number) => {
     if (isStopRef.current) return;
     try {
-      const { data } = await GET(`/follows/following?page=${page}&size=10`);
+      const { data } = await GET(`/users/me/follows?page=${page}&size=10`);
       if (data) {
         setFollowings((prev) => [...prev, ...data.content]);
         isStopRef.current = data.last;

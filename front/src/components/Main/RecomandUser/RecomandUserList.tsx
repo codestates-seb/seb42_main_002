@@ -11,7 +11,7 @@ const RecomandUserList = () => {
 
   const getRecomandUserList = async () => {
     try {
-      const { data, status } = await GET('/members/recommend');
+      const { data, status } = await GET('/users/me/recommend');
       if (status === 200 && data) {
         setRecomandUserList(data.content);
       }

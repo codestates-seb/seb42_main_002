@@ -41,7 +41,7 @@ const SearchList = () => {
       params.append('page', String(page));
       params.append('size', '10');
       const queryString = params.toString();
-      const { data } = await GET(`/members/search?${queryString}`);
+      const { data } = await GET(`/users/search?${queryString}`);
       setSearchUserList(data.content);
     } catch (error) {
       console.log('error');

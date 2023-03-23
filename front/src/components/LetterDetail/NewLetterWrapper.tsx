@@ -20,7 +20,11 @@ const NewLetterWrapper = () => {
    */
   const postNewLetter = async (letter: newLetterType) => {
     try {
-      const response = await POST(`/letters/${newLetter.memberId}`, letter);
+      const response = await POST(`/users/me/letters`, {
+        body: letter.body,
+        type: letter.type,
+        receiver: letter.memberId,
+      });
       const location =
         response.headers.location && response.headers.location.split('/');
 
@@ -61,12 +65,15 @@ const NewLetterWrapper = () => {
     formData.append('type', 'photos');
     file && formData.append('image', file);
     try {
-      const { data } = await POST_IMG(formData, {
-        headers: {
-          'Contest-Type': 'multipart/form-data',
-        },
-      });
-      console.log(data.uploadUrl);
+      const { data } = await POST_IMG(
+        '/users/me/letters/photos/upload',
+        formData,
+        {
+          headers: {
+            'Contest-Type': 'multipart/form-data',
+          },
+        }
+      );
       setNewLetter((prev) => ({
         ...prev,
         photoUrl: [...prev.photoUrl, data.uploadUrl],

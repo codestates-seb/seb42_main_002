@@ -79,7 +79,7 @@ const LanguageLevelModal = ({
 
   const updateLanguage = async () => {
     try {
-      const response = await PATCH('/members', {
+      const response = await PATCH('/users/me', {
         language: changeLanguages,
       });
       if (response) {

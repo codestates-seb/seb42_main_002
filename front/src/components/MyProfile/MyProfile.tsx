@@ -76,7 +76,7 @@ const MyProfile = () => {
 
     if (requestData) {
       try {
-        const response = await PATCH('/members', {
+        const response = await PATCH('/users/me', {
           ...requestData,
         });
         if (response) {
@@ -109,7 +109,7 @@ const MyProfile = () => {
     };
     if (requestData) {
       try {
-        const response = await PATCH('/members', {
+        const response = await PATCH('/users/me', {
           ...requestData,
         });
         if (response) {
@@ -149,7 +149,7 @@ const MyProfile = () => {
 
   const deleteMembers = async () => {
     try {
-      const response = await DELETE('/members');
+      const response = await DELETE('/users/me');
       if (response) {
         removeToken();
         navigate('/');

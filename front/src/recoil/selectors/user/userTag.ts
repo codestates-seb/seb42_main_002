@@ -8,7 +8,7 @@ export const userTagSeletor = selector({
     const data = get(userTagState);
     const requestData = data.map((tag) => tag.name);
     try {
-      const response = await PATCH('/members', {
+      const response = await PATCH('/users/me', {
         tag: requestData,
       });
       if (!response) throw Error;

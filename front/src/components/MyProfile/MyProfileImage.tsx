@@ -37,13 +37,13 @@ const MyProfileImage = ({ onChangeLocation }: MyProfileImageProps) => {
     file && formData.append('image', file);
     try {
       // 이미지를 URL로 변환
-      const { data } = await POST_IMG(formData, {
+      const { data } = await POST_IMG('/users/me/profiles/upload', formData, {
         headers: {
           'Contest-Type': 'multipart/form-data',
         },
       });
       // 프로필 수정
-      const response = await PATCH('/members', {
+      const response = await PATCH('/users/me', {
         profile: data.uploadUrl,
       });
       if (response) {
@@ -57,7 +57,7 @@ const MyProfileImage = ({ onChangeLocation }: MyProfileImageProps) => {
   // 이미지 제거
   const onRemoveImageHandler = async () => {
     try {
-      const response = await PATCH('/members', {
+      const response = await PATCH('/users/me', {
         profile: '',
       });
 

@@ -19,7 +19,7 @@ const BlackList = () => {
   const getBlackList = async (page: number) => {
     if (isStopRef.current) return;
     try {
-      const { data } = await GET(`/blocks?page=${page}&size=10`);
+      const { data } = await GET(`/users/me/blocks?page=${page}&size=10`);
       if (data) {
         isStopRef.current = data.last;
         setBlackUserList((prev) => [...prev, ...data.content]);
@@ -42,7 +42,7 @@ const BlackList = () => {
   ) => {
     e.stopPropagation();
     try {
-      const request = await DELETE(`/blocks/${targetId}`);
+      const request = await DELETE(`/users/me/blocks?target=${targetId}`);
       if (request) {
         console.log(request);
       }
