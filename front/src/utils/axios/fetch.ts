@@ -24,10 +24,11 @@ export const POST = (
 };
 
 export const POST_IMG = (
+  url: string,
   data: any,
   options: AxiosRequestConfig<any> = defaultOptions
 ) => {
-  return instance.post('/image', data, options);
+  return instance.post(url, data, options);
 };
 
 export const PATCH = (

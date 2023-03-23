@@ -66,11 +66,15 @@ const NewLetterWrapper = () => {
     formData.append('type', 'photos');
     file && formData.append('image', file);
     try {
-      const { data } = await POST_IMG(formData, {
-        headers: {
-          'Contest-Type': 'multipart/form-data',
-        },
-      });
+      const { data } = await POST_IMG(
+        '/users/me/letters/photos/upload',
+        formData,
+        {
+          headers: {
+            'Contest-Type': 'multipart/form-data',
+          },
+        }
+      );
       setNewLetter((prev) => ({
         ...prev,
         photoUrl: [...prev.photoUrl, data.uploadUrl],

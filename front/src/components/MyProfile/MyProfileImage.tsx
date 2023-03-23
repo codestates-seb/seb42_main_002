@@ -37,7 +37,7 @@ const MyProfileImage = ({ onChangeLocation }: MyProfileImageProps) => {
     file && formData.append('image', file);
     try {
       // 이미지를 URL로 변환
-      const { data } = await POST_IMG(formData, {
+      const { data } = await POST_IMG('/users/me/profiles/upload', formData, {
         headers: {
           'Contest-Type': 'multipart/form-data',
         },
