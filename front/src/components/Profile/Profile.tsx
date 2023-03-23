@@ -74,7 +74,7 @@ const Profile = () => {
    */
   const deleteFollowing = async (followingId: number) => {
     try {
-      const request = await DELETE(`/follows/${followingId}`);
+      const request = await DELETE(`/users/me/follows?target=${followingId}`);
       if (request) {
         setChangeFollowing((prevState) => !prevState);
       }
