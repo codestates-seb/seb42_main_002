@@ -68,8 +68,7 @@ public class LetterService {
   }
 
   public Page<Letter> findLettersByMemberAndTarget(long targetId, Pageable pageable,
-      String email) {
-    long memberId = memberService.findMemberIdByEmail(email);
+      long memberId) {
     Page<Letter> letterPage = letterRepository.findLettersByMemberAndTarget(memberId, targetId,
         pageable);
     return letterPage;
