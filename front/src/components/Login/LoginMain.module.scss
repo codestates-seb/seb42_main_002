@@ -1,0 +1,63 @@
+.login_container {
+  max-width: 40rem;
+  background-color: var(--white);
+  padding: 3rem 2rem;
+  color: var(--button-primary-color);
+  font-size: 0.75rem;
+  font-weight: bold;
+  margin: 1.875rem auto;
+  box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.1);
+  .inputform_lable {
+    display: block;
+    width: 100%;
+    margin-bottom: 0.3125rem;
+  }
+  .inputform_input {
+    height: 1.875rem;
+    width: 100%;
+    border: none;
+    border-bottom: 0.125rem solid black;
+    margin-bottom: 2rem;
+    padding: 0.125rem;
+    padding-left: 1.5625rem;
+    border-color: var(--text-primary-color);
+    &:focus {
+      border: none;
+      outline-color: var(--text-primary-color);
+    }
+  }
+}
+.icon {
+  position: absolute;
+  top: 1.5rem;
+  left: 0.1875rem;
+  color: var(--text-primary-color);
+  width: 1.125rem;
+  height: 1.125rem;
+}
+.btn {
+  margin-top: 0.3125rem;
+  width: 100%;
+  color: white;
+  font-size: 1.25rem;
+  padding: 0.9375rem;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.signUp_Btn {
+  @extend .btn;
+  background-image: url('../../assets/img/common/btn_primary.svg');
+}
+.google_btn {
+  @extend .btn;
+  background-image: url('../../assets/img/common/btn_secondary.svg');
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  max-width: 40rem;
+  margin: 0 auto;
+  margin-top: 5rem;
+}
+.google_icon {
+  margin-right: 1rem;
+}

@@ -1,0 +1,25 @@
+.recomand_user {
+  padding: 1rem;
+  background-color: var(--active-color);
+  border-radius: var(--border-radius-sm);
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.05);
+
+  .swiper_list {
+    .swiper_slide {
+      width: auto !important;
+    }
+  }
+}
+
+.empty {
+  padding: 1rem;
+  background-color: var(--white);
+  border-radius: var(--border-radius-sm);
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.05);
+  text-align: center;
+  p {
+    margin-bottom: 0.5rem;
+    color: var(--text-primary-color);
+    font-size: var(--font-size-sm);
+  }
+}

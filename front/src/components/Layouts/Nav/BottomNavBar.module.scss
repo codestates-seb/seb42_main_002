@@ -1,0 +1,30 @@
+.bottom_nav_bar {
+  display: flex;
+  width: 100%;
+  background-color: hsl(0, 0%, 24%);
+  color: white;
+  height: 4rem;
+
+  .nav_item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1 0 auto;
+    height: 4rem;
+    font-size: 1.5rem;
+    opacity: 0.3;
+    svg {
+      width: 1em;
+      height: 1em;
+    }
+    &.is_active {
+      opacity: 1;
+    }
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .bottom_nav_bar {
+    display: none;
+  }
+}

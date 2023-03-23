@@ -1,0 +1,13 @@
+.letter_list {
+  & li {
+    margin-bottom: 1rem;
+  }
+  & li:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.icon {
+  margin-top: 1rem;
+  color: var(--text-secondary-color);
+}

@@ -1,0 +1,40 @@
+.baselayout {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  overflow-y: auto;
+  min-height: 100vh;
+  background-color: #eee;
+  background-image: url('../../assets/img/base_texture.svg');
+  background-repeat: repeat;
+  &:before {
+    position: absolute;
+    width: 100%;
+    display: block;
+    content: '';
+    border-top: 0.5rem solid;
+    border-image: url('../../assets/img/envelope_line.svg') 26;
+    border-image-repeat: repeat;
+    z-index: 2;
+  }
+
+  &.is_auth {
+    grid-template-rows: calc(100vh - 4rem) 4rem;
+  }
+
+  article {
+    padding: 1.5rem 0;
+    overflow-y: auto;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .baselayout {
+    display: block;
+    overflow-y: inherit;
+    article {
+      overflow-y: inherit;
+      padding-bottom: 4rem;
+    }
+  }
+}

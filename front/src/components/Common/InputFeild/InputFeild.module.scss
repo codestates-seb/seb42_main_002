@@ -1,0 +1,8 @@
+.inputFeild {
+  padding: 0.25rem 0.25rem;
+  border-bottom: 2px solid var(--text-primary-color);
+  input[type='text'] {
+    width: 100%;
+    outline: 0;
+  }
+}

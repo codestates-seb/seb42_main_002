@@ -1,0 +1,23 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: calc(100% - 4rem);
+}
+
+.title {
+  color: var(--text-primary-color);
+  font-size: var(--font-size-xl);
+}
+
+.children {
+  margin-top: 1rem;
+  color: var(--text-secondary-color);
+}
+
+@media screen and (min-width: 1024px) {
+  .wrapper {
+    height: calc(100vh - 22.4rem);
+  }
+}

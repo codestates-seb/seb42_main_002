@@ -1,0 +1,54 @@
+.btn_group {
+  display: flex;
+  flex-wrap: wrap;
+
+  // gap
+  &.gap_sm {
+    gap: 0.5rem;
+  }
+  &.gap_md {
+    gap: 1rem;
+  }
+  &.gap_lg {
+    gap: 1.5rem;
+  }
+
+  // align itmes
+  &.v_start {
+    align-items: flex-start;
+  }
+
+  &.v_center {
+    align-items: center;
+  }
+
+  &.v_end {
+    align-items: flex-end;
+  }
+
+  // justify content
+  &.h_start {
+    align-items: flex-start;
+  }
+
+  &.h_center {
+    justify-content: center;
+  }
+
+  &.h_end {
+    justify-content: flex-end;
+  }
+
+  &.h_between {
+    justify-content: space-between;
+  }
+
+  // flex wrap
+  &.wrap {
+    flex-wrap: wrap;
+  }
+
+  &.nowrap {
+    flex-wrap: nowrap;
+  }
+}

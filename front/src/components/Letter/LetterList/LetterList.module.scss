@@ -1,0 +1,11 @@
+.letter_wrapper {
+  margin-top: 0.875rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  grid-template-rows: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 1rem;
+}
+.icon {
+  margin-top: 1rem;
+  color: var(--text-secondary-color);
+}

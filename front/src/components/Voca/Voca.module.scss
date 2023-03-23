@@ -1,0 +1,16 @@
+.card_list {
+  & li {
+    margin-bottom: 1rem;
+  }
+  & li:last-child {
+    margin-bottom: 0;
+  }
+  padding-bottom: 2.5rem;
+}
+
+.button {
+  position: fixed;
+  right: 1rem;
+  bottom: 5rem;
+  box-shadow: var(--default-box-shadow);
+}
