@@ -4,6 +4,7 @@ import com.mainproject.back.block.dto.BlockDto;
 import com.mainproject.back.block.entity.Block;
 import com.mainproject.back.block.service.BlockService;
 import com.mainproject.back.member.dto.MemberBlockDto;
+import com.mainproject.back.member.dto.MemberBlockInterface;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.service.MemberConvertService;
 import com.mainproject.back.member.service.MemberService;
@@ -65,9 +66,9 @@ public class BlockController {
   @GetMapping
   public ResponseEntity getBlocks(@PageableDefault Pageable pageable,
       Principal principal) {
-    log.info("## 차단 목록 조회");
-    long memberId = memberService.findMemberIdByEmail(Check.checkPrincipal(principal));
-    Page<Block> blockPage = blockService.findBlocks(memberId, pageable);
+    log.info("## 차단 목록 조회: {}", principal.getName());
+    Member member = memberService.findMemberByEmail(principal.getName());
+    Page<MemberBlockInterface> blockPage = blockService.findBlocks(member.getMemberId(), pageable);
     Page<MemberBlockDto> responses = memberConvertService.blockPageToMemberBlockPage(blockPage);
     return ResponseEntity.ok().body(responses);
 
