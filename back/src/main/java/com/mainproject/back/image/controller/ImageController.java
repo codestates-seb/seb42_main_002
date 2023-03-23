@@ -15,23 +15,29 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/image")
+@RequestMapping("/users/me")
 @Slf4j
 public class ImageController {
 
   private final ImageService imageService;
 
-  @PostMapping()
-  public ResponseEntity<Object> uploadFile(
-      @RequestParam("type") String type,
+  @PostMapping("/profiles/upload")
+  public ResponseEntity<Object> uploadProfile(
       @RequestPart(value = "image") MultipartFile multipartFile) {
-    log.info("## type: {}", type);
-    log.info("## {} 업로드: {}", type, multipartFile.getOriginalFilename());
-    ImageDto imageDto = imageService.uploadFiles(type, multipartFile);
+    log.info("## 프로필 업로드: {}", multipartFile.getOriginalFilename());
+    ImageDto imageDto = imageService.uploadFiles("profiles", multipartFile);
     return ResponseEntity.ok().body(imageDto);
   }
 
-  @DeleteMapping()
+  @PostMapping("/letters/photos/upload")
+  public ResponseEntity<Object> uploadLetterPhoto(
+      @RequestPart(value = "image") MultipartFile multipartFile) {
+    log.info("## 편지 이미지 업로드: {}", multipartFile.getOriginalFilename());
+    ImageDto imageDto = imageService.uploadFiles("photos", multipartFile);
+    return ResponseEntity.ok().body(imageDto);
+  }
+
+  @DeleteMapping("/image")
   public ResponseEntity<Object> deleteFile(
       @RequestParam("url") String keyName) {
     log.info("## 이미지 삭제: {}", keyName);
