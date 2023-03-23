@@ -49,5 +49,5 @@ jobs:
             --region ap-northeast-2 \
             build s3://mpt-front
           aws s3 cp \
-            .env.production s3://mpt-front/.env
+            .env s3://mpt-front/.env
         working-directory: ./front
