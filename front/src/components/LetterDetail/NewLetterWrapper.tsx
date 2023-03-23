@@ -93,12 +93,13 @@ const NewLetterWrapper = () => {
     return (
       <>
         <AlertModal
+          title="편지 전송"
           labelClose="닫기"
           labelSubmit="확인"
           onSubmit={onSubmitHandler}
           onClose={onClose}
         >
-          편지를 정말 보내시겠습니까?
+          <p className="text_center">편지를 정말 보내시겠습니까?</p>
         </AlertModal>
       </>
     );
