@@ -84,6 +84,7 @@ const LetterDetailWrapper = () => {
     setSelectLanguage({ ...selectLanguage, targetNation: event.target.value });
   };
 
+  console.log('ss', letter);
   return (
     <div className={styles.wrapper}>
       {/* 파파고 버튼 */}
@@ -102,8 +103,7 @@ const LetterDetailWrapper = () => {
       <LetterContent
         receiver={letter.receiver}
         body={translatedLanguage}
-        // 임의
-        type="1"
+        type={letter.type}
       />
       {/* 편지 사진 */}
       <LetterPictureWrapper
