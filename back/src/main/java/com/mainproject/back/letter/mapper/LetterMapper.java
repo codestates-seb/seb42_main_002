@@ -8,13 +8,11 @@ import com.mainproject.back.member.dto.MemberSimpleDto;
 import com.mainproject.back.member.entity.Member;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import lombok.RequiredArgsConstructor;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.springframework.data.domain.Page;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-@RequiredArgsConstructor
 public abstract class LetterMapper {
 
   public Letter LetterPostDtoToLetter(LetterPostDto letterPostDto) {
