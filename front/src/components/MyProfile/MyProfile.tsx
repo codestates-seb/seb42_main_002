@@ -76,7 +76,7 @@ const MyProfile = () => {
 
     if (requestData) {
       try {
-        const response = await PATCH('/users', {
+        const response = await PATCH('/users/me', {
           ...requestData,
         });
         if (response) {
@@ -109,7 +109,7 @@ const MyProfile = () => {
     };
     if (requestData) {
       try {
-        const response = await PATCH('/users', {
+        const response = await PATCH('/users/me', {
           ...requestData,
         });
         if (response) {
