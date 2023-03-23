@@ -39,41 +39,42 @@ const LanguageSearchList = ({ languages }: LanguageSearchListProps) => {
 
   return (
     <>
-      {languages.map((lang: LanguageDataType, index: number) => {
-        return (
-          <LabelButton
-            key={index}
-            isActive={selected.includes(lang)}
-            onClick={() =>
-              !selected.includes(lang)
-                ? onClickLanguageLevelModalHandler(lang.nation)
-                : null
-            }
-            full
-          >
-            <LabelButton.Content>
-              <Flex justify="between" align="center">
-                <Flex.Col>
-                  <Flex gap="sm">
-                    <Flex.Col>
-                      <span>{lang.name}</span>
-                    </Flex.Col>
-                    <Flex.Col>
-                      <span>{lang.englishName}</span>
-                    </Flex.Col>
-                  </Flex>
-                </Flex.Col>
-                {lang.level && (
+      {languages &&
+        languages.map((lang: LanguageDataType, index: number) => {
+          return (
+            <LabelButton
+              key={index}
+              isActive={selected.includes(lang)}
+              onClick={() =>
+                !selected.includes(lang)
+                  ? onClickLanguageLevelModalHandler(lang.nation)
+                  : null
+              }
+              full
+            >
+              <LabelButton.Content>
+                <Flex justify="between" align="center">
                   <Flex.Col>
-                    <span>Lv.{lang.level}</span>
+                    <Flex gap="sm">
+                      <Flex.Col>
+                        <span>{lang.name}</span>
+                      </Flex.Col>
+                      <Flex.Col>
+                        <span>{lang.englishName}</span>
+                      </Flex.Col>
+                    </Flex>
                   </Flex.Col>
-                )}
-              </Flex>
-            </LabelButton.Content>
-            {!selected.includes(lang) && <BsPlus />}
-          </LabelButton>
-        );
-      })}
+                  {lang.level && (
+                    <Flex.Col>
+                      <span>Lv.{lang.level}</span>
+                    </Flex.Col>
+                  )}
+                </Flex>
+              </LabelButton.Content>
+              {!selected.includes(lang) && <BsPlus />}
+            </LabelButton>
+          );
+        })}
     </>
   );
 };
