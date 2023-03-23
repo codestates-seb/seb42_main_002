@@ -27,7 +27,7 @@ import MyProfileImage from './MyProfileImage';
 import LocationEditModal from './LocationEditModal/LocationEditModal';
 import styles from './MyProfile.module.scss';
 import { DELETE, PATCH } from '../../utils/axios';
-import { getAge, LanguageDataType } from '../../utils';
+import { getAge, LanguageDataType, toast } from '../../utils';
 import { TagDataType } from '../../utils/types/tags/tags';
 import { useNavigate } from 'react-router-dom';
 import AlertModal, { AlertModalProps } from '../Common/Modal/AlertModal';
@@ -87,6 +87,7 @@ const MyProfile = () => {
             gender: requestData.gender,
             birthday: requestData.birthDay,
           }));
+          toast.success('수정 완료되었습니다!');
         }
       } catch (error) {
         console.error(error);
@@ -117,6 +118,7 @@ const MyProfile = () => {
             ...prevState,
             introduce: requestData.introduce,
           }));
+          toast.success('수정 완료되었습니다!');
         }
       } catch (error) {
         console.error(error);

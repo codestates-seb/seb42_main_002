@@ -14,6 +14,7 @@ import { useState } from 'react';
 import { POST } from '../../utils/axios/fetch';
 import { setCookie } from '../../utils/cookie';
 import AlertModal from '../Common/Modal/AlertModal';
+import Button from '../Common/Button/Button';
 
 type UserDataType = { username: string; password: string };
 
@@ -139,9 +140,9 @@ const LoginMain = () => {
         >
           <AiOutlineLock className={styles.icon} />
         </InputForm>
-        <button type="submit" className={styles.signUp_Btn}>
+        <Button variant="primary" size="lg" full type="submit">
           로그인
-        </button>
+        </Button>
       </form>
     </>
   );

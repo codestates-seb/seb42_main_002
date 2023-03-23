@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import useModals from '../../../hooks/useModals';
 import {
@@ -74,7 +75,6 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
       });
       if (response) {
         setSelectedUserLocation(selectedUserLocationValue);
-        console.log('국가 설정 완료');
       }
     } catch (error) {
       console.log(error);
@@ -87,7 +87,7 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
         language: selectedUserLangauges,
       });
       if (response) {
-        console.log('언어 설정 완료');
+        toast.success('설정 완료되었습니다!');
       }
     } catch (error) {
       console.log(error);
@@ -98,7 +98,13 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
     if (onSubmit) {
       if (userInfo?.location === null) {
         // 첫 설정 일때
-        Promise.all([updateLocation(), updateLanguage(), updateTag()]);
+        Promise.all([updateLocation(), updateLanguage(), updateTag()])
+          .then((res) => {
+            if (res) {
+              toast.success('설정 완료되었습니다!');
+            }
+          })
+          .catch((error) => console.error(error));
         // 첫 설정 후 전체 모달 닫고 Welcome 페이지로 이동
         closeModal(LocationEditModal);
         closeModal(LanguageEditModal);
@@ -106,6 +112,7 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
       } else {
         // 수정 일때
         updateTag();
+        toast.success('수정 완료되었습니다!');
       }
       onClose && onClose();
     }

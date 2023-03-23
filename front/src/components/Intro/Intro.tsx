@@ -9,6 +9,8 @@ import { ReactComponent as OwlBody } from '../../assets/img/intro/owls_body.svg'
 import { ReactComponent as OwlWingLeft } from '../../assets/img/intro/owls_wing_left.svg';
 import { ReactComponent as OwlWingRight } from '../../assets/img/intro/owls_wing_right.svg';
 import styles from './Intro.module.scss';
+import Button from '../Common/Button/Button';
+import Flex from '../Common/Flex/Flex';
 
 const Intro = (): JSX.Element => {
   const navigate = useNavigate();
@@ -75,22 +77,18 @@ const Intro = (): JSX.Element => {
         <h1 className={styles.owls_title_text}>Owls Letters</h1>
       </div>
       <div className={styles.btn_wrapper}>
-        <button
-          className={styles.signup_btn}
-          onClick={() => {
-            navigate('/signup');
-          }}
-        >
-          <p>회원가입</p>
-        </button>
-        <button
-          className={styles.login_btn}
-          onClick={() => {
-            navigate('/login');
-          }}
-        >
-          <p>로그인</p>
-        </button>
+        <Flex dir="column" gap="md">
+          <Flex.Col>
+            <Button variant="primary" size="lg" full to="/signup">
+              <p>회원가입</p>
+            </Button>
+          </Flex.Col>
+          <Flex.Col>
+            <Button variant="secondary" size="lg" full to="/login">
+              <p>로그인</p>
+            </Button>
+          </Flex.Col>
+        </Flex>
       </div>
     </div>
   );
