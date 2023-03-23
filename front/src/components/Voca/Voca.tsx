@@ -10,6 +10,8 @@ import { deleteVocaState, selectedVocaState } from '../../recoil/atoms/voca';
 import AlertModal from '../Common/Modal/AlertModal';
 import useInfiniteScroll from '../../hooks/useInfiniteScroll';
 import styles from './Voca.module.scss';
+import Empty from '../Common/Empty/Empty';
+import { TbVocabulary } from 'react-icons/tb';
 
 const Voca = () => {
   const setSelectedVoca = useSetRecoilState(selectedVocaState);
@@ -99,6 +101,14 @@ const Voca = () => {
       );
     });
   };
+
+  if (vocaList.length === 0) {
+    return (
+      <Empty title="등록된 단어가 없어요">
+        <TbVocabulary className={styles.icon} size={'6rem'} />
+      </Empty>
+    );
+  }
 
   return (
     <>
