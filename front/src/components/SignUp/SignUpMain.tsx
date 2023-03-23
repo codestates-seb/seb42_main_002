@@ -199,7 +199,7 @@ const SignUpMain = (): JSX.Element => {
 
   async function signupRequest(userData: UserDataType) {
     try {
-      const response = await POST('/members', userData);
+      const response = await POST('/users', userData);
       setIsSuccess(true);
     } catch (error) {
       console.log(error);

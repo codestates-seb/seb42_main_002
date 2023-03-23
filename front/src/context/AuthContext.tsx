@@ -60,7 +60,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   // 본인 정보 얻기
   const getCurrentUserInfo = useCallback(async (): Promise<UserData | null> => {
     try {
-      const { data } = await GET('/members');
+      const { data } = await GET('/users/me');
       if (data) {
         setUserInfo(data);
         return data;

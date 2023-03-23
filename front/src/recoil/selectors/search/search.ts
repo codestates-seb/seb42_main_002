@@ -11,7 +11,7 @@ export const searchUserTagSelector = selector({
     const tags = get(selectedSearchTagState);
     if (tags.length === 0) {
       try {
-        const { data } = await GET('/members');
+        const { data } = await GET('/users/me');
         return data.tag;
       } catch (err) {
         // TODO: 에러 처리하기

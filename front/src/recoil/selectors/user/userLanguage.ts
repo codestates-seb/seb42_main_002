@@ -7,7 +7,7 @@ export const userLanguageSeletor = selector({
   get: async ({ get }) => {
     const data = get(userLanguageState);
     try {
-      const response = await PATCH('/members', {
+      const response = await PATCH('/users/me', {
         language: data,
       });
       if (!response) throw Error;

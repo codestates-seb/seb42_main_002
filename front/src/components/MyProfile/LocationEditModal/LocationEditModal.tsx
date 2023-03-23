@@ -39,7 +39,7 @@ const LocationEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
 
   const updateLocation = async () => {
     try {
-      const response = await PATCH('/members', {
+      const response = await PATCH('/users/me', {
         location: changeLocation,
       });
       if (response) {
