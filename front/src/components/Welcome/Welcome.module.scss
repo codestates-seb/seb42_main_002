@@ -6,6 +6,7 @@
   height: 100%;
   max-width: 40rem;
   margin: 0 auto;
+  min-height: calc(100vh - var(--layout-container-height));
 }
 .stamp_icon {
   position: absolute;
@@ -16,9 +17,12 @@
 }
 .fly_owl_container {
   position: relative;
-  margin-bottom: 3.125rem;
+  margin: 0 auto 3.125rem;
   width: 14rem;
   height: 8rem;
+  .fly_owl {
+    animation: move 3s linear infinite;
+  }
 }
 .cloud_1 {
   position: absolute;
@@ -26,6 +30,7 @@
   top: -2rem;
   width: 4rem;
   height: 3rem;
+  animation: cloudy 1.5s infinite ease-out forwards;
 }
 .cloud_2 {
   position: absolute;
@@ -33,11 +38,12 @@
   bottom: -1rem;
   width: 4rem;
   height: 3rem;
+  animation: cloudy 1.5s infinite ease-out forwards;
 }
 .text_container {
   text-align: center;
   margin-bottom: 3.125rem;
-  .text_Head {
+  .text_title {
     font-size: 1.25rem;
     color: var(--title-primary-color);
     margin-bottom: 1.25rem;
@@ -48,6 +54,50 @@
     margin-bottom: 0.25rem;
   }
 }
-.start_btn {
-  max-width: 18rem;
+.btn_wrap {
+  max-width: 16rem;
+  width: 100%;
+  margin: 0 auto;
+  .start_btn {
+    width: 100%;
+  }
+}
+
+@keyframes move {
+  0% {
+    transform: translateY(0) rotateX(0);
+  }
+  25% {
+    transform: translateY(-0.25rem) rotateX(10deg);
+  }
+  50% {
+    transform: rotateX(0) translateY(0);
+  }
+  75% {
+    transform: rotateX(-10deg) translateY(0.25rem);
+  }
+  100% {
+    transform: rotateX(0) translateY(0);
+  }
+}
+
+@keyframes cloudy {
+  0% {
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+    opacity: 1;
+    -webkit-transform: translate(-2rem, 0);
+    -moz-transform: translate(-2rem, 0);
+    -ms-transform: translate(-2rem, 0);
+    -o-transform: translate(-2rem, 0);
+    transform: translate(-2rem, 0);
+  }
+  100% {
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+    opacity: 0;
+    -webkit-transform: translate(4rem, 0);
+    -moz-transform: translate(4rem, 0);
+    -ms-transform: translate(4rem, 0);
+    -o-transform: translate(4rem, 0);
+    transform: translate(4rem, 0);
+  }
 }

@@ -9,6 +9,7 @@
     background-color: var(--light-color);
     border: 2px solid var(--button-primary-color);
     border-radius: var(--border-radius-sm);
+    overflow: hidden;
     img {
       max-width: 100%;
       min-height: 100%;

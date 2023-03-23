@@ -2,15 +2,15 @@ import { useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
 import { useAuth } from '../../context/AuthContext';
-import BottomNav from './Nav/BottomNavBar';
+import { useSetRecoilState } from 'recoil';
 import { DefaultProps } from '../../utils';
+import { userState } from '../../recoil/atoms';
+import BottomNav from './Nav/BottomNavBar';
 import PageTitle from '../Common/PageTitle/PageTitle';
 import PrevButton from '../Common/PrevButton/PrevButton';
 import Footer from './Footer/Footer';
-import styles from './BaseLayout.module.scss';
 import Header from './Header/Header';
-import { useSetRecoilState } from 'recoil';
-import { userState } from '../../recoil/atoms';
+import styles from './BaseLayout.module.scss';
 
 type BaseLayouProps = DefaultProps & {
   isAuth?: boolean;
@@ -21,7 +21,6 @@ type BaseLayouProps = DefaultProps & {
 };
 
 const BaseLayout = ({
-  isAuth,
   isFirstLogin,
   title,
   subTitle,
@@ -61,7 +60,9 @@ const BaseLayout = ({
 
   return (
     <main
-      className={classNames(styles.baselayout, { [styles.is_auth]: isAuth })}
+      className={classNames(styles.baselayout, {
+        [styles.has_bottom_nav]: !isFirstLogin,
+      })}
     >
       <Header />
       <article
@@ -78,7 +79,7 @@ const BaseLayout = ({
           {children}
         </div>
       </article>
-      {isAuth && !isFirstLogin && <BottomNav />}
+      {!isFirstLogin && <BottomNav />}
       <Footer />
     </main>
   );

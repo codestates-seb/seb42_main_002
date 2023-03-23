@@ -9,12 +9,14 @@ export default function Welcom() {
     <div className={styles.profile_completed_container}>
       <Stamp className={styles.stamp_icon} />
       <div className={styles.fly_owl_container}>
-        <Fly_owl />
+        <div className={styles.fly_owl}>
+          <Fly_owl />
+        </div>
         <Cloud className={styles.cloud_1} />
         <Cloud className={styles.cloud_2} />
       </div>
       <div className={styles.text_container}>
-        <p className={styles.text_Head}>세상과 마음을 나누세요</p>
+        <p className={styles.text_title}>세상과 마음을 나누세요</p>
         <p className={styles.text_body}>
           공통 관심사와 언어를 바탕으로 매칭이 진행됩니다
         </p>
@@ -22,15 +24,17 @@ export default function Welcom() {
           새 펜팔에게 첫 편지를 부칠 준비가 되셨나요?
         </p>
       </div>
-      <Button
-        variant="primary"
-        size="lg"
-        className={styles.start_btn}
-        full={true}
-        to="/main"
-      >
-        시작하기
-      </Button>
+      <div className={styles.btn_wrap}>
+        <Button
+          variant="primary"
+          size="lg"
+          className={styles.start_btn}
+          full
+          to="/main"
+        >
+          시작하기
+        </Button>
+      </div>
     </div>
   );
 }

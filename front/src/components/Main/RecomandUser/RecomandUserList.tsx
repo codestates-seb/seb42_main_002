@@ -49,6 +49,7 @@ const RecomandUserList = () => {
             <SwiperSlide key={user.memberId} className={styles.swiper_slide}>
               <RecomandUserListItem
                 profile={user.profile}
+                name={user.name}
                 memberId={user.memberId}
               />
             </SwiperSlide>
