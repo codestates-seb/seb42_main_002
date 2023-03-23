@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { newLetterState } from '../../recoil/atoms';
 import { newLetterType } from '../../utils';
-import { POST } from '../../utils/axios';
+import { POST, POST_IMG } from '../../utils/axios';
 import Button from '../Common/Button/Button';
 import NewLetterContent from './LetterContent/NewLetterContent';
 import LetterPictureWrapper from './LetterPicture/LetterPictureWrapper';
@@ -20,8 +20,11 @@ const NewLetterWrapper = () => {
    */
   const postNewLetter = async (letter: newLetterType) => {
     try {
-      const response = await POST(`/letters/${newLetter.memberId}`, letter);
-      // TODO: 서버에서 CORS 요청 수정 후에 location 설정
+      const response = await POST(`/users/me/letters`, {
+        body: letter.body,
+        type: letter.type,
+        receiver: letter.memberId,
+      });
       const location =
         response.headers.location && response.headers.location.split('/');
 
@@ -54,18 +57,30 @@ const NewLetterWrapper = () => {
     }));
   };
 
-  // TODO : 이미지 추가 로직 변경
-  const pictureAddHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const reader = new FileReader();
+  const pictureAddHandler = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = event.target.files && event.target.files[0];
-
-    reader.onload = () => {
+    const formData = new FormData();
+    formData.append('type', 'photos');
+    file && formData.append('image', file);
+    try {
+      const { data } = await POST_IMG(
+        '/users/me/letters/photos/upload',
+        formData,
+        {
+          headers: {
+            'Contest-Type': 'multipart/form-data',
+          },
+        }
+      );
       setNewLetter((prev) => ({
         ...prev,
-        photoUrl: [...prev.photoUrl, String(reader.result)],
+        photoUrl: [...prev.photoUrl, data.uploadUrl],
       }));
-    };
-    file && reader.readAsDataURL(file);
+    } catch (error) {
+      console.log('error');
+    }
   };
 
   const onSubmitHandler = () => {

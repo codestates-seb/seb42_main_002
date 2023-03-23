@@ -8,7 +8,7 @@ export const userSeletor = selector<UserData>({
   get: async ({ get }) => {
     const data = get(userState);
     try {
-      const response = await PATCH('/members', {
+      const response = await PATCH('/users/me', {
         ...data,
       });
       if (!response) throw Error;

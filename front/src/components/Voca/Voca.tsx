@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { TbVocabulary } from 'react-icons/tb';
 import { VocaDataType } from '../../utils/types/voca';
 import VocaCard from './VocaCard/VocaCard';
 import Button from '../Common/Button/Button';
@@ -9,6 +10,8 @@ import { DELETE, GET } from '../../utils/axios';
 import { deleteVocaState, selectedVocaState } from '../../recoil/atoms/voca';
 import AlertModal from '../Common/Modal/AlertModal';
 import useInfiniteScroll from '../../hooks/useInfiniteScroll';
+import LastInfinite from '../Common/LastInfinite/LastInfinite';
+import Empty from '../Common/Empty/Empty';
 import styles from './Voca.module.scss';
 
 const Voca = () => {
@@ -100,6 +103,14 @@ const Voca = () => {
     });
   };
 
+  if (vocaList.length === 0) {
+    return (
+      <Empty title="등록된 단어가 없어요">
+        <TbVocabulary className={styles.icon} size={'6rem'} />
+      </Empty>
+    );
+  }
+
   return (
     <>
       {isOpenModal && (
@@ -144,7 +155,7 @@ const Voca = () => {
         className={styles.button}
         onClick={onAddModalHandler}
       />
-      <div ref={sentinelRef}></div>
+      <LastInfinite text="마지막 단어 입니다." ref={sentinelRef} />
     </>
   );
 };
