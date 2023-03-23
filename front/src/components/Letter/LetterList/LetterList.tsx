@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { newLetterState, selectedUserInfoState } from '../../../recoil/atoms';
 import { SlEnvolopeLetter } from 'react-icons/sl';
@@ -10,6 +10,7 @@ import LetterUserCard from '../LetterUserCard/LetterUserCard';
 import Empty from '../../Common/Empty/Empty';
 import useInfiniteScroll from '../../../hooks/useInfiniteScroll';
 import styles from './LetterList.module.scss';
+import LastInfinite from '../../Common/LastInfinite/LastInfinite';
 
 const LetterList = () => {
   const navigate = useNavigate();
@@ -62,7 +63,7 @@ const LetterList = () => {
         <Empty title="아직 편지가 없어요.">
           <SlEnvolopeLetter className={styles.icon} size={'6rem'} />
         </Empty>
-        <div ref={sentinelRef}>마지막</div>
+        <div ref={sentinelRef}></div>
       </>
     );
   }
@@ -93,7 +94,7 @@ const LetterList = () => {
           />
         ))}
       </div>
-      <div ref={sentinelRef}></div>
+      <LastInfinite text="마지막 편지 입니다." ref={sentinelRef} />
     </>
   );
 };

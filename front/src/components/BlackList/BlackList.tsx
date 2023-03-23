@@ -8,6 +8,7 @@ import { DELETE, GET } from '../../utils/axios';
 import Empty from '../Common/Empty/Empty';
 import { FiUsers } from 'react-icons/fi';
 import useInfiniteScroll from '../../hooks/useInfiniteScroll';
+import LastInfinite from '../Common/LastInfinite/LastInfinite';
 
 const BlackList = () => {
   const navigate = useNavigate();
@@ -90,7 +91,7 @@ const BlackList = () => {
             </UserCard>
           ))}
       </ul>
-      <div ref={sentinelRef}></div>
+      <LastInfinite text="마지막 차단유저 입니다." ref={sentinelRef} />
     </>
   );
 };

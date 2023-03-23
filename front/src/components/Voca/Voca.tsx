@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { TbVocabulary } from 'react-icons/tb';
 import { VocaDataType } from '../../utils/types/voca';
 import VocaCard from './VocaCard/VocaCard';
 import Button from '../Common/Button/Button';
@@ -9,9 +10,9 @@ import { DELETE, GET } from '../../utils/axios';
 import { deleteVocaState, selectedVocaState } from '../../recoil/atoms/voca';
 import AlertModal from '../Common/Modal/AlertModal';
 import useInfiniteScroll from '../../hooks/useInfiniteScroll';
-import styles from './Voca.module.scss';
+import LastInfinite from '../Common/LastInfinite/LastInfinite';
 import Empty from '../Common/Empty/Empty';
-import { TbVocabulary } from 'react-icons/tb';
+import styles from './Voca.module.scss';
 
 const Voca = () => {
   const setSelectedVoca = useSetRecoilState(selectedVocaState);
@@ -154,7 +155,7 @@ const Voca = () => {
         className={styles.button}
         onClick={onAddModalHandler}
       />
-      <div ref={sentinelRef}></div>
+      <LastInfinite text="마지막 단어 입니다." ref={sentinelRef} />
     </>
   );
 };

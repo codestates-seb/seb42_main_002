@@ -7,6 +7,7 @@ import { newLetterState } from '../../../recoil/atoms';
 import { LetterUserData } from '../../../utils';
 import { GET } from '../../../utils/axios';
 import Empty from '../../Common/Empty/Empty';
+import LastInfinite from '../../Common/LastInfinite/LastInfinite';
 import LetterStatusIcon from '../../Common/LetterStatusIcon/LetterStatusIcon';
 import UserCard from '../../Common/UserCard/UserCard';
 
@@ -89,7 +90,7 @@ const LetterUserList = () => {
           </UserCard>
         ))}
       </ul>
-      <div ref={sentinelRef}></div>
+      <LastInfinite text="마지막 친구 입니다." ref={sentinelRef} />
     </>
   );
 };
