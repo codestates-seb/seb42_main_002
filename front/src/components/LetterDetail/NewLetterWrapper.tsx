@@ -1,8 +1,7 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import useModals from '../../hooks/useModals';
-import { newLetterState } from '../../recoil/atoms';
+import { letterTypeState, newLetterState } from '../../recoil/atoms';
 import { newLetterType, toast } from '../../utils';
 import { POST, POST_IMG } from '../../utils/axios';
 import Button from '../Common/Button/Button';
@@ -10,11 +9,11 @@ import AlertModal, { AlertModalProps } from '../Common/Modal/AlertModal';
 import NewLetterContent from './LetterContent/NewLetterContent';
 import LetterPictureWrapper from './LetterPicture/LetterPictureWrapper';
 import LetterType from './LetterType/LetterType';
-import styles from './NewLetterWrapper.module.scss';
 
 const NewLetterWrapper = () => {
   const { openModal } = useModals();
   const [newLetter, setNewLetter] = useRecoilState(newLetterState);
+  const selectedLetterType = useRecoilValue(letterTypeState);
   const navigate = useNavigate();
 
   /**
@@ -24,7 +23,7 @@ const NewLetterWrapper = () => {
     try {
       const response = await POST(`/users/me/letters`, {
         body: letter.body,
-        type: letter.type,
+        type: selectedLetterType,
         receiver: letter.memberId,
       });
       const location =
@@ -113,8 +112,6 @@ const NewLetterWrapper = () => {
     }
     openModal(confirmSendLetterModal);
   };
-
-  console.log('newLetter', newLetter);
 
   return (
     <>
