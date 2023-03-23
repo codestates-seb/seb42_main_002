@@ -21,23 +21,17 @@ jobs:
             ${{ runner.OS }}-build-
             ${{ runner.OS }}-
 
-      - name: Generate Environment Variables File for Production
-        env:
-          REACT_APP_BASE_URL: ${{ secrets.REACT_APP_BASE_URL }}
-          REACT_APP_GOOGLE_LOGIN_URL: ${{ secrets.REACT_APP_GOOGLE_LOGIN_URL }}
-        run: |
-          echo "REACT_APP_BASE_URL=$REACT_APP_BASE_URL" >> .env
-          echo "REACT_APP_GOOGLE_LOGIN_URL=$REACT_APP_GOOGLE_LOGIN_URL" >> .env
-
       - name: Install Dependencies # 의존 파일 설치
         run: npm i
         working-directory: ./front
 
       - name: Build # React Build
         run: npm run build
-        working-directory: ./front
         env:
+          REACT_APP_BASE_URL: ${{ secrets.REACT_APP_BASE_URL }}
+          REACT_APP_GOOGLE_LOGIN_URL: ${{ secrets.REACT_APP_GOOGLE_LOGIN_URL }}
           CI: ""
+        working-directory: ./front
 
       - name: Deploy
         env:
@@ -48,6 +42,4 @@ jobs:
             --recursive \
             --region ap-northeast-2 \
             build s3://mpt-front
-          aws s3 cp \
-            .env s3://mpt-front/.env
         working-directory: ./front
