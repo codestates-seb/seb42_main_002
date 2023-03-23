@@ -23,9 +23,11 @@ jobs:
 
       - name: Install Dependencies # 의존 파일 설치
         run: npm i
+        path: front/
 
       - name: Build # React Build
         run: npm run build
+        path: front/
         env:
           CI: ""
 
