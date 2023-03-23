@@ -64,10 +64,17 @@ public interface LetterMapper {
   default LetterListDto letterToLetterListDto(Letter letter) {
     LetterListDto.LetterListDtoBuilder builder = LetterListDto.builder()
         .letterId(letter.getLetterId())
-        .sender(MemberSimpleDto.builder().memberId(letter.getSender().getMemberId())
-            .name(letter.getSender().getName()).build())
-        .receiver(MemberSimpleDto.builder().memberId(letter.getReceiver().getMemberId())
-            .name(letter.getReceiver().getName()).build())
+        .sender(
+            MemberSimpleDto.builder()
+                .memberId(letter.getSender().getMemberId())
+                .name(letter.getSender().getName())
+                .build()
+        )
+        .receiver(
+            MemberSimpleDto.builder()
+                .memberId(letter.getReceiver().getMemberId())
+                .name(letter.getReceiver().getName()).build()
+        )
         .isRead(letter.getIsRead())
         .availableAt(letter.getAvailableAt())
         .createdAt(letter.getCreatedAt());

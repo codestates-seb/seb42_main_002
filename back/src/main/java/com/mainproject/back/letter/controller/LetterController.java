@@ -29,10 +29,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/letters")
+@RequestMapping("/users/me/letters")
 @Slf4j
 @Validated
 @RequiredArgsConstructor
@@ -42,12 +43,9 @@ public class LetterController {
   private final LetterMapper letterMapper;
   private final MemberService memberService;
 
-  @PostMapping("/{receiver-id}")
-  public ResponseEntity postLetter(@PathVariable("receiver-id") @Positive long receiverId,
-      @RequestBody @Valid
-      LetterPostDto letterPostDto, Principal principal) {
-    log.info("## 편지 보내기: {}", receiverId);
-    letterPostDto.setReceiverId(receiverId);
+  @PostMapping
+  public ResponseEntity postLetter(@RequestBody @Valid LetterPostDto letterPostDto, Principal principal) {
+    log.info("## 편지 보내기: {}", letterPostDto.getReceiverId());
 
     Member member = memberService.findMemberByEmail(Check.checkPrincipal(principal));
     letterPostDto.setSenderId(member.getMemberId());
@@ -58,8 +56,8 @@ public class LetterController {
     return ResponseEntity.created(uri).build();
   }
 
-  @GetMapping("/{letter-id}")
-  public ResponseEntity getLetter(@PathVariable("letter-id") @Positive long letterId) {
+  @GetMapping("")
+  public ResponseEntity getLetter(@RequestParam("letter") @Positive long letterId) {
     log.info("## 특정 편지 조회: {}", letterId);
     Letter findLetter = letterService.findLetter(letterId);
     LetterResponseDto letterResponseDto = letterMapper.LetterToLetterResponseDto(findLetter);
