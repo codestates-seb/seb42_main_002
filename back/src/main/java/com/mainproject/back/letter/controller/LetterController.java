@@ -59,10 +59,13 @@ public class LetterController {
   }
 
   @GetMapping("/{letter-id}")
-  public ResponseEntity getLetter(@PathVariable("letter-id") @Positive long letterId) {
+  public ResponseEntity getLetter(@PathVariable("letter-id") @Positive long letterId,
+      Principal principal) {
     log.info("## 특정 편지 조회: {}", letterId);
+    long memberId = memberService.findMemberIdByEmail(Check.checkPrincipal(principal));
     Letter findLetter = letterService.findLetter(letterId);
-    LetterResponseDto letterResponseDto = letterMapper.LetterToLetterResponseDto(findLetter);
+    LetterResponseDto letterResponseDto = letterMapper.LetterToLetterResponseDto(findLetter,
+        memberId);
     return ResponseEntity.ok().body(letterResponseDto);
   }
 
@@ -71,7 +74,8 @@ public class LetterController {
       @PageableDefault Pageable pageable, Principal principal) {
     log.info("## 특정 멤버와 주고 받은 편지 리스트 조회: {}", targetId);
     long memberId = memberService.findMemberIdByEmail(Check.checkPrincipal(principal));
-    Page<Letter> letterPage = letterService.findLettersByMemberAndTarget(targetId, pageable, memberId);
+    Page<Letter> letterPage = letterService.findLettersByMemberAndTarget(targetId, pageable,
+        memberId);
     Page<LetterListDto> letterListDtoPage = letterMapper.pageLetterToPageLetterListDtoPage(
         letterPage, memberId);
     return ResponseEntity.ok().body(letterListDtoPage);
