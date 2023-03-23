@@ -15,7 +15,8 @@ public interface LetterRepository extends JpaRepository<Letter, Long> {
   @Query("select l from Letter l "
       + "join l.sender s join l.receiver r "
       + "where (s.memberId = :memberId and r.memberId = :targetId) "
-      + "or (s.memberId = :targetId and r.memberId = :memberId)")
+      + "or (s.memberId = :targetId and r.memberId = :memberId) "
+      + "order by l.createdAt desc")
   Page<Letter> findLettersByMemberAndTarget(@Param("memberId") long memberId,
       @Param("targetId") long targetId, Pageable pageable);
 
