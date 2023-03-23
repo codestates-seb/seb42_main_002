@@ -25,9 +25,12 @@ jobs:
         env:
           REACT_APP_BASE_URL: ${{ secrets.REACT_APP_BASE_URL }}
           REACT_APP_GOOGLE_LOGIN_URL: ${{ secrets.REACT_APP_GOOGLE_LOGIN_URL }}
+          REACT_APP_NAME: ${{ secrets.NAME }}
         run: |
           echo "REACT_APP_BASE_URL=$REACT_APP_BASE_URL" >> .env
           echo "REACT_APP_GOOGLE_LOGIN_URL=$REACT_APP_GOOGLE_LOGIN_URL" >> .env
+          echo "REACT_APP_NAME=$REACT_APP_NAME" >> .env
+          echo "REACT_APP_NAME=$REACT_APP_NAME" >> .env.production
 
       - name: Install Dependencies # 의존 파일 설치
         run: npm i
