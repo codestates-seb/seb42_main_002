@@ -43,7 +43,7 @@ const MyProfileImage = ({ onChangeLocation }: MyProfileImageProps) => {
         },
       });
       // 프로필 수정
-      const response = await PATCH('/members', {
+      const response = await PATCH('/users', {
         profile: data.uploadUrl,
       });
       if (response) {
@@ -57,7 +57,7 @@ const MyProfileImage = ({ onChangeLocation }: MyProfileImageProps) => {
   // 이미지 제거
   const onRemoveImageHandler = async () => {
     try {
-      const response = await PATCH('/members', {
+      const response = await PATCH('/users', {
         profile: '',
       });
 

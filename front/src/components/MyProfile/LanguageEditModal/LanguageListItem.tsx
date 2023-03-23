@@ -37,7 +37,7 @@ const confirmRemoveLanguageaModal = ({
       (lang) => lang.nation !== selectedUserLanguageNation
     );
     try {
-      const response = await PATCH('/members', {
+      const response = await PATCH('/users', {
         language: filterdLanguages,
       });
       if (response) {

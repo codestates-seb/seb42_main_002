@@ -7,7 +7,7 @@ export const userLocationSeletor = selector({
   get: async ({ get }) => {
     const data = get(userLocationState);
     try {
-      const response = await PATCH('/members', {
+      const response = await PATCH('/users', {
         location: data,
       });
       if (!response) throw Error;

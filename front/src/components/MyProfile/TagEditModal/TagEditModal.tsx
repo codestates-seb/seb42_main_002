@@ -56,7 +56,7 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
   const updateTag = async () => {
     try {
       const requestData = changeTags.map((tag) => tag.name);
-      const response = await PATCH('/members', {
+      const response = await PATCH('/users', {
         tag: requestData,
       });
       if (response) {
@@ -70,7 +70,7 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
 
   const updateLocation = async () => {
     try {
-      const response = await PATCH('/members', {
+      const response = await PATCH('/users', {
         location: selectedUserLocationValue,
       });
       if (response) {
@@ -83,7 +83,7 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
 
   const updateLanguage = async () => {
     try {
-      const response = await PATCH('/members', {
+      const response = await PATCH('/users', {
         language: selectedUserLangauges,
       });
       if (response) {
