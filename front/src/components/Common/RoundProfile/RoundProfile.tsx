@@ -1,5 +1,5 @@
-import defaultProfile from '../../../assets/img/default_owls_thumb.svg';
-import { LocationIcons, locationTypes } from '../../../utils';
+import defaultProfile from '../../../assets/img/common/default_owls_thumb.svg';
+import { LocationIcons, locationTypes, onErrorImage } from '../../../utils';
 import { LOCATION_CODE } from '../../../utils/enums/common/common.enum';
 import styles from './RoundProfile.module.scss';
 
@@ -21,12 +21,13 @@ const RoundProfile = ({ location, profile }: RoundProfileProps) => {
         className={styles.location}
       ></div>
       <div className={styles.profile}>
-        {profile && <img src={profile} alt="프로필" />}
+        {profile && <img src={profile} alt="프로필" onError={onErrorImage} />}
         {!profile && (
           <img
             className={styles.default_profile}
             src={defaultProfile}
             alt="프로필"
+            onError={onErrorImage}
           />
         )}
       </div>

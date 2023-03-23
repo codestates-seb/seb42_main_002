@@ -7,6 +7,7 @@ import { FullPageModalProps } from '../Common/Modal/FullPageModal';
 import { ReactComponent as CanceButtonlIcon } from '../../assets/CancelIcon.svg';
 
 import styles from './PictureModal.module.scss';
+import { onErrorImage } from '../../utils';
 
 const PictureModal = ({ onClose }: FullPageModalProps) => {
   const { photoUrl } = useRecoilValue(selectedLetterState);
@@ -48,7 +49,11 @@ const PictureModal = ({ onClose }: FullPageModalProps) => {
               photoUrl.map((picture) => (
                 <SwiperSlide key={picture} className={styles.swiper_slide}>
                   <div className={styles.img_wrapper}>
-                    <img alt="첨부이미지" src={picture} />
+                    <img
+                      alt="첨부이미지"
+                      src={picture}
+                      onError={onErrorImage}
+                    />
                   </div>
                 </SwiperSlide>
               ))}

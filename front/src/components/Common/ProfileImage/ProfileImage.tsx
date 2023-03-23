@@ -1,8 +1,9 @@
 import classNames from 'classnames';
-import defaultProfile from '../../../assets/img/default_owls_thumb.svg';
-import { LocationIcons, locationTypes } from '../../../utils';
+import { LocationIcons, locationTypes, onErrorImage } from '../../../utils';
 import { locationTransformer } from '../../../utils/common';
 import { LOCATION_CODE } from '../../../utils/enums/common/common.enum';
+import defaultProfile from '../../../assets/img/common/default_owls_thumb.svg';
+
 import styles from './ProfileImage.module.scss';
 
 type ProfileImageProps = {
@@ -19,23 +20,27 @@ const ProfileImage = ({
   return (
     <div className={styles.profile_img_wrapper}>
       <div className={styles.profile_img}>
-        {!onChangeLocation ? (
-          <span className={classNames(styles.icon_flags)}>
-            <img
-              src={LocationIcons[location as keyof locationTypes]}
-              alt={`${locationTransformer(location as LOCATION_CODE)} 국기`}
-            />
-          </span>
-        ) : (
-          <button
-            className={classNames(styles.icon_flags)}
-            onClick={onChangeLocation}
-          >
-            <img
-              src={LocationIcons[location as keyof locationTypes]}
-              alt={`${locationTransformer(location as LOCATION_CODE)} 국기`}
-            />
-          </button>
+        {location && (
+          <>
+            {!onChangeLocation ? (
+              <span className={classNames(styles.icon_flags)}>
+                <img
+                  src={LocationIcons[location as keyof locationTypes]}
+                  alt={`${locationTransformer(location as LOCATION_CODE)} 국기`}
+                />
+              </span>
+            ) : (
+              <button
+                className={classNames(styles.icon_flags)}
+                onClick={onChangeLocation}
+              >
+                <img
+                  src={LocationIcons[location as keyof locationTypes]}
+                  alt={`${locationTransformer(location as LOCATION_CODE)} 국기`}
+                />
+              </button>
+            )}
+          </>
         )}
         <figure
           className={classNames({
@@ -43,9 +48,17 @@ const ProfileImage = ({
           })}
         >
           {profile ? (
-            <img src={profile || ''} alt="프로필 이미지" />
+            <img
+              src={profile || ''}
+              alt="프로필 이미지"
+              onError={onErrorImage}
+            />
           ) : (
-            <img src={defaultProfile} alt="프로필 기본 이미지" />
+            <img
+              src={defaultProfile}
+              alt="프로필 기본 이미지"
+              onError={onErrorImage}
+            />
           )}
         </figure>
       </div>
