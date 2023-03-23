@@ -22,9 +22,11 @@ const LetterList = () => {
   const getUserLetterList = async (memberId: number, page: number) => {
     if (isStopRef.current) return;
     try {
-      // TODO: 페이지네이션 보류
+      // const { data } = await GET(
+      //   `letters/members/${memberId}?page=${page}&size=10`
+      // );
       const { data } = await GET(
-        `letters/members/${memberId}?page=${page}&size=10`
+        `users/me/letters?target=${memberId}?page=${page}&size=10`
       );
       isStopRef.current = data.last;
       setUserLetterList((prev) => [...prev, ...data.content]);
