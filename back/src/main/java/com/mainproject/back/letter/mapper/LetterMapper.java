@@ -8,14 +8,16 @@ import com.mainproject.back.member.dto.MemberSimpleDto;
 import com.mainproject.back.member.entity.Member;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import lombok.RequiredArgsConstructor;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.springframework.data.domain.Page;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface LetterMapper {
+@RequiredArgsConstructor
+public abstract class LetterMapper {
 
-  default Letter LetterPostDtoToLetter(LetterPostDto letterPostDto) {
+  public Letter LetterPostDtoToLetter(LetterPostDto letterPostDto) {
     if (letterPostDto == null) {
       return null;
     } else {
@@ -31,7 +33,7 @@ public interface LetterMapper {
     }
   }
 
-  default LetterResponseDto LetterToLetterResponseDto(Letter letter) {
+  public LetterResponseDto LetterToLetterResponseDto(Letter letter) {
     if (letter == null) {
       return null;
     }
@@ -57,24 +59,27 @@ public interface LetterMapper {
     return builder.build();
   }
 
-  default Page<LetterListDto> pageLetterToPageLetterListDtoPage(Page<Letter> letterPage) {
-    return letterPage.map(this::letterToLetterListDto);
+  public Page<LetterListDto> pageLetterToPageLetterListDtoPage(Page<Letter> letterPage,
+      long memberId) {
+    return letterPage.map(letter -> letterToLetterListDto(letter, memberId));
   }
 
-  default LetterListDto letterToLetterListDto(Letter letter) {
+  public LetterListDto letterToLetterListDto(Letter letter, long memberId) {
+    Member sender = letter.getSender();
+    Member receiver = letter.getReceiver();
     LetterListDto.LetterListDtoBuilder builder = LetterListDto.builder()
         .letterId(letter.getLetterId())
-        .sender(MemberSimpleDto.builder().memberId(letter.getSender().getMemberId())
-            .name(letter.getSender().getName()).build())
-        .receiver(MemberSimpleDto.builder().memberId(letter.getReceiver().getMemberId())
-            .name(letter.getReceiver().getName()).build())
+        .sender(MemberSimpleDto.builder().memberId(sender.getMemberId())
+            .name(sender.getName()).build())
+        .receiver(MemberSimpleDto.builder().memberId(receiver.getMemberId())
+            .name(receiver.getName()).build())
         .isRead(letter.getIsRead())
         .availableAt(letter.getAvailableAt())
-        .createdAt(letter.getCreatedAt());
-    if (LocalDateTime.now().isAfter(letter.getAvailableAt())) {
-      builder.body(letter.getBody());
-    }
-    builder.hasPic(letter.getPhotoUrl() != null && !letter.getPhotoUrl().isEmpty());
+        .createdAt(letter.getCreatedAt())
+        .body(
+            LocalDateTime.now().isAfter(letter.getAvailableAt()) || sender.getMemberId() == memberId
+                ? letter.getBody() : null)
+        .hasPic(letter.getPhotoUrl() != null && !letter.getPhotoUrl().isEmpty());
     return builder.build();
   }
 }
