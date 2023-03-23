@@ -24,7 +24,7 @@ const LetterList = () => {
     if (isStopRef.current) return;
     try {
       const { data } = await GET(
-        `users/me/letters?target=${memberId}?page=${page}&size=10`
+        `users/me/letters?target=${memberId}&page=${page}&size=10`
       );
       isStopRef.current = data.last;
       setUserLetterList((prev) => [...prev, ...data.content]);
