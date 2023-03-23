@@ -21,6 +21,14 @@ jobs:
             ${{ runner.OS }}-build-
             ${{ runner.OS }}-
 
+      - name: Generate Environment Variables File for Production
+        run: |
+          echo "REACT_APP_BASE_URL=$REACT_APP_BASE_URL" >> .env.production
+          echo "REACT_APP_GOOGLE_LOGIN_URL=$REACT_APP_GOOGLE_LOGIN_URL" >> .env.production
+        env:
+          REACT_APP_BASE_URL: ${{ secrets.REACT_APP_BASE_URL }}
+          REACT_APP_GOOGLE_LOGIN_URL: ${{ secrets.REACT_APP_GOOGLE_LOGIN_URL }}
+
       - name: Install Dependencies # 의존 파일 설치
         run: npm i
         working-directory: ./front
