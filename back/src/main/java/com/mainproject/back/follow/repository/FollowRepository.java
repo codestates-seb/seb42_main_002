@@ -14,7 +14,7 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
   @Query(value = "select * from follow where following_id = :followingId", nativeQuery = true)
   Page<Follow> findAllFollowersByFollowingId(Long followingId, Pageable pageable);
 
-  @Query(value = "select * from follow where follower_id = :followerId", nativeQuery = true)
+  @Query(value = "select * from follow as f where f.follower_id = :followerId order by f.created_at desc", nativeQuery = true)
   Page<Follow> findAllFollowingsByFollowerId(Long followerId, Pageable pageable);
 
   @Query("select ing.memberId from Follow f join f.follower ed join f.following ing where ed.memberId = :memberId")

@@ -5,7 +5,6 @@ import com.mainproject.back.language.repository.LanguageRepository;
 import com.mainproject.back.tag.entity.Tag;
 import com.mainproject.back.tag.repository.TagRepository;
 import java.util.List;
-import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

@@ -25,15 +25,15 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/follows")
+@RequestMapping("/users/me/follows")
 @Validated
 @RequiredArgsConstructor
 @Slf4j
@@ -77,8 +77,8 @@ public class FollowController {
 
   }
 
-  @GetMapping("/following")
-  public ResponseEntity getFollowing(@PageableDefault(sort = "follow_id") Pageable pageable,
+  @GetMapping
+  public ResponseEntity getFollowing(@PageableDefault Pageable pageable,
       Principal principal) {
     log.info("## 팔로잉 조회");
     Member currentMember = memberService.findMemberByEmail(Check.checkPrincipal(principal));
@@ -91,8 +91,8 @@ public class FollowController {
 
   }
 
-  @DeleteMapping("/{following-id}")
-  public ResponseEntity deleteBlock(@PathVariable("following-id") @Positive long followingId,
+  @DeleteMapping(params = "target")
+  public ResponseEntity deleteBlock(@RequestParam("target") @Positive long followingId,
       Principal principal) {
     log.info("## 팔로우 삭제");
     followService.deleteFollow(followingId, memberService.findMemberIdByEmail(Check.checkPrincipal(principal)));
