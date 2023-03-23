@@ -12,7 +12,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface BlockRepository extends JpaRepository<Block, Long> {
 
-  @Query(value = "select * from block where member_id = :memberId", nativeQuery = true)
+  @Query(value = "select * from block as b where b.member_id = :memberId order by b.created_at desc", nativeQuery = true)
   Page<Block> findAllByMemberId(long memberId, Pageable pageable);
 
   @Query("select b from Block b join b.target t join b.member m where t.memberId = :targetId and m.memberId = :memberId")

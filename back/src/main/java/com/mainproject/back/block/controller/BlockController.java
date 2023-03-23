@@ -23,15 +23,15 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/blocks")
+@RequestMapping("/users/me/blocks")
 @Validated
 @RequiredArgsConstructor
 @Slf4j
@@ -63,18 +63,18 @@ public class BlockController {
   }
 
   @GetMapping
-  public ResponseEntity getBlocks(@PageableDefault(sort = "block_id") Pageable pageable,
+  public ResponseEntity getBlocks(@PageableDefault Pageable pageable,
       Principal principal) {
-    log.info("## 차단 목록 조회: {}", principal.getName());
-    Member member = memberService.findMemberByEmail(principal.getName());
-    Page<Block> blockPage = blockService.findBlocks(member.getMemberId(), pageable);
+    log.info("## 차단 목록 조회");
+    long memberId = memberService.findMemberIdByEmail(Check.checkPrincipal(principal));
+    Page<Block> blockPage = blockService.findBlocks(memberId, pageable);
     Page<MemberBlockDto> responses = memberConvertService.blockPageToMemberBlockPage(blockPage);
     return ResponseEntity.ok().body(responses);
 
   }
 
-  @DeleteMapping("/{target-id}")
-  public ResponseEntity deleteBlock(@PathVariable("target-id") @Positive long targetId,
+  @DeleteMapping(params = "target")
+  public ResponseEntity deleteBlock(@RequestParam("target") @Positive long targetId,
       Principal principal) {
     log.info("## 차단 목록 삭제: {}", targetId);
     blockService.deleteBlock(targetId,
