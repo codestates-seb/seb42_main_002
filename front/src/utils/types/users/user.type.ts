@@ -8,7 +8,7 @@ export type UserData = {
   name: string;
   gender: GENDER_TYPE | null;
   location?: LOCATION_CODE | null;
-  birthday?: string;
+  birthday?: string | null;
   language: LanguageDataType[];
   tag?: TagDataType[];
   introduce?: string;
