@@ -35,7 +35,7 @@ const Profile = () => {
    */
   const getUser = async () => {
     try {
-      const response = await GET(`/members/${memberId}`);
+      const response = await GET(`/users/${memberId}`);
       if (response.data) {
         const userInfo = response.data;
         setUserInfo(userInfo);
