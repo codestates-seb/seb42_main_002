@@ -1,5 +1,9 @@
 import classNames from 'classnames';
-import { LocationIcons, locationTypes, onErrorImage } from '../../../utils';
+import {
+  LocationIcons,
+  locationTypes,
+  onErrorImageHandler,
+} from '../../../utils';
 import { locationTransformer } from '../../../utils/common';
 import { LOCATION_CODE } from '../../../utils/enums/common/common.enum';
 import defaultProfile from '../../../assets/img/common/default_owls_thumb.svg';
@@ -51,13 +55,13 @@ const ProfileImage = ({
             <img
               src={profile || ''}
               alt="프로필 이미지"
-              onError={onErrorImage}
+              onError={onErrorImageHandler}
             />
           ) : (
             <img
               src={defaultProfile}
               alt="프로필 기본 이미지"
-              onError={onErrorImage}
+              onError={onErrorImageHandler}
             />
           )}
         </figure>

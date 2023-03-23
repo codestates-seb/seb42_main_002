@@ -1,6 +1,6 @@
 import defaultProfileError from '../../assets/img/common/default_owls_error.svg';
 
-export const onErrorImage = (
+export const onErrorImageHandler = (
   event: React.ChangeEvent<HTMLImageElement>,
   replaceImage?: string
 ) => {

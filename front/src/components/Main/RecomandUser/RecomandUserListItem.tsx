@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import defaultOwl from '../../../assets/img/common/default_owls_thumb.svg';
-import { onErrorImage } from '../../../utils';
+import { onErrorImageHandler } from '../../../utils';
 import styles from './RecomandUserListItem.module.scss';
 
 type RecomandUserListItemProps = {
@@ -24,14 +24,14 @@ const RecomandUserListItem = ({
               src={profile}
               alt={`${name}님 프로필 이미지`}
               title={`${name} 프로필`}
-              onError={onErrorImage}
+              onError={onErrorImageHandler}
             />
           ) : (
             <img
               src={defaultOwl}
               alt={`${name}님 프로필 이미지`}
               title={`${name}`}
-              onError={onErrorImage}
+              onError={onErrorImageHandler}
             />
           )}
         </figure>

@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { ReactComponent as Camera } from '../../../assets/img/camera.svg';
-import { onErrorImage } from '../../../utils';
+import { onErrorImageHandler } from '../../../utils';
 
 import styles from './LetterPicture.module.scss';
 
@@ -48,7 +48,7 @@ const LetterPicture = ({
       role="presentation"
       onClick={onClick && onClick.bind(null, pic)}
     >
-      <img src={pic} alt="첨부 이미지" onError={onErrorImage} />
+      <img src={pic} alt="첨부 이미지" onError={onErrorImageHandler} />
     </div>
   );
 };
