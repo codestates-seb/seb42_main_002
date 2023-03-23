@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { getCookie } from '../cookie';
+import { toast } from '../toast';
 
 export const instance = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
@@ -20,5 +21,22 @@ instance.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
+  }
+);
+
+instance.interceptors.response.use(
+  (config) => {
+    return config;
+  },
+  (error) => {
+    return new Promise((resolve, reject) => {
+      if (error.response.status === 401 && error.config) {
+        toast.error('로그인에 실패하였습니다');
+      }
+      if (error.response.status === 404 && error.config) {
+        toast.error(error.response.data.message || '요청에 실패하였습니다');
+      }
+      return reject(error);
+    });
   }
 );

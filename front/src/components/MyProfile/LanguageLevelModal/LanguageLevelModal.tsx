@@ -7,7 +7,7 @@ import {
   userLanguageNationState,
   userLanguageState,
 } from '../../../recoil/atoms/user/userLanguage';
-import { LanguageDataType, LANGUAGE_CODE } from '../../../utils';
+import { LanguageDataType, LANGUAGE_CODE, toast } from '../../../utils';
 import { PATCH } from '../../../utils/axios';
 import Flex from '../../Common/Flex/Flex';
 import LabelButton from '../../Common/LabelButton/LabelButton';
@@ -84,7 +84,7 @@ const LanguageLevelModal = ({
       });
       if (response) {
         setSelectedUserLanguages(changeLanguages);
-        console.log('언어 수정 완료');
+        toast.success('수정 완료되었습니다!');
       }
     } catch (error) {
       console.log(error);
