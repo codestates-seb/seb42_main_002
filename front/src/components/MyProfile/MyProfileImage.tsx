@@ -63,6 +63,7 @@ const MyProfileImage = ({ onChangeLocation }: MyProfileImageProps) => {
 
       if (response) {
         setPhotoURL(null);
+        setIsOpenModal(false);
       }
     } catch (error) {
       console.log('error');

@@ -53,7 +53,6 @@ const NewLetterWrapper = () => {
     }));
   };
 
-  // TODO : 이미지 추가 로직 변경
   const pictureAddHandler = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
