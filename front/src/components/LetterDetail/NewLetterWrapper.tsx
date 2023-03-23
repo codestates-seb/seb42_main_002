@@ -20,7 +20,6 @@ const NewLetterWrapper = () => {
    */
   const postNewLetter = async (letter: newLetterType) => {
     try {
-      // const response = await POST(`/letters/${newLetter.memberId}`, letter);
       const response = await POST(`/users/me/letters`, {
         body: letter.body,
         type: letter.type,

@@ -10,7 +10,6 @@ const MainLetter = () => {
 
   const getArrivedLetterCount = async () => {
     try {
-      // const { data, status } = await GET('/letters/arrived');
       const { data, status } = await GET('/users/me/letters/arrived');
       if (status === 200 && data) {
         setArrivedLetterCount(data.count);

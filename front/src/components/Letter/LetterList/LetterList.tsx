@@ -22,9 +22,6 @@ const LetterList = () => {
   const getUserLetterList = async (memberId: number, page: number) => {
     if (isStopRef.current) return;
     try {
-      // const { data } = await GET(
-      //   `letters/members/${memberId}?page=${page}&size=10`
-      // );
       const { data } = await GET(
         `users/me/letters?target=${memberId}?page=${page}&size=10`
       );
