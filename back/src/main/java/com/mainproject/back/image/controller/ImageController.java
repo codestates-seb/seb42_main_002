@@ -25,6 +25,7 @@ public class ImageController {
   public ResponseEntity<Object> uploadFile(
       @RequestParam("type") String type,
       @RequestPart(value = "image") MultipartFile multipartFile) {
+    log.info("## type: {}", type);
     log.info("## {} 업로드: {}", type, multipartFile.getOriginalFilename());
     ImageDto imageDto = imageService.uploadFiles(type, multipartFile);
     return ResponseEntity.ok().body(imageDto);
