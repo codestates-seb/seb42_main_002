@@ -39,7 +39,9 @@ const LetterDetailWrapper = () => {
    */
   const getDetailLetter = async () => {
     try {
-      const { data } = await GET(`/letters/${letterId}`);
+      // const { data } = await GET(`/letters/${letterId}`);
+      const { data } = await GET(`/users/me/letters?letter=${letterId}`);
+
       setSelectedLetter(data);
       setLetter(data);
       setSelectLanguage({ ...selectLanguage, content: data.body });
