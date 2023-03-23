@@ -6,9 +6,10 @@ import {
   useCallback,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { userLocationState, userState } from '../recoil/atoms';
-import { SignInData, UserData } from '../utils';
+import { SignInData, toast, UserData } from '../utils';
 import { GET, POST } from '../utils/axios';
 import { getCookie, removeCookie, setCookie } from '../utils/cookie';
 
@@ -59,7 +60,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   // 본인 정보 얻기
   const getCurrentUserInfo = useCallback(async (): Promise<UserData | null> => {
     try {
-      const { data } = await GET('/members');
+      const { data } = await GET('/users/me');
       if (data) {
         setUserInfo(data);
         return data;
@@ -80,6 +81,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         } else {
           navigate('/main');
         }
+        toast.success('로그인에 성공하였습니다!');
       }
     } catch (error) {
       console.error(error);
@@ -90,6 +92,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     setUserInfo(null);
     selectUserLocation(null);
     removeCookie(TOKEN_NAME);
+    toast.success('로그아웃에 성공하였습니다!');
     navigate('/', { replace: true });
   };
 

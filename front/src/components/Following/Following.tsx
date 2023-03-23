@@ -11,6 +11,7 @@ import Flex from '../Common/Flex/Flex';
 import Empty from '../Common/Empty/Empty';
 import useInfiniteScroll from '../../hooks/useInfiniteScroll';
 import styles from './Following.module.scss';
+import LastInfinite from '../Common/LastInfinite/LastInfinite';
 
 const Following = () => {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ const Following = () => {
   const getFollowings = async (page: number) => {
     if (isStopRef.current) return;
     try {
-      const { data } = await GET(`/follows/following?page=${page}&size=10`);
+      const { data } = await GET(`/users/me/follows?page=${page}&size=10`);
       if (data) {
         setFollowings((prev) => [...prev, ...data.content]);
         isStopRef.current = data.last;
@@ -89,7 +90,7 @@ const Following = () => {
                 </UserCard>
               ))}
           </ul>
-          <div ref={sentinelRef}></div>
+          <LastInfinite text="마지막 친구 입니다." ref={sentinelRef} />
         </Flex.Col>
       </Flex>
     </>
