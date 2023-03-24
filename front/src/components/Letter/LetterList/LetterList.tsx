@@ -1,46 +1,49 @@
-import { useEffect, useRef, useState } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { newLetterState, selectedUserInfoState } from '../../../recoil/atoms';
+import { Suspense, useEffect } from 'react';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+  letterListState,
+  newLetterState,
+  selectedUserInfoState,
+} from '../../../recoil/atoms';
 import { SlEnvolopeLetter } from 'react-icons/sl';
 import { useNavigate } from 'react-router-dom';
-import { GET } from '../../../utils/axios';
-import { LetterDataType } from '../../../utils';
 import Letter from '../Letter/Letter';
 import LetterUserCard from '../LetterUserCard/LetterUserCard';
-import Empty from '../../Common/Empty/Empty';
-import useInfiniteScroll from '../../../hooks/useInfiniteScroll';
 import styles from './LetterList.module.scss';
-import LastInfinite from '../../Common/LastInfinite/LastInfinite';
+import { letterPagiNationState } from '../../../recoil/atoms/pagination';
+import { LetterListStateType } from '../../../utils';
+import InnerSpinner from '../../Common/Spinner/InnerSpinner';
+import NextLetterList from './NextLetterList';
 
 const LetterList = () => {
   const navigate = useNavigate();
   const selectedUser = useRecoilValue(selectedUserInfoState);
   const setNewLetter = useSetRecoilState(newLetterState);
-  const [userLetterList, setUserLetterList] = useState<LetterDataType[]>([]);
-  const pageRef = useRef<number>(0);
-  const isStopRef = useRef<boolean>(false);
+  const [letterList, setLetterList] = useRecoilState(letterListState);
+  const setPagination = useSetRecoilState(letterPagiNationState);
 
-  const getUserLetterList = async (memberId: number, page: number) => {
-    if (isStopRef.current) return;
-    try {
-      const { data } = await GET(
-        `users/me/letters?target=${memberId}&page=${page}&size=10`
-      );
-      isStopRef.current = data.last;
-      setUserLetterList((prev) => [...prev, ...data.content]);
-    } catch (error) {
-      console.log('error');
-      // TODO: ERROR 처리 방법
-    }
+  const addRecentData = (data: LetterListStateType) => {
+    setLetterList((prev) => ({
+      content: [...prev.content, ...data.content],
+      isStop: data.isStop,
+    }));
   };
 
-  const sentinelRef = useInfiniteScroll(async (page: number) => {
-    if (!selectedUser.memberId) {
-      return;
-    }
-    await getUserLetterList(selectedUser.memberId, page);
-    pageRef.current++;
-  }, pageRef.current);
+  const resetList = () => {
+    setLetterList({
+      content: [],
+      isStop: false,
+    });
+    setPagination(0);
+  };
+
+  /**
+   * @description 페이지 이동 시, 초기화
+   */
+  useEffect(() => {
+    resetList();
+    return resetList;
+  }, []);
 
   useEffect(() => {
     // 리다이렉트
@@ -57,17 +60,10 @@ const LetterList = () => {
     }));
   }, []);
 
-  if (userLetterList.length === 0) {
-    return (
-      <>
-        <Empty title="아직 편지가 없어요.">
-          <SlEnvolopeLetter className={styles.icon} size={'6rem'} />
-        </Empty>
-        <div ref={sentinelRef}></div>
-      </>
-    );
-  }
-
+  const emptyProps = {
+    title: '아직 편지가 없어요.',
+    icon: <SlEnvolopeLetter className={styles.icon} size={'6rem'} />,
+  };
   return (
     <>
       <LetterUserCard
@@ -79,7 +75,7 @@ const LetterList = () => {
         cursor={false}
       />
       <ul className={styles.letter_wrapper}>
-        {userLetterList.map((letter) => (
+        {letterList.content.map((letter) => (
           <Letter
             selectedUser={selectedUser.name}
             sender={letter.sender.name}
@@ -93,6 +89,14 @@ const LetterList = () => {
             letterId={letter.letterId}
           />
         ))}
+        {/* 새로 불러오는 List */}
+        <Suspense fallback={<InnerSpinner size="sm" />}>
+          <NextLetterList
+            addRecentData={addRecentData}
+            empty={emptyProps}
+            endText="마지막 스크롤 입니다."
+          ></NextLetterList>
+        </Suspense>
       </ul>
     </>
   );

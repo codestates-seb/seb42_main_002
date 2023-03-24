@@ -19,14 +19,13 @@ const LetterUserList = () => {
   const navigate = useNavigate();
 
   const addRecentData = (data: LetterUserListStateType) => {
-    console.log('저장할 데이터', data);
     setUserList((prev) => ({
       content: [...prev.content, ...data.content],
       isStop: data.isStop,
     }));
   };
 
-  const resetBlackList = () => {
+  const resetList = () => {
     setUserList({
       content: [],
       isStop: false,
@@ -38,7 +37,8 @@ const LetterUserList = () => {
    * @description 페이지 이동 시, 초기화
    */
   useEffect(() => {
-    return resetBlackList;
+    resetList();
+    return resetList;
   }, []);
 
   const onClickHandler = (

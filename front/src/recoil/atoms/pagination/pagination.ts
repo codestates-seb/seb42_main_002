@@ -9,3 +9,8 @@ export const pageNationState = atom<number>({
   key: 'pageNationState',
   default: 0,
 });
+
+export const letterPagiNationState = atom<number>({
+  key: 'letterPagiNationState',
+  default: 0,
+});

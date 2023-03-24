@@ -1,6 +1,6 @@
 import { atom } from 'recoil';
-
 import {
+  LetterListStateType,
   newLetterType,
   SeletedLetterDataType,
 } from './../../../utils/types/letter/letter.type';
@@ -64,7 +64,7 @@ export const selectedPictureIdx = atom<number>({
  * @description 편지를 주고받은 유저 리스트
  */
 export const letterUserListState = atom<LetterUserListStateType>({
-  key: 'letterUserList',
+  key: 'letterUserListState',
   default: {
     content: [],
     isStop: false,
@@ -74,7 +74,7 @@ export const letterUserListState = atom<LetterUserListStateType>({
 /**
  * @description 특정 유저와 주고받은 편지 리스트
  */
-export const letterListState = atom<LetterUserListStateType>({
+export const letterListState = atom<LetterListStateType>({
   key: 'letterListState',
   default: {
     content: [],
