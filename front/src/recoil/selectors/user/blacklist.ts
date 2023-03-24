@@ -17,7 +17,7 @@ export const blackListSeletor = selector({
     }
 
     try {
-      const { data } = await GET(`/users/me/blocks?page=${page}&size=5`);
+      const { data } = await GET(`/users/me/blocks?page=${page}&size=10`);
       return {
         content: data.content, // 최신 데이터만
         isStop: data.last, // 끝 여부
