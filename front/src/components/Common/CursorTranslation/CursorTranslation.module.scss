@@ -1,7 +1,7 @@
 .button {
   position: absolute;
-  width: 30px;
-  height: 30px;
+  width: 1.875rem;
+  height: 1.875rem;
   cursor: pointer;
   background-image: url(../../../assets/img/Translate_icon.svg);
   background-repeat: no-repeat;
@@ -21,11 +21,11 @@
   @extend .button;
   cursor: auto;
   background-image: none;
-  width: 160px;
-  min-height: 160px;
+  width: 10rem;
+  min-height: 10rem;
   background-color: white;
   box-shadow: var(--default-box-shadow);
-  border-radius: 4px;
+  border-radius: 0.25rem;
   padding: 0.625rem;
   display: flex;
   align-items: left;
@@ -33,17 +33,17 @@
   p {
     width: 100%;
     max-height: 30%;
-    font-size: 12px;
+    font-size: 0.75rem;
     margin-bottom: 0.3rem;
     overflow-y: auto;
-    min-height: 20px;
+    min-height: 1.25rem;
   }
 }
 .select_languge {
   font-size: 0.75rem;
   background-color: var(--button-primary-color);
   color: var(--white);
-  border-radius: 4px;
+  border-radius: 0.25rem;
   margin-bottom: 0.3rem;
   margin-top: 0.4rem;
 }
@@ -53,7 +53,7 @@
 .modal_btn {
   background-color: var(--active-color);
   width: 100%;
-  padding: 6px;
+  padding: 0.375rem;
   border-radius: 0.25rem;
   color: var(--white);
 }
