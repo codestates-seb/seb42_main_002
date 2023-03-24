@@ -19,6 +19,7 @@ import {
 import { POST } from '../../utils/axios';
 import { useNavigate } from 'react-router-dom';
 import AlertModal from '../Common/Modal/AlertModal';
+import Button from '../Common/Button/Button';
 
 type UserDataType = {
   email: string;
@@ -198,7 +199,7 @@ const SignUpMain = (): JSX.Element => {
 
   async function signupRequest(userData: UserDataType) {
     try {
-      const response = await POST('/members', userData);
+      const response = await POST('/users', userData);
       setIsSuccess(true);
     } catch (error) {
       console.log(error);
@@ -349,9 +350,9 @@ const SignUpMain = (): JSX.Element => {
         >
           <AiOutlineLock className={styles.icon} />
         </InputForm>
-        <button type="submit" className={styles.signUp_Btn}>
+        <Button variant="primary" size="lg" full type="submit">
           회원가입
-        </button>
+        </Button>
       </form>
     </>
   );

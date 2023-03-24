@@ -20,16 +20,20 @@ import BlackListPage from './pages/BlackListPage';
 import ProfilePage from './pages/ProfilePage';
 import SearchPage from './pages/SearchPage';
 import StartPage from './pages/StartPage';
+import NotFoundPage from './pages/NotFoundPage';
+import RouterLayout from './components/Layouts/RouterLayout';
+import { RouterElement } from './utils';
 
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
-import NotFoundPage from './pages/NotFoundPage';
-import RouterLayout from './components/Layouts/RouterLayout';
-import { RouterElement } from './utils';
-//dwa
+
+// Import React Toast styles
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const routerData: RouterElement[] = [
   {
     path: '/',
@@ -236,6 +240,7 @@ function App() {
   return (
     <>
       <RouterProvider router={routers} />
+      <ToastContainer />
     </>
   );
 }

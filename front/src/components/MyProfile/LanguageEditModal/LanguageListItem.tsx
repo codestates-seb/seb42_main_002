@@ -8,6 +8,7 @@ import {
   userLanguageState,
 } from '../../../recoil/atoms';
 import { userLanguageSeletor } from '../../../recoil/selectors';
+import { toast } from '../../../utils';
 import { PATCH } from '../../../utils/axios';
 import { langTransformer } from '../../../utils/common';
 import { LANGUAGE_CODE } from '../../../utils/enums/common/common.enum';
@@ -35,13 +36,17 @@ const confirmRemoveLanguageaModal = ({
     const filterdLanguages = selectedUserLanguages.filter(
       (lang) => lang.nation !== selectedUserLanguageNation
     );
+    if (filterdLanguages.length === 0) {
+      toast.error('언어를 하나이상 선택해주세요');
+      return;
+    }
     try {
-      const response = await PATCH('/members', {
+      const response = await PATCH('/users/me', {
         language: filterdLanguages,
       });
       if (response) {
         setSelectedUserLanguages(filterdLanguages);
-        console.log('언어 삭제');
+        toast.success('삭제 완료되었습니다!');
       }
     } catch (error) {
       console.log(error);

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import useModals from '../../../hooks/useModals';
 import {
@@ -53,14 +54,18 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
   };
 
   const updateTag = async () => {
+    if (changeTags.length === 0) {
+      toast.error('태그를 하나이상 선택해주세요');
+      return;
+    }
     try {
       const requestData = changeTags.map((tag) => tag.name);
-      const response = await PATCH('/members', {
+      const response = await PATCH('/users/me', {
         tag: requestData,
       });
       if (response) {
         setSelectedUserTags(changeTags);
-        console.log('태그 설정 완료');
+        return true;
       }
     } catch (error) {
       console.log(error);
@@ -69,12 +74,11 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
 
   const updateLocation = async () => {
     try {
-      const response = await PATCH('/members', {
+      const response = await PATCH('/users/me', {
         location: selectedUserLocationValue,
       });
       if (response) {
         setSelectedUserLocation(selectedUserLocationValue);
-        console.log('국가 설정 완료');
       }
     } catch (error) {
       console.log(error);
@@ -83,11 +87,11 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
 
   const updateLanguage = async () => {
     try {
-      const response = await PATCH('/members', {
+      const response = await PATCH('/users/me', {
         language: selectedUserLangauges,
       });
       if (response) {
-        console.log('언어 설정 완료');
+        toast.success('설정 완료되었습니다!');
       }
     } catch (error) {
       console.log(error);
@@ -98,16 +102,25 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
     if (onSubmit) {
       if (userInfo?.location === null) {
         // 첫 설정 일때
-        Promise.all([updateLocation(), updateLanguage(), updateTag()]);
+        Promise.all([updateLocation(), updateLanguage(), updateTag()])
+          .then((res) => {
+            if (res) {
+              toast.success('설정 완료되었습니다!');
+            }
+          })
+          .catch((error) => console.error(error));
         // 첫 설정 후 전체 모달 닫고 Welcome 페이지로 이동
         closeModal(LocationEditModal);
         closeModal(LanguageEditModal);
         navigate('/welcome');
       } else {
         // 수정 일때
-        updateTag();
+        const response = await updateTag();
+        if (response) {
+          toast.success('수정 완료되었습니다!');
+          onClose && onClose();
+        }
       }
-      onClose && onClose();
     }
   };
 

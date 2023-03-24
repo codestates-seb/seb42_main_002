@@ -6,7 +6,7 @@ import {
   userLocationState,
   userState,
 } from '../../../recoil/atoms';
-import { LocationIcons, locationTypes } from '../../../utils';
+import { LocationIcons, locationTypes, toast } from '../../../utils';
 import { PATCH } from '../../../utils/axios';
 import { locationTransformer } from '../../../utils/common';
 import {
@@ -39,12 +39,12 @@ const LocationEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
 
   const updateLocation = async () => {
     try {
-      const response = await PATCH('/members', {
+      const response = await PATCH('/users/me', {
         location: changeLocation,
       });
       if (response) {
         setSelectedUserLocation(changeLocation);
-        console.log('국가 수정 완료');
+        toast.success('수정 완료되었습니다!');
       }
     } catch (error) {
       console.log(error);

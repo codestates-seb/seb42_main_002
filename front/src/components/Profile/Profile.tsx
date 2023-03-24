@@ -35,7 +35,7 @@ const Profile = () => {
    */
   const getUser = async () => {
     try {
-      const response = await GET(`/members/${memberId}`);
+      const response = await GET(`/users/${memberId}`);
       if (response.data) {
         const userInfo = response.data;
         setUserInfo(userInfo);
@@ -57,7 +57,7 @@ const Profile = () => {
    */
   const postFollowing = async (followingId: number) => {
     try {
-      const request = await POST(`follows`, {
+      const request = await POST(`/users/me/follows`, {
         followingId: followingId,
       });
       if (request) {
@@ -74,7 +74,7 @@ const Profile = () => {
    */
   const deleteFollowing = async (followingId: number) => {
     try {
-      const request = await DELETE(`/follows/${followingId}`);
+      const request = await DELETE(`/users/me/follows?target=${followingId}`);
       if (request) {
         setChangeFollowing((prevState) => !prevState);
       }
@@ -89,7 +89,7 @@ const Profile = () => {
    */
   const postBlockUser = async (targetId: number) => {
     try {
-      const request = await POST(`/blocks`, {
+      const request = await POST(`/users/me/blocks`, {
         targetId: targetId,
       });
       if (request) {
@@ -106,7 +106,7 @@ const Profile = () => {
    */
   const deleteBlockUser = async (targetId: number) => {
     try {
-      const request = await DELETE(`/blocks/${targetId}`);
+      const request = await DELETE(`/users/me/blocks?target=${targetId}`);
       if (request) {
         setChangeBlocks((prevState) => !prevState);
       }

@@ -39,7 +39,8 @@ const LetterDetailWrapper = () => {
    */
   const getDetailLetter = async () => {
     try {
-      const { data } = await GET(`/letters/${letterId}`);
+      const { data } = await GET(`/users/me/letters?letter=${letterId}`);
+
       setSelectedLetter(data);
       setLetter(data);
       setSelectLanguage({ ...selectLanguage, content: data.body });
@@ -101,8 +102,7 @@ const LetterDetailWrapper = () => {
       <LetterContent
         receiver={letter.receiver}
         body={translatedLanguage}
-        // 임의
-        type="1"
+        type={letter.type}
       />
       {/* 편지 사진 */}
       <LetterPictureWrapper

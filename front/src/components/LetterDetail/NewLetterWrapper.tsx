@@ -1,18 +1,19 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
-import { newLetterState } from '../../recoil/atoms';
-import { newLetterType } from '../../utils';
-import { POST } from '../../utils/axios';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import useModals from '../../hooks/useModals';
+import { letterTypeState, newLetterState } from '../../recoil/atoms';
+import { newLetterType, toast } from '../../utils';
+import { POST, POST_IMG } from '../../utils/axios';
 import Button from '../Common/Button/Button';
+import AlertModal, { AlertModalProps } from '../Common/Modal/AlertModal';
 import NewLetterContent from './LetterContent/NewLetterContent';
 import LetterPictureWrapper from './LetterPicture/LetterPictureWrapper';
 import LetterType from './LetterType/LetterType';
-import styles from './NewLetterWrapper.module.scss';
 
 const NewLetterWrapper = () => {
+  const { openModal } = useModals();
   const [newLetter, setNewLetter] = useRecoilState(newLetterState);
-  const [isValid, setIsValid] = useState<boolean>(true);
+  const selectedLetterType = useRecoilValue(letterTypeState);
   const navigate = useNavigate();
 
   /**
@@ -20,8 +21,11 @@ const NewLetterWrapper = () => {
    */
   const postNewLetter = async (letter: newLetterType) => {
     try {
-      const response = await POST(`/letters/${newLetter.memberId}`, letter);
-      // TODO: 서버에서 CORS 요청 수정 후에 location 설정
+      const response = await POST(`/users/me/letters`, {
+        body: letter.body,
+        type: selectedLetterType,
+        receiverId: letter.memberId,
+      });
       const location =
         response.headers.location && response.headers.location.split('/');
 
@@ -54,27 +58,60 @@ const NewLetterWrapper = () => {
     }));
   };
 
-  // TODO : 이미지 추가 로직 변경
-  const pictureAddHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const reader = new FileReader();
+  const pictureAddHandler = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = event.target.files && event.target.files[0];
-
-    reader.onload = () => {
+    const formData = new FormData();
+    formData.append('type', 'photos');
+    file && formData.append('image', file);
+    try {
+      const { data } = await POST_IMG(
+        '/users/me/letters/photos/upload',
+        formData,
+        {
+          headers: {
+            'Contest-Type': 'multipart/form-data',
+          },
+        }
+      );
       setNewLetter((prev) => ({
         ...prev,
-        photoUrl: [...prev.photoUrl, String(reader.result)],
+        photoUrl: [...prev.photoUrl, data.uploadUrl],
       }));
-    };
-    file && reader.readAsDataURL(file);
+    } catch (error) {
+      console.log('error');
+    }
   };
 
-  const onSubmitHandler = () => {
+  const confirmSendLetterModal = ({ onSubmit, onClose }: AlertModalProps) => {
+    const onSubmitHandler = () => {
+      postNewLetter(newLetter);
+      onSubmit && onSubmit();
+    };
+
+    return (
+      <>
+        <AlertModal
+          title="편지 전송"
+          labelClose="닫기"
+          labelSubmit="확인"
+          onSubmit={onSubmitHandler}
+          onClose={onClose}
+        >
+          <p className="text_center">편지를 정말 보내시겠습니까?</p>
+        </AlertModal>
+      </>
+    );
+  };
+
+  const confirmSendLetterModalHandler = () => {
     // 유효성 검사
     if (!newLetter.body.trim()) {
-      setIsValid(false);
+      toast.error('편지 내용을 입력해 주세요');
       return;
     }
-    postNewLetter(newLetter);
+    openModal(confirmSendLetterModal);
   };
 
   return (
@@ -82,10 +119,7 @@ const NewLetterWrapper = () => {
       {/* 편지지 선택 */}
       <LetterType />
       {/* 편지 내용 */}
-      <NewLetterContent receiver={newLetter.receiver} />
-      {!isValid && (
-        <div className={styles.valid}>편지 내용을 입력해 주세요.</div>
-      )}
+      <NewLetterContent receiver={newLetter.receiver} type={newLetter.type} />
       {/* 이미지 선택 */}
       <LetterPictureWrapper
         pictures={newLetter.photoUrl}
@@ -94,7 +128,12 @@ const NewLetterWrapper = () => {
         isRead={false}
       />
       {/* 편지 보내기 */}
-      <Button variant="primary" size="lg" full onClick={onSubmitHandler}>
+      <Button
+        variant="primary"
+        size="lg"
+        full
+        onClick={confirmSendLetterModalHandler}
+      >
         편지 보내기
       </Button>
     </>
