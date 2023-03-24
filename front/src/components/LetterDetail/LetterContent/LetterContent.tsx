@@ -1,3 +1,4 @@
+import CursorTranslation from '../../Common/CursorTranslation/CursorTranslation';
 import styles from './LetterContent.module.scss';
 
 type LetterContentProps = {
@@ -14,7 +15,9 @@ const LetterContent = ({ receiver, body, type }: LetterContentProps) => {
         <span className={styles.dear}>Dear</span>
         <span className={styles.receiver}>{receiver}</span>
       </div>
-      <div className={styles.content}>{body}</div>
+      <div className={styles.content}>
+        <CursorTranslation>{body}</CursorTranslation>
+      </div>
     </div>
   );
 };

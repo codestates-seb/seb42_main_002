@@ -11,6 +11,8 @@ import PrevButton from '../Common/PrevButton/PrevButton';
 import Footer from './Footer/Footer';
 import Header from './Header/Header';
 import styles from './BaseLayout.module.scss';
+import { useRecoilState } from 'recoil';
+import { IsModalOpen } from '../../recoil/atoms/Translate/index';
 
 type BaseLayouProps = DefaultProps & {
   isAuth?: boolean;
@@ -58,11 +60,17 @@ const BaseLayout = ({
     fetchUserInfo();
   }, [children]);
 
+  const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpen);
+
   return (
     <main
       className={classNames(styles.baselayout, {
         [styles.has_bottom_nav]: !isFirstLogin,
       })}
+      onClick={() => {
+        if (isModalOpen) setIsModalOpen(false);
+      }}
+      role="presentation"
     >
       <Header />
       <article
