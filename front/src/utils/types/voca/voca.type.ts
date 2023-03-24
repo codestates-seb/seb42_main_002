@@ -7,3 +7,8 @@ export type VocaDataType = {
   nation: string | LANGUAGE_CODE;
   createdAt?: string;
 };
+
+export type vocaListStateType = {
+  content: VocaDataType[];
+  isStop: boolean;
+};

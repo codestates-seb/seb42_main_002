@@ -1,55 +1,45 @@
-import { useRef, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { TbVocabulary } from 'react-icons/tb';
-import { VocaDataType } from '../../utils/types/voca';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { VocaDataType, vocaListStateType } from '../../utils/types/voca';
+import { DELETE } from '../../utils/axios';
+import {
+  deleteVocaState,
+  selectedVocaState,
+  vocaListState,
+} from '../../recoil/atoms/voca';
+import { pageNationState } from '../../recoil/atoms/pagination';
+import InnerSpinner from '../Common/Spinner/InnerSpinner';
+import AlertModal from '../Common/Modal/AlertModal';
+import RecentVocaList from './RecentVocaList';
 import VocaCard from './VocaCard/VocaCard';
 import Button from '../Common/Button/Button';
 import VocaModal from './VocaModal/VocaModal';
-import { DELETE, GET } from '../../utils/axios';
-import { deleteVocaState, selectedVocaState } from '../../recoil/atoms/voca';
-import AlertModal from '../Common/Modal/AlertModal';
-import useInfiniteScroll from '../../hooks/useInfiniteScroll';
-import LastInfinite from '../Common/LastInfinite/LastInfinite';
-import Empty from '../Common/Empty/Empty';
 import styles from './Voca.module.scss';
 
 const Voca = () => {
   const setSelectedVoca = useSetRecoilState(selectedVocaState);
+  const setPagination = useSetRecoilState(pageNationState);
+  const [vocaList, setVocaList] = useRecoilState(vocaListState);
   const deleteVocaId = useRecoilValue(deleteVocaState);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
-  const [vocaList, setVocaList] = useState<VocaDataType[]>([]);
-  const pageRef = useRef<number>(0);
-  const isStopRef = useRef<boolean>(false);
 
-  /**
-   * @description Vocabs API
-   */
-  const getVocaList = async (page: number) => {
-    if (isStopRef.current) return;
-
-    try {
-      const { data } = await GET(`/vocabs?page=${page}&size=10`);
-      isStopRef.current = data.last;
-      const formattedVacaList = data.content.map((voca: VocaDataType) => ({
-        vocabId: voca.vocabId,
-        meaning: voca.meaning,
-        word: voca.word,
-        nation: voca.nation,
-      }));
-
-      setVocaList((prev) => [...prev, ...formattedVacaList]);
-    } catch (error) {
-      console.log(error);
-    }
+  const addRecentVocaList = (data: vocaListStateType) => {
+    setVocaList((prev) => ({
+      content: [...prev.content, ...data.content],
+      isStop: data.isStop,
+    }));
   };
 
-  const sentinelRef = useInfiniteScroll(async (page: number) => {
-    await getVocaList(page);
-    pageRef.current++;
-  }, pageRef.current);
+  const resetVocaList = () => {
+    setVocaList({
+      content: [],
+      isStop: false,
+    });
+    setPagination(0);
+  };
 
   /**
    * @description Vocabs 삭제 API
@@ -58,17 +48,20 @@ const Voca = () => {
     if (!deleteVocaId) return;
     try {
       await DELETE(`vocabs/${deleteVocaId}`);
-      const newVocaList = vocaList.filter(
-        (voca: VocaDataType) => voca.vocabId !== deleteVocaId
-      );
-      setVocaList(newVocaList);
-
       setIsAlertOpen(false);
+      resetVocaList();
     } catch (error) {
       // TODO: 에러 처리
       console.log(error);
     }
   };
+
+  /**
+   * @description 페이지 이동 시, 초기화
+   */
+  useEffect(() => {
+    return resetVocaList;
+  }, []);
 
   const onAddModalHandler = () => {
     setIsOpenModal(true);
@@ -85,13 +78,13 @@ const Voca = () => {
     setIsAlertOpen(true);
   };
 
-  const setNewVocaList = (newVoca: VocaDataType) => {
-    setVocaList((prev) => [...prev, newVoca]);
+  const setNewVocaList = () => {
+    resetVocaList();
   };
 
   const setEditVocaList = (editVoca: VocaDataType) => {
     setVocaList((prev) => {
-      return prev.map((voca: VocaDataType) =>
+      const newList = prev.content.map((voca: VocaDataType) =>
         voca.vocabId !== editVoca.vocabId
           ? voca
           : {
@@ -100,35 +93,13 @@ const Voca = () => {
               word: editVoca.word,
             }
       );
+
+      return {
+        ...prev,
+        content: newList,
+      };
     });
   };
-
-  if (vocaList.length === 0) {
-    return (
-      <>
-        {isOpenModal && (
-          <VocaModal
-            isEditMode={isEditMode}
-            onModalClose={() => setIsOpenModal(false)}
-            onAddNewVoca={setNewVocaList}
-            onAddEditVoca={setEditVocaList}
-          />
-        )}
-        <Empty title="등록된 단어가 없어요">
-          <TbVocabulary className={styles.icon} size={'6rem'} />
-        </Empty>
-        <Button
-          variant="primary"
-          size="md"
-          iconBtn
-          icon={<AiOutlinePlus />}
-          className={styles.button}
-          onClick={onAddModalHandler}
-        />
-        <div ref={sentinelRef}></div>
-      </>
-    );
-  }
 
   return (
     <>
@@ -154,7 +125,7 @@ const Voca = () => {
       )}
       {/* 단어 리스트 */}
       <ul className={styles.card_list}>
-        {vocaList.map((voca: VocaDataType) => (
+        {vocaList.content.map((voca: VocaDataType) => (
           <VocaCard
             key={voca.vocabId}
             vocabId={voca.vocabId}
@@ -165,6 +136,14 @@ const Voca = () => {
             nation={voca.nation}
           />
         ))}
+        {/* 새로 불러오는 VocaList */}
+        <Suspense fallback={<InnerSpinner size="sm" />}>
+          <RecentVocaList
+            onEdit={onEditModalHandler}
+            onDelete={onDeleteHandler}
+            addRecentData={addRecentVocaList}
+          />
+        </Suspense>
       </ul>
       <Button
         variant="primary"
@@ -174,7 +153,6 @@ const Voca = () => {
         className={styles.button}
         onClick={onAddModalHandler}
       />
-      <LastInfinite text="마지막 단어 입니다." ref={sentinelRef} />
     </>
   );
 };
