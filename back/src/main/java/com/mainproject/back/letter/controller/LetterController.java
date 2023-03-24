@@ -8,7 +8,6 @@ import com.mainproject.back.letter.entity.Letter;
 import com.mainproject.back.letter.mapper.LetterMapper;
 import com.mainproject.back.letter.service.LetterService;
 import com.mainproject.back.member.dto.MemberLetterDto;
-import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.service.MemberService;
 import com.mainproject.back.util.UriCreator;
 import com.mainproject.back.util.Util;
@@ -46,8 +45,8 @@ public class LetterController {
       Principal principal) {
     log.info("## 편지 보내기: {}", letterPostDto.getReceiverId());
 
-    Member member = memberService.findMemberByEmail(Util.checkPrincipal(principal));
-    letterPostDto.setSenderId(member.getMemberId());
+    Long memberId = memberService.findMemberIdByEmail(Util.checkPrincipal(principal));
+    letterPostDto.setSenderId(memberId);
 
     Letter letter = letterMapper.LetterPostDtoToLetter(letterPostDto);
     Letter savedLetter = letterService.createLetter(letter);
