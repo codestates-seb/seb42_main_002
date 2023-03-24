@@ -78,7 +78,7 @@ const LetterList = () => {
         memberId={selectedUser.memberId}
         cursor={false}
       />
-      <div className={styles.letter_wrapper}>
+      <ul className={styles.letter_wrapper}>
         {userLetterList.map((letter) => (
           <Letter
             selectedUser={selectedUser.name}
@@ -93,8 +93,7 @@ const LetterList = () => {
             letterId={letter.letterId}
           />
         ))}
-      </div>
-      <LastInfinite text="마지막 편지 입니다." ref={sentinelRef} />
+      </ul>
     </>
   );
 };

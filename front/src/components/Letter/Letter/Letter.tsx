@@ -68,7 +68,7 @@ const Letter = ({
   // 편지 열람이 불가능한 경우
   if (!body) {
     return (
-      <div className={`${styles.letter} ${styles.lock}`}>
+      <li className={`${styles.letter} ${styles.lock}`}>
         <div className={styles.open_time}>
           <span>{getLetterOpenTime(new Date(availableAt), 'KR')}</span>
         </div>
@@ -81,7 +81,7 @@ const Letter = ({
           </span>
         </div>
         <div className={styles.letter_info}>{sender}</div>
-      </div>
+      </li>
     );
   }
 
@@ -94,7 +94,7 @@ const Letter = ({
 
   // 편지 열람 가능한 경우
   return (
-    <div
+    <li
       className={styles.letter}
       onClick={clickLetterHandler}
       role="presentation"
@@ -117,7 +117,7 @@ const Letter = ({
         </span>
         {sender}
       </div>
-    </div>
+    </li>
   );
 };
 
