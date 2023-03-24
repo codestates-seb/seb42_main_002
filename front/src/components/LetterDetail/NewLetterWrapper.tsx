@@ -23,7 +23,7 @@ const NewLetterWrapper = () => {
       const response = await POST(`/users/me/letters`, {
         body: letter.body,
         type: letter.type,
-        receiver: letter.memberId,
+        receiverId: letter.memberId,
       });
       const location =
         response.headers.location && response.headers.location.split('/');
