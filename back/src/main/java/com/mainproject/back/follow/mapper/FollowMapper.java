@@ -16,10 +16,12 @@ public interface FollowMapper {
   }
 
   default FollowDto.Response followToFollowResponse(Follow follow) {
-    FollowDto.Response response =FollowDto.Response
+    FollowDto.Response response = FollowDto.Response
         .builder()
-        .following(MemberSimpleDto.builder().memberId(follow.getFollowing().getMemberId()).name(follow.getFollowing().getName()).build())
-            .follower(MemberSimpleDto.builder().memberId(follow.getFollower().getMemberId()).name(follow.getFollower().getName()).build())
+        .following(MemberSimpleDto.builder().memberId(follow.getFollowing().getMemberId())
+            .name(follow.getFollowing().getName()).memberStatus(follow.getFollowing().getMemberStatus()).build())
+        .follower(MemberSimpleDto.builder().memberId(follow.getFollower().getMemberId())
+            .name(follow.getFollower().getName()).memberStatus(follow.getFollower().getMemberStatus()).build())
 
         .build();
     return response;

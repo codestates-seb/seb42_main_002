@@ -67,9 +67,9 @@ public interface LetterMapper {
     Member receiver = letter.getReceiver();
     LetterListDto.LetterListDtoBuilder builder = LetterListDto.builder()
         .letterId(letter.getLetterId())
-        .sender(MemberSimpleDto.builder().memberId(sender.getMemberId())
+        .sender(MemberSimpleDto.builder().memberId(sender.getMemberId()).memberStatus(sender.getMemberStatus())
             .name(sender.getName()).build())
-        .receiver(MemberSimpleDto.builder().memberId(receiver.getMemberId())
+        .receiver(MemberSimpleDto.builder().memberId(receiver.getMemberId()).memberStatus(receiver.getMemberStatus())
             .name(receiver.getName()).build())
         .isRead(letter.getIsRead())
         .availableAt(letter.getAvailableAt())
