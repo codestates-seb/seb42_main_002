@@ -25,24 +25,25 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
       + "group by b.member_id order by count(*) desc", nativeQuery = true)
   Page<Member> findRecommended(@Param("memberId") long memberId, Pageable pageable);
 
-  @Query(value = "select m.* from member_tag t "
-      + "join member m on t.member_id = m.member_id "
-      + "where t.member_id != :memberId and t.tag_id in (:tags)"
-      + "group by t.member_id order by count(*) desc", nativeQuery = true)
-  Page<Member> getMemberByTags(@Param("tags") List<Long> tags, long memberId, Pageable pageable);
+  @Query(value = "select m.* from member m "
+      + "join member_tag mt on mt.tag_id in(:tags) "
+      + "where m.member_id != :memberId and m.member_id = mt.member_id "
+      + "group by m.member_id order by count(mt.member_tag_id) desc", nativeQuery = true)
+  List<Member> getMemberByTags(@Param("tags") List<Long> tags, @Param("memberId") long memberId);
+
 
   @Query(value = "select m.* from member m "
       + "join member_language ml on ml.language_id in(:languages) "
       + "join member_tag mt on mt.tag_id in(:tags) "
-      + "where m.member_id != :memberId group by m.member_id order by count(ml.member_language_id + mt.member_tag_id) desc", nativeQuery = true)
-  Page<Member> getMemberByTagsAndLang(@Param("tags") List<Long> tags,
-      @Param("languages") List<Long> languages, long memberId, Pageable pageable);
+      + "where m.member_id != :memberId and (m.member_id = ml.member_id or m.member_id = mt.member_id) "
+      + "group by m.member_id order by count(ml.member_language_id + mt.member_tag_id) desc", nativeQuery = true)
+  List<Member> getMemberByTagsAndLang(@Param("tags") List<Long> tags,
+      @Param("languages") List<Long> languages, @Param("memberId") long memberId);
 
   @Query(value =
-      "select m.* from member_language a join member_language b on a.language_id in (:languages) "
-          + "join member m on b.member_id = m.member_id "
-          + "where a.member_id != :memberId "
-          + "group by b.member_id order by count(*) desc", nativeQuery = true)
-  Page<Member> getMemberByLang(@Param("languages") List<Long> languages, long memberId,
-      Pageable pageable);
+      "select m.* from member m "
+          + "join member_language ml on ml.language_id in(:languages) "
+          + "where m.member_id != :memberId and m.member_id = ml.member_id "
+          + "group by m.member_id order by count(ml.member_language_id) desc", nativeQuery = true)
+  List<Member> getMemberByLang(@Param("languages") List<Long> languages, @Param("memberId") long memberId);
 }
