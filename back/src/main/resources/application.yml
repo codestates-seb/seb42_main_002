@@ -1,42 +1,72 @@
-spring:
-  profiles:
-    include : oauth
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+papago:
+  client-id: ${papago.clientId}
+  client-secret: ${papago.clientSecret}
 
----
 spring:
-  config:
-    activate:
-      on-profile: "local"
----
-spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${google.clientId}
+            client-secret: ${google.clientSecret}
+            scope: profile, email
+
+  s3:
+    bucket: ${s3.bucket}
+    access-key: ${s3.accessKey}
+    secret-key: ${s3.secretKey}
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 100MB
   datasource:
-    url: jdbc:mysql://localhost:3306/MPT
-    password: 1234
-    username: root
+    url: ${datasource.url}
+    password: ${datasource.password}
+    username: ${datasource.username}
     driver-class-name: com.mysql.cj.jdbc.Driver
-
   jpa:
     database-platform: org.hibernate.dialect.MySQL5Dialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     #ddl-auto: none
     properties:
       hibernate:
-        highlight_sql: true
-        show_sql: true
-        format_sql: true
+        #        highlight_sql: true
+        #        show_sql: true
+        #        format_sql: true
         default_batch_fetch_size: 100
     database: mysql
     generate-ddl: true
   #      open-in-view: false
+  config:
+    import: 'aws-parameterstore:'
 logging:
   level:
-    org.hibernate.sql: info
-  #    org.hibernate.type: trace
+    org.hibernate.sql: error
+    #    org.hibernate.type: trace
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error
 mail:
   address:
-    admin: admin@gmail.com
+    admin: ${admin.address}
 jwt:
-  key: zxcasdlqwealksjdioqywejkashdjkhj1k23hjkhsd87382h
+  key: ${jwt.key}
   access-token-expiration-minutes: 1440
   refresh-token-expiration-minutes: 1440
+
+aws:
+  paramstore:
+    name: mpt
+    enabled: true
+    profile-separator:
+    prefix: /config
