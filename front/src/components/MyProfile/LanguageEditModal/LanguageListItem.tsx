@@ -36,6 +36,10 @@ const confirmRemoveLanguageaModal = ({
     const filterdLanguages = selectedUserLanguages.filter(
       (lang) => lang.nation !== selectedUserLanguageNation
     );
+    if (filterdLanguages.length === 0) {
+      toast.error('언어를 하나이상 선택해주세요');
+      return;
+    }
     try {
       const response = await PATCH('/users/me', {
         language: filterdLanguages,
