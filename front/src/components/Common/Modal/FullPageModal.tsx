@@ -3,8 +3,6 @@ import { createPortal } from 'react-dom';
 import Button from '../Button/Button';
 import ButtonGroup from '../Button/ButtonGroup';
 import styles from './FullPageModal.module.scss';
-// TODO: 뒤로가기 버튼 & 닫기 버튼 리팩토링
-// import { ReactComponent as PrevButtonIcon } from '../../../assets/img/prev_button.svg';
 import { ReactComponent as CanceButtonlIcon } from '../../../assets/CancelIcon.svg';
 import { CSSTransition } from 'react-transition-group';
 import classNames from 'classnames';
