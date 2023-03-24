@@ -18,10 +18,15 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
   Optional<Long> findMemberIdByEmail(@Param("email") String email);
 
   // 공통된 태그 많은 순으로 정렬
-  @Query(value = "select m.* from member_tag a join member_tag b on a.tag_id = b.tag_id "
-      + "join member m on b.member_id = m.member_id "
-      + "where a.member_id = :memberId and b.member_id != :memberId and member_status = \"MEMBER_ACTIVE\" "
-      + "group by b.member_id order by count(b.member_tag_id) desc", nativeQuery = true)
+//  @Query(value = "select m.* from member_tag a join member_tag b on a.tag_id = b.tag_id "
+//      + "join member m on b.member_id = m.member_id "
+//      + "where a.member_id = :memberId and b.member_id != :memberId and member_status = \"MEMBER_ACTIVE\" "
+//      + "group by b.member_id order by count(*) desc", nativeQuery = true)
+  @Query(value = "select m.* from member m "
+      + "join member_tag t on t.tag_id in"
+      + "(select mt.tag_id from member_tag mt where mt.member_id = :memberId) "
+      + "where m.member_id != :memberId and t.member_id = m.member_id and m.member_status = \"MEMBER_ACTIVE\" "
+      + "group by m.member_id order by count(t.member_tag_id) desc", nativeQuery = true)
   List<Member> findRecommended(@Param("memberId") long memberId);
 
   @Query(value = "select m.* from member m "
