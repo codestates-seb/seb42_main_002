@@ -3,18 +3,18 @@ import styles from './CursorTranslation.module.scss';
 import { POST } from '../../../utils/axios';
 import { toast } from '../../../utils';
 import { useRecoilState } from 'recoil';
-import { IsModalOpen } from '../../../recoil/atoms/Translate/index';
+import { IsModalOpen, IsIconOpen } from '../../../recoil/atoms/Translate/index';
 
 export default function CursorTranslation({ children }: { children: string }) {
   const [selectedText, setSelectedText] = useState('');
   const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isDrag, setIsDrag] = useState(false);
   const [translateLanguge, setTranslateLanguge] = useState({
     content: '',
     targetNation: 'ko',
   });
   const [resultText, setResultText] = useState('');
   const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpen);
+  const [isIconOpen, setIsIconOpen] = useRecoilState(IsIconOpen);
 
   const handleMouseUp = (event: any) => {
     //onMouseUp event 타입 진짜모르겠네요..
@@ -37,15 +37,15 @@ export default function CursorTranslation({ children }: { children: string }) {
 
   const onClickHandler = () => {
     setIsModalOpen(true);
-    setIsDrag(false);
+    setIsIconOpen(false);
   };
 
   useEffect(() => {
     if (selectedText) {
-      setIsDrag(true);
+      setIsIconOpen(true);
       setTranslateLanguge({ ...translateLanguge, content: selectedText });
     } else {
-      setIsDrag(false);
+      setIsIconOpen(false);
     }
   }, [selectedText]);
 
@@ -93,7 +93,7 @@ export default function CursorTranslation({ children }: { children: string }) {
       <div
         className={styles.containner}
         onClick={() => {
-          setIsDrag(false);
+          setIsIconOpen(false);
           if (isModalOpen) {
             setIsModalOpen(false);
           }
@@ -101,7 +101,7 @@ export default function CursorTranslation({ children }: { children: string }) {
         role="presentation"
       >
         <div
-          className={isDrag ? styles.button : styles.hidden}
+          className={isIconOpen ? styles.button : styles.hidden}
           style={{ left: `${position.x}px`, top: `${position.y}px` }}
           role="presentation"
           onClick={onClickHandler}

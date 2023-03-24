@@ -12,7 +12,7 @@ import Footer from './Footer/Footer';
 import Header from './Header/Header';
 import styles from './BaseLayout.module.scss';
 import { useRecoilState } from 'recoil';
-import { IsModalOpen } from '../../recoil/atoms/Translate/index';
+import { IsModalOpen, IsIconOpen } from '../../recoil/atoms/Translate/index';
 
 type BaseLayouProps = DefaultProps & {
   isAuth?: boolean;
@@ -33,6 +33,8 @@ const BaseLayout = ({
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const setUserInfoProfile = useSetRecoilState(userState);
+  const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpen);
+  const [isIconOpen, setIsIconOpen] = useRecoilState(IsIconOpen);
 
   const fetchUserInfo = useCallback(async () => {
     const userInfo = await getCurrentUserInfo();
@@ -60,8 +62,6 @@ const BaseLayout = ({
     fetchUserInfo();
   }, [children]);
 
-  const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpen);
-
   return (
     <main
       className={classNames(styles.baselayout, {
@@ -69,6 +69,7 @@ const BaseLayout = ({
       })}
       onClick={() => {
         if (isModalOpen) setIsModalOpen(false);
+        if (isIconOpen) setIsIconOpen(false);
       }}
       role="presentation"
     >
