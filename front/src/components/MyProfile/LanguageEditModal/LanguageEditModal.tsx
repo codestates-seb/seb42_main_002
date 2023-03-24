@@ -1,8 +1,8 @@
+import { toast } from 'react-toastify';
 import { useRecoilValue } from 'recoil';
 import useModals from '../../../hooks/useModals';
 import { userLocationState, userState } from '../../../recoil/atoms';
 import { userLanguageState } from '../../../recoil/atoms/user/userLanguage';
-import { PATCH } from '../../../utils/axios';
 import Button from '../../Common/Button/Button';
 import FullPageModal, {
   FullPageModalProps,
@@ -28,6 +28,10 @@ const LanguageEditModal = ({ onClose }: FullPageModalProps) => {
   };
 
   const onSubmitHandler = () => {
+    if (selectedUserLanguages.length === 0) {
+      toast.error('언어를 하나이상 선택해주세요');
+      return;
+    }
     if (!selectedUserLocation) {
       // 첫 설정일 때
       openModal(TagEditModal);

@@ -54,6 +54,10 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
   };
 
   const updateTag = async () => {
+    if (changeTags.length === 0) {
+      toast.error('태그를 하나이상 선택해주세요');
+      return;
+    }
     try {
       const requestData = changeTags.map((tag) => tag.name);
       const response = await PATCH('/users/me', {
@@ -61,7 +65,7 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
       });
       if (response) {
         setSelectedUserTags(changeTags);
-        console.log('태그 설정 완료');
+        return true;
       }
     } catch (error) {
       console.log(error);
@@ -111,10 +115,12 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
         navigate('/welcome');
       } else {
         // 수정 일때
-        updateTag();
-        toast.success('수정 완료되었습니다!');
+        const response = await updateTag();
+        if (response) {
+          toast.success('수정 완료되었습니다!');
+          onClose && onClose();
+        }
       }
-      onClose && onClose();
     }
   };
 
