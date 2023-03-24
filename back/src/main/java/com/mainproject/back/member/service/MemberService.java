@@ -4,12 +4,11 @@ package com.mainproject.back.member.service;
 import com.mainproject.back.block.service.BlockService;
 import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.follow.service.FollowService;
-import com.mainproject.back.language.entity.Language;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.exception.MemberExceptionCode;
 import com.mainproject.back.member.repository.MemberRepository;
 import com.mainproject.back.security.utils.AuthorityUtils;
-import com.mainproject.back.tag.entity.Tag;
+import com.mainproject.back.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +20,6 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -127,29 +125,28 @@ public class MemberService {
             !blockIdList.contains(member.getMemberId()))
         .collect(Collectors.toList());
 
-    return new PageImpl<>(result, pageable, result.size());
+    return Util.ListToPage(result, pageable, null);
   }
 
-  public Page<Member> searchMembersByTag(List<Tag> tagList, List<Language> languageList,
+  public Page<Member> searchMembersByTag(List<Long> tagList, List<Long> languageList,
       Pageable pageable, long memberId) {
-    Page<Member> memberPage;
+    List<Member> memberList;
     if (tagList.isEmpty() && !languageList.isEmpty()) {
-      memberPage = memberRepository.getMemberByLang(languageList, pageable);
+      memberList = memberRepository.getMemberByLang(languageList, memberId);
     } else if (languageList.isEmpty() && !tagList.isEmpty()) {
-      memberPage = memberRepository.getMemberByTags(tagList, pageable);
+      memberList = memberRepository.getMemberByTags(tagList, memberId);
     } else {
-      memberPage = memberRepository.getMemberByTagsAndLang(tagList, languageList, pageable);
+      memberList = memberRepository.getMemberByTagsAndLang(tagList, languageList, memberId);
     }
 
     List<Long> blockIdList =
         memberId == 0 ? new ArrayList<>() : blockService.findBlockIdList(memberId);
 
-    List<Member> distinct = memberPage.stream().filter(distinctByKey(Member::getMemberId))
-        .filter(member -> member.getMemberId() != memberId)
+    List<Member> distinct = memberList.stream().filter(distinctByKey(Member::getMemberId))
         .filter(member -> !blockIdList.contains(member.getMemberId()))
         .collect(Collectors.toList());
 
-    return new PageImpl<>(distinct, pageable, distinct.size());
+    return Util.ListToPage(distinct, pageable, null);
   }
 
   public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {

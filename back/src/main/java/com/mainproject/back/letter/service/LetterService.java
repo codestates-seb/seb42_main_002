@@ -14,8 +14,8 @@ import com.mainproject.back.member.dto.MemberLetterDto;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.service.MemberService;
 import com.mainproject.back.util.ApiManager;
+import com.mainproject.back.util.Util;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -116,8 +115,6 @@ public class LetterService {
                       .createdAt(letter.getCreatedAt()).build())
               .build();
         }).collect(Collectors.toSet()));
-    int start = (int) pageable.getOffset();
-    int end = Math.min((start + pageable.getPageSize()), memberLetterDtoSet.size());
     Comparator<MemberLetterDto> comparator = (o1, o2) -> {
       if (o1.getLastLetter().getCreatedAt().isAfter(o2.getLastLetter().getCreatedAt())) {
         return -1;
@@ -127,13 +124,7 @@ public class LetterService {
         return 1;
       }
     };
-
-    List<MemberLetterDto> list = new ArrayList<>(memberLetterDtoSet);
-    list.sort(comparator);
-
-    Page<MemberLetterDto> memberLetterDtoPage = new PageImpl<>(list.subList(start, end), pageable,
-        list.size());
-    return memberLetterDtoPage;
+    return Util.ListToPage(memberLetterDtoSet, pageable, comparator);
   }
 
 

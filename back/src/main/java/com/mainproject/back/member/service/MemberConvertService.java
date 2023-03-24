@@ -10,7 +10,6 @@ import com.mainproject.back.language.exception.LanguageExceptionCode;
 import com.mainproject.back.language.service.LanguageService;
 import com.mainproject.back.letter.dto.LetterSimpleDto;
 import com.mainproject.back.letter.dto.LetterSimpleDto.LetterStatus;
-import com.mainproject.back.letter.service.LetterService;
 import com.mainproject.back.member.dto.MemberBlockDto;
 import com.mainproject.back.member.dto.MemberBlockInterface;
 import com.mainproject.back.member.dto.MemberDto;
@@ -46,8 +45,6 @@ public class MemberConvertService {
   private final LanguageService languageService;
   private final FollowService followService;
   private final BlockService blockService;
-  private final MemberService memberService;
-  private final LetterService letterService;
 
   @Transactional
   public Member memberPatchDtoToMember(MemberDto.Patch memberPatchDto) {
@@ -108,25 +105,25 @@ public class MemberConvertService {
     throw new BusinessLogicException(TagExceptionCode.TAG_NOT_FOUND);
   }
 
-  public List<Tag> getTags(String tagNames) {
+  public List<Long> getTags(String tagNames) {
     if (tagNames.isEmpty()) {
       return new ArrayList<>();
     }
     String[] tagNameArr = tagNames.split(" ");
     List<Tag> allTags = tagService.findAllTags();
-    List<Tag> tagList = Arrays.stream(tagNameArr).map(name -> findTag(allTags, name)).collect(
+    List<Long> tagList = Arrays.stream(tagNameArr).map(name -> findTag(allTags, name).getTagId()).collect(
         Collectors.toList());
     return tagList;
   }
 
-  public List<Language> getLanguages(String languageNations) {
+  public List<Long> getLanguages(String languageNations) {
     if (languageNations.isEmpty()) {
       return new ArrayList<>();
     }
     String[] nationArr = languageNations.split(" ");
     List<Language> allLanguages = languageService.findAllLanguages();
-    List<Language> languageList = Arrays.stream(nationArr)
-        .map(nation -> findLanguage(allLanguages, nation))
+    List<Long> languageList = Arrays.stream(nationArr)
+        .map(nation -> findLanguage(allLanguages, nation).getLanguageId())
         .collect(Collectors.toList());
     return languageList;
   }
