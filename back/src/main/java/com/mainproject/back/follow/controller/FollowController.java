@@ -82,11 +82,11 @@ public class FollowController {
   public ResponseEntity getFollowing(@PageableDefault Pageable pageable,
       Principal principal) {
     log.info("## 팔로잉 조회");
-    Member currentMember = memberService.findMemberByEmail(Check.checkPrincipal(principal));
+    long memberId = memberService.findMemberIdByEmail(Check.checkPrincipal(principal));
 
-    Page<MemberLetterInterface> memberLetterPage = followService.findFollowing(currentMember.getMemberId(), pageable);
+    Page<MemberLetterInterface> memberLetterPage = followService.findFollowing(memberId, pageable);
 
-    Page<MemberLetterDto>  responses = memberConvertService.memberLetterToMemberLetterPage(memberLetterPage);
+    Page<MemberLetterDto> responses = memberConvertService.memberLetterToMemberLetterPage(memberLetterPage);
 
     return ResponseEntity.ok().body(responses);
 

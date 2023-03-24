@@ -66,9 +66,9 @@ public class BlockController {
   @GetMapping
   public ResponseEntity getBlocks(@PageableDefault Pageable pageable,
       Principal principal) {
-    log.info("## 차단 목록 조회: {}", principal.getName());
-    Member member = memberService.findMemberByEmail(principal.getName());
-    Page<MemberBlockInterface> blockPage = blockService.findBlocks(member.getMemberId(), pageable);
+    log.info("## 차단 목록 조회");
+    long memberId = memberService.findMemberIdByEmail(Check.checkPrincipal(principal));
+    Page<MemberBlockInterface> blockPage = blockService.findBlocks(memberId, pageable);
     Page<MemberBlockDto> responses = memberConvertService.blockPageToMemberBlockPage(blockPage);
     return ResponseEntity.ok().body(responses);
 
