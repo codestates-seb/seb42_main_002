@@ -3,7 +3,7 @@ name: frontci
 on:
   push:
     branches:
-      - fe-deploy/deploy_wan 
+      - fe-deploy/deploy_wan
 
 jobs:
   build:
