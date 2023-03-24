@@ -9,7 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class MemberBlockDto {
 
-  private long memberId;
+  private Long memberId;
   private String name;
   private String profile;
   private String location;

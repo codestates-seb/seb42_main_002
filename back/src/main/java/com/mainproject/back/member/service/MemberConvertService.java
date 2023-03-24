@@ -1,9 +1,7 @@
 package com.mainproject.back.member.service;
 
-import com.mainproject.back.block.entity.Block;
 import com.mainproject.back.block.service.BlockService;
 import com.mainproject.back.exception.BusinessLogicException;
-import com.mainproject.back.follow.entity.Follow;
 import com.mainproject.back.follow.service.FollowService;
 import com.mainproject.back.language.dto.MemberLanguageDto;
 import com.mainproject.back.language.entity.Language;
@@ -12,11 +10,11 @@ import com.mainproject.back.language.exception.LanguageExceptionCode;
 import com.mainproject.back.language.service.LanguageService;
 import com.mainproject.back.letter.dto.LetterSimpleDto;
 import com.mainproject.back.letter.dto.LetterSimpleDto.LetterStatus;
-import com.mainproject.back.letter.entity.Letter;
-import com.mainproject.back.letter.service.LetterService;
 import com.mainproject.back.member.dto.MemberBlockDto;
+import com.mainproject.back.member.dto.MemberBlockInterface;
 import com.mainproject.back.member.dto.MemberDto;
 import com.mainproject.back.member.dto.MemberLetterDto;
+import com.mainproject.back.member.dto.MemberLetterInterface;
 import com.mainproject.back.member.dto.MemberSearchDto;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.entity.Member.Gender;
@@ -47,8 +45,6 @@ public class MemberConvertService {
   private final LanguageService languageService;
   private final FollowService followService;
   private final BlockService blockService;
-  private final MemberService memberService;
-  private final LetterService letterService;
 
   @Transactional
   public Member memberPatchDtoToMember(MemberDto.Patch memberPatchDto) {
@@ -109,25 +105,25 @@ public class MemberConvertService {
     throw new BusinessLogicException(TagExceptionCode.TAG_NOT_FOUND);
   }
 
-  public List<Tag> getTags(String tagNames) {
+  public List<Long> getTags(String tagNames) {
     if (tagNames.isEmpty()) {
       return new ArrayList<>();
     }
     String[] tagNameArr = tagNames.split(" ");
     List<Tag> allTags = tagService.findAllTags();
-    List<Tag> tagList = Arrays.stream(tagNameArr).map(name -> findTag(allTags, name)).collect(
+    List<Long> tagList = Arrays.stream(tagNameArr).map(name -> findTag(allTags, name).getTagId()).collect(
         Collectors.toList());
     return tagList;
   }
 
-  public List<Language> getLanguages(String languageNations) {
+  public List<Long> getLanguages(String languageNations) {
     if (languageNations.isEmpty()) {
       return new ArrayList<>();
     }
     String[] nationArr = languageNations.split(" ");
     List<Language> allLanguages = languageService.findAllLanguages();
-    List<Language> languageList = Arrays.stream(nationArr)
-        .map(nation -> findLanguage(allLanguages, nation))
+    List<Long> languageList = Arrays.stream(nationArr)
+        .map(nation -> findLanguage(allLanguages, nation).getLanguageId())
         .collect(Collectors.toList());
     return languageList;
   }
@@ -162,33 +158,30 @@ public class MemberConvertService {
     return false;
   }
 
-  public Page<MemberLetterDto> followPageToMemberLetterPage(Page<Follow> followPage) {
-    return followPage.map(follow -> {
-      Member member = memberService.findMember(follow.getFollowing().getMemberId());
-      Letter letter = letterService.findLastLetter(follow.getFollower().getMemberId(),
-          follow.getFollowing().getMemberId());
+  public Page<MemberLetterDto> memberLetterToMemberLetterPage(Page<MemberLetterInterface> memberLetterPage) {
+    return memberLetterPage.map(memberLetter -> {
       MemberLetterDto.MemberLetterDtoBuilder builder = MemberLetterDto.builder()
-          .name(member.getName())
-          .profile(member.getProfile())
-          .location(member.getLocation())
-          .memberId(member.getMemberId());
-      if (letter == null) {
+          .name(memberLetter.getName())
+          .profile(memberLetter.getProfile())
+          .birthday(memberLetter.getBirthday())
+          .location(memberLetter.getLocation())
+          .memberId(memberLetter.getMember_id());
+      if (memberLetter.getReceiver_id() == null) {
         builder.lastLetter(null);
       } else {
         builder.lastLetter(LetterSimpleDto.builder().status(
-                follow.getFollower().getMemberId() == letter.getReceiver().getMemberId()
-                    ? LetterStatus.RECEIVED : LetterStatus.SENT).isRead(letter.getIsRead())
-            .createdAt(letter.getCreatedAt()).build());
+                memberLetter.getFollower_id().equals(memberLetter.getReceiver_id())
+                    ? LetterStatus.RECEIVED : LetterStatus.SENT).isRead(memberLetter.getIs_read())
+            .createdAt(memberLetter.getCreated_at()).build());
       }
       return builder.build();
     });
   }
 
-  public Page<MemberBlockDto> blockPageToMemberBlockPage(Page<Block> blockPage) {
+  public Page<MemberBlockDto> blockPageToMemberBlockPage(Page<MemberBlockInterface> blockPage) {
     return blockPage.map(block -> {
-      Member target = memberService.findMember(block.getTarget().getMemberId());
-      return MemberBlockDto.builder().memberId(target.getMemberId()).name(target.getName())
-          .profile(target.getProfile()).location(target.getLocation()).build();
+      return MemberBlockDto.builder().memberId(block.getMember_id()).name(block.getName())
+          .profile(block.getProfile()).location(block.getLocation()).build();
     });
   }
 }

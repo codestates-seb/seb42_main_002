@@ -10,8 +10,8 @@ import com.mainproject.back.letter.service.LetterService;
 import com.mainproject.back.member.dto.MemberLetterDto;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.service.MemberService;
-import com.mainproject.back.util.Check;
 import com.mainproject.back.util.UriCreator;
+import com.mainproject.back.util.Util;
 import java.net.URI;
 import java.security.Principal;
 import javax.validation.Valid;
@@ -46,7 +46,7 @@ public class LetterController {
       Principal principal) {
     log.info("## 편지 보내기: {}", letterPostDto.getReceiverId());
 
-    Member member = memberService.findMemberByEmail(Check.checkPrincipal(principal));
+    Member member = memberService.findMemberByEmail(Util.checkPrincipal(principal));
     letterPostDto.setSenderId(member.getMemberId());
 
     Letter letter = letterMapper.LetterPostDtoToLetter(letterPostDto);
@@ -59,7 +59,7 @@ public class LetterController {
   public ResponseEntity getLetter(@RequestParam("letter") @Positive long letterId,
       Principal principal) {
     log.info("## 특정 편지 조회: {}", letterId);
-    long memberId = memberService.findMemberIdByEmail(Check.checkPrincipal(principal));
+    long memberId = memberService.findMemberIdByEmail(Util.checkPrincipal(principal));
     Letter findLetter = letterService.findLetter(letterId);
     LetterResponseDto letterResponseDto = letterMapper.LetterToLetterResponseDto(findLetter,
         memberId);
@@ -70,7 +70,7 @@ public class LetterController {
   public ResponseEntity getLettersByMember(@RequestParam("target") @Positive long targetId,
       @PageableDefault Pageable pageable, Principal principal) {
     log.info("## 특정 멤버와 주고 받은 편지 리스트 조회: {}", targetId);
-    long memberId = memberService.findMemberIdByEmail(Check.checkPrincipal(principal));
+    long memberId = memberService.findMemberIdByEmail(Util.checkPrincipal(principal));
     Page<Letter> letterPage = letterService.findLettersByMemberAndTarget(targetId, pageable,
         memberId);
     Page<LetterListDto> letterListDtoPage = letterMapper.pageLetterToPageLetterListDtoPage(
@@ -82,7 +82,7 @@ public class LetterController {
   public ResponseEntity getMembersByLetter(Pageable pageable, Principal principal) {
     log.info("## 나와 편지를 주고 받은 멤버 리스트 조회");
     Page<MemberLetterDto> memberLetterDtoPage = letterService.findMembersByLetter(pageable,
-        memberService.findMemberIdByEmail(Check.checkPrincipal(principal)));
+        memberService.findMemberIdByEmail(Util.checkPrincipal(principal)));
     return ResponseEntity.ok().body(memberLetterDtoPage);
   }
 
@@ -90,7 +90,7 @@ public class LetterController {
   public ResponseEntity getArrivedLetterCount(Principal principal) {
     log.info("## 도착한 편지 개수 조회");
     LetterCountDto letterCountDto = letterService.getArrivedLettersCount(
-        memberService.findMemberIdByEmail(Check.checkPrincipal(principal)));
+        memberService.findMemberIdByEmail(Util.checkPrincipal(principal)));
     return ResponseEntity.ok().body(letterCountDto);
   }
 

@@ -1,8 +1,6 @@
 package com.mainproject.back.member.repository;
 
-import com.mainproject.back.language.entity.Language;
 import com.mainproject.back.member.entity.Member;
-import com.mainproject.back.tag.entity.Tag;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -16,6 +14,7 @@ import org.springframework.stereotype.Repository;
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
   Optional<Member> findByEmail(String email);
+
   @Query("select m.memberId from Member m where m.email = :email")
   Optional<Long> findMemberIdByEmail(@Param("email") String email);
 
@@ -26,12 +25,25 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
       + "group by b.member_id order by count(*) desc", nativeQuery = true)
   Page<Member> findRecommended(@Param("memberId") long memberId, Pageable pageable);
 
-  @Query("select m from Member m join m.memberTags t join m.memberLanguages l where t.tag in(:tags)")
-  Page<Member> getMemberByTags(@Param("tags")List<Tag> tags, Pageable pageable);
+  @Query(value = "select m.* from member m "
+      + "join member_tag mt on mt.tag_id in(:tags) "
+      + "where m.member_id != :memberId and m.member_id = mt.member_id "
+      + "group by m.member_id order by count(mt.member_tag_id) desc", nativeQuery = true)
+  List<Member> getMemberByTags(@Param("tags") List<Long> tags, @Param("memberId") long memberId);
 
-  @Query("select m from Member m join m.memberTags t join m.memberLanguages l where t.tag in(:tags) and l.language in(:languages)")
-  Page<Member> getMemberByTagsAndLang(@Param("tags")List<Tag> tags, @Param("languages") List<Language> languages,Pageable pageable);
 
-  @Query("select m from Member m join m.memberTags t join m.memberLanguages l where l.language in(:languages)")
-  Page<Member> getMemberByLang(@Param("languages") List<Language> languages,Pageable pageable);
+  @Query(value = "select m.* from member m "
+      + "join member_language ml on ml.language_id in(:languages) "
+      + "join member_tag mt on mt.tag_id in(:tags) "
+      + "where m.member_id != :memberId and (m.member_id = ml.member_id or m.member_id = mt.member_id) "
+      + "group by m.member_id order by count(ml.member_language_id + mt.member_tag_id) desc", nativeQuery = true)
+  List<Member> getMemberByTagsAndLang(@Param("tags") List<Long> tags,
+      @Param("languages") List<Long> languages, @Param("memberId") long memberId);
+
+  @Query(value =
+      "select m.* from member m "
+          + "join member_language ml on ml.language_id in(:languages) "
+          + "where m.member_id != :memberId and m.member_id = ml.member_id "
+          + "group by m.member_id order by count(ml.member_language_id) desc", nativeQuery = true)
+  List<Member> getMemberByLang(@Param("languages") List<Long> languages, @Param("memberId") long memberId);
 }

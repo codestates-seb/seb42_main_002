@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum TagExceptionCode implements ExceptionCode {
 
-  TAG_EXISTS(HttpStatus.FOUND, "태그가 이미 추가되었습니다."),
+  TAG_EXISTS(HttpStatus.CONFLICT, "태그가 이미 추가되었습니다."),
   TAG_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 태그입니다.");
 
   private final HttpStatus status;

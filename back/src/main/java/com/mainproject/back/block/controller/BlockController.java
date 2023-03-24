@@ -4,11 +4,12 @@ import com.mainproject.back.block.dto.BlockDto;
 import com.mainproject.back.block.entity.Block;
 import com.mainproject.back.block.service.BlockService;
 import com.mainproject.back.member.dto.MemberBlockDto;
+import com.mainproject.back.member.dto.MemberBlockInterface;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.service.MemberConvertService;
 import com.mainproject.back.member.service.MemberService;
-import com.mainproject.back.util.Check;
 import com.mainproject.back.util.UriCreator;
+import com.mainproject.back.util.Util;
 import java.net.URI;
 import java.security.Principal;
 import javax.validation.Valid;
@@ -66,8 +67,8 @@ public class BlockController {
   public ResponseEntity getBlocks(@PageableDefault Pageable pageable,
       Principal principal) {
     log.info("## 차단 목록 조회");
-    long memberId = memberService.findMemberIdByEmail(Check.checkPrincipal(principal));
-    Page<Block> blockPage = blockService.findBlocks(memberId, pageable);
+    long memberId = memberService.findMemberIdByEmail(Util.checkPrincipal(principal));
+    Page<MemberBlockInterface> blockPage = blockService.findBlocks(memberId, pageable);
     Page<MemberBlockDto> responses = memberConvertService.blockPageToMemberBlockPage(blockPage);
     return ResponseEntity.ok().body(responses);
 
@@ -78,7 +79,7 @@ public class BlockController {
       Principal principal) {
     log.info("## 차단 목록 삭제: {}", targetId);
     blockService.deleteBlock(targetId,
-        memberService.findMemberIdByEmail(Check.checkPrincipal(principal)));
+        memberService.findMemberIdByEmail(Util.checkPrincipal(principal)));
     return ResponseEntity.noContent().build();
   }
 }

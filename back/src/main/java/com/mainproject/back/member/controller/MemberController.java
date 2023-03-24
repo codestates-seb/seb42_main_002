@@ -1,7 +1,6 @@
 package com.mainproject.back.member.controller;
 
 import com.mainproject.back.helper.UriCreator;
-import com.mainproject.back.language.entity.Language;
 import com.mainproject.back.member.dto.MemberDto;
 import com.mainproject.back.member.dto.MemberRecommendDto;
 import com.mainproject.back.member.dto.MemberSearchDto;
@@ -9,8 +8,7 @@ import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.mapper.MemberMapper;
 import com.mainproject.back.member.service.MemberConvertService;
 import com.mainproject.back.member.service.MemberService;
-import com.mainproject.back.tag.entity.Tag;
-import com.mainproject.back.util.Check;
+import com.mainproject.back.util.Util;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -66,7 +64,7 @@ public class MemberController {
   public ResponseEntity patchMember(
       Principal principal,
       @Valid @RequestBody MemberDto.Patch requestBody) {
-    Long currentId = memberService.findMemberIdByEmail(Check.checkPrincipal(principal));
+    Long currentId = memberService.findMemberIdByEmail(Util.checkPrincipal(principal));
     requestBody.setMemberId(currentId);
     Member member = memberConvertService.memberPatchDtoToMember(requestBody);
     log.info("## 사용자 정보 수정: {}", member.toString());
@@ -77,7 +75,7 @@ public class MemberController {
   @GetMapping("/me")
   public ResponseEntity getMemberBySelf(Principal principal) {
     log.info("## 내 정보 조회");
-    Member findMember = memberService.findMemberByEmail(Check.checkPrincipal(principal));
+    Member findMember = memberService.findMemberByEmail(Util.checkPrincipal(principal));
 
     return ResponseEntity.ok().body(mapper.memberToMemberResponse(findMember));
   }
@@ -87,7 +85,7 @@ public class MemberController {
       @PathVariable("member-id") @Positive long memberId, Principal principal) {
     Member findMember = memberService.findMember(memberId);
     log.info("## 사용자 정보 조회: {}", findMember.toString());
-    long id = memberService.findMemberIdByEmail(Check.checkPrincipal(principal));
+    long id = memberService.findMemberIdByEmail(Util.checkPrincipal(principal));
 
     return new ResponseEntity<>(memberConvertService.memberToResponseDto(findMember, id),
         HttpStatus.OK);
@@ -97,7 +95,7 @@ public class MemberController {
   @DeleteMapping("/me")
   public ResponseEntity deleteMember(Principal principal) {
     log.info("## 사용자 탈퇴: {}", principal.getName());
-    Member currentMember = memberService.findMemberByEmail(Check.checkPrincipal(principal));
+    Member currentMember = memberService.findMemberByEmail(Util.checkPrincipal(principal));
     memberService.deleteMember(currentMember.getMemberId());
 
     return new ResponseEntity<>(HttpStatus.OK);
@@ -106,7 +104,7 @@ public class MemberController {
   @GetMapping("/me/recommend")
   public ResponseEntity getRecommended(Principal principal) {
     log.info("## 사용자 태그 기반 추천 친구");
-    Member currentMember = memberService.findMemberByEmail(Check.checkPrincipal(principal));
+    Member currentMember = memberService.findMemberByEmail(Util.checkPrincipal(principal));
 
     Page<Member> memberPage = memberService.findRecommendedMember(
         currentMember.getMemberId(), PageRequest.of(0, 10));
@@ -120,13 +118,13 @@ public class MemberController {
       @RequestParam(value = "tag", required = false, defaultValue = "") String tags,
       @RequestParam(value = "lang", required = false, defaultValue = "") String lang,
       @PageableDefault Pageable pageable, Principal principal) {
-    long memberId = memberService.findMemberIdByEmail(Check.checkPrincipal(principal));
+    long memberId = memberService.findMemberIdByEmail(Util.checkPrincipal(principal));
     log.info("## 태그 검색: {}", tags);
     log.info("## 언어 검색: {}", lang);
 
-    List<Tag> tagList = memberConvertService.getTags(
+    List<Long> tagList = memberConvertService.getTags(
         URLDecoder.decode(tags, StandardCharsets.UTF_8));
-    List<Language> languageList = memberConvertService.getLanguages(
+    List<Long> languageList = memberConvertService.getLanguages(
         URLDecoder.decode(lang, StandardCharsets.UTF_8));
     log.info("## 태그+언어로 사용자 검색: tags={}\n\t lang={}", tagList.toString(), languageList.toString());
     Page<Member> memberPage = memberService

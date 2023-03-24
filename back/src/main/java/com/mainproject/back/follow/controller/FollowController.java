@@ -6,11 +6,12 @@ import com.mainproject.back.follow.entity.Follow;
 import com.mainproject.back.follow.mapper.FollowMapper;
 import com.mainproject.back.follow.service.FollowService;
 import com.mainproject.back.member.dto.MemberLetterDto;
+import com.mainproject.back.member.dto.MemberLetterInterface;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.service.MemberConvertService;
 import com.mainproject.back.member.service.MemberService;
-import com.mainproject.back.util.Check;
 import com.mainproject.back.util.UriCreator;
+import com.mainproject.back.util.Util;
 import java.net.URI;
 import java.security.Principal;
 import javax.validation.Valid;
@@ -50,7 +51,7 @@ public class FollowController {
       Principal principal) {
     log.info("## 팔로우 요청");
 
-    Member follower = memberService.findMemberByEmail(Check.checkPrincipal(principal));
+    Member follower = memberService.findMemberByEmail(Util.checkPrincipal(principal));
     Member following = memberService.findMember(requestBody.getFollowingId());
 
     Follow follow = new Follow();
@@ -66,7 +67,7 @@ public class FollowController {
   public ResponseEntity getFollower(@PageableDefault(sort = "follow_id") Pageable pageable,
       Principal principal) {
     log.info("## 팔로워 조회");
-    Member currentMember = memberService.findMemberByEmail(Check.checkPrincipal(principal));
+    Member currentMember = memberService.findMemberByEmail(Util.checkPrincipal(principal));
 
     Page<Follow> followPage = followService.findFollower(currentMember.getMemberId(), pageable);
 
@@ -81,11 +82,11 @@ public class FollowController {
   public ResponseEntity getFollowing(@PageableDefault Pageable pageable,
       Principal principal) {
     log.info("## 팔로잉 조회");
-    Member currentMember = memberService.findMemberByEmail(Check.checkPrincipal(principal));
+    long memberId = memberService.findMemberIdByEmail(Util.checkPrincipal(principal));
 
-    Page<Follow> followPage = followService.findFollowing(currentMember.getMemberId(), pageable);
+    Page<MemberLetterInterface> memberLetterPage = followService.findFollowing(memberId, pageable);
 
-    Page<MemberLetterDto> responses = memberConvertService.followPageToMemberLetterPage(followPage);
+    Page<MemberLetterDto> responses = memberConvertService.memberLetterToMemberLetterPage(memberLetterPage);
 
     return ResponseEntity.ok().body(responses);
 
@@ -95,7 +96,7 @@ public class FollowController {
   public ResponseEntity deleteBlock(@RequestParam("target") @Positive long followingId,
       Principal principal) {
     log.info("## 팔로우 삭제");
-    followService.deleteFollow(followingId, memberService.findMemberIdByEmail(Check.checkPrincipal(principal)));
+    followService.deleteFollow(followingId, memberService.findMemberIdByEmail(Util.checkPrincipal(principal)));
     return ResponseEntity.noContent().build();
   }
 }
