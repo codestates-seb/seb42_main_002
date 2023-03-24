@@ -57,7 +57,7 @@ const Profile = () => {
    */
   const postFollowing = async (followingId: number) => {
     try {
-      const request = await POST(`follows`, {
+      const request = await POST(`/users/me/follows`, {
         followingId: followingId,
       });
       if (request) {
