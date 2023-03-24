@@ -18,9 +18,9 @@ public interface BlockMapper {
     BlockDto.Response response =BlockDto.Response
         .builder()
         .member(MemberSimpleDto.builder().memberId(block.getMember().getMemberId())
-            .name(block.getMember().getName()).build())
+            .name(block.getMember().getName()).memberStatus(block.getMember().getMemberStatus()).build())
         .target(MemberSimpleDto.builder().memberId(block.getTarget().getMemberId())
-            .name(block.getTarget().getName()).build())
+            .name(block.getTarget().getName()).memberStatus(block.getTarget().getMemberStatus()).build())
         .build();
     return response;
   }

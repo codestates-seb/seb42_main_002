@@ -95,8 +95,8 @@ public class MemberController {
   @DeleteMapping("/me")
   public ResponseEntity deleteMember(Principal principal) {
     log.info("## 사용자 탈퇴: {}", principal.getName());
-    Member currentMember = memberService.findMemberByEmail(Util.checkPrincipal(principal));
-    memberService.deleteMember(currentMember.getMemberId());
+    Long currentId = memberService.findMemberIdByEmail(Util.checkPrincipal(principal));
+    memberService.deleteMember(currentId);
 
     return new ResponseEntity<>(HttpStatus.OK);
   }

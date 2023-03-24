@@ -5,6 +5,7 @@ import com.mainproject.back.block.service.BlockService;
 import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.follow.service.FollowService;
 import com.mainproject.back.member.entity.Member;
+import com.mainproject.back.member.entity.Member.MemberStatus;
 import com.mainproject.back.member.exception.MemberExceptionCode;
 import com.mainproject.back.member.repository.MemberRepository;
 import com.mainproject.back.security.utils.AuthorityUtils;
@@ -81,8 +82,8 @@ public class MemberService {
   @Transactional
   public void deleteMember(long memberId) {
     Member findMember = findVerifiedMember(memberId);
-
-    memberRepository.delete(findMember);
+    findMember.setMemberStatus(MemberStatus.MEMBER_QUIT);
+    memberRepository.save(findMember);
   }
 
   private Member findVerifiedMember(long memberId) {

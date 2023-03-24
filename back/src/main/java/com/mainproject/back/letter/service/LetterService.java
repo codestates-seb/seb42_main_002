@@ -12,6 +12,7 @@ import com.mainproject.back.letter.exception.LetterExceptionCode;
 import com.mainproject.back.letter.repository.LetterRepository;
 import com.mainproject.back.member.dto.MemberLetterDto;
 import com.mainproject.back.member.entity.Member;
+import com.mainproject.back.member.entity.Member.MemberStatus;
 import com.mainproject.back.member.service.MemberService;
 import com.mainproject.back.util.ApiManager;
 import com.mainproject.back.util.Util;
@@ -46,6 +47,10 @@ public class LetterService {
     // verify receiver id
     Member sender = memberService.findMember(letter.getSender().getMemberId());
     Member receiver = memberService.findMember(letter.getReceiver().getMemberId());
+    // 탈퇴 혹은 휴면계정한테 편지를 보낼 수 없음
+    if(!receiver.getMemberStatus().equals(MemberStatus.MEMBER_ACTIVE)){
+      throw new BusinessLogicException(LetterExceptionCode.LETTER_NOT_ALLOWED);
+    }
     letter.setAvailableAt(calculateTime(sender, receiver));
     letter.setSender(sender);
     letter.setReceiver(receiver);
@@ -96,6 +101,7 @@ public class LetterService {
               .birthday(receiver.getBirthday())
               .profile(receiver.getProfile())
               .location(receiver.getLocation())
+              .memberStatus(receiver.getMemberStatus())
               .lastLetter(
                   LetterSimpleDto.builder().isRead(letter.getIsRead()).status(LetterStatus.SENT)
                       .createdAt(letter.getCreatedAt()).build())
@@ -110,6 +116,7 @@ public class LetterService {
               .profile(sender.getProfile())
               .birthday(sender.getBirthday())
               .location(sender.getLocation())
+              .memberStatus(sender.getMemberStatus())
               .lastLetter(
                   LetterSimpleDto.builder().isRead(letter.getIsRead()).status(LetterStatus.RECEIVED)
                       .createdAt(letter.getCreatedAt()).build())
