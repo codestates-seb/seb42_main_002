@@ -15,7 +15,8 @@ type NextUserCardListProps = {
   addRecentData: any;
   empty: {
     title: string;
-    icon: React.ReactNode;
+    icon?: React.ReactNode;
+    children?: React.ReactNode;
   };
 };
 
@@ -47,7 +48,10 @@ const NextUserCardList = ({
   if (data.content.length === 0) {
     return (
       <>
-        <Empty title={empty.title}>{empty.icon}</Empty>
+        <Empty title={empty.title}>
+          {empty.icon}
+          {empty.children}
+        </Empty>
       </>
     );
   }

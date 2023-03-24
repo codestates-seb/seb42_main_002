@@ -1,5 +1,6 @@
 import { GENDER_TYPE, LOCATION_CODE, USER_STATUS } from '../../enums';
 import { LanguageDataType } from '../common/common.type';
+import { LetterUserData } from '../letter';
 import { TagDataType } from '../tags/tags';
 
 export type UserData = {
@@ -27,6 +28,11 @@ export type BlackUserDataType = {
 
 export type blackListStateType = {
   content: BlackUserDataType[];
+  isStop: boolean;
+};
+
+export type followingListStateType = {
+  content: LetterUserData[];
   isStop: boolean;
 };
 

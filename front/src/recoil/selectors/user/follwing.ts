@@ -1,13 +1,13 @@
 import { selector } from 'recoil';
 import { GET } from '../../../utils/axios';
-import { blackListState } from '../../atoms';
 import { pageNationState } from '../../atoms/pagination';
+import { followingListState } from '../../atoms/user/following';
 
-export const blackListSeletor = selector({
-  key: 'blackList/get',
+export const followingListSeletor = selector({
+  key: 'following/get',
   get: async ({ get }) => {
     const page = get(pageNationState);
-    const { content, isStop } = get(blackListState);
+    const { content, isStop } = get(followingListState);
     if (isStop) {
       return {
         content,
@@ -16,7 +16,7 @@ export const blackListSeletor = selector({
     }
 
     try {
-      const { data } = await GET(`/users/me/blocks?page=${page}&size=10`);
+      const { data } = await GET(`/users/me/follows?page=${page}&size=10`);
       return {
         content: data.content, // 최신 데이터만
         isStop: data.last, // 끝 여부
