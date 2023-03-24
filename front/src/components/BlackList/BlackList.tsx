@@ -111,7 +111,7 @@ const BlackList = () => {
             date={null}
             onClick={moveProfileHandler}
           >
-            <DeleteBlackListButton />
+            <DeleteBlackListButton memberId={user.memberId} />
           </UserCard>
         ))}
         {/* 새로 불러오는 List */}
