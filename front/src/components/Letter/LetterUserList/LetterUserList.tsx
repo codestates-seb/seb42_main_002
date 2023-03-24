@@ -2,7 +2,7 @@ import { Suspense, useEffect } from 'react';
 import { SlEnvolopeLetter } from 'react-icons/sl';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { letterUserList, newLetterState } from '../../../recoil/atoms';
+import { letterUserListState, newLetterState } from '../../../recoil/atoms';
 import { pageNationState } from '../../../recoil/atoms/pagination';
 import { letterUserListSeletor } from '../../../recoil/selectors/letter';
 import { LetterUserData, LetterUserListStateType } from '../../../utils';
@@ -15,7 +15,7 @@ import styles from './LetterUserList.module.scss';
 const LetterUserList = () => {
   const setNewLetter = useSetRecoilState(newLetterState);
   const setPagination = useSetRecoilState(pageNationState);
-  const [userList, setUserList] = useRecoilState(letterUserList);
+  const [userList, setUserList] = useRecoilState(letterUserListState);
   const navigate = useNavigate();
 
   const addRecentData = (data: LetterUserListStateType) => {

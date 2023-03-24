@@ -1,13 +1,13 @@
 import { selector } from 'recoil';
 import { GET } from '../../../utils/axios';
-import { letterUserList } from '../../atoms';
+import { letterUserListState } from '../../atoms';
 import { pageNationState } from '../../atoms/pagination';
 
 export const letterUserListSeletor = selector({
   key: 'letterUser/get',
   get: async ({ get }) => {
     const page = get(pageNationState);
-    const { content, isStop } = get(letterUserList);
+    const { content, isStop } = get(letterUserListState);
     if (isStop) {
       return {
         content,

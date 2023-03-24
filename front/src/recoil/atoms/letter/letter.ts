@@ -63,8 +63,19 @@ export const selectedPictureIdx = atom<number>({
 /**
  * @description 편지를 주고받은 유저 리스트
  */
-export const letterUserList = atom<LetterUserListStateType>({
+export const letterUserListState = atom<LetterUserListStateType>({
   key: 'letterUserList',
+  default: {
+    content: [],
+    isStop: false,
+  },
+});
+
+/**
+ * @description 특정 유저와 주고받은 편지 리스트
+ */
+export const letterListState = atom<LetterUserListStateType>({
+  key: 'letterListState',
   default: {
     content: [],
     isStop: false,
