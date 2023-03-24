@@ -14,7 +14,7 @@ $spinner_color: var(--active-color);
   position: relative;
   z-index: 9999;
   margin-top: 2rem;
-
+  grid-column: 1 / -1;
   .spinner {
     position: relative !important;
     margin-top: 1rem;

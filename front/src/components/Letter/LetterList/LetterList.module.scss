@@ -1,4 +1,5 @@
 .letter_wrapper {
+  height: calc(100% - 15.75rem);
   margin-top: 0.875rem;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
