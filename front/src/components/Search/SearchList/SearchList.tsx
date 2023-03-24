@@ -1,57 +1,74 @@
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { RiEmotionSadLine } from 'react-icons/ri';
-import { GET } from '../../../utils/axios';
 import UserCard from '../../Common/UserCard/UserCard';
 import LetterStatusIcon from '../../Common/LetterStatusIcon/LetterStatusIcon';
-import { useNavigate } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   newLetterState,
+  searchUserListState,
   selectedSearchLangTagState,
+  selectedSearchTagState,
+  userState,
 } from '../../../recoil/atoms';
-import { LanguageDataType, SearchUserDataType } from '../../../utils';
-import { searchUserTagSelector } from '../../../recoil/selectors/search';
-import { TagDataType } from '../../../utils/types/tags/tags';
+import { pageNationState } from '../../../recoil/atoms/pagination';
+import { SearchUserListStateType } from '../../../utils';
+import InnerSpinner from '../../Common/Spinner/InnerSpinner';
+import NextUserCardList from '../../Common/UserCard/NextUserCardList';
+import { searchUserListSeletor } from '../../../recoil/selectors/search';
 import styles from './SearchList.module.scss';
-import Empty from '../../Common/Empty/Empty';
 
 const SearchList = () => {
   const navigate = useNavigate();
+  const userInfo = useRecoilValue(userState);
   const setNewLetter = useSetRecoilState(newLetterState);
-  const searchLangTags = useRecoilValue(selectedSearchLangTagState);
-  const searchTags = useRecoilValue(searchUserTagSelector);
-  const [page, setPage] = useState<number>(0);
-  const [searchUserList, setSearchUserList] = useState<SearchUserDataType[]>(
-    []
+  const setPagination = useSetRecoilState(pageNationState);
+  const [searchLangTags, setSearchLangTags] = useRecoilState(
+    selectedSearchLangTagState
   );
+  const [searchTags, setSearchTags] = useRecoilState(selectedSearchTagState);
+  const [searchUserList, setSearchUserList] =
+    useRecoilState(searchUserListState);
 
   /**
-   * @description API
+   * @description 첫 진입 시, 태그 설정
    */
-  const getSearchUserList = async () => {
-    try {
-      const tags = searchTags.map((tag: TagDataType) => tag.name).join('+');
-      const langs = searchLangTags
-        .map((tag: LanguageDataType) => tag.nation)
-        .join('+');
+  useEffect(() => {
+    if (!userInfo) return;
+    setSearchLangTags(userInfo.language);
+    setSearchTags(userInfo.tag);
+  }, [userInfo]);
 
-      const params = new URLSearchParams();
-      params.append('tag', tags);
-      params.append('lang', langs);
-      params.append('page', String(page));
-      params.append('size', '10');
-      const queryString = params.toString();
-      const { data } = await GET(`/users/search?${queryString}`);
-      setSearchUserList(data.content);
-    } catch (error) {
-      console.log('error');
-      // TODO: ERROR 처리 방법
-    }
+  const addRecentData = (data: SearchUserListStateType) => {
+    setSearchUserList((prev) => ({
+      content: [...prev.content, ...data.content],
+      isStop: data.isStop,
+    }));
   };
 
+  const resetList = () => {
+    setSearchUserList({
+      content: [],
+      isStop: false,
+    });
+    setPagination(0);
+  };
+
+  /**
+   * @description 페이지 이동 시, 초기화
+   */
   useEffect(() => {
-    // 태그 변경 시,
-    getSearchUserList();
+    resetList();
+    return () => {
+      resetList();
+    };
+  }, []);
+
+  /**
+   * @description 태그 변경 시, page 리셋
+   */
+  useEffect(() => {
+    resetList();
   }, [searchLangTags, searchTags]);
 
   const moveProfileHandler = (id: number) => {
@@ -71,17 +88,27 @@ const SearchList = () => {
     }));
   };
 
-  if (searchUserList.length === 0) {
+  const ChildrenButtonComponent = ({ name }: any) => {
     return (
-      <Empty title="일치하는 유저가 없어요!">
-        <RiEmotionSadLine className={styles.icon} size={'6rem'} />
-      </Empty>
+      <button
+        onClick={(event) => {
+          onClickHandler(event, name);
+        }}
+        className={styles.button}
+      >
+        <LetterStatusIcon status={'SENT'} />
+      </button>
     );
-  }
+  };
+
+  const emptyProps = {
+    title: '일치하는 유저가 없어요!',
+    icon: <RiEmotionSadLine className={styles.icon} size={'6rem'} />,
+  };
 
   return (
     <ul className={styles.user_list}>
-      {searchUserList.map((user) => (
+      {searchUserList.content.map((user) => (
         <UserCard
           key={user.memberId}
           memberId={user.memberId}
@@ -91,16 +118,20 @@ const SearchList = () => {
           date={null}
           onClick={moveProfileHandler}
         >
-          <button
-            onClick={(event) => {
-              onClickHandler(event, user.name);
-            }}
-            className={styles.button}
-          >
-            <LetterStatusIcon status={'SENT'} />
-          </button>
+          <ChildrenButtonComponent name={user.name} />
         </UserCard>
       ))}
+      {/* 새로 불러오는 List */}
+      <Suspense fallback={<InnerSpinner size="sm" />}>
+        <NextUserCardList
+          selector={searchUserListSeletor}
+          addRecentData={addRecentData}
+          empty={emptyProps}
+          endText="마지막 스크롤 입니다."
+        >
+          <ChildrenButtonComponent />
+        </NextUserCardList>
+      </Suspense>
     </ul>
   );
 };

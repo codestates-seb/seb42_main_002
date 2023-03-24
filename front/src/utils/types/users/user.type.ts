@@ -11,7 +11,7 @@ export type UserData = {
   location?: LOCATION_CODE | null;
   birthday?: string | null;
   language: LanguageDataType[];
-  tag?: TagDataType[];
+  tag: TagDataType[];
   introduce?: string;
   profile?: string | null;
   memberStatus?: USER_STATUS;
@@ -38,4 +38,9 @@ export type FollowingListStateType = {
 
 export type SearchUserDataType = BlackUserDataType & {
   friend: boolean;
+};
+
+export type SearchUserListStateType = {
+  content: SearchUserDataType[];
+  isStop: boolean;
 };
