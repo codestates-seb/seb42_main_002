@@ -105,9 +105,28 @@ const Voca = () => {
 
   if (vocaList.length === 0) {
     return (
-      <Empty title="등록된 단어가 없어요">
-        <TbVocabulary className={styles.icon} size={'6rem'} />
-      </Empty>
+      <>
+        {isOpenModal && (
+          <VocaModal
+            isEditMode={isEditMode}
+            onModalClose={() => setIsOpenModal(false)}
+            onAddNewVoca={setNewVocaList}
+            onAddEditVoca={setEditVocaList}
+          />
+        )}
+        <Empty title="등록된 단어가 없어요">
+          <TbVocabulary className={styles.icon} size={'6rem'} />
+        </Empty>
+        <Button
+          variant="primary"
+          size="md"
+          iconBtn
+          icon={<AiOutlinePlus />}
+          className={styles.button}
+          onClick={onAddModalHandler}
+        />
+        <div ref={sentinelRef}></div>
+      </>
     );
   }
 
