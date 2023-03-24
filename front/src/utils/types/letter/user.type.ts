@@ -5,6 +5,7 @@ export type LetterUserData = {
   memberId: number;
   location: LOCATION_CODE;
   birthday?: string;
+  memberStatus?: string;
   lastLetter: {
     status: 'SENT' | 'RECEIVED';
     createdAt: string;
