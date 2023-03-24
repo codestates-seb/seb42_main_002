@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import useModals from '../../hooks/useModals';
 import { letterTypeState, newLetterState } from '../../recoil/atoms';
-import { newLetterType, toast } from '../../utils';
+import { newLetterType, toast, validateUploadImage } from '../../utils';
 import { POST, POST_IMG } from '../../utils/axios';
 import Button from '../Common/Button/Button';
 import AlertModal, { AlertModalProps } from '../Common/Modal/AlertModal';
@@ -61,26 +61,34 @@ const NewLetterWrapper = () => {
   const pictureAddHandler = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const file = event.target.files && event.target.files[0];
-    const formData = new FormData();
-    formData.append('type', 'photos');
-    file && formData.append('image', file);
-    try {
-      const { data } = await POST_IMG(
-        '/users/me/letters/photos/upload',
-        formData,
-        {
-          headers: {
-            'Contest-Type': 'multipart/form-data',
-          },
-        }
-      );
+    const checkedFile = await validateUploadImage(event);
+    if (!checkedFile.isValid) {
       setNewLetter((prev) => ({
         ...prev,
-        photoUrl: [...prev.photoUrl, data.uploadUrl],
+        photoUrl: [...prev.photoUrl],
       }));
-    } catch (error) {
-      console.log('error');
+    }
+    if (checkedFile.isValid) {
+      const formData = new FormData();
+      formData.append('type', 'photos');
+      checkedFile.file && formData.append('image', checkedFile.file);
+      try {
+        const { data } = await POST_IMG(
+          '/users/me/letters/photos/upload',
+          formData,
+          {
+            headers: {
+              'Contest-Type': 'multipart/form-data',
+            },
+          }
+        );
+        setNewLetter((prev) => ({
+          ...prev,
+          photoUrl: [...prev.photoUrl, data.uploadUrl],
+        }));
+      } catch (error) {
+        console.log('error');
+      }
     }
   };
 

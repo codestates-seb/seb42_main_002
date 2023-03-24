@@ -8,7 +8,7 @@ import Button from '../Common/Button/Button';
 import ButtonGroup from '../Common/Button/ButtonGroup';
 import Flex from '../Common/Flex/Flex';
 import ProfileImage from '../Common/ProfileImage/ProfileImage';
-import { checkUploadsExtendName, checkUploadsSize, toast } from '../../utils';
+import { validateUploadImage, toast } from '../../utils';
 
 type MyProfileImageProps = {
   onChangeLocation: () => void;
@@ -32,16 +32,15 @@ const MyProfileImage = ({ onChangeLocation }: MyProfileImageProps) => {
   const onChangeImageHandler = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const file = event.target.files && event.target.files[0];
     // 확장자 체크 & 파일 용량 체크
-    const isValid = checkUploadsExtendName(event) && checkUploadsSize(event);
-    if (!isValid) {
+    const checkedFile = await validateUploadImage(event);
+    if (!checkedFile.isValid) {
       setPhotoURL(null);
     }
-    if (isValid) {
+    if (checkedFile.isValid) {
       const formData = new FormData();
       formData.append('type', 'profiles');
-      file && formData.append('image', file);
+      checkedFile.file && formData.append('image', checkedFile.file);
 
       try {
         // 이미지를 URL로 변환
