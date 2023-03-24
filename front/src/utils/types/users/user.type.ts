@@ -18,13 +18,18 @@ export type UserData = {
   block?: boolean;
 };
 
-export type BlackUserData = {
+export type BlackUserDataType = {
   memberId: number;
   name: string;
   location: LOCATION_CODE;
   profile: string | null;
 };
 
-export type SearchUserDataType = BlackUserData & {
+export type blackListStateType = {
+  content: BlackUserDataType[];
+  isStop: boolean;
+};
+
+export type SearchUserDataType = BlackUserDataType & {
   friend: boolean;
 };

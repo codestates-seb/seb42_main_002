@@ -1,39 +1,44 @@
-import { useState, useRef } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { TiDeleteOutline } from 'react-icons/ti';
+import { blackListState } from '../../recoil/atoms';
+import { blackListStateType, BlackUserDataType } from '../../utils';
+import { DELETE } from '../../utils/axios';
+import { pageNationState } from '../../recoil/atoms/pagination';
+import InnerSpinner from '../Common/Spinner/InnerSpinner';
+import { blackListSeletor } from '../../recoil/selectors/user/blacklist';
 import UserCard from '../Common/UserCard/UserCard';
-import { BlackUserData } from '../../utils';
+import NextUserCardList from '../Common/UserCard/NextUserCardList';
 import styles from './BlackList.module.scss';
-import { DELETE, GET } from '../../utils/axios';
-import Empty from '../Common/Empty/Empty';
 import { FiUsers } from 'react-icons/fi';
-import useInfiniteScroll from '../../hooks/useInfiniteScroll';
-import LastInfinite from '../Common/LastInfinite/LastInfinite';
 
 const BlackList = () => {
   const navigate = useNavigate();
-  const [blackUserList, setBlackUserList] = useState<BlackUserData[]>([]);
-  const pageRef = useRef<number>(0);
-  const isStopRef = useRef<boolean>(false);
+  const setPagination = useSetRecoilState(pageNationState);
+  const [blackUserList, setBlackUserList] = useRecoilState(blackListState);
 
-  const getBlackList = async (page: number) => {
-    if (isStopRef.current) return;
-    try {
-      const { data } = await GET(`/users/me/blocks?page=${page}&size=10`);
-      if (data) {
-        isStopRef.current = data.last;
-        setBlackUserList((prev) => [...prev, ...data.content]);
-      }
-    } catch (error) {
-      console.log('error');
-      // TODO: ERROR 처리 방법
-    }
+  const addRecentData = (data: blackListStateType) => {
+    setBlackUserList((prev) => ({
+      content: [...prev.content, ...data.content],
+      isStop: data.isStop,
+    }));
   };
 
-  const sentinelRef = useInfiniteScroll(async (page: number) => {
-    await getBlackList(page);
-    pageRef.current++;
-  }, pageRef.current);
+  const resetBlackList = () => {
+    setBlackUserList({
+      content: [],
+      isStop: false,
+    });
+    setPagination(0);
+  };
+
+  /**
+   * @description 페이지 이동 시, 초기화
+   */
+  useEffect(() => {
+    return resetBlackList;
+  }, []);
 
   // API 연결
   const deleteBlackListHandler = async (
@@ -55,43 +60,55 @@ const BlackList = () => {
     navigate(`/profile/${id}`);
   };
 
-  if (blackUserList.length === 0) {
+  const DeleteBlackListButton = ({ memberId }: any) => {
     return (
-      <>
-        <Empty title="차단한 친구가 없어요">
-          <FiUsers className={styles.icon} size={'6rem'} />
-        </Empty>
-        <div ref={sentinelRef}></div>
-      </>
+      <button
+        className={styles.button}
+        onClick={(event) => deleteBlackListHandler(event, memberId)}
+      >
+        <TiDeleteOutline size="1.7rem" />
+      </button>
     );
-  }
+  };
+
+  const emptyProps = {
+    icon: <FiUsers className={styles.icon} size={'6rem'} />,
+    title: '차단한 친구가 없어요',
+  };
 
   return (
     <>
       <ul className={styles.letter_list}>
-        {blackUserList &&
-          blackUserList.map((user: BlackUserData) => (
-            <UserCard
-              key={user.memberId}
-              memberId={user.memberId}
-              name={user.name}
-              location={user.location}
-              profile={user.profile}
-              date={null}
-              onClick={moveProfileHandler}
+        {blackUserList.content.map((user: BlackUserDataType) => (
+          <UserCard
+            key={user.memberId}
+            memberId={user.memberId}
+            name={user.name}
+            location={user.location}
+            profile={user.profile}
+            date={null}
+            onClick={moveProfileHandler}
+          >
+            <button
+              className={styles.button}
+              onClick={(event) => deleteBlackListHandler(event, user.memberId)}
             >
-              <button
-                className={styles.button}
-                onClick={(event) =>
-                  deleteBlackListHandler(event, user.memberId)
-                }
-              >
-                <TiDeleteOutline size="1.7rem" />
-              </button>
-            </UserCard>
-          ))}
+              <TiDeleteOutline size="1.7rem" />
+            </button>
+          </UserCard>
+        ))}
+        {/* 새로 불러오는 List */}
+        <Suspense fallback={<InnerSpinner size="sm" />}>
+          <NextUserCardList
+            selector={blackListSeletor}
+            addRecentData={addRecentData}
+            empty={emptyProps}
+            endText="마지막 스크롤 입니다."
+          >
+            <DeleteBlackListButton />
+          </NextUserCardList>
+        </Suspense>
       </ul>
-      <LastInfinite text="마지막 차단유저 입니다." ref={sentinelRef} />
     </>
   );
 };
