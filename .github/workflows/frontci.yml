@@ -3,7 +3,7 @@ name: frontci
 on:
   push:
     branches:
-      - fe-deploy/deploy_wan # master 브랜치에서 push 이벤트가 일어났을 때 실행
+      - fe-deploy/deploy_wan
 
 jobs:
   build:
