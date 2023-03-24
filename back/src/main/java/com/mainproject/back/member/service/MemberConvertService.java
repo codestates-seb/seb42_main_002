@@ -165,6 +165,7 @@ public class MemberConvertService {
           .profile(memberLetter.getProfile())
           .birthday(memberLetter.getBirthday())
           .location(memberLetter.getLocation())
+          .memberStatus(memberLetter.getMember_status())
           .memberId(memberLetter.getMember_id());
       if (memberLetter.getReceiver_id() == null) {
         builder.lastLetter(null);

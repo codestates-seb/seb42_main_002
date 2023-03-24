@@ -21,13 +21,13 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
   // 공통된 태그 많은 순으로 정렬
   @Query(value = "select m.* from member_tag a join member_tag b on a.tag_id = b.tag_id "
       + "join member m on b.member_id = m.member_id "
-      + "where a.member_id = :memberId and b.member_id != :memberId "
+      + "where a.member_id = :memberId and b.member_id != :memberId and member_status = \"MEMBER_ACTIVE\" "
       + "group by b.member_id order by count(*) desc", nativeQuery = true)
   Page<Member> findRecommended(@Param("memberId") long memberId, Pageable pageable);
 
   @Query(value = "select m.* from member m "
       + "join member_tag mt on mt.tag_id in(:tags) "
-      + "where m.member_id != :memberId and m.member_id = mt.member_id "
+      + "where m.member_id != :memberId and m.member_id = mt.member_id and member_status = \"MEMBER_ACTIVE\" "
       + "group by m.member_id order by count(mt.member_tag_id) desc", nativeQuery = true)
   List<Member> getMemberByTags(@Param("tags") List<Long> tags, @Param("memberId") long memberId);
 
@@ -35,7 +35,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
   @Query(value = "select m.* from member m "
       + "join member_language ml on ml.language_id in(:languages) "
       + "join member_tag mt on mt.tag_id in(:tags) "
-      + "where m.member_id != :memberId and (m.member_id = ml.member_id or m.member_id = mt.member_id) "
+      + "where m.member_id != :memberId and (m.member_id = ml.member_id or m.member_id = mt.member_id) and member_status = \"MEMBER_ACTIVE\" "
       + "group by m.member_id order by count(ml.member_language_id + mt.member_tag_id) desc", nativeQuery = true)
   List<Member> getMemberByTagsAndLang(@Param("tags") List<Long> tags,
       @Param("languages") List<Long> languages, @Param("memberId") long memberId);
@@ -43,7 +43,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
   @Query(value =
       "select m.* from member m "
           + "join member_language ml on ml.language_id in(:languages) "
-          + "where m.member_id != :memberId and m.member_id = ml.member_id "
+          + "where m.member_id != :memberId and m.member_id = ml.member_id and member_status = \"MEMBER_ACTIVE\" "
           + "group by m.member_id order by count(ml.member_language_id) desc", nativeQuery = true)
   List<Member> getMemberByLang(@Param("languages") List<Long> languages, @Param("memberId") long memberId);
 }
