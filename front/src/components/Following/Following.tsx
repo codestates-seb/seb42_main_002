@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FiUsers } from 'react-icons/fi';
 import LetterStatusIcon from '../Common/LetterStatusIcon/LetterStatusIcon';
 import UserCard from '../Common/UserCard/UserCard';
-import { followingListStateType, LetterUserData } from '../../utils';
+import { FollowingListStateType, LetterUserData } from '../../utils';
 import Button from '../Common/Button/Button';
 import ButtonGroup from '../Common/Button/ButtonGroup';
 import Flex from '../Common/Flex/Flex';
@@ -34,7 +34,7 @@ const Following = () => {
     return resetList;
   }, []);
 
-  const addRecentData = (data: followingListStateType) => {
+  const addRecentData = (data: FollowingListStateType) => {
     setFollowings((prev) => ({
       content: [...prev.content, ...data.content],
       isStop: data.isStop,

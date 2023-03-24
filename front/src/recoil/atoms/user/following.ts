@@ -1,7 +1,7 @@
 import { atom } from 'recoil';
-import { followingListStateType } from '../../../utils';
+import { FollowingListStateType } from '../../../utils';
 
-export const followingListState = atom<followingListStateType>({
+export const followingListState = atom<FollowingListStateType>({
   key: 'followingListState',
   default: {
     content: [],

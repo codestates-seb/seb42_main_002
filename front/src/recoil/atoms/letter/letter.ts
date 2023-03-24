@@ -6,6 +6,7 @@ import {
 } from './../../../utils/types/letter/letter.type';
 import { LOCATION_CODE } from './../../../utils/enums/common/common.enum';
 import { LetterUserCardProps } from './../../../components/Letter/LetterUserCard/LetterUserCard';
+import { LetterUserListStateType } from '../../../utils';
 
 type selectedUserInfo = LetterUserCardProps;
 
@@ -54,8 +55,18 @@ export const selectedLetterState = atom<SeletedLetterDataType>({
 /**
  * @description 선택한 이미지 순서 데이터
  */
-
 export const selectedPictureIdx = atom<number>({
   key: 'selectedPictureIdx',
   default: 0,
+});
+
+/**
+ * @description 편지를 주고받은 유저 리스트
+ */
+export const letterUserList = atom<LetterUserListStateType>({
+  key: 'letterUserList',
+  default: {
+    content: [],
+    isStop: false,
+  },
 });

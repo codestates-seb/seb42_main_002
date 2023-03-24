@@ -11,3 +11,8 @@ export type LetterUserData = {
     isRead: boolean;
   };
 };
+
+export type LetterUserListStateType = {
+  content: LetterUserData[];
+  isStop: boolean;
+};

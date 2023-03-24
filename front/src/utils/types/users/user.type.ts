@@ -31,7 +31,7 @@ export type blackListStateType = {
   isStop: boolean;
 };
 
-export type followingListStateType = {
+export type FollowingListStateType = {
   content: LetterUserData[];
   isStop: boolean;
 };
