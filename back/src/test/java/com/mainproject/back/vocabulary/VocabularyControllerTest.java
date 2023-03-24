@@ -1,54 +1,30 @@
 package com.mainproject.back.vocabulary;
 
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
-import com.mainproject.back.letter.controller.LetterController;
-import com.mainproject.back.letter.dto.LetterListDto;
-import com.mainproject.back.letter.dto.LetterPostDto;
-import com.mainproject.back.letter.dto.LetterResponseDto;
-import com.mainproject.back.letter.entity.Letter;
-import com.mainproject.back.member.controller.MemberController;
-import com.mainproject.back.member.dto.MemberSimpleDto;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.entity.Member.Gender;
 import com.mainproject.back.member.repository.MemberRepository;
-import com.mainproject.back.member.service.MemberService;
 import com.mainproject.back.vocabulary.controller.VocabController;
 import com.mainproject.back.vocabulary.dto.VocabDto;
 import com.mainproject.back.vocabulary.entity.Vocabulary;
-import com.mainproject.back.vocabulary.mapper.VocabMapper;
 import com.mainproject.back.vocabulary.repository.VocabRepository;
-import com.mainproject.back.vocabulary.service.VocabService;
 import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -97,7 +73,7 @@ public class VocabularyControllerTest {
   @Test
   public void postVocab() throws Exception {
 
-    VocabDto.Post post = VocabDto.Post.builder().word("apple").meaning("사과").nation("US").build();
+    VocabDto.Post post = VocabDto.Post.builder().word("apple").meaning("사과").build();
     String content = gson.toJson(post);
 
     when(principal.getName()).thenReturn("test1@test");

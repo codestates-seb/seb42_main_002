@@ -1,4 +1,4 @@
-package com.mainproject.oauth;
+package com.mainproject.back.security.oauth;
 
 import java.util.Map;
 

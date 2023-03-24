@@ -4,7 +4,6 @@ import com.mainproject.back.letter.dto.LetterCountDto;
 import com.mainproject.back.letter.dto.LetterListDto;
 import com.mainproject.back.letter.dto.LetterPostDto;
 import com.mainproject.back.letter.dto.LetterResponseDto;
-import com.mainproject.back.letter.dto.LetterTranslateDto;
 import com.mainproject.back.letter.entity.Letter;
 import com.mainproject.back.letter.mapper.LetterMapper;
 import com.mainproject.back.letter.service.LetterService;
@@ -25,14 +24,14 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/letters")
+@RequestMapping("/users/me/letters")
 @Slf4j
 @Validated
 @RequiredArgsConstructor
@@ -42,12 +41,10 @@ public class LetterController {
   private final LetterMapper letterMapper;
   private final MemberService memberService;
 
-  @PostMapping("/{receiver-id}")
-  public ResponseEntity postLetter(@PathVariable("receiver-id") @Positive long receiverId,
-      @RequestBody @Valid
-      LetterPostDto letterPostDto, Principal principal) {
-    log.info("## 편지 보내기: {}", receiverId);
-    letterPostDto.setReceiverId(receiverId);
+  @PostMapping
+  public ResponseEntity postLetter(@RequestBody @Valid LetterPostDto letterPostDto,
+      Principal principal) {
+    log.info("## 편지 보내기: {}", letterPostDto.getReceiverId());
 
     Member member = memberService.findMemberByEmail(Check.checkPrincipal(principal));
     letterPostDto.setSenderId(member.getMemberId());
@@ -58,8 +55,8 @@ public class LetterController {
     return ResponseEntity.created(uri).build();
   }
 
-  @GetMapping("/{letter-id}")
-  public ResponseEntity getLetter(@PathVariable("letter-id") @Positive long letterId,
+  @GetMapping(params = "letter")
+  public ResponseEntity getLetter(@RequestParam("letter") @Positive long letterId,
       Principal principal) {
     log.info("## 특정 편지 조회: {}", letterId);
     long memberId = memberService.findMemberIdByEmail(Check.checkPrincipal(principal));
@@ -69,8 +66,8 @@ public class LetterController {
     return ResponseEntity.ok().body(letterResponseDto);
   }
 
-  @GetMapping("/members/{member-id}")
-  public ResponseEntity getLettersByMember(@PathVariable("member-id") @Positive long targetId,
+  @GetMapping(params = "target")
+  public ResponseEntity getLettersByMember(@RequestParam("target") @Positive long targetId,
       @PageableDefault Pageable pageable, Principal principal) {
     log.info("## 특정 멤버와 주고 받은 편지 리스트 조회: {}", targetId);
     long memberId = memberService.findMemberIdByEmail(Check.checkPrincipal(principal));
@@ -81,7 +78,7 @@ public class LetterController {
     return ResponseEntity.ok().body(letterListDtoPage);
   }
 
-  @GetMapping()
+  @GetMapping("/inbox")
   public ResponseEntity getMembersByLetter(Pageable pageable, Principal principal) {
     log.info("## 나와 편지를 주고 받은 멤버 리스트 조회");
     Page<MemberLetterDto> memberLetterDtoPage = letterService.findMembersByLetter(pageable,
@@ -97,10 +94,5 @@ public class LetterController {
     return ResponseEntity.ok().body(letterCountDto);
   }
 
-  @GetMapping("/translate")
-  public ResponseEntity<Object> getTranslated(@RequestBody LetterTranslateDto body) {
-    log.info("## 편지 번역");
-    LetterTranslateDto result = letterService.translate(body);
-    return ResponseEntity.ok().body(result);
-  }
+
 }

@@ -38,7 +38,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/members")
+@RequestMapping("/users")
 @RequiredArgsConstructor
 @Validated
 @Slf4j
@@ -62,7 +62,7 @@ public class MemberController {
     return ResponseEntity.created(location).build();
   }
 
-  @PatchMapping
+  @PatchMapping("/me")
   public ResponseEntity patchMember(
       Principal principal,
       @Valid @RequestBody MemberDto.Patch requestBody) {
@@ -74,7 +74,7 @@ public class MemberController {
     return ResponseEntity.ok().body(mapper.memberToMemberResponse(updateMember));
   }
 
-  @GetMapping
+  @GetMapping("/me")
   public ResponseEntity getMemberBySelf(Principal principal) {
     log.info("## 내 정보 조회");
     Member findMember = memberService.findMemberByEmail(Check.checkPrincipal(principal));
@@ -94,7 +94,7 @@ public class MemberController {
 
   }
 
-  @DeleteMapping
+  @DeleteMapping("/me")
   public ResponseEntity deleteMember(Principal principal) {
     log.info("## 사용자 탈퇴: {}", principal.getName());
     Member currentMember = memberService.findMemberByEmail(Check.checkPrincipal(principal));
@@ -103,7 +103,7 @@ public class MemberController {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
-  @GetMapping("/recommend")
+  @GetMapping("/me/recommend")
   public ResponseEntity getRecommended(Principal principal) {
     log.info("## 사용자 태그 기반 추천 친구");
     Member currentMember = memberService.findMemberByEmail(Check.checkPrincipal(principal));

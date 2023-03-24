@@ -173,7 +173,7 @@ public class MemberConvertService {
         builder.lastLetter(null);
       } else {
         builder.lastLetter(LetterSimpleDto.builder().status(
-                memberLetter.getFollower_id() == memberLetter.getReceiver_id()
+                memberLetter.getFollower_id().equals(memberLetter.getReceiver_id())
                     ? LetterStatus.RECEIVED : LetterStatus.SENT).isRead(memberLetter.getIs_read())
             .createdAt(memberLetter.getCreated_at()).build());
       }

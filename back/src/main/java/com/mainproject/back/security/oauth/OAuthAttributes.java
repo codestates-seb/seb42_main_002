@@ -1,11 +1,11 @@
-package com.mainproject.oauth;
+package com.mainproject.back.security.oauth;
+
 import com.mainproject.back.member.entity.Member;
 import java.util.List;
-import lombok.Builder;
-import lombok.Getter;
-
 import java.util.Map;
 import java.util.UUID;
+import lombok.Builder;
+import lombok.Getter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -41,11 +41,18 @@ public class OAuthAttributes {
    * 비밀번호는 임의로 작성
    */
   public Member toEntity(GoogleOAuth2UserInfo oauth2UserInfo) {
+    String location;
+    switch (oauth2UserInfo.getLocation()){
+      case "ko": location = "KR"; break;
+      case "ja": location = "JP"; break;
+      default: location = oauth2UserInfo.getLocation().toUpperCase();
+    }
+
     return Member.builder()
         .email(oauth2UserInfo.getEmail())
         .name(oauth2UserInfo.getName())
         .profile(oauth2UserInfo.getImageUrl())
-        .location(oauth2UserInfo.getLocation())
+        .location(location)
         .password(new BCryptPasswordEncoder().encode(UUID.randomUUID().toString().substring(0, 6)))
         .roles(List.of("USER"))
         .build();

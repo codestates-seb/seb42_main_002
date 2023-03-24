@@ -6,7 +6,6 @@ import com.mainproject.back.block.repository.BlockRepository;
 import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.follow.service.FollowService;
 import com.mainproject.back.member.dto.MemberBlockInterface;
-import com.mainproject.back.member.entity.Member;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
