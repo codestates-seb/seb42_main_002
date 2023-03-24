@@ -18,7 +18,7 @@ export const vocaSeletor = selector({
     }
 
     try {
-      const { data } = await GET(`/vocabs?page=${page}&size=5`);
+      const { data } = await GET(`/vocabs?page=${page}&size=10`);
       const formattedVacaList = data.content.map((voca: VocaDataType) => ({
         vocabId: voca.vocabId,
         meaning: voca.meaning,
