@@ -8,6 +8,7 @@ import Button from '../Common/Button/Button';
 import ButtonGroup from '../Common/Button/ButtonGroup';
 import Flex from '../Common/Flex/Flex';
 import ProfileImage from '../Common/ProfileImage/ProfileImage';
+import { validateUploadImage, toast } from '../../utils';
 
 type MyProfileImageProps = {
   onChangeLocation: () => void;
@@ -31,26 +32,34 @@ const MyProfileImage = ({ onChangeLocation }: MyProfileImageProps) => {
   const onChangeImageHandler = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const file = event.target.files && event.target.files[0];
-    const formData = new FormData();
-    formData.append('type', 'profiles');
-    file && formData.append('image', file);
-    try {
-      // 이미지를 URL로 변환
-      const { data } = await POST_IMG('/users/me/profiles/upload', formData, {
-        headers: {
-          'Contest-Type': 'multipart/form-data',
-        },
-      });
-      // 프로필 수정
-      const response = await PATCH('/users/me', {
-        profile: data.uploadUrl,
-      });
-      if (response) {
-        setPhotoURL(data.uploadUrl);
+    // 확장자 체크 & 파일 용량 체크
+    const checkedFile = await validateUploadImage(event);
+    if (!checkedFile.isValid) {
+      setPhotoURL(null);
+    }
+    if (checkedFile.isValid) {
+      const formData = new FormData();
+      formData.append('type', 'profiles');
+      checkedFile.file && formData.append('image', checkedFile.file);
+
+      try {
+        // 이미지를 URL로 변환
+        const { data } = await POST_IMG('/users/me/profiles/upload', formData, {
+          headers: {
+            'Contest-Type': 'multipart/form-data',
+          },
+        });
+        // 프로필 수정
+        const response = await PATCH('/users/me', {
+          profile: data.uploadUrl,
+        });
+        if (response) {
+          setPhotoURL(data.uploadUrl);
+          toast.success('사진 수정이 완료되었습니다');
+        }
+      } catch (error) {
+        console.log('error');
       }
-    } catch (error) {
-      console.log('error');
     }
   };
 
@@ -64,6 +73,7 @@ const MyProfileImage = ({ onChangeLocation }: MyProfileImageProps) => {
       if (response) {
         setPhotoURL(null);
         setIsOpenModal(false);
+        toast.success('사진이 삭제되었습니다');
       }
     } catch (error) {
       console.log('error');
@@ -95,22 +105,19 @@ const MyProfileImage = ({ onChangeLocation }: MyProfileImageProps) => {
         <Flex.Col>
           <ButtonGroup>
             <Flex dir="column" gap="sm">
-              {!photoURL ? (
-                <>
-                  <Button size="sm" variant="primary">
-                    <label htmlFor="profile">
-                      <input
-                        type="file"
-                        id="profile"
-                        className="blind"
-                        accept="image/*"
-                        onChange={onChangeImageHandler}
-                      />
-                      사진 수정
-                    </label>
-                  </Button>
-                </>
-              ) : (
+              <Button size="sm" variant="primary">
+                <label htmlFor="profile">
+                  <input
+                    type="file"
+                    id="profile"
+                    className="blind"
+                    accept="image/*"
+                    onChange={onChangeImageHandler}
+                  />
+                  사진 수정
+                </label>
+              </Button>
+              {photoURL && (
                 <Button
                   size="sm"
                   variant="secondary"
