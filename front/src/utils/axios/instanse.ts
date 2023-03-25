@@ -33,7 +33,9 @@ instance.interceptors.response.use(
       if (error.response.status === 401 && error.config) {
         toast.error('로그인에 실패하였습니다');
         if (window.location.pathname !== '/login') {
-          window.location.href = '/';
+          setTimeout(() => {
+            window.location.href = '/';
+          }, 1000);
         }
         return;
       }
