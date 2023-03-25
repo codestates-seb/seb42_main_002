@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { RecoilRoot } from 'recoil';
 import AuthProvider from './context/AuthContext';
 import NoneLayout from './components/Layouts/NoneLayout';
 import IntroPage from './pages/IntroPage';
@@ -33,9 +34,6 @@ import 'swiper/css/scrollbar';
 // Import React Toast styles
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { RecoilRoot } from 'recoil';
-import { useEffect, useState } from 'react';
-import { getCookie } from './utils/cookie';
 
 const routerData: RouterElement[] = [
   {
@@ -240,18 +238,9 @@ const routers = createBrowserRouter(
 );
 
 function App() {
-  const [resetkey, setResetKey] = useState(0);
-  const token = getCookie('accessJwtToken');
-
-  useEffect(() => {
-    if (token === null) {
-      setResetKey((prev) => prev + 1);
-    }
-  }, []);
-
   return (
     <>
-      <RecoilRoot key={resetkey}>
+      <RecoilRoot>
         <RouterProvider router={routers} />
         <ToastContainer />
       </RecoilRoot>
