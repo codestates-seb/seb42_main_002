@@ -1,4 +1,4 @@
-import { BsFilterRight } from 'react-icons/bs';
+import { BsFilterLeft, BsFilterRight } from 'react-icons/bs';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { useRecoilValue } from 'recoil';
 import { Scrollbar } from 'swiper';
@@ -38,11 +38,9 @@ const SearchHeader = () => {
           size="md"
           className={styles.button_wrapper}
           onClick={openFilterModalHandler}
+          icon={<BsFilterLeft />}
         >
-          <div className={styles.button}>
-            <span className={styles.text}>검색 필터</span>
-            <BsFilterRight size={'1.5rem'} />
-          </div>
+          검색 필터
         </Button>
         {/* Swiper */}
         <div className={styles.tags}>
