@@ -7,10 +7,12 @@
     color: var(--text-primary-color);
     font-size: 1.25rem;
     font-weight: bold;
+    word-break: break-word;
   }
   p {
     margin-top: 1rem;
     color: var(--text-secondary-color);
     line-height: 1.5;
+    word-break: break-word;
   }
 }
