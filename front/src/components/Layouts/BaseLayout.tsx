@@ -11,6 +11,8 @@ import PrevButton from '../Common/PrevButton/PrevButton';
 import Footer from './Footer/Footer';
 import Header from './Header/Header';
 import styles from './BaseLayout.module.scss';
+import { useRecoilState } from 'recoil';
+import { IsModalOpen, IsIconOpen } from '../../recoil/atoms/Translate/index';
 
 type BaseLayouProps = DefaultProps & {
   isAuth?: boolean;
@@ -31,6 +33,9 @@ const BaseLayout = ({
   const { pathname } = useLocation();
   const { getCurrentUserInfo } = useAuth();
   const setUserInfo = useSetRecoilState(userState);
+  const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpen);
+  const [isIconOpen, setIsIconOpen] = useRecoilState(IsIconOpen);
+
 
   const fetchUserInfo = useCallback(async () => {
     const userInfo = await getCurrentUserInfo();
@@ -57,6 +62,11 @@ const BaseLayout = ({
       className={classNames(styles.baselayout, {
         [styles.has_bottom_nav]: !isFirstLogin,
       })}
+      onClick={() => {
+        if (isModalOpen) setIsModalOpen(false);
+        if (isIconOpen) setIsIconOpen(false);
+      }}
+      role="presentation"
     >
       <Header />
       <article

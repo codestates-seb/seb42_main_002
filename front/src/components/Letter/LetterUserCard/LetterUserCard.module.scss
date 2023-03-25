@@ -19,6 +19,11 @@ $sub-font-size: var(--font-size-sm);
   background-color: var(--white);
   flex: 1 1 0;
   z-index: 1;
+  justify-content: space-between;
+}
+.user_info {
+  display: flex;
+  align-items: center;
 }
 
 .user {
