@@ -10,6 +10,8 @@ import LetterStatusIcon from '../../Common/LetterStatusIcon/LetterStatusIcon';
 import InnerSpinner from '../../Common/Spinner/InnerSpinner';
 import NextUserCardList from '../../Common/UserCard/NextUserCardList';
 import UserCard from '../../Common/UserCard/UserCard';
+import UserQuit from '../../Common/UserCard/UserQuit/UserQuit';
+
 import styles from './LetterUserList.module.scss';
 
 const LetterUserList = () => {
@@ -56,7 +58,15 @@ const LetterUserList = () => {
     navigate('/newLetter');
   };
 
-  const ChildrenButtonComponent = ({ memberId, name, lastLetter }: any) => {
+  const ChildrenButtonComponent = ({
+    memberId,
+    name,
+    lastLetter,
+    memberStatus,
+  }: any) => {
+    if (memberStatus === 'MEMBER_QUIT') {
+      return <UserQuit />;
+    }
     return (
       <button
         onClick={(event) => {

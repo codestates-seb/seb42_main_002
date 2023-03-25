@@ -72,6 +72,7 @@ const LetterList = () => {
         name={selectedUser.name}
         profile={selectedUser.profile}
         memberId={selectedUser.memberId}
+        memberStatus={selectedUser.memberStatus}
         cursor={false}
       />
       <ul className={styles.letter_wrapper}>
