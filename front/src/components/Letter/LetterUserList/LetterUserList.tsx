@@ -10,6 +10,7 @@ import Empty from '../../Common/Empty/Empty';
 import LastInfinite from '../../Common/LastInfinite/LastInfinite';
 import LetterStatusIcon from '../../Common/LetterStatusIcon/LetterStatusIcon';
 import UserCard from '../../Common/UserCard/UserCard';
+import UserQuit from '../../Common/UserCard/UserQuit/UserQuit';
 
 import styles from './LetterUserList.module.scss';
 
@@ -77,16 +78,20 @@ const LetterUserList = () => {
             {...user}
             date={user.lastLetter.createdAt}
           >
-            <button
-              onClick={(event) => {
-                onClickHandler(event, user.memberId, user.name);
-              }}
-            >
-              <LetterStatusIcon
-                status={user.lastLetter.status}
-                isRead={user.lastLetter.isRead}
-              />
-            </button>
+            {user.memberStatus === 'MEMBER_QUIT' ? (
+              <UserQuit />
+            ) : (
+              <button
+                onClick={(event) => {
+                  onClickHandler(event, user.memberId, user.name);
+                }}
+              >
+                <LetterStatusIcon
+                  status={user.lastLetter.status}
+                  isRead={user.lastLetter.isRead}
+                />
+              </button>
+            )}
           </UserCard>
         ))}
       </ul>

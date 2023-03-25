@@ -76,6 +76,7 @@ const LetterList = () => {
         name={selectedUser.name}
         profile={selectedUser.profile}
         memberId={selectedUser.memberId}
+        memberStatus={selectedUser.memberStatus}
         cursor={false}
       />
       <div className={styles.letter_wrapper}>

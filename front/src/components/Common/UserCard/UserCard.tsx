@@ -13,6 +13,7 @@ type UserCardProps = {
   memberId: number;
   location: LOCATION_CODE;
   profile: string | null;
+  memberStatus?: string;
   birthday?: string;
   children?: React.ReactNode;
   date?: string | null;
@@ -25,6 +26,7 @@ const UserCard = ({
   location,
   birthday,
   profile,
+  memberStatus,
   children,
   date,
   onClick,
@@ -40,7 +42,9 @@ const UserCard = ({
       profile,
       location,
       memberId,
+      memberStatus,
     };
+
     setUserInfo(selectedUser);
     navigate(`/letters/${memberId}`);
   };
