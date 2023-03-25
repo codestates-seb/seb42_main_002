@@ -88,6 +88,7 @@ const LetterList = () => {
             key={letter.letterId}
             availableAt={letter.availableAt}
             letterId={letter.letterId}
+            memberStatus={selectedUser.memberStatus}
           />
         ))}
         {/* 새로 불러오는 List */}

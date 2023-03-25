@@ -1,4 +1,5 @@
-import { useAuth } from '../../../context/AuthContext';
+import { useSetRecoilState } from 'recoil';
+import { selectedLetterState } from '../../../recoil/atoms';
 import { formatDateToHour, getLetterOpenTime } from '../../../utils';
 import { useNavigate } from 'react-router-dom';
 import { ko } from 'date-fns/locale';
@@ -22,6 +23,7 @@ type LetterProps = {
   availableAt: string; // 편지 읽을 수 있는 날짜
   letterId: number;
   selectedUser: string;
+  memberStatus?: string;
 };
 
 type LetterStatusProps = {
@@ -64,6 +66,7 @@ const Letter = ({
   availableAt,
   letterId,
   selectedUser,
+  memberStatus,
 }: LetterProps) => {
   // 편지 열람이 불가능한 경우
   if (!body) {
@@ -86,10 +89,16 @@ const Letter = ({
   }
 
   const naviagte = useNavigate();
+  const setSelectedLetterState = useSetRecoilState(selectedLetterState);
 
   const clickLetterHandler = () => {
     // 편지 상세페이지로 이동
     naviagte(`${letterId}`);
+    // 선택한 편지의 작성자 상태 저장(탈퇴 여부)
+    setSelectedLetterState((prev) => ({
+      ...prev,
+      memberStatus,
+    }));
   };
 
   // 편지 열람 가능한 경우

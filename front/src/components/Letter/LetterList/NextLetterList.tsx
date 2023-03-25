@@ -72,6 +72,7 @@ const NextLetterList = ({
           key={letter.letterId}
           availableAt={letter.availableAt}
           letterId={letter.letterId}
+          memberStatus={selectedUser.memberStatus}
         />
       ))}
       <LastInfinite text={endText} ref={sentinelRef} />

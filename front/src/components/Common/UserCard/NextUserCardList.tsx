@@ -1,5 +1,4 @@
 import React, { isValidElement } from 'react';
-import { IconType } from 'react-icons';
 import { RecoilValueReadOnly, useRecoilState, useRecoilValue } from 'recoil';
 import useInfiniteScroll from '../../../hooks/useInfiniteScroll';
 import { pageNationState } from '../../../recoil/atoms/pagination';
@@ -68,6 +67,7 @@ const NextUserCardList = ({
           birthday={user.birthday}
           date={user.birthday}
           onClick={onClick}
+          memberStatus={user.memberStatus}
         >
           {/* {children} */}
           {isValidElement(children) &&

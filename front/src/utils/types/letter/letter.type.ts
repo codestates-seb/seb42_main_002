@@ -29,6 +29,7 @@ export type SeletedLetterDataType = {
   availableAt: string;
   createdAt: string;
   photoUrl: string[] | null;
+  memberStatus?: string;
 };
 
 /**

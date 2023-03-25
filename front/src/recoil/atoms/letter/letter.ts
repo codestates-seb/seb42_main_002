@@ -49,6 +49,7 @@ export const selectedLetterState = atom<SeletedLetterDataType>({
     availableAt: String(new Date()),
     createdAt: String(new Date()),
     photoUrl: null,
+    memberStatus: '',
   },
 });
 
