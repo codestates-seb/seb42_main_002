@@ -104,10 +104,10 @@ public class MemberController {
   @GetMapping("/me/recommend")
   public ResponseEntity getRecommended(Principal principal) {
     log.info("## 사용자 태그 기반 추천 친구");
-    Member currentMember = memberService.findMemberByEmail(Util.checkPrincipal(principal));
+    Long memberId = memberService.findMemberIdByEmail(Util.checkPrincipal(principal));
 
     Page<Member> memberPage = memberService.findRecommendedMember(
-        currentMember.getMemberId(), PageRequest.of(0, 10));
+        memberId, PageRequest.of(0, 10));
     Page<MemberRecommendDto> memberRecommendDtoPage = mapper.pageMemberToMemberRecommendDtoPage(
         memberPage);
     return ResponseEntity.ok().body(memberRecommendDtoPage);

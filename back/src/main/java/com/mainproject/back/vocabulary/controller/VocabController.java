@@ -86,8 +86,8 @@ public class VocabController {
     if (principal.getName() == null) {
       throw new BusinessLogicException(MemberExceptionCode.MEMBER_NOT_FOUND);
     }
-    Member member = memberService.findMemberByEmail(Util.checkPrincipal(principal));
-    Page<Vocabulary> pageVocabs = vocabService.findVocabs(member.getMemberId(), pageable);
+    long member = memberService.findMemberIdByEmail(Util.checkPrincipal(principal));
+    Page<Vocabulary> pageVocabs = vocabService.findVocabs(member, pageable);
     Page<VocabDto.Response> vocabResponseDto = mapper.pageVocabToPageVocabResponsePage(
         pageVocabs);
     return new ResponseEntity<>(vocabResponseDto, HttpStatus.OK);
@@ -104,8 +104,8 @@ public class VocabController {
   @GetMapping("/random")
   public ResponseEntity randomVocab(Principal principal) {
     log.info("## 랜덤 단어 생성: {}", principal);
-    Member member = memberService.findMemberByEmail(Util.checkPrincipal(principal));
-    Vocabulary vocab = vocabService.randomVocab(member.getMemberId());
+    long member = memberService.findMemberIdByEmail(Util.checkPrincipal(principal));
+    Vocabulary vocab = vocabService.randomVocab(member);
     if (vocab == null) {
       return ResponseEntity.noContent().build();
     }
