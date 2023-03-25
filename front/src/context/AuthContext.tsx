@@ -7,11 +7,17 @@ import {
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { userLocationState, userState } from '../recoil/atoms';
+import { useRecoilState, useResetRecoilState } from 'recoil';
+import {
+  userLanguageState,
+  userLocationState,
+  userState,
+  userTagState,
+} from '../recoil/atoms';
 import { SignInData, toast, UserData } from '../utils';
 import { GET, POST } from '../utils/axios';
 import { getCookie, removeCookie, setCookie } from '../utils/cookie';
+import { TagDataType } from '../utils/types/tags/tags';
 
 type AuthProviderProps = {
   children?: ReactNode;
@@ -25,6 +31,7 @@ type AuthContextProps = {
   setToken: (value: string, options?: any) => void;
   removeToken: () => void;
   getCurrentUserInfo: () => Promise<UserData | null>;
+  resetState: () => void;
 };
 
 const AuthContext = createContext<AuthContextProps>({
@@ -35,13 +42,17 @@ const AuthContext = createContext<AuthContextProps>({
   setToken: () => undefined,
   removeToken: () => undefined,
   getCurrentUserInfo: async () => null,
+  resetState: () => undefined,
 });
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const [userInfo, setUserInfo] = useRecoilState(userState);
-  const selectUserLocation = useSetRecoilState(userLocationState);
   const navigate = useNavigate();
   const TOKEN_NAME = 'accessJwtToken';
+  const resetUserInfo = useResetRecoilState(userState);
+  const resetSelectedUserLocation = useResetRecoilState(userLocationState);
+  const resetSelectedUserLanguage = useResetRecoilState(userLanguageState);
+  const resetSelectedUserTag = useResetRecoilState(userTagState);
 
   // 로그인 요청
   const loginRequest = async (signData: SignInData) => {
@@ -81,18 +92,22 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         } else {
           navigate('/main');
         }
-        toast.success('로그인에 성공하였습니다!');
       }
     } catch (error) {
       console.error(error);
     }
   };
 
-  const logout = () => {
-    setUserInfo(null);
-    selectUserLocation(null);
+  const resetState = () => {
     removeCookie(TOKEN_NAME);
-    toast.success('로그아웃에 성공하였습니다!');
+    resetUserInfo();
+    resetSelectedUserLocation();
+    resetSelectedUserLanguage();
+    resetSelectedUserTag();
+  };
+
+  const logout = () => {
+    resetState();
     navigate('/', { replace: true });
   };
 
@@ -117,6 +132,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       getToken,
       removeToken,
       getCurrentUserInfo,
+      resetState,
     }),
     [userInfo]
   );

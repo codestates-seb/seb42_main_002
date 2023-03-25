@@ -11,11 +11,9 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <RecoilRoot>
-      <React.Suspense fallback={<Spinner />}>
-        <App />
-      </React.Suspense>
-    </RecoilRoot>
+    <React.Suspense fallback={<Spinner />}>
+      <App />
+    </React.Suspense>
   </React.StrictMode>
 );
 

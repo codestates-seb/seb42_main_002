@@ -64,7 +64,7 @@ const LocationEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
       }
     }
   };
-  console.log(selectedUserLocation);
+
   return (
     <FullPageModal
       onSubmit={onSubmitHandler}

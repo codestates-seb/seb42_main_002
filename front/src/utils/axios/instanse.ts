@@ -32,10 +32,14 @@ instance.interceptors.response.use(
     return new Promise((resolve, reject) => {
       if (error.response.status === 401 && error.config) {
         toast.error('로그인에 실패하였습니다');
+        return;
       }
       if (error.response.status === 404 && error.config) {
         toast.error(error.response.data.message || '요청에 실패하였습니다');
+        return;
       }
+
+      toast.error(error.response.data.message || '다시 시도해주세요');
       return reject(error);
     });
   }

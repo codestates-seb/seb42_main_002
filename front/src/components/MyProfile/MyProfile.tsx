@@ -31,11 +31,10 @@ import { getAge, LanguageDataType, toast } from '../../utils';
 import { TagDataType } from '../../utils/types/tags/tags';
 import { useNavigate } from 'react-router-dom';
 import AlertModal, { AlertModalProps } from '../Common/Modal/AlertModal';
-import { removeCookie } from '../../utils/cookie';
 
 const MyProfile = () => {
   const navigate = useNavigate();
-  const { logout, removeToken } = useAuth();
+  const { logout, resetState } = useAuth();
   const { openModal } = useModals();
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [userTags, setUserTags] = useRecoilState(userTagState);
@@ -53,7 +52,7 @@ const MyProfile = () => {
   useEffect(() => {
     setUserLanguages(userInfo?.language as LanguageDataType[]);
     setUserTags(userInfo?.tag as TagDataType[]);
-  }, []);
+  }, [userInfo]);
 
   const onChangeEditBaseInfo = () => {
     setIsEditBaseInfo((prevState) => !prevState);
@@ -151,8 +150,9 @@ const MyProfile = () => {
     try {
       const response = await DELETE('/users/me');
       if (response) {
-        removeToken();
-        navigate('/');
+        resetState();
+        toast.success('성공적으로 탈퇴되었습니다!');
+        navigate('/', { replace: true });
       }
     } catch (error) {
       console.error(error);

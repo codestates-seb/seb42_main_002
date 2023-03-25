@@ -57,18 +57,19 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
     if (changeTags.length === 0) {
       toast.error('태그를 하나이상 선택해주세요');
       return;
-    }
-    try {
-      const requestData = changeTags.map((tag) => tag.name);
-      const response = await PATCH('/users/me', {
-        tag: requestData,
-      });
-      if (response) {
-        setSelectedUserTags(changeTags);
-        return true;
+    } else {
+      try {
+        const requestData = changeTags.map((tag) => tag.name);
+        const response = await PATCH('/users/me', {
+          tag: requestData,
+        });
+        if (response) {
+          setSelectedUserTags(changeTags);
+          return true;
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -87,12 +88,9 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
 
   const updateLanguage = async () => {
     try {
-      const response = await PATCH('/users/me', {
+      await PATCH('/users/me', {
         language: selectedUserLangauges,
       });
-      if (response) {
-        toast.success('설정 완료되었습니다!');
-      }
     } catch (error) {
       console.log(error);
     }
@@ -105,14 +103,15 @@ const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
         Promise.all([updateLocation(), updateLanguage(), updateTag()])
           .then((res) => {
             if (res) {
+              // 첫 설정 후 전체 모달 닫고 Welcome 페이지로 이동
+              closeModal(LocationEditModal);
+              closeModal(LanguageEditModal);
+              onClose && onClose();
               toast.success('설정 완료되었습니다!');
+              navigate('/welcome');
             }
           })
           .catch((error) => console.error(error));
-        // 첫 설정 후 전체 모달 닫고 Welcome 페이지로 이동
-        closeModal(LocationEditModal);
-        closeModal(LanguageEditModal);
-        navigate('/welcome');
       } else {
         // 수정 일때
         const response = await updateTag();
