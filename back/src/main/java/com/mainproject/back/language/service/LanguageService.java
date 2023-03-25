@@ -1,5 +1,6 @@
 package com.mainproject.back.language.service;
 
+import com.mainproject.back.language.dto.LanguageSimpleDto;
 import com.mainproject.back.language.entity.Language;
 import com.mainproject.back.language.repository.LanguageRepository;
 import java.util.List;
@@ -17,4 +18,6 @@ public class LanguageService {
   public List<Language> findAllLanguages() {
     return languageRepository.findAll();
   }
+
+  public List<LanguageSimpleDto> findAllSimpleLanguages(){return languageRepository.findAllSimpleLanguages();}
 }

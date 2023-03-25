@@ -117,7 +117,7 @@ public class MemberService {
   }
 
   public Page<Member> findRecommendedMember(long memberId, Pageable pageable) {
-    Page<Member> memberPage = memberRepository.findRecommended(memberId, pageable);
+    List<Member> memberPage = memberRepository.findRecommended(memberId);
     List<Long> followingIdList = followService.findFollowingId(memberId);
     List<Long> blockIdList = blockService.findBlockIdList(memberId);
 
