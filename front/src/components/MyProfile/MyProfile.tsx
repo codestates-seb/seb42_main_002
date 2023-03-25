@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRecoilState } from 'recoil';
 import { FaMars, FaTransgender, FaVenus } from 'react-icons/fa';
 import { BiEdit } from 'react-icons/bi';
@@ -34,7 +34,7 @@ import AlertModal, { AlertModalProps } from '../Common/Modal/AlertModal';
 
 const MyProfile = () => {
   const navigate = useNavigate();
-  const { logout, resetState } = useAuth();
+  const { logout, resetState, getCurrentUserInfo } = useAuth();
   const { openModal } = useModals();
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [userTags, setUserTags] = useRecoilState(userTagState);
@@ -48,6 +48,20 @@ const MyProfile = () => {
     FEMALE: <FaVenus color="#932f42" />,
     OTHER: <FaTransgender color="#505050" />,
   };
+
+  const fetchUserInfo = useCallback(async () => {
+    const userInfo = await getCurrentUserInfo();
+    if (userInfo === null) {
+      navigate('/', { replace: true });
+    }
+    if (userInfo) {
+      setUserInfo(userInfo);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
 
   useEffect(() => {
     setUserLanguages(userInfo?.language as LanguageDataType[]);

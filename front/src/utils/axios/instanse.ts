@@ -32,6 +32,9 @@ instance.interceptors.response.use(
     return new Promise((resolve, reject) => {
       if (error.response.status === 401 && error.config) {
         toast.error('로그인에 실패하였습니다');
+        if (window.location.pathname !== '/login') {
+          window.location.href = '/';
+        }
         return;
       }
       if (error.response.status === 404 && error.config) {
