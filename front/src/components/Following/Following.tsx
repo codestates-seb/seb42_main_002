@@ -1,72 +1,82 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiUsers } from 'react-icons/fi';
+import { FiSearch, FiUsers } from 'react-icons/fi';
 import LetterStatusIcon from '../Common/LetterStatusIcon/LetterStatusIcon';
 import UserCard from '../Common/UserCard/UserCard';
-import { LetterUserData } from '../../utils';
-import { GET } from '../../utils/axios';
+import { FollowingListStateType, LetterUserData } from '../../utils';
 import Button from '../Common/Button/Button';
 import ButtonGroup from '../Common/Button/ButtonGroup';
 import Flex from '../Common/Flex/Flex';
-import Empty from '../Common/Empty/Empty';
-import useInfiniteScroll from '../../hooks/useInfiniteScroll';
 import styles from './Following.module.scss';
-import LastInfinite from '../Common/LastInfinite/LastInfinite';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { followingListState } from '../../recoil/atoms/user/following';
+import { pageNationState } from '../../recoil/atoms/pagination';
+import NextUserCardList from '../Common/UserCard/NextUserCardList';
+import InnerSpinner from '../Common/Spinner/InnerSpinner';
+import { followingListSeletor } from '../../recoil/selectors/user/follwing';
 
 const Following = () => {
   const navigate = useNavigate();
-  const [followings, setFollowings] = useState<LetterUserData[]>([]);
-  const pageRef = useRef<number>(0);
-  const isStopRef = useRef<boolean>(false);
+  const setPagination = useSetRecoilState(pageNationState);
+  const [followings, setFollowings] = useRecoilState(followingListState);
+
+  const resetList = () => {
+    setFollowings({
+      content: [],
+      isStop: false,
+    });
+    setPagination(0);
+  };
+  /**
+   * @description 페이지 이동 시, 초기화
+   */
+  useEffect(() => {
+    return resetList;
+  }, []);
+
+  const addRecentData = (data: FollowingListStateType) => {
+    setFollowings((prev) => ({
+      content: [...prev.content, ...data.content],
+      isStop: data.isStop,
+    }));
+  };
 
   const moveProfileHandler = (id: number): void => {
     navigate(`/profile/${id}`);
   };
 
-  const getFollowings = async (page: number) => {
-    if (isStopRef.current) return;
-    try {
-      const { data } = await GET(`/users/me/follows?page=${page}&size=10`);
-      if (data) {
-        setFollowings((prev) => [...prev, ...data.content]);
-        isStopRef.current = data.last;
-      }
-    } catch (error) {
-      console.log('error');
-      // TODO: ERROR 처리 방법
-    }
+  // TODO: 가운데 정렬 하고 싶은데 어떻게 해야할까요?
+  const emptyProps = {
+    title: '팔로잉한 친구가 없어요',
+    children: (
+      <Flex dir="column" align="center" gap="lg">
+        <Flex.Col>
+          <FiUsers className={styles.icon} size={'6rem'} />
+        </Flex.Col>
+        <Flex.Col>
+          <ButtonGroup>
+            <Button variant="primary" size="md" to="/search">
+              친구 찾으러 가기
+            </Button>
+          </ButtonGroup>
+        </Flex.Col>
+      </Flex>
+    ),
   };
-
-  const sentinelRef = useInfiniteScroll(async (page: number) => {
-    await getFollowings(page);
-    pageRef.current++;
-  }, pageRef.current);
-
-  if (followings.length === 0) {
-    return (
-      <Empty title="팔로잉한 친구가 없어요">
-        <Flex dir="column" align="center" gap="lg">
-          <Flex.Col>
-            <FiUsers className={styles.icon} size={'6rem'} />
-          </Flex.Col>
-          <Flex.Col>
-            <ButtonGroup>
-              <Button variant="primary" size="md" to="/search">
-                친구 찾으러 가기
-              </Button>
-            </ButtonGroup>
-            <div ref={sentinelRef}></div>
-          </Flex.Col>
-        </Flex>
-      </Empty>
-    );
-  }
 
   return (
     <>
-      <Flex dir="column" gap="md">
+      <Flex dir="column" justify="between" gap="md">
         <Flex.Col>
-          <ButtonGroup justify="end">
+          <ButtonGroup justify="between">
+            <Button
+              variant="primary"
+              size="sm"
+              to="/search"
+              icon={<FiSearch />}
+            >
+              친구 찾기
+            </Button>
             <Button variant="secondary" size="sm" to="/blacklist">
               차단 친구 목록
             </Button>
@@ -75,7 +85,7 @@ const Following = () => {
         <Flex.Col>
           <ul className={styles.letter_list}>
             {followings &&
-              followings.map((user: LetterUserData) => (
+              followings.content.map((user: LetterUserData) => (
                 <UserCard
                   key={user.memberId}
                   {...user}
@@ -89,8 +99,16 @@ const Following = () => {
                   />
                 </UserCard>
               ))}
+            {/* 새로 불러오는 List */}
+            <Suspense fallback={<InnerSpinner size="sm" />}>
+              <NextUserCardList
+                selector={followingListSeletor}
+                addRecentData={addRecentData}
+                empty={emptyProps}
+                endText="마지막 스크롤 입니다."
+              ></NextUserCardList>
+            </Suspense>
           </ul>
-          <LastInfinite text="마지막 친구 입니다." ref={sentinelRef} />
         </Flex.Col>
       </Flex>
     </>

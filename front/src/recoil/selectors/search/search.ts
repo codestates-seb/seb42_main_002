@@ -1,26 +1,54 @@
 import { selector } from 'recoil';
+import { LanguageDataType } from '../../../utils';
 import { GET } from '../../../utils/axios';
-import { selectedSearchTagState } from '../../atoms';
+import { TagDataType } from '../../../utils/types/tags/tags';
+import {
+  searchUserListState,
+  selectedSearchLangTagState,
+  selectedSearchTagState,
+} from '../../atoms';
+import { pageNationState } from '../../atoms/pagination';
 
 /**
- * @description 프로필 정보를 가져오는 API, TODO: 나중에 변경 예정
+ * @description 검색 유저 리스트 selector
  */
-export const searchUserTagSelector = selector({
-  key: 'searchTag',
+export const searchUserListSeletor = selector({
+  key: 'searchUserList/get',
   get: async ({ get }) => {
-    const tags = get(selectedSearchTagState);
-    if (tags.length === 0) {
-      try {
-        const { data } = await GET('/users/me');
-        return data.tag;
-      } catch (err) {
-        // TODO: 에러 처리하기
-        console.log(err);
-      }
+    const page = get(pageNationState);
+    const searchTags = get(selectedSearchTagState);
+    const searchLangTags = get(selectedSearchLangTagState);
+    const { content, isStop } = get(searchUserListState);
+    if (isStop) {
+      return {
+        content,
+        isStop,
+      };
     }
-    return tags;
-  },
-  set: ({ set }, newValue) => {
-    set(selectedSearchTagState, newValue);
+
+    try {
+      const tags = searchTags.map((tag: TagDataType) => tag.name).join('+');
+      const langs = searchLangTags
+        .map((tag: LanguageDataType) => tag.nation)
+        .join('+');
+
+      const params = new URLSearchParams();
+      params.append('tag', tags);
+      params.append('lang', langs);
+      params.append('page', String(page));
+      params.append('size', '10');
+      const queryString = params.toString();
+      const { data } = await GET(`/users/search?${queryString}`);
+      return {
+        content: data.content, // 최신 데이터만
+        isStop: data.last, // 끝 여부
+      };
+    } catch (error: unknown) {
+      console.error(error);
+    }
+    return {
+      content: [],
+      isStop: false,
+    };
   },
 });

@@ -1,12 +1,11 @@
+import { useSetRecoilState } from 'recoil';
+import { useNavigate } from 'react-router-dom';
 import RoundProfile from '../RoundProfile/RoundProfile';
 import UserCardInfo from './UserCardInfo/UserCardInfo';
-
-import styles from './UserCard.module.scss';
-import { useSetRecoilState } from 'recoil';
 import { selectedUserInfoState } from '../../../recoil/atoms';
 import { LetterUserCardProps } from '../../Letter/LetterUserCard/LetterUserCard';
-import { useNavigate } from 'react-router-dom';
 import { LOCATION_CODE } from '../../../utils/enums/common/common.enum';
+import styles from './UserCard.module.scss';
 
 type UserCardProps = {
   name: string;
@@ -61,6 +60,9 @@ const UserCard = ({
       </div>
       {/* INFO */}
       <div className={styles.profile_info}>
+        {memberStatus === 'MEMBER_QUIT' && (
+          <p className={styles.user_quit}>탈퇴한 회원입니다.</p>
+        )}
         <UserCardInfo name={name} location={location} date={date} />
       </div>
       {/* 타입에 따른 아이콘 변경*/}

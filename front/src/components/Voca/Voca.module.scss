@@ -1,4 +1,5 @@
 .card_list {
+  height: calc(100% - 4rem);
   & li {
     margin-bottom: 1rem;
   }
@@ -9,8 +10,8 @@
 }
 
 .button {
-  position: fixed;
-  right: 1rem;
-  bottom: 5rem;
+  position: sticky;
+  left: 100%;
+  bottom: 1rem;
   box-shadow: var(--default-box-shadow);
 }

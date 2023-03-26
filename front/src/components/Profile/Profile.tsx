@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AiOutlineAlert } from 'react-icons/ai';
 import { HiOutlineBan } from 'react-icons/hi';
@@ -15,8 +15,8 @@ import styles from './Profile.module.scss';
 import { getAge, UserData } from '../../utils';
 import useModals from '../../hooks/useModals';
 import AlertModal, { AlertModalProps } from '../Common/Modal/AlertModal';
-import { newLetterState } from '../../recoil/atoms';
-import { useSetRecoilState } from 'recoil';
+import { newLetterState, userState } from '../../recoil/atoms';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { BiEdit } from 'react-icons/bi';
 
 const Profile = () => {
@@ -27,8 +27,23 @@ const Profile = () => {
   const [userInfo, setUserInfo] = useState<UserData | null>(null);
   const [changeFollowing, setChangeFollowing] = useState(false);
   const [changeBloks, setChangeBlocks] = useState(false);
+  const myInfo = useRecoilValue(userState);
 
-  // const { friend }: any = userInfo;
+  /**
+   * 내가 선택한 언어
+   */
+  const myInfoLanguages = useMemo(
+    () => (myInfo && myInfo?.language?.map((tag) => tag.languageId)) || [],
+    [myInfo?.language]
+  );
+
+  /**
+   * 내가 선택한 태그
+   */
+  const myInfoTags = useMemo(
+    () => (myInfo && myInfo?.tag?.map((tag) => tag.tagId)) || [],
+    [myInfo?.tag]
+  );
 
   /**
    * 유저 상세 조회
@@ -277,7 +292,11 @@ const Profile = () => {
                     {userInfo.language &&
                       userInfo.language.map((language) => (
                         <Flex.Col key={language.nation}>
-                          <Label>
+                          <Label
+                            isActive={myInfoLanguages.includes(
+                              language.languageId
+                            )}
+                          >
                             {langTransformer(language.nation)} Lv.
                             {language.level}
                           </Label>
@@ -293,7 +312,9 @@ const Profile = () => {
                     {userInfo.tag &&
                       userInfo.tag.map((tag) => (
                         <Flex.Col key={tag.tagId}>
-                          <Label>{tag.name}</Label>
+                          <Label isActive={myInfoTags.includes(tag.tagId)}>
+                            {tag.name}
+                          </Label>
                         </Flex.Col>
                       ))}
                   </Flex>

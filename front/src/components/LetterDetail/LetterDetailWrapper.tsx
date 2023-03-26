@@ -7,7 +7,6 @@ import {
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { GET, POST } from '../../utils/axios';
-import { SeletedLetterDataType } from '../../utils';
 import LetterContent from './LetterContent/LetterContent';
 import LetterPictureWrapper from './LetterPicture/LetterPictureWrapper';
 import Button from '../Common/Button/Button';
@@ -21,11 +20,9 @@ const LetterDetailWrapper = () => {
   const { letterId } = useParams();
 
   const setSelectedPictureIdx = useSetRecoilState(selectedPictureIdx);
-  // TODO: 리코일 setter사용 시, 페이지 접속 시 바로 렌더링이 되지않음.
   const [selectedLetter, setSelectedLetter] =
     useRecoilState(selectedLetterState);
   const newLetter = useRecoilValue(newLetterState);
-  const [letter, setLetter] = useState<SeletedLetterDataType>(selectedLetter);
   const [isShowButton, setIsShowButton] = useState<boolean>(false);
   const [selectLanguage, setSelectLanguage] = useState({
     content: selectedLetter.body,
@@ -34,15 +31,18 @@ const LetterDetailWrapper = () => {
   const [translatedLanguage, setTranslatedLanguage] = useState(
     selectedLetter.body
   );
+
   /**
    * @description API
    */
   const getDetailLetter = async () => {
     try {
       const { data } = await GET(`/users/me/letters?letter=${letterId}`);
-
-      setSelectedLetter(data);
-      setLetter(data);
+      setSelectedLetter((prev) => ({
+        ...prev,
+        ...data,
+      }));
+      // setLetter(data);
       setSelectLanguage({ ...selectLanguage, content: data.body });
       setTranslatedLanguage(data.body);
       if (data.receiver !== newLetter.receiver) {
@@ -52,7 +52,6 @@ const LetterDetailWrapper = () => {
       }
     } catch (error) {
       console.log('error');
-      // TODO: ERROR 처리 방법
     }
   };
 
@@ -84,6 +83,18 @@ const LetterDetailWrapper = () => {
     setSelectLanguage({ ...selectLanguage, targetNation: event.target.value });
   };
 
+  const ReplyButton = () => {
+    const isActiveMember = selectedLetter.memberStatus !== 'MEMBER_QUIT';
+    if (isShowButton && isActiveMember) {
+      return (
+        <Button variant="primary" size="lg" full to="/newletter">
+          답장하기
+        </Button>
+      );
+    }
+    return <></>;
+  };
+
   return (
     <div className={styles.wrapper}>
       {/* 파파고 버튼 */}
@@ -100,23 +111,18 @@ const LetterDetailWrapper = () => {
       </div>
       {/* 편지 내용 */}
       <LetterContent
-        receiver={letter.receiver}
+        receiver={selectedLetter.receiver}
         body={translatedLanguage}
-        type={letter.type}
+        type={selectedLetter.type}
       />
       {/* 편지 사진 */}
       <LetterPictureWrapper
-        pictures={letter.photoUrl}
+        pictures={selectedLetter.photoUrl}
         onClick={pictureClickHandler}
         isRead
       />
       {/* 답장 */}
-      {/* 버튼 고민 */}
-      {isShowButton && (
-        <Button variant="primary" size="lg" full to="/newletter">
-          답장하기
-        </Button>
-      )}
+      <ReplyButton />
     </div>
   );
 };

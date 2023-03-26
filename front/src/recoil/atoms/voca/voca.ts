@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { VocaDataType } from '../../../utils/types/voca';
+import { VocaDataType, vocaListStateType } from '../../../utils/types/voca';
 
 export const selectedVocaState = atom<VocaDataType>({
   key: 'selectedVocaState',
@@ -8,6 +8,14 @@ export const selectedVocaState = atom<VocaDataType>({
     word: '',
     meaning: '',
     nation: '',
+  },
+});
+
+export const vocaListState = atom<vocaListStateType>({
+  key: 'vocaListState',
+  default: {
+    content: [],
+    isStop: false,
   },
 });
 

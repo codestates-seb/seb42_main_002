@@ -5,8 +5,8 @@
 }
 
 .btn_newLetter {
-  position: absolute;
-  bottom: 2rem;
-  right: 2rem;
+  position: sticky;
+  left: 100%;
+  bottom: 1rem;
   z-index: 2;
 }

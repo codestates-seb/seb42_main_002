@@ -4,7 +4,7 @@ import styles from './ButtonGroup.module.scss';
 
 type ButtonGroupProps = {
   gap?: 'none' | 'sm' | 'md' | 'lg';
-  justify?: 'start' | 'center' | 'end'; // 버튼 그룹 가로 정렬
+  justify?: 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly'; // 버튼 그룹 가로 정렬
   align?: 'start' | 'center' | 'end'; // 버튼 그룹 세로 정렬
   wrap?: 'wrap' | 'nowrap';
   children?: ReactNode;
@@ -45,6 +45,9 @@ const JUSTIFY_CONTENT = {
   start: styles.h_start,
   center: styles.h_center,
   end: styles.h_end,
+  between: styles.h_between,
+  around: styles.h_around,
+  evenly: styles.h_evenly,
 };
 
 const FLEX_WRAP = {
