@@ -112,8 +112,9 @@ public class MemberConvertService {
     }
     String[] tagNameArr = tagNames.split(" ");
     List<Tag> allTags = tagService.findAllTags();
-    List<Long> tagList = Arrays.stream(tagNameArr).map(name -> findTag(allTags, name).getTagId()).collect(
-        Collectors.toList());
+    List<Long> tagList = Arrays.stream(tagNameArr).map(name -> findTag(allTags, name).getTagId())
+        .collect(
+            Collectors.toList());
     return tagList;
   }
 
@@ -159,7 +160,8 @@ public class MemberConvertService {
     return false;
   }
 
-  public Page<MemberLetterDto> memberLetterToFollowMemberPage(Page<FollowMemberInterface> memberLetterPage) {
+  public Page<MemberLetterDto> memberLetterToFollowMemberPage(
+      Page<FollowMemberInterface> memberLetterPage) {
     return memberLetterPage.map(memberLetter -> {
       MemberLetterDto.MemberLetterDtoBuilder builder = MemberLetterDto.builder()
           .name(memberLetter.getName())
@@ -171,16 +173,21 @@ public class MemberConvertService {
       if (memberLetter.getReceiver_id() == null) {
         builder.lastLetter(null);
       } else {
-        builder.lastLetter(LetterSimpleDto.builder().status(
-                memberLetter.getFollower_id().equals(memberLetter.getReceiver_id())
-                    ? LetterStatus.RECEIVED : LetterStatus.SENT).isRead(memberLetter.getIs_read())
-            .createdAt(memberLetter.getCreated_at()).build());
+        builder.lastLetter(
+            LetterSimpleDto.builder()
+                .status(memberLetter.getFollower_id().equals(memberLetter.getReceiver_id())
+                    ? LetterStatus.RECEIVED : LetterStatus.SENT)
+                .isRead(memberLetter.getIs_read() != 0)
+                .createdAt(memberLetter.getCreated_at())
+                .build()
+        );
       }
       return builder.build();
     });
   }
 
-  public Page<MemberLetterDto> memberLetterToMemberLetterDtoPage(Page<MemberLetterInterface> memberLetterInterfacePage){
+  public Page<MemberLetterDto> memberLetterToMemberLetterDtoPage(
+      Page<MemberLetterInterface> memberLetterInterfacePage) {
     return memberLetterInterfacePage.map(memberLetter -> {
       MemberLetterDto.MemberLetterDtoBuilder builder = MemberLetterDto.builder()
           .name(memberLetter.getName())
@@ -192,10 +199,14 @@ public class MemberConvertService {
       if (memberLetter.getReceiver_id() == null) {
         builder.lastLetter(null);
       } else {
-        builder.lastLetter(LetterSimpleDto.builder().status(
-                !memberLetter.getMember_id().equals(memberLetter.getReceiver_id())
-                    ? LetterStatus.RECEIVED : LetterStatus.SENT).isRead(memberLetter.getIs_read())
-            .createdAt(memberLetter.getCreated_at()).build());
+        builder.lastLetter(
+            LetterSimpleDto.builder()
+                .status(!memberLetter.getMember_id().equals(memberLetter.getReceiver_id())
+                    ? LetterStatus.RECEIVED : LetterStatus.SENT)
+                .isRead(memberLetter.getIs_read() != 0)
+                .createdAt(memberLetter.getCreated_at())
+                .build()
+        );
       }
       return builder.build();
     });
