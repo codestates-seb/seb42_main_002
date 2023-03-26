@@ -10,6 +10,7 @@ import com.mainproject.back.language.exception.LanguageExceptionCode;
 import com.mainproject.back.language.service.LanguageService;
 import com.mainproject.back.letter.dto.LetterSimpleDto;
 import com.mainproject.back.letter.dto.LetterSimpleDto.LetterStatus;
+import com.mainproject.back.member.dto.FollowMemberInterface;
 import com.mainproject.back.member.dto.MemberBlockDto;
 import com.mainproject.back.member.dto.MemberBlockInterface;
 import com.mainproject.back.member.dto.MemberDto;
@@ -158,7 +159,7 @@ public class MemberConvertService {
     return false;
   }
 
-  public Page<MemberLetterDto> memberLetterToMemberLetterPage(Page<MemberLetterInterface> memberLetterPage) {
+  public Page<MemberLetterDto> memberLetterToFollowMemberPage(Page<FollowMemberInterface> memberLetterPage) {
     return memberLetterPage.map(memberLetter -> {
       MemberLetterDto.MemberLetterDtoBuilder builder = MemberLetterDto.builder()
           .name(memberLetter.getName())
@@ -172,6 +173,27 @@ public class MemberConvertService {
       } else {
         builder.lastLetter(LetterSimpleDto.builder().status(
                 memberLetter.getFollower_id().equals(memberLetter.getReceiver_id())
+                    ? LetterStatus.RECEIVED : LetterStatus.SENT).isRead(memberLetter.getIs_read())
+            .createdAt(memberLetter.getCreated_at()).build());
+      }
+      return builder.build();
+    });
+  }
+
+  public Page<MemberLetterDto> memberLetterToMemberLetterDtoPage(Page<MemberLetterInterface> memberLetterInterfacePage){
+    return memberLetterInterfacePage.map(memberLetter -> {
+      MemberLetterDto.MemberLetterDtoBuilder builder = MemberLetterDto.builder()
+          .name(memberLetter.getName())
+          .profile(memberLetter.getProfile())
+          .birthday(memberLetter.getBirthday())
+          .location(memberLetter.getLocation())
+          .memberStatus(memberLetter.getMember_status())
+          .memberId(memberLetter.getMember_id());
+      if (memberLetter.getReceiver_id() == null) {
+        builder.lastLetter(null);
+      } else {
+        builder.lastLetter(LetterSimpleDto.builder().status(
+                !memberLetter.getMember_id().equals(memberLetter.getReceiver_id())
                     ? LetterStatus.RECEIVED : LetterStatus.SENT).isRead(memberLetter.getIs_read())
             .createdAt(memberLetter.getCreated_at()).build());
       }

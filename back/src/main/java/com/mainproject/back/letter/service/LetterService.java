@@ -3,29 +3,22 @@ package com.mainproject.back.letter.service;
 import com.mainproject.back.block.service.BlockService;
 import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.letter.dto.LetterCountDto;
-import com.mainproject.back.letter.dto.LetterSimpleDto;
-import com.mainproject.back.letter.dto.LetterSimpleDto.LetterStatus;
 import com.mainproject.back.letter.dto.LetterTranslateDto;
 import com.mainproject.back.letter.entity.Letter;
 import com.mainproject.back.letter.entity.Nations;
 import com.mainproject.back.letter.exception.LetterExceptionCode;
 import com.mainproject.back.letter.repository.LetterRepository;
-import com.mainproject.back.member.dto.MemberLetterDto;
+import com.mainproject.back.member.dto.MemberLetterInterface;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.entity.Member.MemberStatus;
 import com.mainproject.back.member.service.MemberService;
 import com.mainproject.back.util.ApiManager;
-import com.mainproject.back.util.Util;
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,7 +41,7 @@ public class LetterService {
     Member sender = memberService.findMember(letter.getSender().getMemberId());
     Member receiver = memberService.findMember(letter.getReceiver().getMemberId());
     // 탈퇴 혹은 휴면계정한테 편지를 보낼 수 없음
-    if(!receiver.getMemberStatus().equals(MemberStatus.MEMBER_ACTIVE)){
+    if (!receiver.getMemberStatus().equals(MemberStatus.MEMBER_ACTIVE)) {
       throw new BusinessLogicException(LetterExceptionCode.LETTER_NOT_ALLOWED);
     }
     letter.setAvailableAt(calculateTime(sender, receiver));
@@ -88,52 +81,9 @@ public class LetterService {
     return LocalDateTime.now();
   }
 
-  public Page<MemberLetterDto> findMembersByLetter(Pageable pageable, long memberId) {
-    List<Long> blockIdList = blockService.findBlockIdList(memberId);
-    Set<Letter> sentLetter = letterRepository.findSentLettersByMember(memberId);
-    Set<Letter> receivedLetter = letterRepository.findReceivedLettersByMember(memberId);
-    Set<MemberLetterDto> memberLetterDtoSet = sentLetter.stream()
-        .filter(letter -> !blockIdList.contains(letter.getReceiver().getMemberId()))
-        .map(letter -> {
-          Member receiver = letter.getReceiver();
-          return MemberLetterDto.builder().memberId(receiver.getMemberId())
-              .name(receiver.getName())
-              .birthday(receiver.getBirthday())
-              .profile(receiver.getProfile())
-              .location(receiver.getLocation())
-              .memberStatus(receiver.getMemberStatus())
-              .lastLetter(
-                  LetterSimpleDto.builder().isRead(letter.getIsRead()).status(LetterStatus.SENT)
-                      .createdAt(letter.getCreatedAt()).build())
-              .build();
-        }).collect(Collectors.toSet());
-    memberLetterDtoSet.addAll(receivedLetter.stream()
-        .filter(letter -> !blockIdList.contains(letter.getSender().getMemberId()))
-        .map(letter -> {
-          Member sender = letter.getSender();
-          return MemberLetterDto.builder().memberId(sender.getMemberId())
-              .name(sender.getName())
-              .profile(sender.getProfile())
-              .birthday(sender.getBirthday())
-              .location(sender.getLocation())
-              .memberStatus(sender.getMemberStatus())
-              .lastLetter(
-                  LetterSimpleDto.builder().isRead(letter.getIsRead()).status(LetterStatus.RECEIVED)
-                      .createdAt(letter.getCreatedAt()).build())
-              .build();
-        }).collect(Collectors.toSet()));
-    Comparator<MemberLetterDto> comparator = (o1, o2) -> {
-      if (o1.getLastLetter().getCreatedAt().isAfter(o2.getLastLetter().getCreatedAt())) {
-        return -1;
-      } else if (o1.getLastLetter().getCreatedAt().isEqual(o2.getLastLetter().getCreatedAt())) {
-        return 0;
-      } else {
-        return 1;
-      }
-    };
-    return Util.ListToPage(memberLetterDtoSet, pageable, comparator);
+  public Page<MemberLetterInterface> findMembersByLetter(Pageable pageable, long memberId) {
+    return letterRepository.findAllMemberLetterByMemberId(memberId, pageable);
   }
-
 
   public LetterCountDto getArrivedLettersCount(long memberId) {
     Long count;
@@ -145,15 +95,6 @@ public class LetterService {
     }
 
     return new LetterCountDto(count);
-  }
-
-  public Letter findLastLetter(long targetId, long memberId) {
-    Page<Letter> letterPage = letterRepository.findLastLetterByMember(targetId, memberId,
-        PageRequest.of(0, 1));
-    if (letterPage.isEmpty()) {
-      return null;
-    }
-    return letterPage.getContent().get(0);
   }
 
   public LetterTranslateDto translate(LetterTranslateDto letterTranslateDto) {

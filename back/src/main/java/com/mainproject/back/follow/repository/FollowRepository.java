@@ -1,7 +1,7 @@
 package com.mainproject.back.follow.repository;
 
 import com.mainproject.back.follow.entity.Follow;
-import com.mainproject.back.member.dto.MemberLetterInterface;
+import com.mainproject.back.member.dto.FollowMemberInterface;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -21,7 +21,7 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
       + "and (l.receiver_id = f.follower_id or l.sender_id = f.follower_id)) "
       + "where f.follower_id = :followerId and member_status = \"MEMBER_ACTIVE\" group by f.following_id "
       + "order by l.created_at desc", nativeQuery = true)
-  Page<MemberLetterInterface> findAllFollowingsByFollowerId(Long followerId, Pageable pageable);
+  Page<FollowMemberInterface> findAllFollowingsByFollowerId(Long followerId, Pageable pageable);
 
 
   @Query("select ing.memberId from Follow f join f.follower ed join f.following ing where ed.memberId = :memberId")
