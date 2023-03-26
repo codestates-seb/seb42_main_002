@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { TiDeleteOutline } from 'react-icons/ti';
 import { useRecoilState } from 'recoil';
 import { selectedVocaState } from '../../../recoil/atoms/voca';
+import { toast } from '../../../utils';
 import { PATCH, POST } from '../../../utils/axios';
 import { VocaDataType } from '../../../utils/types/voca';
 import Button from '../../Common/Button/Button';
@@ -86,12 +87,20 @@ const VocaModal = ({
 
   const onEditVocaHandler = (): void => {
     if (!editVoca.meaning || !editVoca.word) return;
+    if (editVoca.meaning.length >= 250) {
+      toast.error('250자 이하로 작성해주세요!');
+      return;
+    }
     editVocaAPI();
   };
 
   const onAddNewVocaHandler = (): void => {
     // 유효성 검사
     if (!newVoca.meaning || !newVoca.word) return;
+    if (editVoca.meaning.length >= 250) {
+      toast.error('250자 이하로 작성해주세요!');
+      return;
+    }
     addNewVocaAPI();
   };
 

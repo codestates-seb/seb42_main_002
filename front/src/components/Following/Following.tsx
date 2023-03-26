@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiUsers } from 'react-icons/fi';
+import { FiSearch, FiUsers } from 'react-icons/fi';
 import LetterStatusIcon from '../Common/LetterStatusIcon/LetterStatusIcon';
 import UserCard from '../Common/UserCard/UserCard';
 import { FollowingListStateType, LetterUserData } from '../../utils';
@@ -66,9 +66,17 @@ const Following = () => {
 
   return (
     <>
-      <Flex dir="column" gap="md">
+      <Flex dir="column" justify="between" gap="md">
         <Flex.Col>
-          <ButtonGroup justify="end">
+          <ButtonGroup justify="between">
+            <Button
+              variant="primary"
+              size="sm"
+              to="/search"
+              icon={<FiSearch />}
+            >
+              친구 찾기
+            </Button>
             <Button variant="secondary" size="sm" to="/blacklist">
               차단 친구 목록
             </Button>
