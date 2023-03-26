@@ -1,22 +1,11 @@
-import { useEffect } from 'react';
 import useModals from '../../hooks/useModals';
 import Button from '../../components/Common/Button/Button';
 import LocationEditModal from '../../components/MyProfile/LocationEditModal/LocationEditModal';
 import { ReactComponent as OwlsFriends } from '../../assets/img/common/owls_friends.svg';
 import styles from './Start.module.scss';
-import { useRecoilValue } from 'recoil';
-import { userState } from '../../recoil/atoms';
-import { useNavigate } from 'react-router-dom';
 
 const Start = () => {
   const { openModal } = useModals();
-  const navigate = useNavigate();
-  const userInfo = useRecoilValue(userState);
-  useEffect(() => {
-    if (userInfo?.location === null) {
-      openModal(LocationEditModal);
-    }
-  }, []);
 
   return (
     <div className={styles.container}>

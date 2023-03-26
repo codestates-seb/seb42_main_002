@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRecoilState } from 'recoil';
 import { FaMars, FaTransgender, FaVenus } from 'react-icons/fa';
 import { BiEdit } from 'react-icons/bi';
@@ -31,11 +31,10 @@ import { getAge, LanguageDataType, toast } from '../../utils';
 import { TagDataType } from '../../utils/types/tags/tags';
 import { useNavigate } from 'react-router-dom';
 import AlertModal, { AlertModalProps } from '../Common/Modal/AlertModal';
-import { removeCookie } from '../../utils/cookie';
 
 const MyProfile = () => {
   const navigate = useNavigate();
-  const { logout, removeToken } = useAuth();
+  const { logout, resetState, getCurrentUserInfo } = useAuth();
   const { openModal } = useModals();
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [userTags, setUserTags] = useRecoilState(userTagState);
@@ -50,10 +49,24 @@ const MyProfile = () => {
     OTHER: <FaTransgender color="#505050" />,
   };
 
+  const fetchUserInfo = useCallback(async () => {
+    const userInfo = await getCurrentUserInfo();
+    if (userInfo === null) {
+      navigate('/', { replace: true });
+    }
+    if (userInfo) {
+      setUserInfo(userInfo);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
+
   useEffect(() => {
     setUserLanguages(userInfo?.language as LanguageDataType[]);
     setUserTags(userInfo?.tag as TagDataType[]);
-  }, []);
+  }, [userInfo]);
 
   const onChangeEditBaseInfo = () => {
     setIsEditBaseInfo((prevState) => !prevState);
@@ -151,8 +164,9 @@ const MyProfile = () => {
     try {
       const response = await DELETE('/users/me');
       if (response) {
-        removeToken();
-        navigate('/');
+        resetState();
+        toast.success('성공적으로 탈퇴되었습니다!');
+        navigate('/', { replace: true });
       }
     } catch (error) {
       console.error(error);

@@ -32,7 +32,7 @@ const LanguageEditModal = ({ onClose }: FullPageModalProps) => {
       toast.error('언어를 하나이상 선택해주세요');
       return;
     }
-    if (!selectedUserLocation) {
+    if (userInfo?.location === null) {
       // 첫 설정일 때
       openModal(TagEditModal);
     } else {
