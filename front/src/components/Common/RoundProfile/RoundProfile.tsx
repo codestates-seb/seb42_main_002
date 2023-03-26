@@ -13,7 +13,6 @@ type RoundProfileProps = {
 };
 
 const RoundProfile = ({ location, profile }: RoundProfileProps) => {
-  // 문제) 해당 유저의 국가 정보를 받아서 inline으로 CSS수정
   return (
     <div className={styles.round_profile}>
       <div

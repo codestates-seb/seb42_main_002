@@ -1,14 +1,14 @@
-import { useRef, useState } from 'react';
+import { Suspense, useEffect } from 'react';
 import { SlEnvolopeLetter } from 'react-icons/sl';
 import { useNavigate } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
-import useInfiniteScroll from '../../../hooks/useInfiniteScroll';
-import { newLetterState } from '../../../recoil/atoms';
-import { LetterUserData } from '../../../utils';
-import { GET } from '../../../utils/axios';
-import Empty from '../../Common/Empty/Empty';
-import LastInfinite from '../../Common/LastInfinite/LastInfinite';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { letterUserListState, newLetterState } from '../../../recoil/atoms';
+import { pageNationState } from '../../../recoil/atoms/pagination';
+import { letterUserListSeletor } from '../../../recoil/selectors/letter';
+import { LetterUserData, LetterUserListStateType } from '../../../utils';
 import LetterStatusIcon from '../../Common/LetterStatusIcon/LetterStatusIcon';
+import InnerSpinner from '../../Common/Spinner/InnerSpinner';
+import NextUserCardList from '../../Common/UserCard/NextUserCardList';
 import UserCard from '../../Common/UserCard/UserCard';
 import UserQuit from '../../Common/UserCard/UserQuit/UserQuit';
 
@@ -16,32 +16,32 @@ import styles from './LetterUserList.module.scss';
 
 const LetterUserList = () => {
   const setNewLetter = useSetRecoilState(newLetterState);
-  const [userList, setUserList] = useState<LetterUserData[]>([]);
+  const setPagination = useSetRecoilState(pageNationState);
+  const [userList, setUserList] = useRecoilState(letterUserListState);
   const navigate = useNavigate();
-  const pageRef = useRef<number>(0);
-  const isStopRef = useRef<boolean>(false);
 
-  /**
-   * @description API
-   */
-  const getLetterUserList = async (page: number) => {
-    if (isStopRef.current) return;
-    try {
-      const { data } = await GET(
-        `/users/me/letters/inbox?page=${page}&size=10`
-      );
-      isStopRef.current = data.last;
-      setUserList((prev) => [...prev, ...data.content]);
-    } catch (error) {
-      console.log('error');
-      // TODO: ERROR 처리 방법
-    }
+  const addRecentData = (data: LetterUserListStateType) => {
+    setUserList((prev) => ({
+      content: [...prev.content, ...data.content],
+      isStop: data.isStop,
+    }));
   };
 
-  const sentinelRef = useInfiniteScroll(async (page: number) => {
-    await getLetterUserList(page);
-    pageRef.current++;
-  }, pageRef.current);
+  const resetList = () => {
+    setUserList({
+      content: [],
+      isStop: false,
+    });
+    setPagination(0);
+  };
+
+  /**
+   * @description 페이지 이동 시, 초기화
+   */
+  useEffect(() => {
+    resetList();
+    return resetList;
+  }, []);
 
   const onClickHandler = (
     event: React.MouseEvent<Element, MouseEvent>,
@@ -58,44 +58,64 @@ const LetterUserList = () => {
     navigate('/newLetter');
   };
 
-  if (userList.length === 0) {
+  const ChildrenButtonComponent = ({
+    memberId,
+    name,
+    lastLetter,
+    memberStatus,
+  }: any) => {
+    if (memberStatus === 'MEMBER_QUIT') {
+      return <UserQuit />;
+    }
     return (
-      <>
-        <Empty title="아직 편지를 교환한 사람이 없어요.">
-          <SlEnvolopeLetter className={styles.icon} size={'6rem'} />
-        </Empty>
-        <div ref={sentinelRef}></div>
-      </>
+      <button
+        onClick={(event) => {
+          onClickHandler(event, memberId, name);
+        }}
+      >
+        {lastLetter && (
+          <LetterStatusIcon
+            status={lastLetter.status}
+            isRead={lastLetter.isRead}
+          />
+        )}
+      </button>
     );
-  }
+  };
+
+  const emptyProps = {
+    title: '아직 편지를 교환한 사람이 없어요.',
+    icon: <SlEnvolopeLetter className={styles.icon} size={'6rem'} />,
+  };
 
   return (
     <>
       <ul className={styles.letter_list}>
-        {userList.map((user: LetterUserData) => (
+        {userList.content.map((user: LetterUserData) => (
           <UserCard
             key={user.memberId}
             {...user}
             date={user.lastLetter.createdAt}
           >
-            {user.memberStatus === 'MEMBER_QUIT' ? (
-              <UserQuit />
-            ) : (
-              <button
-                onClick={(event) => {
-                  onClickHandler(event, user.memberId, user.name);
-                }}
-              >
-                <LetterStatusIcon
-                  status={user.lastLetter.status}
-                  isRead={user.lastLetter.isRead}
-                />
-              </button>
-            )}
+            <ChildrenButtonComponent
+              memberId={user.memberId}
+              name={user.memberId}
+              lastLetter={user.lastLetter}
+            />
           </UserCard>
         ))}
+        {/* 새로 불러오는 List */}
+        <Suspense fallback={<InnerSpinner size="sm" />}>
+          <NextUserCardList
+            selector={letterUserListSeletor}
+            addRecentData={addRecentData}
+            empty={emptyProps}
+            endText="마지막 스크롤 입니다."
+          >
+            <ChildrenButtonComponent />
+          </NextUserCardList>
+        </Suspense>
       </ul>
-      <LastInfinite text="마지막 친구 입니다." ref={sentinelRef} />
     </>
   );
 };

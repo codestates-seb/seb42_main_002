@@ -16,3 +16,8 @@
 .children_wrapper {
   display: flex;
 }
+.user_quit {
+  color: var(--alert-color);
+  font-size: var(--font-size-xs);
+  margin-bottom: 0.25rem;
+}

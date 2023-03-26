@@ -11,7 +11,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <React.Suspense fallback={<Spinner />}>
+    <React.Suspense fallback={<Spinner size="lg" />}>
       <App />
     </React.Suspense>
   </React.StrictMode>
