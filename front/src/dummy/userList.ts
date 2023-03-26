@@ -1,5 +1,5 @@
 import { LOCATION_CODE } from './../utils/enums/common/common.enum';
-import { BlackUserData } from './../utils/types/users/user.type';
+import { BlackUserDataType } from './../utils/types/users/user.type';
 import { LetterUserData } from './../utils/types/letter/user.type';
 
 export const userData: LetterUserData[] = [
@@ -130,7 +130,7 @@ export const userData: LetterUserData[] = [
   },
 ];
 
-export const blackListData: BlackUserData[] = [
+export const blackListData: BlackUserDataType[] = [
   {
     profile: null,
     name: '안아영',

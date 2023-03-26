@@ -2,7 +2,7 @@ import React, { ForwardedRef } from 'react';
 import styles from './LastInfinite.module.scss';
 
 type LastInfiniteProps = {
-  text: string;
+  text?: string;
 };
 
 const LastInfinite = React.forwardRef(

@@ -11,7 +11,7 @@ import styles from './VocaModal.module.scss';
 type VocaModalPros = {
   onModalClose: (event?: React.MouseEvent<HTMLButtonElement>) => void;
   isEditMode: boolean;
-  onAddNewVoca: (newVoca: VocaDataType) => void;
+  onAddNewVoca: () => void;
   onAddEditVoca: (editVoca: VocaDataType) => void;
 };
 
@@ -53,10 +53,10 @@ const VocaModal = ({
    */
   const addNewVocaAPI = async () => {
     try {
-      const { data } = await POST('/vocabs', {
+      await POST('/vocabs', {
         ...newVoca,
       });
-      onAddNewVoca(data);
+      onAddNewVoca();
       onModalClose();
       setNewVoca({
         word: '',

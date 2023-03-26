@@ -5,20 +5,20 @@ import { Scrollbar } from 'swiper';
 import Button from '../../Common/Button/Button';
 import SearchTag from '../SearchTag/SearchTag';
 import useModals from '../../../hooks/useModals';
-import 'swiper/css';
-import 'swiper/css/scrollbar';
 import SearchFilterModal from '../SearchFilterModal/SearchFilterModal';
-import { selectedSearchLangTagState } from '../../../recoil/atoms/search';
+import {
+  selectedSearchLangTagState,
+  selectedSearchTagState,
+} from '../../../recoil/atoms/search';
 import SummaryTitle from '../../Common/SummaryTitle/SummaryTitle';
-import styles from './SearchHeader.module.scss';
 import { TagDataType } from '../../../utils/types/tags/tags';
-import { searchUserTagSelector } from '../../../recoil/selectors/search';
+import styles from './SearchHeader.module.scss';
 
 const SearchHeader = () => {
   const { openModal } = useModals();
 
   const searchLangTags = useRecoilValue(selectedSearchLangTagState);
-  const searchTags = useRecoilValue(searchUserTagSelector);
+  const searchTags = useRecoilValue(selectedSearchTagState);
 
   const openFilterModalHandler = () => {
     openModal(SearchFilterModal);
@@ -58,16 +58,17 @@ const SearchHeader = () => {
             {/* Language */}
             {searchLangTags.map((tag) => (
               <SwiperSlide key={tag.languageId} className={styles.swiper_slide}>
-                <SearchTag type="lang" tag={tag.name} />
+                <SearchTag type="lang" tag={tag.nation} />
               </SwiperSlide>
             ))}
 
             {/* Tags */}
-            {searchTags.map((tag: TagDataType) => (
-              <SwiperSlide key={tag.tagId} className={styles.swiper_slide}>
-                <SearchTag type="default" tag={tag.name} />
-              </SwiperSlide>
-            ))}
+            {searchTags &&
+              searchTags.map((tag: TagDataType) => (
+                <SwiperSlide key={tag.tagId} className={styles.swiper_slide}>
+                  <SearchTag type="default" tag={tag.name} />
+                </SwiperSlide>
+              ))}
           </Swiper>
         </div>
       </div>

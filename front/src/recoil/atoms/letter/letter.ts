@@ -1,11 +1,12 @@
 import { atom } from 'recoil';
-
 import {
+  LetterListStateType,
   newLetterType,
   SeletedLetterDataType,
 } from './../../../utils/types/letter/letter.type';
 import { LOCATION_CODE } from './../../../utils/enums/common/common.enum';
 import { LetterUserCardProps } from './../../../components/Letter/LetterUserCard/LetterUserCard';
+import { LetterUserListStateType } from '../../../utils';
 
 type selectedUserInfo = LetterUserCardProps;
 
@@ -48,14 +49,36 @@ export const selectedLetterState = atom<SeletedLetterDataType>({
     availableAt: String(new Date()),
     createdAt: String(new Date()),
     photoUrl: null,
+    memberStatus: '',
   },
 });
 
 /**
  * @description 선택한 이미지 순서 데이터
  */
-
 export const selectedPictureIdx = atom<number>({
   key: 'selectedPictureIdx',
   default: 0,
+});
+
+/**
+ * @description 편지를 주고받은 유저 리스트
+ */
+export const letterUserListState = atom<LetterUserListStateType>({
+  key: 'letterUserListState',
+  default: {
+    content: [],
+    isStop: false,
+  },
+});
+
+/**
+ * @description 특정 유저와 주고받은 편지 리스트
+ */
+export const letterListState = atom<LetterListStateType>({
+  key: 'letterListState',
+  default: {
+    content: [],
+    isStop: false,
+  },
 });

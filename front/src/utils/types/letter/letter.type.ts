@@ -15,6 +15,11 @@ export type LetterDataType = {
   hasPic: boolean; // 이미지 첨부 여부
 };
 
+export type LetterListStateType = {
+  content: LetterDataType[];
+  isStop: boolean;
+};
+
 export type SeletedLetterDataType = {
   letterId?: number;
   sender: string;
@@ -24,6 +29,7 @@ export type SeletedLetterDataType = {
   availableAt: string;
   createdAt: string;
   photoUrl: string[] | null;
+  memberStatus?: string;
 };
 
 /**
