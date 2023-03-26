@@ -15,15 +15,14 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
   @Query(value = "select * from follow where following_id = :followingId and member_status = \"MEMBER_ACTIVE\" ", nativeQuery = true)
   Page<Follow> findAllFollowersByFollowingId(Long followingId, Pageable pageable);
 
-  @Query(value =
-      "select m.member_id, m.name, m.location, m.profile, m.birthday, m.member_status, l.created_at, l.is_read, l.receiver_id, f.follower_id "
-          + "from follow f join member m on f.following_id = m.member_id "
-          + "join letter l on (l.receiver_id = m.member_id or l.sender_id = m.member_id) and f.follower_id = :followerId "
-          + "and l.created_at in (select MAX(l.created_at) as created_at from letter l group by l.receiver_id) "
-          + "where member_status = \"MEMBER_ACTIVE\" "
-          + "group by f.following_id order by l.created_at desc", nativeQuery = true)
-  Page<MemberLetterInterface> findAllFollowingsByFollowerId(
-      @Param("followerId") Long followerId, Pageable pageable);
+  @Query(value = "select m.member_id, m.name, m.location, m.profile, m.birthday, m.member_status, l.created_at, l  .is_read, l.receiver_id, f.follower_id "
+      + "from follow f join member m on f.following_id = m.member_id "
+      + "left join letter l on ((l.receiver_id = m.member_id or l.sender_id = m.member_id) "
+      + "and (l.receiver_id = f.follower_id or l.sender_id = f.follower_id)) "
+      + "where f.follower_id = :followerId and member_status = \"MEMBER_ACTIVE\" group by f.following_id "
+      + "order by l.created_at desc", nativeQuery = true)
+  Page<MemberLetterInterface> findAllFollowingsByFollowerId(Long followerId, Pageable pageable);
+
 
   @Query("select ing.memberId from Follow f join f.follower ed join f.following ing where ed.memberId = :memberId")
   List<Long> findAllFollowingId(@Param("memberId") long memberId);
