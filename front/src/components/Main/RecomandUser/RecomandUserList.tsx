@@ -13,7 +13,7 @@ const RecomandUserList = () => {
     try {
       const { data, status } = await GET('/users/me/recommend');
       if (status === 200 && data) {
-        setRecomandUserList(data.content);
+        setRecomandUserList(data.content.slice(0, 10));
       }
     } catch (error) {
       console.error(error);
