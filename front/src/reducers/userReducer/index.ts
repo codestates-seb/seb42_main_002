@@ -1,4 +1,3 @@
-import { userData } from '../../dummy/userList';
 import { profileUser } from '../../dummy/users';
 import {
   GENDER_TYPE,

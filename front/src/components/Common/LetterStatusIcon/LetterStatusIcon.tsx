@@ -13,7 +13,6 @@ const LetterStatusIcon = ({ status, isRead }: LetterStatusIconProps) => {
     SENT: (
       <>
         {!isRead && <div className={styles.read_flag}></div>}
-
         <Send />
       </>
     ),
