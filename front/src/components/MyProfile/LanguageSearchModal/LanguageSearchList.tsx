@@ -11,7 +11,7 @@ import {
   userLanguageNationState,
   userLanguageState,
 } from '../../../recoil/atoms/user/userLanguage';
-import { languageTags } from '../../../dummy/languages';
+import { allLanguageState } from '../../../recoil/selectors';
 
 type LanguageSearchListProps = {
   languages: LanguageDataType[];
@@ -19,12 +19,13 @@ type LanguageSearchListProps = {
 
 const LanguageSearchList = ({ languages }: LanguageSearchListProps) => {
   const { openModal } = useModals();
+  const allLanguages = useRecoilValue(allLanguageState);
   const selectedUserLanguages = useRecoilValue(userLanguageState);
   const setSelectedUserLanguageNation = useSetRecoilState(
     userLanguageNationState
   );
   const [selected] = useState<LanguageDataType[]>(
-    languageTags.filter((lang) =>
+    allLanguages.filter((lang) =>
       selectedUserLanguages.map((lang) => lang.nation).includes(lang.nation)
     )
   );
