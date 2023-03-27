@@ -31,11 +31,8 @@ export const vocaSeletor = selector({
       };
     } catch (error: unknown) {
       console.error(error);
+      throw new Error('단어 GET API 에러');
     }
-    return {
-      content: [],
-      isStop: false,
-    };
   },
 });
 
@@ -49,6 +46,7 @@ export const randomVocaSelector = selector<VocaDataType>({
       }
     } catch (error) {
       console.error(error);
+      throw new Error('단어 GET API 에러');
     }
     return null;
   },

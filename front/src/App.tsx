@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import AuthProvider from './context/AuthContext';
 import NoneLayout from './components/Layouts/NoneLayout';
@@ -35,7 +36,6 @@ import 'swiper/css/scrollbar';
 // Import React Toast styles
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Suspense } from 'react';
 
 const routerData: RouterElement[] = [
   {

@@ -22,11 +22,7 @@ export const followingListSeletor = selector({
         isStop: data.last, // 끝 여부
       };
     } catch (error: unknown) {
-      console.error(error);
+      throw new Error('친구 GET API 에러');
     }
-    return {
-      content: [],
-      isStop: false,
-    };
   },
 });

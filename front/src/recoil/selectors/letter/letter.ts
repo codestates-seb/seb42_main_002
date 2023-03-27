@@ -25,11 +25,8 @@ export const letterUserListSeletor = selector({
       };
     } catch (error: unknown) {
       console.error(error);
+      throw new Error('편지 GET API 에러');
     }
-    return {
-      content: [],
-      isStop: false,
-    };
   },
 });
 
@@ -57,11 +54,8 @@ export const letterListSeletor = selector({
       };
     } catch (error: unknown) {
       console.error(error);
+      throw new Error('편지 GET API 에러');
     }
-    return {
-      content: [],
-      isStop: false,
-    };
   },
 });
 
@@ -75,6 +69,7 @@ export const arrivedLetterCountSelector = selector({
       }
     } catch (error) {
       console.error(error);
+      throw new Error('편지 GET API 에러');
     }
     return 0;
   },
@@ -93,6 +88,7 @@ export const selectedLetterSelector = selectorFamily({
       }
     } catch (error) {
       console.error(error);
+      throw new Error('편지 GET API 에러');
     }
     return null;
   },

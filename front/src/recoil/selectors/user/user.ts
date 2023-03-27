@@ -39,6 +39,7 @@ export const recomandUserSelector = selector({
       }
     } catch (error) {
       console.error(error);
+      throw new Error('추천 유저 GET API 에러');
     }
     return [];
   },
@@ -58,6 +59,7 @@ export const otherUserSelector = selectorFamily<UserData | null, string>({
         }
       } catch (error) {
         console.error(error);
+        throw new Error('다른 유저 프로필 GET API 에러');
       }
       return null;
     },
