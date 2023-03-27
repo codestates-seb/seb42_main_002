@@ -7,7 +7,7 @@ export type TagDataType = {
 };
 
 export type LangTagDataType = {
-  languageId: number;
+  languageId?: number;
   name?: string;
   englishName: string;
   nation: LANGUAGE_CODE;
