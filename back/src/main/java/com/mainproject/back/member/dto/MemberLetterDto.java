@@ -18,6 +18,7 @@ public class MemberLetterDto {
   private String profile;
   private String birthday;
   private Member.MemberStatus memberStatus;
+  private Boolean isRead;
   private LetterSimpleDto lastLetter;
 
   @Override

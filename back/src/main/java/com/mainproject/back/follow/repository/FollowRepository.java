@@ -16,7 +16,8 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
   Page<Follow> findAllFollowersByFollowingId(Long followingId, Pageable pageable);
 
   @Query(value = "select m.member_id, m.name, m.location, m.profile, m.birthday, m.member_status, "
-      + "l.created_at, (select q.is_read from letter q where q.letter_id = l.letter_id) as is_read, l.receiver_id, f.follower_id "
+      + "l.created_at, l.receiver_id, f.follower_id, "
+      + "0 in (select q.is_read from letter q where q.receiver_id = :followerId and q.sender_id = m.member_id) as is_read "
       + "from follow f join member m on f.following_id = m.member_id "
       + "left join letter l on ((l.receiver_id = m.member_id or l.sender_id = m.member_id) "
       + "and (l.receiver_id = f.follower_id or l.sender_id = f.follower_id)) "
