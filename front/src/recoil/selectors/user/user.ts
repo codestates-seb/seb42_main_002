@@ -1,7 +1,8 @@
-import { selector } from 'recoil';
+import { selector, selectorFamily } from 'recoil';
 import { UserData } from '../../../utils';
 import { GET, PATCH } from '../../../utils/axios';
 import { userState } from '../../atoms';
+import { rerenderingTriggerState } from '../../atoms/common';
 
 export const userSeletor = selector<UserData>({
   key: 'user/patch',
@@ -25,6 +26,9 @@ export const userSeletor = selector<UserData>({
   },
 });
 
+/**
+ * @description 추천 유저 GET
+ */
 export const recomandUserSelector = selector({
   key: 'recomandUser/get',
   get: async () => {
@@ -38,4 +42,23 @@ export const recomandUserSelector = selector({
     }
     return [];
   },
+});
+
+export const otherUserSelector = selectorFamily<UserData | null, string>({
+  key: 'otherUser/get',
+  get:
+    (memberId: string) =>
+    async ({ get }) => {
+      get(rerenderingTriggerState);
+      if (!memberId) return null;
+      try {
+        const { data, status } = await GET(`/users/${memberId}`);
+        if (status === 200 && data) {
+          return data as UserData;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+      return null;
+    },
 });
