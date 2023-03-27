@@ -22,7 +22,7 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
       + "and (l.receiver_id = f.follower_id or l.sender_id = f.follower_id)) "
       + "where f.follower_id = :followerId and m.member_status = \"MEMBER_ACTIVE\" group by f.following_id "
       + "order by l.created_at desc", nativeQuery = true)
-  Page<FollowMemberInterface> findAllFollowingsByFollowerId(Long followerId, Pageable pageable);
+  List<FollowMemberInterface> findAllFollowingsByFollowerId(@Param("followerId") Long followerId, Pageable pageable);
 
 
   @Query("select ing.memberId from Follow f join f.follower ed join f.following ing where ed.memberId = :memberId")
