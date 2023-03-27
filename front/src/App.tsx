@@ -214,7 +214,7 @@ const routers = createBrowserRouter(
                   isAuth={router.isAuth}
                   isFirstLogin={router.isFirstLogin}
                 >
-                  <Suspense fallback={<Spinner size="lg" />}>
+                  <Suspense fallback={<Spinner size="md" />}>
                     {router.element}
                   </Suspense>
                 </BaseLayout>
@@ -231,7 +231,7 @@ const routers = createBrowserRouter(
             <AuthProvider>
               <ModalProvider>
                 <NoneLayout>
-                  <Suspense fallback={<Spinner size="lg" />}>
+                  <Suspense fallback={<Spinner size="md" />}>
                     {router.element}
                   </Suspense>
                 </NoneLayout>

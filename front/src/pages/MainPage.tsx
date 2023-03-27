@@ -1,4 +1,3 @@
-import React from 'react';
 import Button from '../components/Common/Button/Button';
 import LifeQuotes from '../components/Main/LifeQuotes/LifeQuotes';
 import MainLetter from '../components/Main/MainLetters/MainLetter';

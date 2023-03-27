@@ -64,3 +64,18 @@ export const letterListSeletor = selector({
     };
   },
 });
+
+export const arrivedLetterCountSelector = selector({
+  key: 'arrivedLetter/get',
+  get: async () => {
+    try {
+      const { data, status } = await GET('/users/me/letters/arrived');
+      if (status === 200 && data) {
+        return data.count;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    return 0;
+  },
+});
