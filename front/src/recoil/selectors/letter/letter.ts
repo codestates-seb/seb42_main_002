@@ -1,4 +1,4 @@
-import { selector } from 'recoil';
+import { selector, selectorFamily } from 'recoil';
 import { GET } from '../../../utils/axios';
 import { letterUserListState, selectedUserInfoState } from '../../atoms';
 import { letterPagiNationState, pageNationState } from '../../atoms/pagination';
@@ -77,5 +77,23 @@ export const arrivedLetterCountSelector = selector({
       console.error(error);
     }
     return 0;
+  },
+});
+
+export const selectedLetterSelector = selectorFamily({
+  key: 'selectedLetter/get',
+  get: (letterId: string) => async () => {
+    if (!letterId) return null;
+    try {
+      const { data, status } = await GET(
+        `/users/me/letters?letter=${letterId}`
+      );
+      if (status === 200 && data) {
+        return data;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    return null;
   },
 });
