@@ -21,8 +21,12 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
       + "left join letter l on ((l.receiver_id = m.member_id or l.sender_id = m.member_id) "
       + "and (l.receiver_id = f.follower_id or l.sender_id = f.follower_id)) "
       + "where f.follower_id = :followerId and m.member_status = \"MEMBER_ACTIVE\" group by f.following_id "
-      + "order by l.created_at desc", nativeQuery = true)
-  List<FollowMemberInterface> findAllFollowingsByFollowerId(@Param("followerId") Long followerId, Pageable pageable);
+      + "order by l.created_at desc",
+      countQuery = "select count(m.member_id) from follow f join member m on f.following_id = m.member_id "
+          + "left join letter l on (l.receiver_id = m.member_id or l.sender_id = m.member_id) and (l.receiver_id = f.follower_id or l.sender_id = f.follower_id) "
+          + "where f.follower_id = :followerId and m.member_status = \"MEMBER_ACTIVE\" group by f.following_id",
+      nativeQuery = true)
+  Page<FollowMemberInterface> findAllFollowingsByFollowerId(@Param("followerId") Long followerId, Pageable pageable);
 
 
   @Query("select ing.memberId from Follow f join f.follower ed join f.following ing where ed.memberId = :memberId")

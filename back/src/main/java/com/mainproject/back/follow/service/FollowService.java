@@ -6,7 +6,6 @@ import com.mainproject.back.follow.entity.Follow;
 import com.mainproject.back.follow.exception.FollowExceptionCode;
 import com.mainproject.back.follow.repository.FollowRepository;
 import com.mainproject.back.member.dto.FollowMemberInterface;
-import com.mainproject.back.util.Util;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -50,8 +49,7 @@ public class FollowService {
   }
 
   public Page<FollowMemberInterface> findFollowing(long memberId, Pageable pageable) {
-    List<FollowMemberInterface> followMemberInterfaces = followRepository.findAllFollowingsByFollowerId(memberId, pageable);
-    return Util.ListToPage(followMemberInterfaces, pageable, null);
+    return followRepository.findAllFollowingsByFollowerId(memberId, pageable);
   }
 
   public List<Long> findFollowingId(long memberId) {
