@@ -3,6 +3,7 @@ package com.mainproject.back.tag.controller;
 import com.mainproject.back.tag.dto.TagSimpleDto;
 import com.mainproject.back.tag.mapper.TagMapper;
 import com.mainproject.back.tag.service.TagService;
+import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class TagController {
   private final TagService tagService;
   private final TagMapper tagMapper;
 
+  @ApiOperation(value = "모든 태그 조회")
   @GetMapping
   public ResponseEntity getAllTags() {
     log.info("## 모든 태그 조회");

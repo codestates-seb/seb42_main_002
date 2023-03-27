@@ -10,6 +10,8 @@ import com.mainproject.back.member.service.MemberConvertService;
 import com.mainproject.back.member.service.MemberService;
 import com.mainproject.back.util.UriCreator;
 import com.mainproject.back.util.Util;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import java.net.URI;
 import java.security.Principal;
 import javax.validation.Valid;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 @CrossOrigin
 @RestController
@@ -47,9 +50,10 @@ public class BlockController {
   private final MemberService memberService;
   private final MemberConvertService memberConvertService;
 
+  @ApiOperation(value = "상대방 차단요청")
   @PostMapping
   public ResponseEntity postBlock(@Valid @RequestBody BlockDto.Post requestBody,
-      Principal principal) {
+      @ApiIgnore Principal principal) {
     log.info("## 차단 생성: {}", requestBody.getTargetId());
     Member member = memberService.findMemberByEmail(principal.getName());
     Member target = memberService.findMember(requestBody.getTargetId());
@@ -63,9 +67,10 @@ public class BlockController {
     return ResponseEntity.created(uri).build();
   }
 
+  @ApiOperation(value = "차단 목록 조회")
   @GetMapping
-  public ResponseEntity getBlocks(@PageableDefault Pageable pageable,
-      Principal principal) {
+  public ResponseEntity getBlocks(@PageableDefault @ApiIgnore Pageable pageable,
+      @ApiIgnore Principal principal) {
     log.info("## 차단 목록 조회");
     long memberId = memberService.findMemberIdByEmail(Util.checkPrincipal(principal));
     Page<MemberBlockInterface> blockPage = blockService.findBlocks(memberId, pageable);
@@ -73,10 +78,10 @@ public class BlockController {
     return ResponseEntity.ok().body(responses);
 
   }
-
+  @ApiOperation(value = "차단 해제")
   @DeleteMapping(params = "target")
   public ResponseEntity deleteBlock(@RequestParam("target") @Positive long targetId,
-      Principal principal) {
+      @ApiIgnore Principal principal) {
     log.info("## 차단 목록 삭제: {}", targetId);
     blockService.deleteBlock(targetId,
         memberService.findMemberIdByEmail(Util.checkPrincipal(principal)));

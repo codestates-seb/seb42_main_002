@@ -2,6 +2,7 @@ package com.mainproject.back.member.dto;
 
 import com.mainproject.back.letter.dto.LetterSimpleDto;
 import com.mainproject.back.member.entity.Member;
+import io.swagger.annotations.ApiModel;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,6 +11,7 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 @Getter
+@ApiModel("회원 편지")
 public class MemberLetterDto {
 
   private long memberId;

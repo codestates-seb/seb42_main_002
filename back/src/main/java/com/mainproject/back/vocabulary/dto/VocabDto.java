@@ -2,6 +2,7 @@ package com.mainproject.back.vocabulary.dto;
 
 import com.mainproject.back.member.dto.MemberSimpleDto;
 import com.sun.istack.NotNull;
+import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,8 +24,13 @@ public class VocabDto {
   public static class Post {
 
     @NotNull
+    @ApiModelProperty(example = "NOODLE")
     private String word;
+
+    @ApiModelProperty(example = "US")
     private String targetNation;
+
+    @ApiModelProperty(example = "국수")
     private String meaning;
 
   }
@@ -37,9 +43,15 @@ public class VocabDto {
 
     @Setter
     private long vocabId;
+
+    @ApiModelProperty(example = "NOODLE")
     private String word;
+
+    @ApiModelProperty(example = "US")
     @Nullable
     private String nation;
+
+    @ApiModelProperty(example = "우동")
     private String meaning;
   }
 

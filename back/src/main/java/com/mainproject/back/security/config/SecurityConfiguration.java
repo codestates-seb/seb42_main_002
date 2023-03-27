@@ -134,4 +134,12 @@ public class SecurityConfiguration {
     source.registerCorsConfiguration("/**", configuration);
     return source;
   }
+  protected void configure(HttpSecurity httpSecurity) throws Exception {
+    httpSecurity.authorizeHttpRequests()
+        .antMatchers("api/v2/**", "/health", "/swagger-ui.html", "/swagger/**",
+            "/swagger-resources/**", "/webjars/**", "/v2/api-docs").permitAll()
+        .anyRequest().authenticated()
+        .and()
+        .csrf().disable().formLogin();
+  }
 }

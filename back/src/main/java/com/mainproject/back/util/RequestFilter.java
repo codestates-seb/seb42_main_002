@@ -1,10 +1,13 @@
 package com.mainproject.back.util;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -17,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 import org.springframework.web.util.ContentCachingRequestWrapper;
@@ -81,7 +85,7 @@ public class RequestFilter<Map> extends GenericFilterBean {
       if (buf.length > 0) {
         try {
           String json = new String(buf, 0, buf.length, wrapper.getCharacterEncoding());
-          Gson gson = new GsonBuilder().setPrettyPrinting().create();
+          Gson gson = new GsonBuilder().setLenient().setPrettyPrinting().create();
           JsonElement element = JsonParser.parseString(json);
           return gson.toJson(element);
         } catch (UnsupportedEncodingException e) {
@@ -101,14 +105,9 @@ public class RequestFilter<Map> extends GenericFilterBean {
       byte[] buf = wrapper.getContentAsByteArray();
       if (buf.length > 0) {
         payload = new String(buf, 0, buf.length, wrapper.getCharacterEncoding());
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        JsonElement element = JsonParser.parseString(payload);
-        payload = gson.toJson(element);
         wrapper.copyBodyToResponse();
       }
     }
     return null == payload ? " - " : payload;
   }
-
-
 }

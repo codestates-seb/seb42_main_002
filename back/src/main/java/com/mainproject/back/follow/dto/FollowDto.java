@@ -1,6 +1,8 @@
 package com.mainproject.back.follow.dto;
 
 import com.mainproject.back.member.dto.MemberSimpleDto;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,9 +16,8 @@ public class FollowDto {
   @Getter
   @AllArgsConstructor
   @NoArgsConstructor
-
+  @ApiModel("팔로우 요청")
   public static class Post {
-
     @NotNull
     private Long followingId;
   }

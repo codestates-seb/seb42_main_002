@@ -2,6 +2,7 @@ package com.mainproject.back.letter.controller;
 
 import com.mainproject.back.letter.dto.LetterTranslateDto;
 import com.mainproject.back.letter.service.LetterService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ public class TranslateController {
 
   private final LetterService letterService;
 
+  @ApiOperation(value = "편지 번역")
   @PostMapping("/translate")
   public ResponseEntity<Object> getTranslated(@RequestBody LetterTranslateDto body) {
     log.info("## 편지 번역");

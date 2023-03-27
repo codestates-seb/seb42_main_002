@@ -2,6 +2,7 @@ package com.mainproject.back.language.controller;
 
 import com.mainproject.back.language.dto.LanguageSimpleDto;
 import com.mainproject.back.language.service.LanguageService;
+import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class LanguageController {
 
   private final LanguageService languageService;
-
+  @ApiOperation(value = "모든 언어 조회")
   @GetMapping
   public ResponseEntity getAllLanguages() {
     log.info("## 모든 언어 조회");

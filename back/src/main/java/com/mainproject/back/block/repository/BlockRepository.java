@@ -15,7 +15,7 @@ public interface BlockRepository extends JpaRepository<Block, Long> {
 
   @Query(value = "select m.member_id, m.name, m.profile, m.location from block b "
       + "join member m on m.member_id = b.target_id where b.member_id = :memberId and member_status = \"MEMBER_ACTIVE\"", nativeQuery = true)
-  Page<MemberBlockInterface> findAllByMemberId(long memberId, Pageable pageable);
+  Page<MemberBlockInterface> findAllByMemberId(@Param("memberId") long memberId, Pageable pageable);
 
   @Query("select b from Block b join b.target t join b.member m where t.memberId = :targetId and m.memberId = :memberId")
   Optional<Block> findBlockByTargetIdAndMemberId(@Param("targetId") long targetId, @Param("memberId") long memberId);

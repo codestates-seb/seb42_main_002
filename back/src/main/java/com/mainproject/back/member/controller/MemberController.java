@@ -9,6 +9,9 @@ import com.mainproject.back.member.mapper.MemberMapper;
 import com.mainproject.back.member.service.MemberConvertService;
 import com.mainproject.back.member.service.MemberService;
 import com.mainproject.back.util.Util;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -34,6 +37,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/users")
@@ -42,12 +46,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class MemberController {
 
-  private final static String MEMBER_DEFAULT_URL = "/members";
+  private final static String MEMBER_DEFAULT_URL = "/users";
   private final MemberService memberService;
   private final MemberMapper mapper;
   private final MemberConvertService memberConvertService;
 
-
+  @ApiOperation(value = "회원 가입")
   @PostMapping
   public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post requestBody) {
     log.info("## 회원 가입");
@@ -59,10 +63,10 @@ public class MemberController {
 
     return ResponseEntity.created(location).build();
   }
-
+  @ApiOperation(value = "내 정보 수정")
   @PatchMapping("/me")
   public ResponseEntity patchMember(
-      Principal principal,
+      @ApiIgnore Principal principal,
       @Valid @RequestBody MemberDto.Patch requestBody) {
     Long currentId = memberService.findMemberIdByEmail(Util.checkPrincipal(principal));
     requestBody.setMemberId(currentId);
@@ -71,18 +75,18 @@ public class MemberController {
     Member updateMember = memberService.updateMember(member);
     return ResponseEntity.ok().body(mapper.memberToMemberResponse(updateMember));
   }
-
+  @ApiOperation(value = "내 정보 조회")
   @GetMapping("/me")
-  public ResponseEntity getMemberBySelf(Principal principal) {
+  public ResponseEntity getMemberBySelf(@ApiIgnore Principal principal) {
     log.info("## 내 정보 조회");
     Member findMember = memberService.findMemberByEmail(Util.checkPrincipal(principal));
 
     return ResponseEntity.ok().body(mapper.memberToMemberResponse(findMember));
   }
-
+  @ApiOperation(value = "사용자 정보 조회")
   @GetMapping("/{member-id}")
   public ResponseEntity getMember(
-      @PathVariable("member-id") @Positive long memberId, Principal principal) {
+      @PathVariable("member-id") @Positive long memberId, @ApiIgnore Principal principal) {
     Member findMember = memberService.findMember(memberId);
     log.info("## 사용자 정보 조회: {}", findMember.toString());
     long id = memberService.findMemberIdByEmail(Util.checkPrincipal(principal));
@@ -91,18 +95,18 @@ public class MemberController {
         HttpStatus.OK);
 
   }
-
+  @ApiOperation(value = "탈퇴")
   @DeleteMapping("/me")
-  public ResponseEntity deleteMember(Principal principal) {
+  public ResponseEntity deleteMember(@ApiIgnore Principal principal) {
     log.info("## 사용자 탈퇴: {}", principal.getName());
     Long currentId = memberService.findMemberIdByEmail(Util.checkPrincipal(principal));
     memberService.deleteMember(currentId);
 
     return new ResponseEntity<>(HttpStatus.OK);
   }
-
+  @ApiOperation(value = "사용자 태그 기반 추천 친구")
   @GetMapping("/me/recommend")
-  public ResponseEntity getRecommended(Principal principal) {
+  public ResponseEntity getRecommended(@ApiIgnore Principal principal) {
     log.info("## 사용자 태그 기반 추천 친구");
     Long memberId = memberService.findMemberIdByEmail(Util.checkPrincipal(principal));
 
@@ -112,12 +116,12 @@ public class MemberController {
         memberPage);
     return ResponseEntity.ok().body(memberRecommendDtoPage);
   }
-
+  @ApiOperation(value = "태그 , 언어로 사용자 검색")
   @GetMapping("/search")
   public ResponseEntity searchMembers(
       @RequestParam(value = "tag", required = false, defaultValue = "") String tags,
       @RequestParam(value = "lang", required = false, defaultValue = "") String lang,
-      @PageableDefault Pageable pageable, Principal principal) {
+      @PageableDefault @ApiIgnore Pageable pageable, @ApiIgnore Principal principal) {
     long memberId = memberService.findMemberIdByEmail(Util.checkPrincipal(principal));
     log.info("## 태그 검색: {}", tags);
     log.info("## 언어 검색: {}", lang);

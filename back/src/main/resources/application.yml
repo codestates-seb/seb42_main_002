@@ -40,3 +40,9 @@ jwt:
   key: zxcasdlqwealksjdioqywejkashdjkhj1k23hjkhsd87382h
   access-token-expiration-minutes: 1440
   refresh-token-expiration-minutes: 1440
+
+---
+spring:
+  mvc:
+    path match:
+      matching-strategy: ant_path_matcher

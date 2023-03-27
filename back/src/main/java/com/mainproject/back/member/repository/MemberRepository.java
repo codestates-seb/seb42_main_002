@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
   @Query(value = "select * from member m where m.email = :email and m.member_status = \"MEMBER_ACTIVE\"", nativeQuery = true)
-  Optional<Member> findByEmail(String email);
+  Optional<Member> findByEmail(@Param("email") String email);
 
   @Query(value = "select m.member_id from member m where m.email = :email and m.member_status = \"MEMBER_ACTIVE\"", nativeQuery = true)
   Optional<Long> findMemberIdByEmail(@Param("email") String email);

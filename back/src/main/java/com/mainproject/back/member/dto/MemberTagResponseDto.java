@@ -1,5 +1,6 @@
 package com.mainproject.back.member.dto;
 
+import io.swagger.annotations.ApiModel;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

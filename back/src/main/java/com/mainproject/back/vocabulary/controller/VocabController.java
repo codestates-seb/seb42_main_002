@@ -10,6 +10,7 @@ import com.mainproject.back.vocabulary.dto.VocabDto;
 import com.mainproject.back.vocabulary.entity.Vocabulary;
 import com.mainproject.back.vocabulary.mapper.VocabMapper;
 import com.mainproject.back.vocabulary.service.VocabService;
+import io.swagger.annotations.ApiOperation;
 import java.net.URI;
 import java.security.Principal;
 import javax.validation.Valid;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Validated
 @RestController
@@ -42,8 +44,9 @@ public class VocabController {
   private final VocabService vocabService;
   private final VocabMapper mapper;
 
+  @ApiOperation(value = "단어 생성")
   @PostMapping
-  public ResponseEntity postVocab(@RequestBody @Valid VocabDto.Post requestBody, Principal principal) {
+  public ResponseEntity postVocab(@RequestBody @Valid VocabDto.Post requestBody, @ApiIgnore Principal principal) {
     log.info("## 단어 생성: {}", requestBody);
     Member member = memberService.findMemberByEmail(Util.checkPrincipal(principal));
 
@@ -56,10 +59,10 @@ public class VocabController {
     URI uri = UriCreator.createUri("/vocabs", createdVocab.getVocabId());
     return ResponseEntity.created(uri).body(response);
   }
-
+  @ApiOperation(value = "단어 수정")
   @PatchMapping("/{vocab-id}")
   public ResponseEntity patchVocab(@PathVariable("vocab-id") @Positive long vocabId,
-      @RequestBody VocabDto.Patch requestBody, Principal principal) {
+      @RequestBody VocabDto.Patch requestBody, @ApiIgnore Principal principal) {
     log.info("## 단어 수정: {}", requestBody);
     Long memberId = memberService.findMemberIdByEmail(Util.checkPrincipal(principal));
     requestBody.setVocabId(vocabId);
@@ -70,7 +73,7 @@ public class VocabController {
 
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
-
+  @ApiOperation(value = "특정 단어 조회")
   @GetMapping("/{vocab-id}")
   public ResponseEntity getVocab(@PathVariable("vocab-id") @Positive long vocabId) {
     log.info("## 특정 단어 생성: {}", vocabId);
@@ -79,9 +82,9 @@ public class VocabController {
 
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
-
+  @ApiOperation(value = "전체 단어 조회")
   @GetMapping
-  public ResponseEntity getVocabs(@PageableDefault Pageable pageable, Principal principal) {
+  public ResponseEntity getVocabs(@PageableDefault @ApiIgnore Pageable pageable, @ApiIgnore Principal principal) {
     log.info("## 전체 단어 조회: {}", principal);
     if (principal.getName() == null) {
       throw new BusinessLogicException(MemberExceptionCode.MEMBER_NOT_FOUND);
@@ -92,7 +95,7 @@ public class VocabController {
         pageVocabs);
     return new ResponseEntity<>(vocabResponseDto, HttpStatus.OK);
   }
-
+  @ApiOperation(value = "단어 삭제")
   @DeleteMapping("/{vocab-id}")
   public ResponseEntity deleteVocab(@PathVariable("vocab-id") @Positive long vocabId) {
     log.info("## 단어 삭제: {}", vocabId);
@@ -101,8 +104,9 @@ public class VocabController {
   }
 
 
+  @ApiOperation(value = "랜덤 단어 생성")
   @GetMapping("/random")
-  public ResponseEntity randomVocab(Principal principal) {
+  public ResponseEntity randomVocab(@ApiIgnore Principal principal) {
     log.info("## 랜덤 단어 생성: {}", principal);
     long member = memberService.findMemberIdByEmail(Util.checkPrincipal(principal));
     Vocabulary vocab = vocabService.randomVocab(member);

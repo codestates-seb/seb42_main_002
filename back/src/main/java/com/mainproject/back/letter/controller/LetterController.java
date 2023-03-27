@@ -13,6 +13,7 @@ import com.mainproject.back.member.service.MemberConvertService;
 import com.mainproject.back.member.service.MemberService;
 import com.mainproject.back.util.UriCreator;
 import com.mainproject.back.util.Util;
+import io.swagger.annotations.ApiOperation;
 import java.net.URI;
 import java.security.Principal;
 import javax.validation.Valid;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/users/me/letters")
@@ -43,9 +45,10 @@ public class LetterController {
   private final MemberService memberService;
   private final MemberConvertService memberConvertService;
 
+  @ApiOperation(value = "편지 보내기")
   @PostMapping
   public ResponseEntity postLetter(@RequestBody @Valid LetterPostDto letterPostDto,
-      Principal principal) {
+      @ApiIgnore Principal principal) {
     log.info("## 편지 보내기: {}", letterPostDto.getReceiverId());
 
     Long memberId = memberService.findMemberIdByEmail(Util.checkPrincipal(principal));
@@ -56,10 +59,10 @@ public class LetterController {
     URI uri = UriCreator.createUri("/letter", savedLetter.getLetterId());
     return ResponseEntity.created(uri).build();
   }
-
+  @ApiOperation(value = "특정 편지 조회")
   @GetMapping(params = "letter")
   public ResponseEntity getLetter(@RequestParam("letter") @Positive long letterId,
-      Principal principal) {
+      @ApiIgnore Principal principal) {
     log.info("## 특정 편지 조회: {}", letterId);
     long memberId = memberService.findMemberIdByEmail(Util.checkPrincipal(principal));
     Letter findLetter = letterService.findLetter(letterId);
@@ -67,10 +70,10 @@ public class LetterController {
         memberId);
     return ResponseEntity.ok().body(letterResponseDto);
   }
-
+  @ApiOperation(value = "특정 멤버와 주고 받은 편지 리스트 조회")
   @GetMapping(params = "target")
   public ResponseEntity getLettersByMember(@RequestParam("target") @Positive long targetId,
-      @PageableDefault Pageable pageable, Principal principal) {
+      @PageableDefault @ApiIgnore Pageable pageable, @ApiIgnore Principal principal) {
     log.info("## 특정 멤버와 주고 받은 편지 리스트 조회: {}", targetId);
     long memberId = memberService.findMemberIdByEmail(Util.checkPrincipal(principal));
     Page<Letter> letterPage = letterService.findLettersByMemberAndTarget(targetId, pageable,
@@ -80,17 +83,18 @@ public class LetterController {
     return ResponseEntity.ok().body(letterListDtoPage);
   }
 
+  @ApiOperation(value = "나와 편지를 주고 받은 멤버 리스트 조회")
   @GetMapping("/inbox")
-  public ResponseEntity getMembersByLetter(Pageable pageable, Principal principal) {
+  public ResponseEntity getMembersByLetter(@ApiIgnore Pageable pageable, @ApiIgnore Principal principal) {
     log.info("## 나와 편지를 주고 받은 멤버 리스트 조회");
     Page<MemberLetterInterface> memberLetterInterfacePage = letterService.findMembersByLetter(pageable,
         memberService.findMemberIdByEmail(Util.checkPrincipal(principal)));
     Page<MemberLetterDto> memberLetterDtoPage = memberConvertService.memberLetterToMemberLetterDtoPage(memberLetterInterfacePage);
     return ResponseEntity.ok().body(memberLetterDtoPage);
   }
-
+  @ApiOperation(value = "도착한 편지 개수 조회")
   @GetMapping("/arrived")
-  public ResponseEntity getArrivedLetterCount(Principal principal) {
+  public ResponseEntity getArrivedLetterCount(@ApiIgnore Principal principal) {
     log.info("## 도착한 편지 개수 조회");
     LetterCountDto letterCountDto = letterService.getArrivedLettersCount(
         memberService.findMemberIdByEmail(Util.checkPrincipal(principal)));
