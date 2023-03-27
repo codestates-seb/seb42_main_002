@@ -20,17 +20,13 @@ public interface LetterRepository extends JpaRepository<Letter, Long> {
       @Param("targetId") long targetId, Pageable pageable);
 
   // 읽지 않은 받은 편지 개수
-  @Query(value = "select count(l.letter_id) from letter l "
-      + "join member m on l.sender_id = m.member_id "
-      + "where l.receiver_id = :memberId "
-      + "and m.member_status = \"MEMBER_ACTVIE\"", nativeQuery = true)
+  @Query(value = "select count(l.letter_id) from letter l join member m on m.member_id = l.sender_id "
+      + "where l.receiver_id = :memberId and l.is_read = false and m.member_status = \"MEMBER_ACTIVE\"", nativeQuery = true)
   Long countByIsReadAndReceiver(@Param("memberId") long memberId);
 
-  @Query(value = "select count(l.letter_id) from letter l "
-      + "join member m on l.sender_id = m.member_id "
-      + "where l.receiver_id = :memberId "
-      + "and m.member_status = \"MEMBER_ACTVIE\" "
-      + "and l.sender_id not in(:blockIdList)", nativeQuery = true)
+  @Query(value = "select count(l.letter_id) from letter l join member m on m.member_id = l.sender_id "
+      + "where l.receiver_id = :memberId and l.is_read = false "
+      + "and m.member_status = \"MEMBER_ACTIVE\" and m.member_id not in (:blockIdList)", nativeQuery = true)
   Long countByIsReadAndReceiverAndBlock(@Param("memberId") long memberId, @Param("blockIdList")List<Long> blockIdList);
 
   // 편지를 주고 받은 회원 조회
