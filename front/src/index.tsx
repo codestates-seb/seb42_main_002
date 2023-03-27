@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { RecoilRoot } from 'recoil';
-import Spinner from './components/Common/Spinner/Spinner';
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import './index.scss';
 
 const root = ReactDOM.createRoot(
@@ -12,7 +12,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <RecoilRoot>
-      <App />
+      <ErrorBoundary>
+        <App />
+      </ErrorBoundary>
     </RecoilRoot>
   </React.StrictMode>
 );

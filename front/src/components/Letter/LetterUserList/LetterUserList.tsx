@@ -99,6 +99,7 @@ const LetterUserList = () => {
               memberId={user.memberId}
               name={user.memberId}
               lastLetter={user.lastLetter}
+              isRead={user.isRead}
             />
           </UserCard>
         ))}

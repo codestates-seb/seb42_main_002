@@ -9,8 +9,8 @@ export type LetterUserData = {
   lastLetter: {
     status: 'SENT' | 'RECEIVED';
     createdAt: string;
-    isRead: boolean;
   };
+  isRead: boolean;
 };
 
 export type LetterUserListStateType = {
