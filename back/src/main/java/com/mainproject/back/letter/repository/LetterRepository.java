@@ -31,7 +31,8 @@ public interface LetterRepository extends JpaRepository<Letter, Long> {
 
   // 편지를 주고 받은 회원 조회
   @Query(value = "select b.member_id, b.name, b.location, b.profile, b.birthday, b.member_status, "
-      + "l.created_at, (select q.is_read from letter q where q.letter_id = l.letter_id) as is_read, l.receiver_id "
+      + "l.created_at, l.receiver_id, "
+      + "0 in (select q.is_read from letter q where q.receiver_id = a.member_id and q.sender_id = b.member_id) as is_read "
       + "from member a "
       + "join letter l on l.receiver_id = a.member_id or l.sender_id = a.member_id "
       + "join member b on (b.member_id = l.receiver_id or l.sender_id = b.member_id) and b.member_id != a.member_id "
@@ -42,4 +43,5 @@ public interface LetterRepository extends JpaRepository<Letter, Long> {
           + "where a.member_id = :memberId and b.member_status = \"MEMBER_ACTIVE\" "
           + "group by b.member_id", nativeQuery = true)
   Page<MemberLetterInterface> findAllMemberLetterByMemberId(@Param("memberId") Long memberId, Pageable pageable);
+
 }

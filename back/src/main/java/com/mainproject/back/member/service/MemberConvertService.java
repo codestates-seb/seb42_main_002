@@ -177,10 +177,9 @@ public class MemberConvertService {
             LetterSimpleDto.builder()
                 .status(memberLetter.getFollower_id().equals(memberLetter.getReceiver_id())
                     ? LetterStatus.RECEIVED : LetterStatus.SENT)
-                .isRead(memberLetter.getIs_read() != 0)
                 .createdAt(memberLetter.getCreated_at())
                 .build()
-        );
+        ).isRead(memberLetter.getIs_read() == 0);
       }
       return builder.build();
     });
@@ -199,14 +198,14 @@ public class MemberConvertService {
       if (memberLetter.getReceiver_id() == null) {
         builder.lastLetter(null);
       } else {
-        builder.lastLetter(
-            LetterSimpleDto.builder()
-                .status(!memberLetter.getMember_id().equals(memberLetter.getReceiver_id())
-                    ? LetterStatus.RECEIVED : LetterStatus.SENT)
-                .isRead(memberLetter.getIs_read() != 0)
-                .createdAt(memberLetter.getCreated_at())
-                .build()
-        );
+        builder
+            .lastLetter(
+                LetterSimpleDto.builder()
+                    .status(!memberLetter.getMember_id().equals(memberLetter.getReceiver_id())
+                        ? LetterStatus.RECEIVED : LetterStatus.SENT)
+                    .createdAt(memberLetter.getCreated_at())
+                    .build())
+            .isRead(memberLetter.getIs_read() == 0);
       }
       return builder.build();
     });
