@@ -63,6 +63,7 @@ const LetterUserList = () => {
     name,
     lastLetter,
     memberStatus,
+    isRead,
   }: any) => {
     if (memberStatus === 'MEMBER_QUIT') {
       return <UserQuit />;
@@ -74,10 +75,7 @@ const LetterUserList = () => {
         }}
       >
         {lastLetter && (
-          <LetterStatusIcon
-            status={lastLetter.status}
-            isRead={lastLetter.isRead}
-          />
+          <LetterStatusIcon status={lastLetter.status} isRead={isRead} />
         )}
       </button>
     );
