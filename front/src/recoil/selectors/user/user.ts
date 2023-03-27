@@ -1,6 +1,6 @@
 import { selector } from 'recoil';
 import { UserData } from '../../../utils';
-import { PATCH } from '../../../utils/axios';
+import { GET, PATCH } from '../../../utils/axios';
 import { userState } from '../../atoms';
 
 export const userSeletor = selector<UserData>({
@@ -22,5 +22,20 @@ export const userSeletor = selector<UserData>({
   },
   set: ({ set }, newValue) => {
     set(userState, newValue);
+  },
+});
+
+export const recomandUserSelector = selector({
+  key: 'recomandUser/get',
+  get: async () => {
+    try {
+      const { data, status } = await GET('/users/me/recommend');
+      if (status === 200 && data) {
+        return data.content.slice(0, 10);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    return [];
   },
 });

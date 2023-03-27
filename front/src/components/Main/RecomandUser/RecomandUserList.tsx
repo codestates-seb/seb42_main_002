@@ -1,28 +1,13 @@
-import { useEffect, useState } from 'react';
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import RecomandUserListItem from './RecomandUserListItem';
-import { GET } from '../../../utils/axios';
 import Button from '../../Common/Button/Button';
 import styles from './RecomandUserList.module.scss';
+import { useRecoilValue } from 'recoil';
+import { recomandUserSelector } from '../../../recoil/selectors/user/user';
 
 const RecomandUserList = () => {
-  const [recomandUserList, setRecomandUserList] = useState<any[]>([]);
-
-  const getRecomandUserList = async () => {
-    try {
-      const { data, status } = await GET('/users/me/recommend');
-      if (status === 200 && data) {
-        setRecomandUserList(data.content.slice(0, 10));
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    getRecomandUserList();
-  }, []);
+  const recomandUserList = useRecoilValue(recomandUserSelector);
 
   if (!recomandUserList.length) {
     return (
@@ -45,7 +30,7 @@ const RecomandUserList = () => {
           scrollbar={{ draggable: true }}
           className={styles.swiper_list}
         >
-          {recomandUserList.map((user) => (
+          {recomandUserList.map((user: any) => (
             <SwiperSlide key={user.memberId} className={styles.swiper_slide}>
               <RecomandUserListItem
                 profile={user.profile}

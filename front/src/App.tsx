@@ -33,6 +33,8 @@ import 'swiper/css/scrollbar';
 // Import React Toast styles
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Suspense } from 'react';
+import Spinner from './components/Common/Spinner/Spinner';
 
 const routerData: RouterElement[] = [
   {
@@ -212,7 +214,9 @@ const routers = createBrowserRouter(
                   isAuth={router.isAuth}
                   isFirstLogin={router.isFirstLogin}
                 >
-                  {router.element}
+                  <Suspense fallback={<Spinner size="lg" />}>
+                    {router.element}
+                  </Suspense>
                 </BaseLayout>
               </ModalProvider>
             </AuthProvider>
@@ -226,7 +230,11 @@ const routers = createBrowserRouter(
           <RouterLayout router={router}>
             <AuthProvider>
               <ModalProvider>
-                <NoneLayout>{router.element}</NoneLayout>
+                <NoneLayout>
+                  <Suspense fallback={<Spinner size="lg" />}>
+                    {router.element}
+                  </Suspense>
+                </NoneLayout>
               </ModalProvider>
             </AuthProvider>
           </RouterLayout>
