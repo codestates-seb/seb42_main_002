@@ -13,7 +13,8 @@ export const userLanguageSeletor = selector({
       if (!response) throw Error;
       if (response) return data;
     } catch (error: any) {
-      alert(error && error?.response.data.message);
+      console.error(error && error?.response.data.message);
+      throw new Error('태그수정 GET API 에러');
       // window.location.reload();
       return error;
     }

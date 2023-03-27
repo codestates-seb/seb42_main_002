@@ -7,7 +7,6 @@ import {
   userLanguageNationState,
   userLanguageState,
 } from '../../../recoil/atoms';
-import { userLanguageSeletor } from '../../../recoil/selectors';
 import { toast } from '../../../utils';
 import { PATCH } from '../../../utils/axios';
 import { langTransformer } from '../../../utils/common';

@@ -1,26 +1,10 @@
-import { useState, useEffect } from 'react';
-import { GET } from '../../../utils/axios';
-import { VocaDataType } from '../../../utils/types/voca';
+import { useRecoilValue } from 'recoil';
+import { randomVocaSelector } from '../../../recoil/selectors/voca';
 import Button from '../../Common/Button/Button';
 import styles from './MainVocaCard.module.scss';
 
 const MainVocaCard = () => {
-  const [vocabs, sestVocabs] = useState<VocaDataType | null>(null);
-
-  const getVocabs = async () => {
-    try {
-      const { data } = await GET('/vocabs/random');
-      if (data) {
-        sestVocabs(data);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    getVocabs();
-  }, []);
+  const vocabs = useRecoilValue(randomVocaSelector);
 
   if (!vocabs) {
     return (

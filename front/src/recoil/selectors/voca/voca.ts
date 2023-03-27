@@ -1,5 +1,4 @@
 import { selector } from 'recoil';
-import { toast } from '../../../utils';
 import { GET } from '../../../utils/axios';
 import { VocaDataType } from '../../../utils/types/voca';
 import { pageNationState } from '../../atoms/pagination';
@@ -32,11 +31,23 @@ export const vocaSeletor = selector({
       };
     } catch (error: unknown) {
       console.error(error);
-      toast.error('네트워크 오류가 발생했습니다.');
+      throw new Error('단어 GET API 에러');
     }
-    return {
-      content: [],
-      isStop: false,
-    };
+  },
+});
+
+export const randomVocaSelector = selector<VocaDataType>({
+  key: 'randomVoca/get',
+  get: async () => {
+    try {
+      const { data } = await GET('/vocabs/random');
+      if (data) {
+        return data;
+      }
+    } catch (error) {
+      console.error(error);
+      throw new Error('단어 GET API 에러');
+    }
+    return null;
   },
 });

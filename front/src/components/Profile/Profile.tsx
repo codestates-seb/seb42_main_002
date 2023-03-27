@@ -1,8 +1,7 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { AiOutlineAlert } from 'react-icons/ai';
 import { HiOutlineBan } from 'react-icons/hi';
-import { DELETE, GET, POST } from '../../utils/axios';
+import { DELETE, POST } from '../../utils/axios';
 import { genderTransformer, langTransformer } from '../../utils/common';
 import Button from '../Common/Button/Button';
 import ButtonGroup from '../Common/Button/ButtonGroup';
@@ -12,22 +11,23 @@ import Label from '../Common/Label/Label';
 import ProfileCard from '../Common/ProfileCard/ProfileCard.module';
 import ProfileImage from '../Common/ProfileImage/ProfileImage';
 import styles from './Profile.module.scss';
-import { getAge, UserData } from '../../utils';
+import { getAge } from '../../utils';
 import useModals from '../../hooks/useModals';
 import AlertModal, { AlertModalProps } from '../Common/Modal/AlertModal';
 import { newLetterState, userState } from '../../recoil/atoms';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { BiEdit } from 'react-icons/bi';
+import { rerenderingTriggerState } from '../../recoil/atoms/common';
+import { otherUserSelector } from '../../recoil/selectors/user/user';
 
 const Profile = () => {
   const { openModal } = useModals();
   const { memberId } = useParams();
   const navigate = useNavigate();
   const setNewLetter = useSetRecoilState(newLetterState);
-  const [userInfo, setUserInfo] = useState<UserData | null>(null);
-  const [changeFollowing, setChangeFollowing] = useState(false);
-  const [changeBloks, setChangeBlocks] = useState(false);
+  const userInfo = useRecoilValue(otherUserSelector(memberId || ''));
   const myInfo = useRecoilValue(userState);
+  const setRerenderingTrigger = useSetRecoilState(rerenderingTriggerState);
 
   /**
    * 내가 선택한 언어
@@ -46,27 +46,6 @@ const Profile = () => {
   );
 
   /**
-   * 유저 상세 조회
-   */
-  const getUser = async () => {
-    try {
-      const response = await GET(`/users/${memberId}`);
-      if (response.data) {
-        const userInfo = response.data;
-        setUserInfo(userInfo);
-        setChangeBlocks(userInfo?.block);
-        setChangeFollowing(userInfo?.friend);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    getUser();
-  }, [changeFollowing, changeBloks]);
-
-  /**
    * 친구 추가
    * @param followingId
    */
@@ -76,7 +55,7 @@ const Profile = () => {
         followingId: followingId,
       });
       if (request) {
-        setChangeFollowing((prevState) => !prevState);
+        setRerenderingTrigger((prev) => prev + 1);
       }
     } catch (error) {
       console.error(error);
@@ -91,7 +70,7 @@ const Profile = () => {
     try {
       const request = await DELETE(`/users/me/follows?target=${followingId}`);
       if (request) {
-        setChangeFollowing((prevState) => !prevState);
+        setRerenderingTrigger((prev) => prev + 1);
       }
     } catch (error) {
       console.error(error);
@@ -108,7 +87,7 @@ const Profile = () => {
         targetId: targetId,
       });
       if (request) {
-        setChangeBlocks((prevState) => !prevState);
+        setRerenderingTrigger((prev) => prev + 1);
       }
     } catch (error) {
       console.error(error);
@@ -123,7 +102,7 @@ const Profile = () => {
     try {
       const request = await DELETE(`/users/me/blocks?target=${targetId}`);
       if (request) {
-        setChangeBlocks((prevState) => !prevState);
+        setRerenderingTrigger((prev) => prev + 1);
       }
     } catch (error) {
       console.error(error);
@@ -182,7 +161,7 @@ const Profile = () => {
                     <ButtonGroup>
                       <Flex dir="column" gap="sm">
                         {/** 차단된 친구 일 경우 */}
-                        {(userInfo.block || changeBloks) && (
+                        {userInfo.block && (
                           <Button
                             size="sm"
                             variant="secondary"
@@ -196,7 +175,7 @@ const Profile = () => {
                         {!userInfo.block && (
                           <>
                             {/** 팔로잉 친구 조건 분기 */}
-                            {!userInfo.friend || !changeFollowing ? (
+                            {!userInfo.friend ? (
                               <Button
                                 size="sm"
                                 variant="primary"

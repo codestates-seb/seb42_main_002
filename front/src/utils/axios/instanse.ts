@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getCookie } from '../cookie';
+import { getCookie, removeCookie } from '../cookie';
 import { toast } from '../toast';
 
 export const instance = axios.create({
@@ -33,19 +33,18 @@ instance.interceptors.response.use(
       if (error.response.status === 401 && error.config) {
         toast.error('로그인에 실패하였습니다');
         if (window.location.pathname !== '/login') {
-          setTimeout(() => {
-            window.location.href = '/';
-          }, 1000);
+          removeCookie('accessJwtToken');
+          window.location.replace('/');
         }
         return;
       }
       if (error.response.status === 404 && error.config) {
         toast.error(error.response.data.message || '요청에 실패하였습니다');
-        return;
+        throw new Error(error.response.data.message || '요청에 실패하였습니다');
       }
 
       toast.error(error.response.data.message || '다시 시도해주세요');
-      return reject(error);
+      throw new Error(error.response.data.message || '다시 시도해주세요');
     });
   }
 );

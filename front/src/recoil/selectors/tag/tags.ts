@@ -9,6 +9,7 @@ export const allTagState = selector({
       return data;
     } catch (error) {
       console.log(error);
+      throw new Error('태그 GET API 에러');
     }
   },
 });

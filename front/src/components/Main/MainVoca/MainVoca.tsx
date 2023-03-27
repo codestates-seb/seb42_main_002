@@ -1,4 +1,3 @@
-import React from 'react';
 import MainTitle from '../MainTitle';
 import MainVocaCard from './MainVocaCard';
 

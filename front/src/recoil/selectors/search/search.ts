@@ -45,10 +45,7 @@ export const searchUserListSeletor = selector({
       };
     } catch (error: unknown) {
       console.error(error);
+      throw new Error('태그 검색 GET API 에러');
     }
-    return {
-      content: [],
-      isStop: false,
-    };
   },
 });

@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import AuthProvider from './context/AuthContext';
 import NoneLayout from './components/Layouts/NoneLayout';
@@ -22,6 +23,8 @@ import SearchPage from './pages/SearchPage';
 import StartPage from './pages/StartPage';
 import NotFoundPage from './pages/NotFoundPage';
 import RouterLayout from './components/Layouts/RouterLayout';
+import Spinner from './components/Common/Spinner/Spinner';
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import { RouterElement } from './utils';
 
 // Import Swiper styles
@@ -212,7 +215,11 @@ const routers = createBrowserRouter(
                   isAuth={router.isAuth}
                   isFirstLogin={router.isFirstLogin}
                 >
-                  {router.element}
+                  <ErrorBoundary>
+                    <Suspense fallback={<Spinner size="md" />}>
+                      {router.element}
+                    </Suspense>
+                  </ErrorBoundary>
                 </BaseLayout>
               </ModalProvider>
             </AuthProvider>
@@ -226,7 +233,13 @@ const routers = createBrowserRouter(
           <RouterLayout router={router}>
             <AuthProvider>
               <ModalProvider>
-                <NoneLayout>{router.element}</NoneLayout>
+                <NoneLayout>
+                  <ErrorBoundary>
+                    <Suspense fallback={<Spinner size="md" />}>
+                      {router.element}
+                    </Suspense>
+                  </ErrorBoundary>
+                </NoneLayout>
               </ModalProvider>
             </AuthProvider>
           </RouterLayout>
