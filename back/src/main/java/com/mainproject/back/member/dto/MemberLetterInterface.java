@@ -11,7 +11,6 @@ public interface MemberLetterInterface {
   String getBirthday();
   Member.MemberStatus getMember_status();
   LocalDateTime getCreated_at();
-  Boolean getIs_read();
-  Long getFollower_id();
+  Integer getIs_read();
   Long getReceiver_id();
 }

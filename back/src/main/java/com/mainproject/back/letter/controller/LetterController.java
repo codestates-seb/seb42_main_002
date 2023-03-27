@@ -8,6 +8,8 @@ import com.mainproject.back.letter.entity.Letter;
 import com.mainproject.back.letter.mapper.LetterMapper;
 import com.mainproject.back.letter.service.LetterService;
 import com.mainproject.back.member.dto.MemberLetterDto;
+import com.mainproject.back.member.dto.MemberLetterInterface;
+import com.mainproject.back.member.service.MemberConvertService;
 import com.mainproject.back.member.service.MemberService;
 import com.mainproject.back.util.UriCreator;
 import com.mainproject.back.util.Util;
@@ -39,6 +41,7 @@ public class LetterController {
   private final LetterService letterService;
   private final LetterMapper letterMapper;
   private final MemberService memberService;
+  private final MemberConvertService memberConvertService;
 
   @PostMapping
   public ResponseEntity postLetter(@RequestBody @Valid LetterPostDto letterPostDto,
@@ -80,8 +83,9 @@ public class LetterController {
   @GetMapping("/inbox")
   public ResponseEntity getMembersByLetter(Pageable pageable, Principal principal) {
     log.info("## 나와 편지를 주고 받은 멤버 리스트 조회");
-    Page<MemberLetterDto> memberLetterDtoPage = letterService.findMembersByLetter(pageable,
+    Page<MemberLetterInterface> memberLetterInterfacePage = letterService.findMembersByLetter(pageable,
         memberService.findMemberIdByEmail(Util.checkPrincipal(principal)));
+    Page<MemberLetterDto> memberLetterDtoPage = memberConvertService.memberLetterToMemberLetterDtoPage(memberLetterInterfacePage);
     return ResponseEntity.ok().body(memberLetterDtoPage);
   }
 
