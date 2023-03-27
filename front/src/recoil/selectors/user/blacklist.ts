@@ -23,10 +23,7 @@ export const blackListSeletor = selector({
       };
     } catch (error: unknown) {
       console.error(error);
+      throw new Error('블랙리스트 GET API 에러');
     }
-    return {
-      content: [],
-      isStop: false,
-    };
   },
 });

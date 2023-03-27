@@ -6,7 +6,7 @@ import {
 } from '../../recoil/atoms';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { GET, POST } from '../../utils/axios';
+import { POST } from '../../utils/axios';
 import LetterContent from './LetterContent/LetterContent';
 import LetterPictureWrapper from './LetterPicture/LetterPictureWrapper';
 import Button from '../Common/Button/Button';
@@ -14,11 +14,14 @@ import useModals from '../../hooks/useModals';
 import PictureModal from '../PictureModal/PictureModal';
 
 import styles from './LetterDetailWrapper.module.scss';
+import { selectedLetterSelector } from '../../recoil/selectors/letter';
 
 const LetterDetailWrapper = () => {
   const { openModal } = useModals();
   const { letterId } = useParams();
-
+  const getSelectedLetter = useRecoilValue(
+    selectedLetterSelector(letterId || '')
+  );
   const setSelectedPictureIdx = useSetRecoilState(selectedPictureIdx);
   const [selectedLetter, setSelectedLetter] =
     useRecoilState(selectedLetterState);
@@ -37,15 +40,14 @@ const LetterDetailWrapper = () => {
    */
   const getDetailLetter = async () => {
     try {
-      const { data } = await GET(`/users/me/letters?letter=${letterId}`);
+      // const { data } = await GET(`/users/me/letters?letter=${letterId}`);
       setSelectedLetter((prev) => ({
         ...prev,
-        ...data,
+        ...getSelectedLetter,
       }));
-      // setLetter(data);
-      setSelectLanguage({ ...selectLanguage, content: data.body });
-      setTranslatedLanguage(data.body);
-      if (data.receiver !== newLetter.receiver) {
+      setSelectLanguage({ ...selectLanguage, content: getSelectedLetter.body });
+      setTranslatedLanguage(getSelectedLetter.body);
+      if (getSelectedLetter.receiver !== newLetter.receiver) {
         setIsShowButton(true);
       } else {
         setIsShowButton(false);

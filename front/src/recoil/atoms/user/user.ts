@@ -16,3 +16,11 @@ export const searchUserListState = atom<SearchUserListStateType>({
     isStop: false,
   },
 });
+
+/**
+ * @description 현재 조회중인 프로필 유저 id
+ */
+export const selectedOtherMemberIdState = atom<string | undefined>({
+  key: 'selectedOtherMemberIdState',
+  default: '',
+});
