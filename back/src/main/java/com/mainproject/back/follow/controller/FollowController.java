@@ -5,8 +5,8 @@ import com.mainproject.back.follow.dto.FollowDto;
 import com.mainproject.back.follow.entity.Follow;
 import com.mainproject.back.follow.mapper.FollowMapper;
 import com.mainproject.back.follow.service.FollowService;
+import com.mainproject.back.member.dto.FollowMemberInterface;
 import com.mainproject.back.member.dto.MemberLetterDto;
-import com.mainproject.back.member.dto.MemberLetterInterface;
 import com.mainproject.back.member.entity.Member;
 import com.mainproject.back.member.service.MemberConvertService;
 import com.mainproject.back.member.service.MemberService;
@@ -84,9 +84,9 @@ public class FollowController {
     log.info("## 팔로잉 조회");
     long memberId = memberService.findMemberIdByEmail(Util.checkPrincipal(principal));
 
-    Page<MemberLetterInterface> memberLetterPage = followService.findFollowing(memberId, pageable);
+    Page<FollowMemberInterface> memberLetterPage = followService.findFollowing(memberId, pageable);
 
-    Page<MemberLetterDto> responses = memberConvertService.memberLetterToMemberLetterPage(memberLetterPage);
+    Page<MemberLetterDto> responses = memberConvertService.memberLetterToFollowMemberPage(memberLetterPage);
 
     return ResponseEntity.ok().body(responses);
 

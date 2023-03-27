@@ -5,7 +5,7 @@ import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.follow.entity.Follow;
 import com.mainproject.back.follow.exception.FollowExceptionCode;
 import com.mainproject.back.follow.repository.FollowRepository;
-import com.mainproject.back.member.dto.MemberLetterInterface;
+import com.mainproject.back.member.dto.FollowMemberInterface;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +48,7 @@ public class FollowService {
     return followRepository.findAllFollowersByFollowingId(memberId, pageable);
   }
 
-  public Page<MemberLetterInterface> findFollowing(long memberId, Pageable pageable) {
+  public Page<FollowMemberInterface> findFollowing(long memberId, Pageable pageable) {
     return followRepository.findAllFollowingsByFollowerId(memberId, pageable);
   }
 
