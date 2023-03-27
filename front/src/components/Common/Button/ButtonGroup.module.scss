@@ -43,6 +43,14 @@
     justify-content: space-between;
   }
 
+  &.h_around {
+    justify-content: space-around;
+  }
+
+  &.h_evenly {
+    justify-content: space-evenly;
+  }
+
   // flex wrap
   &.wrap {
     flex-wrap: wrap;

@@ -5,24 +5,25 @@ import FullPageModal, {
   FullPageModalProps,
 } from '../../Common/Modal/FullPageModal';
 import SearchTagFilter from '../SearchTagFilter/SearchTagFilter';
-import { selectedSearchLangTagState } from '../../../recoil/atoms/search';
+import {
+  selectedSearchLangTagState,
+  selectedSearchTagState,
+} from '../../../recoil/atoms/search';
 import InfoGroup from '../../Common/InfoGroup/InfoGroup';
 import Flex from '../../Common/Flex/Flex';
 import Label from '../../Common/Label/Label';
 
-import styles from './SearchFilterModal.module.scss';
 import SearchLangTagFilter from '../SearchLangTagFilter/SearchLangTagFilter';
 import { TagDataType } from '../../../utils/types/tags/tags';
-import { searchUserTagSelector } from '../../../recoil/selectors/search';
+import { langTransformer } from '../../../utils/common';
+import styles from './SearchFilterModal.module.scss';
 
 const SearchFilterModal = ({ onSubmit, onClose }: FullPageModalProps) => {
   const { openModal } = useModals();
-
   // 언어 태그들
   const searchLangTags = useRecoilValue(selectedSearchLangTagState);
-
   // 취미 태그들
-  const searchTags = useRecoilValue(searchUserTagSelector);
+  const searchTags = useRecoilValue(selectedSearchTagState);
 
   const openLangFilterModal = () => {
     openModal(SearchLangTagFilter);
@@ -44,7 +45,7 @@ const SearchFilterModal = ({ onSubmit, onClose }: FullPageModalProps) => {
             {searchLangTags &&
               searchLangTags.map((tag) => (
                 <Flex.Col key={tag.languageId}>
-                  <Label>{tag.name}</Label>
+                  <Label>{langTransformer(tag.nation)}</Label>
                 </Flex.Col>
               ))}
             <Button size="sm" variant="dashed" onClick={openLangFilterModal}>

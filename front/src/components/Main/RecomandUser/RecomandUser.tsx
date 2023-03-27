@@ -1,6 +1,5 @@
 import MainTitle from '../MainTitle';
 import RecomandUserList from './RecomandUserList';
-import styles from './RecomandUser.module.scss';
 
 const RecomandUser = () => {
   return (

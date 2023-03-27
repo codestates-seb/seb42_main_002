@@ -29,38 +29,32 @@ const BaseLayout = ({
   noTitle,
   children,
 }: BaseLayouProps) => {
-  const { getCurrentUserInfo } = useAuth();
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const setUserInfoProfile = useSetRecoilState(userState);
+  const { getCurrentUserInfo } = useAuth();
+  const setUserInfo = useSetRecoilState(userState);
   const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpen);
   const [isIconOpen, setIsIconOpen] = useRecoilState(IsIconOpen);
 
   const fetchUserInfo = useCallback(async () => {
     const userInfo = await getCurrentUserInfo();
-    console.log(userInfo);
     if (userInfo === null) {
-      navigate('/');
-      return;
+      navigate('/', { replace: true });
     }
-    // TODO : 다른 방법 찾아보기
     if (userInfo) {
-      if (userInfo.location) {
-        return;
-      }
+      setUserInfo(userInfo);
       if (userInfo.location === null) {
-        const pathArr = ['/start', '/welcome'];
-        if (!pathArr.includes(pathname)) {
-          navigate('/start', { replace: true });
-        }
+        navigate('/start', { replace: true });
       }
-      setUserInfoProfile(userInfo);
+      if (userInfo.location && pathname === '/start') {
+        navigate('/main', { replace: true });
+      }
     }
   }, []);
 
   useEffect(() => {
     fetchUserInfo();
-  }, [children]);
+  }, []);
 
   return (
     <main

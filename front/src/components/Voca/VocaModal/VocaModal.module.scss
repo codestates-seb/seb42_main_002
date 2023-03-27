@@ -4,7 +4,7 @@
   height: 100%;
   background-color: var(--modal-bg);
   top: 0;
-  z-index: 9999;
+  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -12,6 +12,7 @@
 .modal {
   width: 100%;
   max-height: 25rem;
+  max-width: 40rem;
   margin: 1.5rem 1rem;
   padding: 1rem;
   background-color: var(--white);
@@ -41,7 +42,8 @@
   width: 100%;
   padding: 0.5rem 1rem;
   font-size: var(--font-size-xxl);
-  outline: none;
+  outline: var(--button-secondary-color) solid 1px;
+  border-radius: var(--border-radius-sm);
 }
 
 .meaning {

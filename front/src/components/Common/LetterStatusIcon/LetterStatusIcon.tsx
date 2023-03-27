@@ -8,16 +8,18 @@ type LetterStatusIconProps = {
   isRead?: boolean;
 };
 
-const LetterStatusIcon = ({
-  status,
-  isRead = false,
-}: LetterStatusIconProps) => {
-  // 조건부 렌더링 같은 경우 어떤 식으로 하는 게 좋을지
+const LetterStatusIcon = ({ status, isRead }: LetterStatusIconProps) => {
   const Icons = {
-    SENT: <Send />,
+    SENT: (
+      <>
+        {!isRead && <div className={styles.read_flag}></div>}
+
+        <Send />
+      </>
+    ),
     RECEIVED: (
       <>
-        {isRead && <div className={styles.read_flag}></div>}
+        {!isRead && <div className={styles.read_flag}></div>}
         <Receive />
       </>
     ),

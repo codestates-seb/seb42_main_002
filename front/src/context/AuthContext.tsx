@@ -6,10 +6,14 @@ import {
   useCallback,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { userLocationState, userState } from '../recoil/atoms';
-import { SignInData, toast, UserData } from '../utils';
+import { useResetRecoilState, useSetRecoilState } from 'recoil';
+import {
+  userLanguageState,
+  userLocationState,
+  userState,
+  userTagState,
+} from '../recoil/atoms';
+import { SignInData, UserData } from '../utils';
 import { GET, POST } from '../utils/axios';
 import { getCookie, removeCookie, setCookie } from '../utils/cookie';
 
@@ -18,29 +22,33 @@ type AuthProviderProps = {
 };
 
 type AuthContextProps = {
-  user: UserData | null;
   login: (data: SignInData) => void;
   logout: () => void;
-  getToken: () => void;
+  getToken: () => string;
   setToken: (value: string, options?: any) => void;
   removeToken: () => void;
   getCurrentUserInfo: () => Promise<UserData | null>;
+  resetState: () => void;
 };
 
 const AuthContext = createContext<AuthContextProps>({
-  user: null,
   login: () => undefined,
   logout: () => undefined,
-  getToken: () => undefined,
+  getToken: () => '',
   setToken: () => undefined,
   removeToken: () => undefined,
   getCurrentUserInfo: async () => null,
+  resetState: () => undefined,
 });
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [userInfo, setUserInfo] = useRecoilState(userState);
-  const selectUserLocation = useSetRecoilState(userLocationState);
   const navigate = useNavigate();
+  const setUserInfo = useSetRecoilState(userState);
+  const resetUserInfo = useResetRecoilState(userState);
+  const resetSelectedUserLocation = useResetRecoilState(userLocationState);
+  const resetSelectedUserLanguage = useResetRecoilState(userLanguageState);
+  const resetSelectedUserTag = useResetRecoilState(userTagState);
+
   const TOKEN_NAME = 'accessJwtToken';
 
   // 로그인 요청
@@ -62,11 +70,10 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     try {
       const { data } = await GET('/users/me');
       if (data) {
-        setUserInfo(data);
         return data;
       }
     } catch (error) {
-      setUserInfo(null);
+      console.error(error);
     }
     return null;
   }, []);
@@ -76,28 +83,33 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       const response = await loginRequest(data);
       if (response === 'SUCCESS') {
         const user = await getCurrentUserInfo();
+        setUserInfo(user);
         if (user?.location === null) {
           navigate('/start');
         } else {
           navigate('/main');
         }
-        toast.success('로그인에 성공하였습니다!');
       }
     } catch (error) {
       console.error(error);
     }
   };
 
-  const logout = () => {
-    setUserInfo(null);
-    selectUserLocation(null);
+  const resetState = () => {
     removeCookie(TOKEN_NAME);
-    toast.success('로그아웃에 성공하였습니다!');
+    resetUserInfo();
+    resetSelectedUserLocation();
+    resetSelectedUserLanguage();
+    resetSelectedUserTag();
+  };
+
+  const logout = () => {
+    resetState();
     navigate('/', { replace: true });
   };
 
   const getToken = () => {
-    getCookie(TOKEN_NAME);
+    return getCookie(TOKEN_NAME);
   };
 
   const setToken = (value: string, options?: any) => {
@@ -110,15 +122,15 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const value = useMemo(
     () => ({
-      user: userInfo,
       login,
       logout,
       setToken,
       getToken,
       removeToken,
       getCurrentUserInfo,
+      resetState,
     }),
-    [userInfo]
+    []
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

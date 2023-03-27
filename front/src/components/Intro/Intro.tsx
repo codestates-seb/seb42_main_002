@@ -8,9 +8,9 @@ import { ReactComponent as OwlHead } from '../../assets/img/intro/owls_head.svg'
 import { ReactComponent as OwlBody } from '../../assets/img/intro/owls_body.svg';
 import { ReactComponent as OwlWingLeft } from '../../assets/img/intro/owls_wing_left.svg';
 import { ReactComponent as OwlWingRight } from '../../assets/img/intro/owls_wing_right.svg';
-import styles from './Intro.module.scss';
 import Button from '../Common/Button/Button';
 import Flex from '../Common/Flex/Flex';
+import styles from './Intro.module.scss';
 
 const Intro = (): JSX.Element => {
   const navigate = useNavigate();

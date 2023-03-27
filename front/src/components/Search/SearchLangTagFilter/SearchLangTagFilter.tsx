@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { languageTags } from '../../../dummy/languages';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { selectedSearchLangTagState } from '../../../recoil/atoms/search';
+import { allLanguageState } from '../../../recoil/selectors';
 import { LanguageDataType } from '../../../utils';
 import Flex from '../../Common/Flex/Flex';
 import LabelButton from '../../Common/LabelButton/LabelButton';
@@ -11,11 +11,13 @@ import FullPageModal, {
 import SearchInput from '../../Common/SearchInput/SearchInput';
 
 const SearchLangTagFilter = ({ onSubmit, onClose }: FullPageModalProps) => {
+  const allLanguages = useRecoilValue(allLanguageState);
   const [searchTags, setSearchTags] = useRecoilState(
     selectedSearchLangTagState
   );
 
-  const [languageList, setLanguageList] = useState([...languageTags]);
+  // TODO: 언어 변경
+  const [languageList, setLanguageList] = useState([...allLanguages]);
 
   // 수정 전 임시 태그 데이터
   const [tempTagList, setTempTagList] =
@@ -62,7 +64,7 @@ const SearchLangTagFilter = ({ onSubmit, onClose }: FullPageModalProps) => {
       labelSubmit="수정"
     >
       <SearchInput
-        items={languageTags}
+        items={allLanguages}
         filterKey="filterTag"
         filterHandler={onChangeSearchInputHandler}
       />

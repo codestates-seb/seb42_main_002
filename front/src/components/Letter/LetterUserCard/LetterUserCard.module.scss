@@ -19,10 +19,15 @@ $sub-font-size: var(--font-size-sm);
   background-color: var(--white);
   flex: 1 1 0;
   z-index: 1;
+  justify-content: space-between;
+}
+.user_info {
+  display: flex;
+  align-items: center;
 }
 
 .user {
-  margin-left: 1.5rem;
+  margin-left: 1rem;
   & .name {
     font-size: $main-font-size;
     color: var(--text-primary-color);
@@ -32,6 +37,11 @@ $sub-font-size: var(--font-size-sm);
   & .info {
     font-size: $sub-font-size;
     color: var(--text-primary-color);
+  }
+  & .user_quit {
+    color: var(--alert-color);
+    font-size: var(--font-size-xs);
+    margin-bottom: 0.25rem;
   }
 }
 
