@@ -36,6 +36,10 @@ public interface LetterRepository extends JpaRepository<Letter, Long> {
       + "join letter l on l.receiver_id = a.member_id or l.sender_id = a.member_id "
       + "join member b on (b.member_id = l.receiver_id or l.sender_id = b.member_id) and b.member_id != a.member_id "
       + "where a.member_id = :memberId and b.member_status = \"MEMBER_ACTIVE\" "
-      + "group by b.member_id order by l.created_at desc ", nativeQuery = true)
+      + "group by b.member_id order by l.created_at desc",
+      countQuery = "select count(b.member_id) from member a join letter l on l.receiver_id = a.member_id or l.sender_id = a.member_id "
+          + "join member b on (b.member_id = l.receiver_id or b.member_id = l.sender_id) and b.member_id != a.member_id "
+          + "where a.member_id = :memberId and b.member_status = \"MEMBER_ACTIVE\" "
+          + "group by b.member_id", nativeQuery = true)
   Page<MemberLetterInterface> findAllMemberLetterByMemberId(@Param("memberId") Long memberId, Pageable pageable);
 }
