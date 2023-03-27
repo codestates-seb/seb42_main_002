@@ -215,11 +215,7 @@ const routers = createBrowserRouter(
                   isAuth={router.isAuth}
                   isFirstLogin={router.isFirstLogin}
                 >
-                  <ErrorBoundary>
-                    <Suspense fallback={<Spinner size="md" />}>
-                      {router.element}
-                    </Suspense>
-                  </ErrorBoundary>
+                  <ErrorBoundary>{router.element}</ErrorBoundary>
                 </BaseLayout>
               </ModalProvider>
             </AuthProvider>
@@ -234,11 +230,7 @@ const routers = createBrowserRouter(
             <AuthProvider>
               <ModalProvider>
                 <NoneLayout>
-                  <ErrorBoundary>
-                    <Suspense fallback={<Spinner size="md" />}>
-                      {router.element}
-                    </Suspense>
-                  </ErrorBoundary>
+                  <ErrorBoundary>{router.element}</ErrorBoundary>
                 </NoneLayout>
               </ModalProvider>
             </AuthProvider>
@@ -251,10 +243,10 @@ const routers = createBrowserRouter(
 
 function App() {
   return (
-    <>
+    <Suspense fallback={<Spinner size="md" />}>
       <RouterProvider router={routers} />
       <ToastContainer />
-    </>
+    </Suspense>
   );
 }
 

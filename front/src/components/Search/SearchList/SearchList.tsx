@@ -96,7 +96,7 @@ const SearchList = () => {
         }}
         className={styles.button}
       >
-        <LetterStatusIcon status={'SENT'} />
+        <LetterStatusIcon status={'SENT'} isRead />
       </button>
     );
   };
@@ -128,6 +128,7 @@ const SearchList = () => {
           addRecentData={addRecentData}
           empty={emptyProps}
           endText="마지막 스크롤 입니다."
+          onClick={moveProfileHandler}
         >
           <ChildrenButtonComponent />
         </NextUserCardList>
