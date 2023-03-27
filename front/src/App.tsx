@@ -22,6 +22,8 @@ import SearchPage from './pages/SearchPage';
 import StartPage from './pages/StartPage';
 import NotFoundPage from './pages/NotFoundPage';
 import RouterLayout from './components/Layouts/RouterLayout';
+import Spinner from './components/Common/Spinner/Spinner';
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import { RouterElement } from './utils';
 
 // Import Swiper styles
@@ -34,7 +36,6 @@ import 'swiper/css/scrollbar';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Suspense } from 'react';
-import Spinner from './components/Common/Spinner/Spinner';
 
 const routerData: RouterElement[] = [
   {
@@ -214,9 +215,11 @@ const routers = createBrowserRouter(
                   isAuth={router.isAuth}
                   isFirstLogin={router.isFirstLogin}
                 >
-                  <Suspense fallback={<Spinner size="md" />}>
-                    {router.element}
-                  </Suspense>
+                  <ErrorBoundary>
+                    <Suspense fallback={<Spinner size="md" />}>
+                      {router.element}
+                    </Suspense>
+                  </ErrorBoundary>
                 </BaseLayout>
               </ModalProvider>
             </AuthProvider>
@@ -231,9 +234,11 @@ const routers = createBrowserRouter(
             <AuthProvider>
               <ModalProvider>
                 <NoneLayout>
-                  <Suspense fallback={<Spinner size="md" />}>
-                    {router.element}
-                  </Suspense>
+                  <ErrorBoundary>
+                    <Suspense fallback={<Spinner size="md" />}>
+                      {router.element}
+                    </Suspense>
+                  </ErrorBoundary>
                 </NoneLayout>
               </ModalProvider>
             </AuthProvider>

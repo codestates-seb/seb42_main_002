@@ -41,11 +41,11 @@ instance.interceptors.response.use(
       }
       if (error.response.status === 404 && error.config) {
         toast.error(error.response.data.message || '요청에 실패하였습니다');
-        return;
+        throw new Error(error.response.data.message || '요청에 실패하였습니다');
       }
 
       toast.error(error.response.data.message || '다시 시도해주세요');
-      return reject(error);
+      throw new Error(error.response.data.message || '다시 시도해주세요');
     });
   }
 );
