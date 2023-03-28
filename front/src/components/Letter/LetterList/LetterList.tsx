@@ -1,5 +1,10 @@
 import { Suspense, useEffect } from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+  useRecoilRefresher_UNSTABLE,
+  useRecoilState,
+  useRecoilValue,
+  useSetRecoilState,
+} from 'recoil';
 import {
   letterListState,
   newLetterState,
@@ -9,11 +14,12 @@ import { SlEnvolopeLetter } from 'react-icons/sl';
 import { useNavigate } from 'react-router-dom';
 import Letter from '../Letter/Letter';
 import LetterUserCard from '../LetterUserCard/LetterUserCard';
-import styles from './LetterList.module.scss';
 import { letterPagiNationState } from '../../../recoil/atoms/pagination';
 import { LetterListStateType } from '../../../utils';
 import InnerSpinner from '../../Common/Spinner/InnerSpinner';
 import NextLetterList from './NextLetterList';
+import { letterListSeletor } from '../../../recoil/selectors/letter';
+import styles from './LetterList.module.scss';
 
 const LetterList = () => {
   const navigate = useNavigate();
@@ -21,6 +27,7 @@ const LetterList = () => {
   const setNewLetter = useSetRecoilState(newLetterState);
   const [letterList, setLetterList] = useRecoilState(letterListState);
   const setPagination = useSetRecoilState(letterPagiNationState);
+  const refresh = useRecoilRefresher_UNSTABLE(letterListSeletor);
 
   const addRecentData = (data: LetterListStateType) => {
     setLetterList((prev) => ({
@@ -42,6 +49,7 @@ const LetterList = () => {
    */
   useEffect(() => {
     resetList();
+    refresh();
     return resetList;
   }, []);
 
