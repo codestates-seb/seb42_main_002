@@ -303,20 +303,22 @@ const Profile = () => {
           </>
         )}
       </ProfileCard>
-      <Button
-        variant="primary"
-        size="md"
-        iconBtn
-        icon={<BiEdit />}
-        className={styles.btn_newLetter}
-        onClick={(event) => {
-          onClickHandler(
-            event,
-            userInfo?.memberId as number,
-            userInfo?.name as string
-          );
-        }}
-      />
+      {userInfo?.friend && (
+        <Button
+          variant="primary"
+          size="md"
+          iconBtn
+          icon={<BiEdit />}
+          className={styles.btn_newLetter}
+          onClick={(event) => {
+            onClickHandler(
+              event,
+              userInfo?.memberId as number,
+              userInfo?.name as string
+            );
+          }}
+        />
+      )}
     </>
   );
 };
