@@ -5,7 +5,7 @@ import {
   userState,
 } from '../../recoil/atoms';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { POST } from '../../utils/axios';
 import { selectedLetterSelector } from '../../recoil/selectors/letter';
 import LetterContent from './LetterContent/LetterContent';
@@ -16,6 +16,7 @@ import PictureModal from '../PictureModal/PictureModal';
 import styles from './LetterDetailWrapper.module.scss';
 
 const LetterDetailWrapper = () => {
+  const navigate = useNavigate();
   const { openModal } = useModals();
   const { letterId } = useParams();
   const getSelectedLetter = useRecoilValue(
@@ -43,6 +44,7 @@ const LetterDetailWrapper = () => {
         ...prev,
         ...getSelectedLetter,
       }));
+
       setSelectLanguage({ ...selectLanguage, content: getSelectedLetter.body });
       setTranslatedLanguage(getSelectedLetter.body);
       if (getSelectedLetter.senderId !== userInfo?.memberId) {
@@ -57,6 +59,13 @@ const LetterDetailWrapper = () => {
 
   useEffect(() => {
     getDetailLetter();
+  }, []);
+
+  // TODO: userInfo가 없는 경우 처리
+  useEffect(() => {
+    if (!userInfo) {
+      navigate('/');
+    }
   }, []);
 
   // 사진 확대 핸들러
