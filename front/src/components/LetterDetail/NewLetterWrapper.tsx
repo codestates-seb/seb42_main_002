@@ -25,6 +25,7 @@ const NewLetterWrapper = () => {
         body: letter.body,
         type: selectedLetterType,
         receiverId: letter.memberId,
+        photoUrl: newLetter.photoUrl,
       });
       const location =
         response.headers.location && response.headers.location.split('/');
