@@ -43,7 +43,7 @@ public interface LetterMapper {
     if (letter.getSender() == null) {
       builder.sender(null);
     } else {
-      builder.sender(letter.getSender().getName());
+      builder.sender(letter.getSender().getName()).senderId(letter.getSender().getMemberId());
     }
     if (letter.getReceiver() == null) {
       builder.receiver(null);

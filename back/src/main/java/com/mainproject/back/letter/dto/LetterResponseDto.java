@@ -13,6 +13,7 @@ import lombok.Setter;
 public class LetterResponseDto {
 
   private long letterId;
+  private long senderId;
   @Setter
   private String sender;
   @Setter
