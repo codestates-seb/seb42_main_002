@@ -12,12 +12,12 @@ export type tempData = {
 export const TemplateType: tempData[] = [
   {
     url: LetterType0,
-    options: '52 / 16px / 32px repeat',
+    options: '60 / 16px / 32px repeat',
     bgColor: '#ffffff',
   },
   {
     url: LetterType1,
-    options: '106 / 18px / 28px space',
+    options: '106 / 18px / 32px repeat',
     bgColor: '#ffffff',
   },
   {
