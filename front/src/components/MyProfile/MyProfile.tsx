@@ -445,9 +445,6 @@ const MyProfile = () => {
         </Flex.Col>
         <Flex.Col>
           <ButtonGroup gap="sm" justify="end">
-            <Button variant="secondary" size="sm" to="/guide">
-              스타일 가이드
-            </Button>
             <Button variant="primary" size="sm" onClick={logout}>
               로그아웃
             </Button>

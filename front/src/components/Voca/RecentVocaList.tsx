@@ -1,4 +1,9 @@
-import { useRecoilState, useRecoilValue } from 'recoil';
+import {
+  useRecoilRefresher_UNSTABLE,
+  useRecoilState,
+  useRecoilValue,
+} from 'recoil';
+import { useEffect } from 'react';
 import { TbVocabulary } from 'react-icons/tb';
 import useInfiniteScroll from '../../hooks/useInfiniteScroll';
 import { pageNationState } from '../../recoil/atoms/pagination';
@@ -21,6 +26,12 @@ const RecentVocaList = ({
 }: RecentVocaListProps) => {
   const recentVocaList = useRecoilValue(vocaSeletor);
   const [pagination, setPagination] = useRecoilState(pageNationState);
+
+  const refresh = useRecoilRefresher_UNSTABLE(vocaSeletor);
+
+  useEffect(() => {
+    refresh();
+  }, []);
 
   const sentinelRef = useInfiniteScroll(async () => {
     if (recentVocaList.isStop) {
