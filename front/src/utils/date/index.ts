@@ -8,7 +8,7 @@ export const formatDateToHour = (date: Date, locale: Locale): string => {
     new Date(date).getTime() - date.getTimezoneOffset() * 60000;
 
   try {
-    const result = format(new Date(diffTimeDate), 'aa hh:mm ', {
+    const result = format(diffTimeDate, 'aa hh:mm ', {
       locale: locale,
     });
     return result;
