@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { letterTypeState, newLetterState } from '../../../recoil/atoms';
 import { TemplateType } from '../../../utils';
@@ -11,7 +12,8 @@ type NewLetterContentProps = {
 const NewLetterContent = ({ receiver }: NewLetterContentProps) => {
   // 새로 생성할 편지 데이터
   const [newLetter, setNewLetter] = useRecoilState(newLetterState);
-  const selectedLetterType = useRecoilValue(letterTypeState);
+  const [selectedLetterType, setSelectedLetterType] =
+    useRecoilState(letterTypeState);
   const template = TemplateType[selectedLetterType || 0];
 
   const onChangeHandler = (
@@ -23,6 +25,20 @@ const NewLetterContent = ({ receiver }: NewLetterContentProps) => {
       type: selectedLetterType,
     }));
   };
+
+  /**
+   * @deprecated 페이지 이동 시, 초기화
+   */
+  useEffect(() => {
+    return () => {
+      setSelectedLetterType(0);
+      setNewLetter((prev) => ({
+        ...prev,
+        body: '',
+        type: 0,
+      }));
+    };
+  }, []);
 
   return (
     <div
