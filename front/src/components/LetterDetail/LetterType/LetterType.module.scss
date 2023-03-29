@@ -13,5 +13,10 @@
   box-shadow: var(--default-box-shadow);
   margin-right: 0.3rem;
   background-position: center;
+  border: 1px solid #dcdcdc;
+  border-radius: var(--border-radius-sm);
   cursor: pointer;
+  &.isActive {
+    border: 4px solid var(--button-primary-color);
+  }
 }

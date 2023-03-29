@@ -1,9 +1,10 @@
 .letter {
   background-color: var(--white);
   min-height: 10rem;
+  max-height: 10rem;
   min-width: 10rem;
   padding: 1rem;
-  font-size: var(--font-size-xxs);
+  font-size: var(--font-size-sm);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -46,8 +47,57 @@
   }
 
   & .open_time {
-    font-size: var(--font-size-xs);
     text-align: center;
-    font-weight: 700;
+    margin-bottom: 1rem;
+    span {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      font-size: var(--font-size-sm);
+      background-color: var(--light-color);
+      border-radius: var(--border-radius-sm);
+    }
+  }
+}
+
+.locksLetter {
+  position: relative;
+  width: 5rem;
+  height: 3.45rem;
+  margin: 0 auto;
+  align-self: center;
+  display: flex;
+  .locks_wrapper {
+    display: block;
+    position: absolute;
+    top: 0.7rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1.25rem;
+    height: 2.25rem;
+    z-index: 2;
+  }
+  &:hover {
+    .locks {
+      display: block;
+      animation: shaking 0.25s infinite;
+    }
+  }
+}
+
+@keyframes shaking {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(5px, 5px) rotate(5deg);
+  }
+  50% {
+    transform: translate(0, 0) rotate(0eg);
+  }
+  75% {
+    transform: translate(-5px, 5px) rotate(-5deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
   }
 }

@@ -4,7 +4,7 @@ import { ModalDispatchContext, ModalEventProps } from '../context/ModalContext';
 const useModals = () => {
   const { open, close } = useContext(ModalDispatchContext);
 
-  const openModal = (Component: React.ElementType, props: ModalEventProps) => {
+  const openModal = (Component: React.ElementType, props?: ModalEventProps) => {
     open(Component, props);
   };
 

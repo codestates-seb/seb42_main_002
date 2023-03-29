@@ -32,10 +32,13 @@
     .header {
       border-bottom: 1px solid var(--light-color);
       padding: 1rem 1rem;
-      font-weight: bold;
     }
     .body {
       padding: 2rem 1rem;
+      color: var(--text-primary-color);
+      p {
+        line-height: 1.5;
+      }
     }
     .footer {
       padding: 0.5rem 1rem;

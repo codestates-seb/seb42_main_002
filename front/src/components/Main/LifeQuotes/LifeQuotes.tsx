@@ -20,7 +20,6 @@ const LifeQuotes = () => {
     const fetchLifeQuotesAPI = async () => {
       try {
         const data = await fetchAPI();
-        console.log(data);
         const [result, respond] = data;
         if (result.result === 'success') {
           setSentense(respond.respond);

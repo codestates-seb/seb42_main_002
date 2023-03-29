@@ -1,4 +1,3 @@
-import { userData } from '../../dummy/userList';
 import { profileUser } from '../../dummy/users';
 import {
   GENDER_TYPE,
@@ -72,7 +71,9 @@ const userReducer = (state: any = initialState, action: any) => {
     case 'REMOVE_TAG': {
       return {
         ...state,
-        tag: state.tag.filter((tag: TagDataType) => tag.id !== action.payload),
+        tag: state.tag.filter(
+          (tag: TagDataType) => tag.tagId !== action.payload
+        ),
       };
     }
     default:

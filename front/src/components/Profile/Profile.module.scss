@@ -3,3 +3,10 @@
   bottom: 1rem;
   right: 1rem;
 }
+
+.btn_newLetter {
+  position: sticky;
+  left: 100%;
+  bottom: 1rem;
+  z-index: 2;
+}

@@ -3,7 +3,7 @@
   box-shadow: var(--default-box-shadow);
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 1rem;
+  padding: 1rem 1.5rem;
   background-color: var(--white);
   cursor: pointer;
 }
@@ -15,4 +15,9 @@
 }
 .children_wrapper {
   display: flex;
+}
+.user_quit {
+  color: var(--alert-color);
+  font-size: var(--font-size-xs);
+  margin-bottom: 0.25rem;
 }

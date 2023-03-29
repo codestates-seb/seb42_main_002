@@ -1,4 +1,8 @@
-import { LANGUAGE_CODE, LOCATION_CODE } from '../enums/common/common.enum';
+import {
+  GENDER_TYPE,
+  LANGUAGE_CODE,
+  LOCATION_CODE,
+} from '../enums/common/common.enum';
 
 /**
  * @description 언어코드 표기명 변환하는 함수
@@ -43,11 +47,11 @@ export const langTransformer = (value: LANGUAGE_CODE, isEnglish?: boolean) => {
       case LANGUAGE_CODE.EN:
         return 'English';
       case LANGUAGE_CODE.ES:
-        return 'Castellano';
+        return 'Spanish';
       case LANGUAGE_CODE.FR:
-        return 'France';
+        return 'French';
       case LANGUAGE_CODE.IT:
-        return 'italien';
+        return 'Italian';
       case LANGUAGE_CODE.RU:
         return 'Russian';
       case LANGUAGE_CODE.TR:
@@ -69,7 +73,7 @@ export const locationTransformer = (
   isEnglish?: boolean
 ) => {
   if (!isEnglish) {
-    // 해당 언어 표기
+    // 해당 국가 표기
     switch (value) {
       case LOCATION_CODE.KR:
         return '한국';
@@ -86,15 +90,31 @@ export const locationTransformer = (
     // 영문 표기
     switch (value) {
       case LOCATION_CODE.KR:
-        return 'Korean';
+        return 'Korea';
       case LOCATION_CODE.JP:
-        return 'Japanese';
+        return 'Japan';
       case LOCATION_CODE.CN:
-        return 'Chinese';
+        return 'China';
       case LOCATION_CODE.US:
-        return 'English';
+        return 'America';
       case LOCATION_CODE.ES:
-        return 'Castellano';
+        return 'Spain';
     }
+  }
+};
+
+/**
+ *
+ * @param gender 성별 표기명 변환하는 함수
+ * @returns
+ */
+export const genderTransformer = (gender: GENDER_TYPE | null) => {
+  switch (gender) {
+    case GENDER_TYPE.MALE:
+      return '남자';
+    case GENDER_TYPE.FEMALE:
+      return '여자';
+    case GENDER_TYPE.OTHER:
+      return '기타';
   }
 };

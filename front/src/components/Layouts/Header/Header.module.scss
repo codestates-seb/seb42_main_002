@@ -1,0 +1,29 @@
+.header {
+  display: none;
+}
+@media screen and (min-width: 1024px) {
+  .header {
+    display: block;
+    padding: 1.5rem 1rem;
+    .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header_logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      svg {
+        width: 3.5rem;
+      }
+      h1 {
+        font-family: 'MV Boil';
+        font-weight: bold;
+        color: var(--text-primary-color);
+        font-size: var(--font-size-xl);
+      }
+    }
+  }
+}

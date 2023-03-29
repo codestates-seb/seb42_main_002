@@ -1,5 +1,5 @@
+import { ReactNode } from 'react';
 import classNames from 'classnames';
-import { MouseEvent, MouseEventHandler, ReactNode } from 'react';
 import styles from './LabelButton.module.scss';
 
 type LabelButtonProps = {
@@ -34,12 +34,6 @@ const LabelButtonItem = ({
   );
   // 라벨 버튼 전체 이벤트
   if (onClick) {
-    // const onClickHandler = (
-    //   e: MouseEvent<HTMLButtonElement, MouseEvent>
-    // ): void => {
-    //   onClick();
-    // };
-
     return (
       <button type="button" className={classNameValues} onClick={onClick}>
         {children}

@@ -33,19 +33,11 @@ const GuidePage = () => {
   };
 
   const onClickAlertModalHandler = () => {
-    openModal(ConfirmAlertModal, {
-      onSubmit: () => {
-        console.log('Alert 모달');
-      },
-    });
+    openModal(ConfirmAlertModal);
   };
 
   const onClickPullPageModalHandler = () => {
-    openModal(CustomPullPageModal, {
-      onSubmit: () => {
-        console.log('Pull Page 모달');
-      },
-    });
+    openModal(CustomPullPageModal);
   };
 
   return (
@@ -55,16 +47,13 @@ const GuidePage = () => {
         <GuideBox>
           <h4>variant</h4>
           <ButtonGroup gap="sm">
-            <Button size="md" variant="default">
-              Default
-            </Button>
-            <Button size="md" variant="primary">
+            <Button size="sm" variant="primary">
               Primary
             </Button>
-            <Button size="md" variant="secondary">
+            <Button size="sm" variant="secondary">
               Secondary
             </Button>
-            <Button size="md" variant="dashed">
+            <Button size="sm" variant="dashed">
               Dashed
             </Button>
           </ButtonGroup>
@@ -117,13 +106,13 @@ const GuidePage = () => {
         <GuideBox>
           <h4>full size</h4>
           <ButtonGroup gap="sm">
-            <Button size="md" variant="primary" full>
+            <Button size="sm" variant="primary" full>
               Primary
             </Button>
-            <Button size="md" variant="secondary" full>
+            <Button size="sm" variant="secondary" full>
               Secondary
             </Button>
-            <Button size="md" variant="dashed" full>
+            <Button size="sm" variant="dashed" full>
               Dashed
             </Button>
           </ButtonGroup>
@@ -131,29 +120,29 @@ const GuidePage = () => {
         <GuideBox>
           <h4>full size - nowrap</h4>
           <ButtonGroup gap="sm" wrap="nowrap">
-            <Button size="md" variant="primary" full>
+            <Button size="sm" variant="primary" full>
               Primary
             </Button>
-            <Button size="md" variant="secondary" full>
+            <Button size="sm" variant="secondary" full>
               Secondary
             </Button>
-            <Button size="md" variant="dashed" full>
+            <Button size="sm" variant="dashed" full>
               Dashed
             </Button>
           </ButtonGroup>
           <ButtonGroup gap="sm" wrap="nowrap">
-            <Button size="md" variant="primary" full>
+            <Button size="sm" variant="primary" full>
               Primary
             </Button>
-            <Button size="md" variant="secondary" full>
+            <Button size="sm" variant="secondary" full>
               Secondary
             </Button>
           </ButtonGroup>
           <ButtonGroup gap="sm" wrap="nowrap">
-            <Button size="md" variant="primary" full>
+            <Button size="sm" variant="primary" full>
               Primary
             </Button>
-            <Button size="md" variant="secondary">
+            <Button size="sm" variant="secondary">
               Secondary
             </Button>
           </ButtonGroup>
@@ -167,9 +156,6 @@ const GuidePage = () => {
             <Button size="sm" variant="secondary">
               Secondary
             </Button>
-            <Button size="sm" variant="dashed">
-              Dashed
-            </Button>
           </ButtonGroup>
           <ButtonGroup gap="md">
             <Button size="sm" variant="primary">
@@ -178,9 +164,6 @@ const GuidePage = () => {
             <Button size="sm" variant="secondary">
               Secondary
             </Button>
-            <Button size="sm" variant="dashed">
-              Dashed
-            </Button>
           </ButtonGroup>
           <ButtonGroup gap="lg">
             <Button size="sm" variant="primary">
@@ -188,9 +171,6 @@ const GuidePage = () => {
             </Button>
             <Button size="sm" variant="secondary">
               Secondary
-            </Button>
-            <Button size="sm" variant="dashed">
-              Dashed
             </Button>
           </ButtonGroup>
         </GuideBox>

@@ -5,11 +5,12 @@
   & li:last-child {
     margin-bottom: 0;
   }
+  padding-bottom: 2.5rem;
 }
 
 .button {
-  position: absolute;
-  right: 0.5rem;
-  bottom: 4.5rem;
+  position: sticky;
+  left: 100%;
+  bottom: 1rem;
   box-shadow: var(--default-box-shadow);
 }

@@ -1,70 +1,153 @@
 import { useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { hobbyTags } from '../../../dummy/Tags';
-import { userTagState } from '../../../recoil/atoms/user/userTag';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import useModals from '../../../hooks/useModals';
+import {
+  userLanguageState,
+  userLocationState,
+  userLocationValueState,
+  userState,
+  userTagState,
+} from '../../../recoil/atoms';
+import { allTagState } from '../../../recoil/selectors';
+import { PATCH } from '../../../utils/axios';
 import { TagDataType } from '../../../utils/types/tags/tags';
 import Flex from '../../Common/Flex/Flex';
 import LabelButton from '../../Common/LabelButton/LabelButton';
 import FullPageModal, {
   FullPageModalProps,
 } from '../../Common/Modal/FullPageModal';
-import TagSearchBar from '../../Common/Tags/TagSearchBar';
+import SearchInput from '../../Common/SearchInput/SearchInput';
+import SummaryTitle from '../../Common/SummaryTitle/SummaryTitle';
+import LanguageEditModal from '../LanguageEditModal/LanguageEditModal';
+import LocationEditModal from '../LocationEditModal/LocationEditModal';
 
 const TagEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
-  const [selectedUserTags, setSelectedUserTags] = useRecoilState(userTagState);
-  const [changeTagIds, setChangeTags] = useState<TagDataType[]>([
+  const { closeModal } = useModals();
+  const navigate = useNavigate();
+  const userInfo = useRecoilValue(userState);
+  const hobbyTags = useRecoilValue(allTagState); // 취미 전체 목록
+  const selectedUserLangauges = useRecoilValue(userLanguageState); // 선택한 언어
+  const selectedUserLocationValue = useRecoilValue(userLocationValueState); // 첫 설정시 국가
+  const [selectedUserTags, setSelectedUserTags] =
+    useRecoilState<TagDataType[]>(userTagState);
+  const [changeTags, setChangeTags] = useState<TagDataType[]>([
     ...selectedUserTags,
   ]);
+  const [selectedUserLocation, setSelectedUserLocation] =
+    useRecoilState(userLocationState);
   const [tagList, setTagList] = useState([...hobbyTags]);
 
   // 태그 선택
-  const onSelectTagHandler = (selectedTag: TagDataType) => {
-    if (!changeTagIds.map((tag) => tag.id).includes(selectedTag.id)) {
-      setChangeTags((currentState) => [...currentState, selectedTag]);
+  const onSelectTagHandler = (selectTag: TagDataType) => {
+    if (!changeTags.map((tag) => tag.name).includes(selectTag.name)) {
+      setChangeTags((currentState) => [...currentState, selectTag]);
     } else {
-      setChangeTags(changeTagIds.filter((tag) => tag.id !== selectedTag.id));
+      setChangeTags(changeTags.filter((tag) => tag.name !== selectTag.name));
     }
   };
 
   // 태그 검색
-  const onChangeSearchInputHandler = (filterTags: any) => {
-    setTagList(filterTags);
+  const onChangeSearchInputHandler = (filteredItems: any) => {
+    setTagList(filteredItems);
   };
 
-  const onSubmitHandler = () => {
+  const updateTag = async () => {
+    if (changeTags.length === 0) {
+      toast.error('태그를 하나이상 선택해주세요');
+      return;
+    } else {
+      try {
+        const requestData = changeTags.map((tag) => tag.name);
+        const response = await PATCH('/users/me', {
+          tag: requestData,
+        });
+        if (response) {
+          setSelectedUserTags(changeTags);
+          return true;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const updateLocation = async () => {
+    try {
+      const response = await PATCH('/users/me', {
+        location: selectedUserLocationValue,
+      });
+      if (response) {
+        setSelectedUserLocation(selectedUserLocationValue);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateLanguage = async () => {
+    try {
+      await PATCH('/users/me', {
+        language: selectedUserLangauges,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const onSubmitHandler = async () => {
     if (onSubmit) {
-      setSelectedUserTags(changeTagIds);
-      onSubmit();
-    }
-    if (onClose) {
-      onClose();
-    }
-  };
-
-  const onCloseHandler = () => {
-    if (onClose) {
-      onClose();
+      if (userInfo?.location === null) {
+        // 첫 설정 일때
+        Promise.all([updateLocation(), updateLanguage(), updateTag()])
+          .then((res) => {
+            if (res) {
+              // 첫 설정 후 전체 모달 닫고 Welcome 페이지로 이동
+              closeModal(LocationEditModal);
+              closeModal(LanguageEditModal);
+              onClose && onClose();
+              toast.success('설정 완료되었습니다!');
+              navigate('/welcome');
+            }
+          })
+          .catch((error) => console.error(error));
+      } else {
+        // 수정 일때
+        const response = await updateTag();
+        if (response) {
+          toast.success('수정 완료되었습니다!');
+          onClose && onClose();
+        }
+      }
     }
   };
 
   return (
     <FullPageModal
       onSubmit={onSubmitHandler}
-      onClose={onCloseHandler}
-      labelSubmit="수정"
+      onClose={onClose}
+      labelSubmit={userInfo?.location === null ? '설정 완료' : '수정'}
     >
-      <TagSearchBar
-        tags={hobbyTags}
+      {userInfo?.location === null && (
+        <SummaryTitle>
+          관심 있는 <br />
+          주제의 태그를 선택하세요
+        </SummaryTitle>
+      )}
+      <SearchInput
+        items={hobbyTags}
+        filterKey="name"
         filterHandler={onChangeSearchInputHandler}
       />
       <Flex gap="sm" wrap="wrap">
         {tagList &&
-          tagList.map((tag) => (
+          tagList.map((tag: TagDataType) => (
             <Flex.Col key={tag.name} cols={6}>
               <LabelButton
                 full
                 onClick={() => onSelectTagHandler(tag)}
-                isActive={changeTagIds.map((tag) => tag.id).includes(tag.id)}
+                isActive={changeTags.map((tag) => tag.name).includes(tag.name)}
               >
                 <LabelButton.Content>{tag.name}</LabelButton.Content>
               </LabelButton>

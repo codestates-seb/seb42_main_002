@@ -1,28 +1,35 @@
 $button_shadow: linear-gradient(270deg, #ffffff 0%, #e2e2e2 221.53%);
-$main-font-size: var(--font-size-xs);
-$sub-font-size: var(--font-size-xxs);
+$main-font-size: var(--font-size-md);
+$sub-font-size: var(--font-size-sm);
 
 .wrapper {
   display: flex;
   width: 100%;
   cursor: pointer;
 }
+.cursor {
+  cursor: default !important;
+}
 
 .usercard {
   display: flex;
   box-shadow: var(--default-box-shadow);
   align-items: center;
-  padding: 0.5rem 1rem;
+  padding: 1rem 1.5rem;
   background-color: var(--white);
   flex: 1 1 0;
   z-index: 1;
+  justify-content: space-between;
+}
+.user_info {
+  display: flex;
+  align-items: center;
 }
 
 .user {
-  margin-left: 1.5rem;
+  margin-left: 1rem;
   & .name {
     font-size: $main-font-size;
-    font-weight: 700;
     color: var(--text-primary-color);
     margin-bottom: 0.25rem;
   }
@@ -30,6 +37,11 @@ $sub-font-size: var(--font-size-xxs);
   & .info {
     font-size: $sub-font-size;
     color: var(--text-primary-color);
+  }
+  & .user_quit {
+    color: var(--alert-color);
+    font-size: var(--font-size-xs);
+    margin-bottom: 0.25rem;
   }
 }
 

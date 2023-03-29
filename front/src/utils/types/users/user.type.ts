@@ -1,48 +1,46 @@
-import { GENDER_TYPE } from '../../enums/common/common.enum';
+import { GENDER_TYPE, LOCATION_CODE, USER_STATUS } from '../../enums';
 import { LanguageDataType } from '../common/common.type';
+import { LetterUserData } from '../letter';
 import { TagDataType } from '../tags/tags';
 
 export type UserData = {
   memberId: number;
   email: string;
   name: string;
-  gender: GENDER_TYPE;
-  location?: string;
-  birthday?: string;
+  gender: GENDER_TYPE | null;
+  location?: LOCATION_CODE | null;
+  birthday?: string | null;
   language: LanguageDataType[];
-  tag?: TagDataType[];
+  tag: TagDataType[];
   introduce?: string;
   profile?: string | null;
-  memberStatus?: string;
-  selectedLevelValue?: number | string | null;
-  selectedNationValue?: number | string | null;
-  selectedLanguage?: any;
+  memberStatus?: USER_STATUS;
+  friend?: boolean;
+  block?: boolean;
 };
 
-type Language = {
-  nation: string;
-  level: number;
-};
-
-export type Gender = 'MALE' | 'FEMALE' | 'OTHER';
-
-export type UserProfileData = {
+export type BlackUserDataType = {
   memberId: number;
   name: string;
-  email: string;
-  gender: Gender;
-  location: string;
-  birthday: string;
-  introduce: string;
+  location: LOCATION_CODE;
   profile: string | null;
-  createdAt: string;
-  language: Language[];
-  tag: string[];
 };
 
-export type BlackUserData = {
-  memberId: number;
-  name: string;
-  location: string;
-  profile: string | null;
+export type blackListStateType = {
+  content: BlackUserDataType[];
+  isStop: boolean;
+};
+
+export type FollowingListStateType = {
+  content: LetterUserData[];
+  isStop: boolean;
+};
+
+export type SearchUserDataType = BlackUserDataType & {
+  friend: boolean;
+};
+
+export type SearchUserListStateType = {
+  content: SearchUserDataType[];
+  isStop: boolean;
 };

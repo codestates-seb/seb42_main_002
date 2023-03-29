@@ -1,47 +1,126 @@
-import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import useModals from '../../hooks/useModals';
+import { letterTypeState, newLetterState } from '../../recoil/atoms';
+import { newLetterType, toast, validateUploadImage } from '../../utils';
+import { POST, POST_IMG } from '../../utils/axios';
 import Button from '../Common/Button/Button';
+import AlertModal, { AlertModalProps } from '../Common/Modal/AlertModal';
 import NewLetterContent from './LetterContent/NewLetterContent';
 import LetterPictureWrapper from './LetterPicture/LetterPictureWrapper';
 import LetterType from './LetterType/LetterType';
 
 const NewLetterWrapper = () => {
-  // 첨부 파일
-  const [pictures, setPictures] = useState<string[]>([
-    'https://images.unsplash.com/photo-1678565555430-f8640bf41628?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80',
-    'https://images.unsplash.com/photo-1678582911712-43934e3fe86d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80',
-    'https://images.unsplash.com/photo-1674574124649-778f9afc0e9c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
-    'https://images.unsplash.com/photo-1678537223079-aac394356c16?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
-  ]);
-  // 콘텐츠
-  const [body, setBody] = useState<string>('');
+  const { openModal } = useModals();
+  const [newLetter, setNewLetter] = useRecoilState(newLetterState);
+  const selectedLetterType = useRecoilValue(letterTypeState);
+  const navigate = useNavigate();
+
+  /**
+   * @description 새 편지 등록 API
+   */
+  const postNewLetter = async (letter: newLetterType) => {
+    try {
+      const response = await POST(`/users/me/letters`, {
+        body: letter.body,
+        type: selectedLetterType,
+        receiverId: letter.memberId,
+        photoUrl: newLetter.photoUrl,
+      });
+      const location =
+        response.headers.location && response.headers.location.split('/');
+
+      // 편지 내용 초기화
+      setNewLetter((prev) => ({
+        ...prev,
+        body: '',
+        photoUrl: [],
+      }));
+
+      if (location[2]) {
+        navigate(`/letters/${newLetter.memberId}/${location[2]}`);
+      } else {
+        navigate(`/letters/${newLetter.memberId}`);
+      }
+    } catch (error) {
+      console.log('error');
+      // TODO: ERROR 처리 방법
+    }
+  };
 
   // TODO : 이미지 삭제 시, 모달로 확인하기?
   const pictureRemoveHandler = (idx: number) => {
-    console.log('현재 사진 삭제', idx);
-    const newPictures = pictures.filter((_, picIdx) => picIdx !== idx);
-    setPictures(newPictures);
+    const removedPhotoArr = newLetter.photoUrl.filter(
+      (_, photoIdx) => photoIdx !== idx
+    );
+    setNewLetter((prev) => ({
+      ...prev,
+      photoUrl: removedPhotoArr,
+    }));
   };
 
-  // TODO : 이미지 추가 로직 변경
-  const pictureAddHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const reader = new FileReader();
-    const file = event.target.files && event.target.files[0];
+  const pictureAddHandler = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const checkedFile = await validateUploadImage(event);
+    if (!checkedFile.isValid) {
+      setNewLetter((prev) => ({
+        ...prev,
+        photoUrl: [...prev.photoUrl],
+      }));
+    }
+    if (checkedFile.isValid) {
+      const formData = new FormData();
+      formData.append('type', 'photos');
+      checkedFile.file && formData.append('image', checkedFile.file);
+      try {
+        const { data } = await POST_IMG(
+          '/users/me/letters/photos/upload',
+          formData,
+          {
+            headers: {
+              'Contest-Type': 'multipart/form-data',
+            },
+          }
+        );
+        setNewLetter((prev) => ({
+          ...prev,
+          photoUrl: [...prev.photoUrl, data.uploadUrl],
+        }));
+      } catch (error) {
+        console.log('error');
+      }
+    }
+  };
 
-    reader.onload = () => {
-      setPictures((prev) => [...prev, String(reader.result)]);
+  const confirmSendLetterModal = ({ onSubmit, onClose }: AlertModalProps) => {
+    const onSubmitHandler = () => {
+      postNewLetter(newLetter);
+      onSubmit && onSubmit();
     };
-    file && reader.readAsDataURL(file);
+
+    return (
+      <>
+        <AlertModal
+          title="편지 전송"
+          labelClose="닫기"
+          labelSubmit="확인"
+          onSubmit={onSubmitHandler}
+          onClose={onClose}
+        >
+          <p className="text_center">편지를 정말 보내시겠습니까?</p>
+        </AlertModal>
+      </>
+    );
   };
 
-  const onChangeHandler = (
-    event: React.ChangeEvent<HTMLTextAreaElement>
-  ): void => {
-    console.log('편지 내용 작성');
-    setBody(event.target.value);
-  };
-
-  const onSubmitHandler = () => {
-    console.log('편지 제출', body, pictures);
+  const confirmSendLetterModalHandler = () => {
+    // 유효성 검사
+    if (!newLetter.body.trim()) {
+      toast.error('편지 내용을 입력해 주세요');
+      return;
+    }
+    openModal(confirmSendLetterModal);
   };
 
   return (
@@ -49,20 +128,21 @@ const NewLetterWrapper = () => {
       {/* 편지지 선택 */}
       <LetterType />
       {/* 편지 내용 */}
-      <NewLetterContent
-        body={body}
-        onChange={onChangeHandler}
-        receiver="안아영"
-      />
+      <NewLetterContent receiver={newLetter.receiver} type={newLetter.type} />
       {/* 이미지 선택 */}
       <LetterPictureWrapper
-        pictures={pictures}
+        pictures={newLetter.photoUrl}
         onRemove={pictureRemoveHandler}
         onAdd={pictureAddHandler}
         isRead={false}
       />
       {/* 편지 보내기 */}
-      <Button variant="primary" size="lg" full onClick={onSubmitHandler}>
+      <Button
+        variant="primary"
+        size="lg"
+        full
+        onClick={confirmSendLetterModalHandler}
+      >
         편지 보내기
       </Button>
     </>

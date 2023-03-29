@@ -1,12 +1,19 @@
+import { LOCATION_CODE } from './../../enums/common/common.enum';
 export type LetterUserData = {
   profile: string | null;
   name: string;
   memberId: number;
-  location: string;
+  location: LOCATION_CODE;
   birthday?: string;
+  memberStatus?: string;
   lastLetter: {
     status: 'SENT' | 'RECEIVED';
     createdAt: string;
-    isRead: boolean;
   };
+  isRead: boolean;
+};
+
+export type LetterUserListStateType = {
+  content: LetterUserData[];
+  isStop: boolean;
 };

@@ -12,14 +12,12 @@
     display: block;
     font-size: var(--font-size-xs);
     color: var(--button-primary-color);
-    font-weight: bold;
     margin-bottom: 0.5rem;
   }
   .info_content {
     p {
       font-size: var(--font-size-xs);
       color: var(--text-primary-color);
-      font-weight: bold;
       word-break: break-all;
     }
   }

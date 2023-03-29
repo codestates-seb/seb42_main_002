@@ -1,4 +1,4 @@
-export type LetterData = {
+export type LetterDataType = {
   letterId: number;
   sender: {
     memberId: number;
@@ -8,22 +8,37 @@ export type LetterData = {
     memberId: number;
     name: string;
   };
-  // title: string; // 이게 어디서 쓰이는거지
   body: string;
   isRead: boolean; // 읽음 여부
   availableAt: string;
-  canRead: boolean;
   createdAt: string;
   hasPic: boolean; // 이미지 첨부 여부
 };
 
-export type SeletedLetterData = {
-  letterId: number;
+export type LetterListStateType = {
+  content: LetterDataType[];
+  isStop: boolean;
+};
+
+export type SeletedLetterDataType = {
+  letterId?: number;
   sender: string;
   type: number;
   receiver: string;
   body: string;
   availableAt: string;
   createdAt: string;
-  pic: string[];
+  photoUrl: string[] | null;
+  memberStatus?: string;
+};
+
+/**
+ * @description 편지 생성 type
+ */
+export type newLetterType = {
+  body: string;
+  photoUrl: string[];
+  type?: number;
+  receiver: string;
+  memberId: null | number;
 };

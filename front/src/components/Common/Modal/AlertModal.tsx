@@ -10,6 +10,8 @@ export type AlertModalProps = {
   labelClose?: string;
   onSubmit?: () => void;
   onClose?: () => void;
+  hideSubmit?: boolean;
+  hideClose?: boolean;
   children?: ReactNode;
 };
 
@@ -19,6 +21,8 @@ const AlertModal = ({
   onClose,
   labelSubmit = '확인',
   labelClose = '닫기',
+  hideSubmit,
+  hideClose,
   children,
 }: AlertModalProps) => {
   return createPortal(
@@ -33,12 +37,16 @@ const AlertModal = ({
         <div className={styles.body}>{children}</div>
         <div className={styles.footer}>
           <ButtonGroup gap="sm" wrap="nowrap">
-            <Button size="md" variant="secondary" onClick={onClose} full>
-              {labelClose}
-            </Button>
-            <Button size="md" variant="primary" onClick={onSubmit} full>
-              {labelSubmit}
-            </Button>
+            {!hideClose && (
+              <Button size="md" variant="secondary" onClick={onClose} full>
+                {labelClose}
+              </Button>
+            )}
+            {!hideSubmit && (
+              <Button size="md" variant="primary" onClick={onSubmit} full>
+                {labelSubmit}
+              </Button>
+            )}
           </ButtonGroup>
         </div>
       </div>

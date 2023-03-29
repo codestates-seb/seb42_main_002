@@ -1,4 +1,3 @@
-import React from 'react';
 import Button from '../components/Common/Button/Button';
 import LifeQuotes from '../components/Main/LifeQuotes/LifeQuotes';
 import MainLetter from '../components/Main/MainLetters/MainLetter';
@@ -19,7 +18,7 @@ const MainPage = () => {
         <MainLetter />
       </MainSection>
       <MainSection>
-        <Button variant="primary" size="lg" full to="/letters">
+        <Button variant="primary" size="lg" full to="/search">
           친구 찾으러 가기
         </Button>
       </MainSection>

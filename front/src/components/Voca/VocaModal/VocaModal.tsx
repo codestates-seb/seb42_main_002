@@ -1,20 +1,29 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { TiDeleteOutline } from 'react-icons/ti';
+import { useRecoilState } from 'recoil';
+import { selectedVocaState } from '../../../recoil/atoms/voca';
+import { toast } from '../../../utils';
+import { PATCH, POST } from '../../../utils/axios';
+import { VocaDataType } from '../../../utils/types/voca';
 import Button from '../../Common/Button/Button';
 import styles from './VocaModal.module.scss';
 
 type VocaModalPros = {
   onModalClose: (event?: React.MouseEvent<HTMLButtonElement>) => void;
   isEditMode: boolean;
+  onAddNewVoca: () => void;
+  onAddEditVoca: (editVoca: VocaDataType) => void;
 };
 
-const VocaModal = ({ onModalClose, isEditMode }: VocaModalPros) => {
-  // 보카 수정 - 리코일에서 가져오기
-  const [editVoca, setEditVoca] = useState({
-    word: 'Orange',
-    meaning: '오렌지도 새콤 달콤',
-  });
+const VocaModal = ({
+  onModalClose,
+  isEditMode,
+  onAddNewVoca,
+  onAddEditVoca,
+}: VocaModalPros) => {
+  const [editVoca, setEditVoca] =
+    useRecoilState<VocaDataType>(selectedVocaState);
 
   // 새 보카
   const [newVoca, setNewVoca] = useState({
@@ -40,14 +49,59 @@ const VocaModal = ({ onModalClose, isEditMode }: VocaModalPros) => {
     }));
   };
 
+  /**
+   * @description Voca 생성 API
+   */
+  const addNewVocaAPI = async () => {
+    try {
+      await POST('/vocabs', {
+        ...newVoca,
+      });
+      onAddNewVoca();
+      onModalClose();
+      setNewVoca({
+        word: '',
+        meaning: '',
+      });
+    } catch (error) {
+      // TODO: 에러 처리
+      console.log(error);
+    }
+  };
+
+  /**
+   * @description Voca 수정 API
+   */
+  const editVocaAPI = async () => {
+    try {
+      const { data } = await PATCH(`/vocabs/${editVoca.vocabId}`, {
+        word: editVoca.word,
+        meaning: editVoca.meaning,
+      });
+      onAddEditVoca(data);
+      onModalClose();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const onEditVocaHandler = (): void => {
-    console.log('보카 수정', editVoca);
-    onModalClose();
+    if (!editVoca.meaning || !editVoca.word) return;
+    if (editVoca.meaning.length >= 250) {
+      toast.error('250자 이하로 작성해주세요!');
+      return;
+    }
+    editVocaAPI();
   };
 
   const onAddNewVocaHandler = (): void => {
-    console.log('보카 생성', newVoca);
-    onModalClose();
+    // 유효성 검사
+    if (!newVoca.meaning || !newVoca.word) return;
+    if (editVoca.meaning.length >= 250) {
+      toast.error('250자 이하로 작성해주세요!');
+      return;
+    }
+    addNewVocaAPI();
   };
 
   return createPortal(

@@ -1,5 +1,5 @@
-$main-font-size: var(--font-size-xs);
-$sub-font-size: var(--font-size-xxs);
+$main-font-size: var(--font-size-md);
+$sub-font-size: var(--font-size-sm);
 
 .user_info {
   display: flex;
@@ -9,7 +9,6 @@ $sub-font-size: var(--font-size-xxs);
 .user {
   & .name {
     font-size: $main-font-size;
-    font-weight: 700;
     color: var(--text-primary-color);
     margin-bottom: 0.25rem;
   }

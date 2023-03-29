@@ -1,18 +1,17 @@
 import { atom } from 'recoil';
-import { profileUser } from '../../../dummy/users';
 import { LanguageDataType } from '../../../utils/types/common/common.type';
 
 export const userLanguageState = atom({
-  key: 'selectedUserLanguages',
-  default: profileUser.language as LanguageDataType[],
+  key: 'userLanguageState',
+  default: [] as LanguageDataType[],
 });
 
 export const userLanguageNationState = atom({
-  key: 'selectedUserLanguageNation',
-  default: null,
+  key: 'userLanguageNationState',
+  default: '',
 });
 
 export const userLanguageLevelState = atom({
-  key: 'selectedUserLanguageLevel',
+  key: 'userLanguageLevelState',
   default: null,
 });

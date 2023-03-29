@@ -6,12 +6,14 @@
   align-items: center;
   height: 2.5rem;
   & .title {
+    font-family: 'MV Boil';
     font-size: var(--font-size-xxl);
+    font-weight: 700;
     color: var(--title-primary-color);
     margin-bottom: 0.5rem;
   }
   & .translate {
-    font-size: var(--font-size-xs);
+    font-size: var(--font-size-md);
     color: var(--title-secondary-color);
   }
 }
