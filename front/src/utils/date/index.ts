@@ -4,8 +4,13 @@ import { differenceInMinutes, format, getYear, Locale } from 'date-fns';
  * @description Date를 시간으로 변환하는 함수
  */
 export const formatDateToHour = (date: Date, locale: Locale): string => {
+  const diffTimeDate =
+    new Date(date).getTime() - date.getTimezoneOffset() * 60000;
+
   try {
-    const result = format(date, 'aa h:m ', { locale });
+    const result = format(diffTimeDate, 'aa hh:mm ', {
+      locale: locale,
+    });
     return result;
   } catch (error) {
     return '';
