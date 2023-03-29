@@ -20,6 +20,8 @@ $sub-font-size: var(--font-size-sm);
   flex: 1 1 0;
   z-index: 1;
   justify-content: space-between;
+  border-top-left-radius: var(--border-radius-sm);
+  border-bottom-left-radius: var(--border-radius-sm);
 }
 .user_info {
   display: flex;
@@ -50,4 +52,6 @@ $sub-font-size: var(--font-size-sm);
   min-width: 3.75rem;
   background: $button_shadow;
   box-shadow: var(--default-box-shadow);
+  border-top-right-radius: var(--border-radius-sm);
+  border-bottom-right-radius: var(--border-radius-sm);
 }
