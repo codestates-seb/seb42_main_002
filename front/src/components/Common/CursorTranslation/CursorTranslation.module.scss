@@ -1,0 +1,59 @@
+.button {
+  position: absolute;
+  width: 1.875rem;
+  height: 1.875rem;
+  cursor: pointer;
+  background-image: url(../../../assets/img/Translate_icon.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  transition: 0.3s ease-in;
+  z-index: 9999;
+}
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+.containner {
+  position: relative;
+}
+
+.modle {
+  @extend .button;
+  cursor: auto;
+  background-image: none;
+  width: 10rem;
+  min-height: 10rem;
+  background-color: white;
+  box-shadow: var(--default-box-shadow);
+  border-radius: 0.25rem;
+  padding: 0.625rem;
+  display: flex;
+  align-items: left;
+  flex-direction: column;
+  p {
+    width: 100%;
+    max-height: 30%;
+    font-size: 0.75rem;
+    margin-bottom: 0.3rem;
+    overflow-y: auto;
+    min-height: 1.25rem;
+  }
+}
+.select_languge {
+  font-size: 0.75rem;
+  background-color: var(--button-primary-color);
+  color: var(--white);
+  border-radius: 0.25rem;
+  margin-bottom: 0.3rem;
+  margin-top: 0.4rem;
+}
+.text_box {
+  height: 80%;
+}
+.modal_btn {
+  background-color: var(--active-color);
+  width: 100%;
+  padding: 0.375rem;
+  border-radius: 0.25rem;
+  color: var(--white);
+}

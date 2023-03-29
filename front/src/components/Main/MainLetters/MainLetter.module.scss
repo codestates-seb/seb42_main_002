@@ -1,0 +1,74 @@
+.container {
+  position: relative;
+  border-radius: var(--border-radius-lg);
+  max-width: 30rem;
+  margin: 0 auto;
+  z-index: 1;
+
+  box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.1);
+  &.is_arrived {
+    .envelope {
+      background: var(--light-color);
+      &:hover {
+        .envelope_letter {
+          transform: translateY(-8rem);
+        }
+      }
+      .envelope_cover {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+        background-image: url('../../../assets/img/main/main_envelope_cover.svg');
+      }
+      .envelope_letter {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        padding: 1rem;
+        transition: all 0.4s ease;
+
+        div {
+          background-color: var(--button-primary-color);
+          background-image: url('../../../assets/img/main/main_letter_card.svg');
+          background-color: cover;
+          width: 100%;
+          height: 100%;
+          padding: 1rem;
+        }
+      }
+      p {
+        top: auto;
+        bottom: 2rem;
+        z-index: 3;
+        span {
+          font-size: 2rem;
+          color: var(--button-primary-color);
+        }
+      }
+    }
+  }
+
+  .envelope {
+    padding-bottom: 71.25%;
+    background-image: url('../../../assets/img/main/main_envelope_empty.svg');
+    background-repeat: no-repeat;
+    background-size: 100%;
+    img {
+      position: absolute;
+      left: 1rem;
+      bottom: 1rem;
+      width: 30%;
+      max-width: 8rem;
+    }
+    p {
+      position: absolute;
+      top: 20%;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 1rem;
+      color: var(--text-primary-color);
+    }
+  }
+}

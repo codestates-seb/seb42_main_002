@@ -1,0 +1,16 @@
+.top_nav_bar {
+  display: flex;
+  gap: 1rem;
+  .nav_item {
+    display: inline-flex;
+    padding: 0.5rem;
+    text-decoration: none;
+    gap: 1rem;
+    border-radius: var(--border-radius-sm);
+    &:hover,
+    &.is_active {
+      background-color: var(--active-color);
+      color: var(--white);
+    }
+  }
+}

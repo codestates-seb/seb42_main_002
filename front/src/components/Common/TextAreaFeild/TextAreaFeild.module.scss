@@ -1,0 +1,12 @@
+.textarea {
+  border: 2px solid var(--text-primary-color);
+  padding: 0.25rem;
+
+  textarea {
+    width: 100%;
+    min-height: 5rem;
+    line-height: 1.5;
+    outline: 0;
+    font-size: var(--font-size-sm);
+  }
+}

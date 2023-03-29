@@ -1,0 +1,28 @@
+.item {
+  a {
+    text-decoration: none;
+  }
+  figure {
+    width: 4rem;
+    height: 4rem;
+    background-color: white;
+    border: 2px solid var(--button-primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    img {
+      width: 100%;
+      max-width: 100%;
+      min-height: 100%;
+    }
+  }
+  .name {
+    display: block;
+    text-align: center;
+    font-size: var(--font-size-xs);
+    margin-top: 0.5rem;
+    color: var(--button-primary-color);
+  }
+}

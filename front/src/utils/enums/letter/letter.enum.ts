@@ -1,0 +1,5 @@
+export const enum LETTER_TYPE {
+  SEARCH = 'SEARCH',
+  FOLLOWINGS = 'FOLLOWINGS',
+  BLACK_LIST = 'BLACK_LIST',
+}

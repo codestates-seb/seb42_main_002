@@ -1,13 +1,24 @@
 spring:
+  profiles:
+    include : oauth
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "local"
+---
+spring:
   datasource:
     url: {DATABASEURL}
     password: {DATABASE_PASSWORD}
     username: {DATABASE_ID}
     driver-class-name: com.mysql.cj.jdbc.Driver
+
   jpa:
     database-platform: org.hibernate.dialect.MySQL5Dialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     #ddl-auto: none
     properties:
       hibernate:

@@ -1,0 +1,31 @@
+.card {
+  background-color: white;
+  box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  border-radius: var(--border-radius-sm);
+  h3 {
+    color: var(--text-primary-color);
+    font-size: 1.25rem;
+    font-weight: bold;
+    word-break: break-word;
+  }
+  p {
+    margin-top: 1rem;
+    color: var(--text-secondary-color);
+    line-height: 1.5;
+    word-break: break-word;
+  }
+}
+
+.empty {
+  padding: 1rem;
+  background-color: var(--white);
+  border-radius: var(--border-radius-sm);
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.05);
+  text-align: center;
+  p {
+    margin-bottom: 0.5rem;
+    color: var(--text-primary-color);
+    font-size: var(--font-size-sm);
+  }
+}

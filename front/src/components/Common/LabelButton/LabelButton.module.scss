@@ -1,0 +1,33 @@
+.label_button {
+  display: flex;
+  background-color: var(--default-color);
+  border-radius: var(--border-radius-sm);
+  padding: 1rem;
+  align-items: center;
+  gap: 1rem;
+  font-size: var(--font-size-sm);
+  color: var(--text-primary-color);
+
+  &.is_active {
+    background-color: var(--active-color);
+    color: var(--white);
+  }
+
+  &.is_full {
+    width: 100%;
+  }
+
+  + .label_button {
+    margin-top: 1rem;
+  }
+
+  .content {
+    width: 100%;
+  }
+
+  .action {
+    display: flex;
+    width: auto;
+    align-items: center;
+  }
+}

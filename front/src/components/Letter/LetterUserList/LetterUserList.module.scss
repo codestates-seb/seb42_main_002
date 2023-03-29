@@ -1,0 +1,19 @@
+.letter_list {
+  & li {
+    margin-bottom: 1rem;
+  }
+  & li:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.icon {
+  margin-top: 1rem;
+  color: var(--text-secondary-color);
+}
+.member_quit {
+  margin: auto;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  color: var(--alert-color);
+}

@@ -1,0 +1,42 @@
+.letter {
+  padding: 2rem;
+  margin-top: 1rem;
+  min-height: 50vh;
+  height: calc(100vh - var(--layout-container-height) - 16rem);
+  word-break: break-all;
+  border-radius: var(--border-radius-md);
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+
+  .letter_inner {
+    height: 100%;
+    overflow-y: auto;
+    border-width: 1px;
+    border-style: solid;
+  }
+
+  & textarea {
+    width: 100%;
+    height: calc(100% - 1.5rem);
+    min-height: 15rem;
+    background-color: transparent;
+  }
+}
+.receiver_info {
+  & .dear {
+    font-size: var(--font-size-md);
+    font-weight: 700;
+    margin-right: 0.5rem;
+    color: var(--title-primary-color);
+  }
+  & .receiver {
+    font-size: var(--font-size-s);
+    font-weight: 700;
+    color: var(--text-primary-color);
+  }
+}
+
+.body {
+  outline: none;
+  padding: 1rem 0;
+}
