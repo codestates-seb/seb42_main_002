@@ -38,9 +38,11 @@ const NewLetterWrapper = () => {
       }));
 
       if (location[2]) {
-        navigate(`/letters/${newLetter.memberId}/${location[2]}`);
+        navigate(`/letters/${newLetter.memberId}/${location[2]}`, {
+          replace: true,
+        });
       } else {
-        navigate(`/letters/${newLetter.memberId}`);
+        navigate(`/letters/${newLetter.memberId}`, { replace: true });
       }
     } catch (error) {
       console.log('error');

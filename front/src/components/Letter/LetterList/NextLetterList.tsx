@@ -1,5 +1,9 @@
 import { useEffect } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import {
+  useRecoilRefresher_UNSTABLE,
+  useRecoilState,
+  useRecoilValue,
+} from 'recoil';
 import useInfiniteScroll from '../../../hooks/useInfiniteScroll';
 import { selectedUserInfoState } from '../../../recoil/atoms';
 import { letterPagiNationState } from '../../../recoil/atoms/pagination';
@@ -32,6 +36,11 @@ const NextLetterList = ({
   const data: DataType = useRecoilValue(letterListSeletor);
   const selectedUser = useRecoilValue(selectedUserInfoState);
   const [pagination, setPagination] = useRecoilState(letterPagiNationState);
+  const refresh = useRecoilRefresher_UNSTABLE(letterListSeletor);
+
+  useEffect(() => {
+    refresh();
+  }, []);
 
   const sentinelRef = useInfiniteScroll(async () => {
     if (data.isStop) {

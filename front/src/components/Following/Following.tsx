@@ -7,7 +7,6 @@ import { FollowingListStateType, LetterUserData } from '../../utils';
 import Button from '../Common/Button/Button';
 import ButtonGroup from '../Common/Button/ButtonGroup';
 import Flex from '../Common/Flex/Flex';
-import styles from './Following.module.scss';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { followingListState } from '../../recoil/atoms/user/following';
 import { pageNationState } from '../../recoil/atoms/pagination';
@@ -15,6 +14,7 @@ import NextUserCardList from '../Common/UserCard/NextUserCardList';
 import InnerSpinner from '../Common/Spinner/InnerSpinner';
 import { followingListSeletor } from '../../recoil/selectors/user/follwing';
 import { newLetterState } from '../../recoil/atoms';
+import styles from './Following.module.scss';
 
 const Following = () => {
   const navigate = useNavigate();
