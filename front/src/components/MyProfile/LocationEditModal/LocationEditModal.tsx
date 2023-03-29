@@ -24,7 +24,7 @@ import styles from './LocationEditModal.module.scss';
 
 const LocationEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
   const { openModal } = useModals();
-  const userInfo = useRecoilValue(userState);
+  const [userInfo, setUserInfo] = useRecoilState(userState);
   const [selectedUserLocation, setSelectedUserLocation] =
     useRecoilState(userLocationState);
   const setselectedUserLocationValueState = useSetRecoilState<any>(
@@ -60,6 +60,11 @@ const LocationEditModal = ({ onSubmit, onClose }: FullPageModalProps) => {
       } else {
         // 수정일 때
         updateLocation();
+        // TODO: 타입에러
+        setUserInfo((prev: any) => ({
+          ...prev,
+          location: changeLocation,
+        }));
         onClose && onClose();
       }
     }

@@ -58,7 +58,7 @@ const MyProfileImage = ({ onChangeLocation }: MyProfileImageProps) => {
           toast.success('사진 수정이 완료되었습니다');
         }
       } catch (error) {
-        console.log('error');
+        console.error('error');
       }
     }
   };
