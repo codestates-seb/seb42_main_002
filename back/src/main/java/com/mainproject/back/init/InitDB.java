@@ -5,7 +5,6 @@ import com.mainproject.back.language.repository.LanguageRepository;
 import com.mainproject.back.tag.entity.Tag;
 import com.mainproject.back.tag.repository.TagRepository;
 import java.util.List;
-import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +15,7 @@ public class InitDB {
 
   private final Init init;
 
-  @PostConstruct
+//  @PostConstruct
   public void initTag() {
     init.initTag();
     init.initLanguage();
@@ -74,12 +73,12 @@ class Init {
   }
 
   @Transactional
-  public void initLanguage(){
+  public void initLanguage() {
     List<Language> languages = List.of(
-        Language.builder().nation("KR").build(),
+        Language.builder().nation("KO").build(),
         Language.builder().nation("CN").build(),
-        Language.builder().nation("EN").build(),
-        Language.builder().nation("JP").build(),
+        Language.builder().nation("US").build(),
+        Language.builder().nation("JA").build(),
         Language.builder().nation("ES").build()
     );
     languageRepository.saveAll(languages);

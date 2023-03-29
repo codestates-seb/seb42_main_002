@@ -13,12 +13,13 @@ import lombok.Setter;
 public class LetterResponseDto {
 
   private long letterId;
+  private long senderId;
   @Setter
   private String sender;
   @Setter
   private String receiver;
   private String body;
-  private List<String> pic;
+  private List<String> photoUrl;
   private int type;
   private LocalDateTime createdAt;
   private LocalDateTime availableAt;

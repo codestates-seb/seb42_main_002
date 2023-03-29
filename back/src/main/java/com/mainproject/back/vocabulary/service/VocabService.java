@@ -2,29 +2,43 @@ package com.mainproject.back.vocabulary.service;
 
 import com.mainproject.back.exception.BusinessLogicException;
 import com.mainproject.back.member.exception.MemberExceptionCode;
+import com.mainproject.back.util.ApiManager;
 import com.mainproject.back.vocabulary.entity.Vocabulary;
 import com.mainproject.back.vocabulary.exception.VocabExceptionCode;
 import com.mainproject.back.vocabulary.repository.VocabRepository;
-import java.util.NoSuchElementException;
+import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class VocabService {
 
-  public VocabService(VocabRepository vocabRepository) {
-    this.vocabRepository = vocabRepository;
-  }
+  private final VocabRepository vocabRepository;
+  private final ApiManager apiManager;
 
-  private VocabRepository vocabRepository;
+  @Transactional
+  public Vocabulary createVocab(Vocabulary vocab, String target) {
+    // nation 추가
+    String nation = apiManager.getWordLang(vocab.getWord());
+    vocab.setNation(nation.equals("zh-CN") || nation.equals("zh-TW") ? "CN" : nation.toUpperCase());
 
-  public Vocabulary createVocab(Vocabulary vocab) {
+    // 단어 뜻 번역
+    if(!target.isEmpty()) {
+      String translated = apiManager.getWordMeaning(vocab.getWord(), target, nation);
+      vocab.setMeaning(translated);
+    }
+
     Vocabulary savedVocab = vocabRepository.save(vocab);
     return savedVocab;
   }
 
+  @Transactional
   public Vocabulary updateVocab(long memberId, Vocabulary vocab) {
     Vocabulary findVocab = findVerifiedVocab(vocab.getVocabId());
 
@@ -53,11 +67,20 @@ public class VocabService {
     return vocabRepository.findAllByMemberId(memberId, pageable);
   }
 
+  @Transactional
   public void deleteVocab(long vocabId) {
     Optional<Vocabulary> optionalBoard = vocabRepository.findById(vocabId);
     Vocabulary findVocab = optionalBoard
-        .orElseThrow(() -> new NoSuchElementException());
+        .orElseThrow(() -> new BusinessLogicException(VocabExceptionCode.VOCAB_NOT_FOUND));
     vocabRepository.deleteById(vocabId);
   }
 
+  public Vocabulary randomVocab(long memberId) {
+    List<Vocabulary> page = vocabRepository.findAllByMemberIdOrderByRand(memberId);
+    if (page.isEmpty()) {
+      return null;
+    }
+    return page.get(0);
+  }
 }
+

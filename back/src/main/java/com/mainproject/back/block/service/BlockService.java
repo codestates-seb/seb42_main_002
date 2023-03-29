@@ -4,60 +4,45 @@ import com.mainproject.back.block.entity.Block;
 import com.mainproject.back.block.exception.BlockExceptionCode;
 import com.mainproject.back.block.repository.BlockRepository;
 import com.mainproject.back.exception.BusinessLogicException;
-import com.mainproject.back.letter.dto.LetterSimpleDto;
-import com.mainproject.back.letter.dto.LetterSimpleDto.LetterStatus;
-import com.mainproject.back.letter.entity.Letter;
-import com.mainproject.back.letter.service.LetterService;
-import com.mainproject.back.member.dto.MemberLetterDto;
-import com.mainproject.back.member.entity.Member;
-import com.mainproject.back.member.service.MemberService;
+import com.mainproject.back.follow.service.FollowService;
+import com.mainproject.back.member.dto.MemberBlockInterface;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 @Service
 public class BlockService {
 
   private final BlockRepository blockRepository;
-  private final MemberService memberService;
-  private final LetterService letterService;
+  private final FollowService followService;
 
+  @Transactional
   public Block createBlock(Block block) {
+    blockRepository.findBlockByTargetIdAndMemberId(block.getTarget().getMemberId(),
+        block.getMember().getMemberId()).ifPresent(b -> {throw new BusinessLogicException(BlockExceptionCode.BLOCK_EXISTS);});
+    followService.deleteFollowByBlock(block.getMember().getMemberId(),
+        block.getTarget().getMemberId());
     return blockRepository.save(block);
   }
 
-  public void deleteBlock(long blockId) {
-    long foundId = blockRepository.findBlockIdByBlockId(blockId)
+  @Transactional
+  public void deleteBlock(long targetId, long memberId) {
+    Block findBlock = blockRepository.findBlockByTargetIdAndMemberId(targetId, memberId)
         .orElseThrow(() -> new BusinessLogicException(
             BlockExceptionCode.BLOCK_NOT_FOUND));
-    blockRepository.deleteById(foundId);
+    blockRepository.delete(findBlock);
   }
 
-  public Page<Block> findBlocks(long memberId, Pageable pageable) {
+  public Page<MemberBlockInterface> findBlocks(long memberId, Pageable pageable) {
     return blockRepository.findAllByMemberId(memberId, pageable);
   }
 
-  public Page<MemberLetterDto> blockToMemberLetterDto(Page<Block> blockPage) {
-    return blockPage.map(block -> {
-      Member member = memberService.findMember(block.getTarget().getMemberId());
-      Letter letter = letterService.findLastLetter(block.getMember().getMemberId(),
-          block.getTarget().getMemberId());
-      MemberLetterDto.MemberLetterDtoBuilder builder = MemberLetterDto.builder()
-          .name(member.getName())
-          .profile(member.getProfile())
-          .location(member.getLocation())
-          .memberId(member.getMemberId());
-      if (letter == null) {
-        builder.lastLetter(null);
-      } else {
-        builder.lastLetter(LetterSimpleDto.builder().status(
-                block.getMember().getMemberId() == letter.getReceiver().getMemberId()
-                    ? LetterStatus.RECEIVED : LetterStatus.SENT).isRead(letter.getIsRead())
-            .createdAt(letter.getCreatedAt()).build());
-      }
-      return builder.build();
-    });
+  public List<Long> findBlockIdList(long memberId) {
+    return blockRepository.findBlockIdsByMemberId(memberId);
   }
 }

@@ -20,8 +20,8 @@ public interface LetterMapper {
       return null;
     } else {
       Letter.LetterBuilder letter = Letter.builder();
-      letter.body(letterPostDto.getBody());
-      ArrayList<String> arrayList = letterPostDto.getPic();
+      letter.body(letterPostDto.getBody()).type(letterPostDto.getType());
+      ArrayList<String> arrayList = letterPostDto.getPhotoUrl();
       if (arrayList != null) {
         letter.photoUrl(new ArrayList<>(arrayList));
       }
@@ -31,51 +31,53 @@ public interface LetterMapper {
     }
   }
 
-  default LetterResponseDto LetterToLetterResponseDto(Letter letter) {
+  default LetterResponseDto LetterToLetterResponseDto(Letter letter, long memberId) {
     if (letter == null) {
       return null;
     }
     LetterResponseDto.LetterResponseDtoBuilder builder = LetterResponseDto.builder()
         .letterId(letter.getLetterId())
+        .type(letter.getType())
         .createdAt(letter.getCreatedAt())
         .availableAt(letter.getAvailableAt());
     if (letter.getSender() == null) {
       builder.sender(null);
     } else {
-      builder.sender(letter.getSender().getName());
+      builder.sender(letter.getSender().getName()).senderId(letter.getSender().getMemberId());
     }
     if (letter.getReceiver() == null) {
       builder.receiver(null);
     } else {
       builder.receiver(letter.getReceiver().getName());
     }
-    if(letter.getAvailableAt().isBefore(LocalDateTime.now())) builder.body(letter.getBody());
+    if (letter.getAvailableAt().isBefore(LocalDateTime.now()) || letter.getSender().getMemberId() == memberId) {
+      builder.body(letter.getBody()).photoUrl(letter.getPhotoUrl());
+    }
 
     return builder.build();
   }
 
-  default Page<LetterListDto> pageLetterToPageLetterListDtoPage(Page<Letter> letterPage) {
-    return letterPage.map(this::letterToLetterListDto);
+  default Page<LetterListDto> pageLetterToPageLetterListDtoPage(Page<Letter> letterPage,
+      long memberId) {
+    return letterPage.map(letter -> letterToLetterListDto(letter, memberId));
   }
 
-  default LetterListDto letterToLetterListDto(Letter letter) {
+  default LetterListDto letterToLetterListDto(Letter letter, long memberId) {
+    Member sender = letter.getSender();
+    Member receiver = letter.getReceiver();
     LetterListDto.LetterListDtoBuilder builder = LetterListDto.builder()
         .letterId(letter.getLetterId())
-        .sender(MemberSimpleDto.builder().memberId(letter.getSender().getMemberId())
-            .name(letter.getSender().getName()).build())
-        .receiver(MemberSimpleDto.builder().memberId(letter.getReceiver().getMemberId())
-            .name(letter.getReceiver().getName()).build())
+        .sender(MemberSimpleDto.builder().memberId(sender.getMemberId()).memberStatus(sender.getMemberStatus())
+            .name(sender.getName()).build())
+        .receiver(MemberSimpleDto.builder().memberId(receiver.getMemberId()).memberStatus(receiver.getMemberStatus())
+            .name(receiver.getName()).build())
         .isRead(letter.getIsRead())
         .availableAt(letter.getAvailableAt())
-        .createdAt(letter.getCreatedAt());
-    if (LocalDateTime.now().isAfter(letter.getAvailableAt())) {
-      builder.body(letter.getBody());
-    }
-    if (letter.getPhotoUrl() == null || letter.getPhotoUrl().isEmpty()) {
-      builder.hasPic(false);
-    } else {
-      builder.hasPic(true);
-    }
+        .createdAt(letter.getCreatedAt())
+        .body(
+            LocalDateTime.now().isAfter(letter.getAvailableAt()) || sender.getMemberId() == memberId
+                ? letter.getBody() : null)
+        .hasPic(letter.getPhotoUrl() != null && !letter.getPhotoUrl().isEmpty());
     return builder.build();
   }
 }

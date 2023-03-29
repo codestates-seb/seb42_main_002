@@ -1,7 +1,8 @@
 package com.mainproject.back.letter.repository;
 
 import com.mainproject.back.letter.entity.Letter;
-import java.util.Set;
+import com.mainproject.back.member.dto.MemberLetterInterface;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,28 +12,36 @@ import org.springframework.data.repository.query.Param;
 public interface LetterRepository extends JpaRepository<Letter, Long> {
 
   // 특정 멤버와 주고 받은 편지 리스트
-  @Query("select l from Letter l "
-      + "join l.sender s join l.receiver r "
-      + "where (s.memberId = :memberId and r.memberId = :targetId) "
-      + "or (s.memberId = :targetId and r.memberId = :memberId)")
+  @Query(value = "select * from letter as l "
+      + "where (l.sender_id = :memberId and l.receiver_id = :targetId) "
+      + "or (l.sender_id = :targetId and l.receiver_id = :memberId) "
+      + "order by l.created_at desc", nativeQuery = true)
   Page<Letter> findLettersByMemberAndTarget(@Param("memberId") long memberId,
       @Param("targetId") long targetId, Pageable pageable);
 
   // 읽지 않은 받은 편지 개수
-  @Query("select COUNT(l) from Letter l join l.receiver r where l.isRead = false and r.memberId = :memberId")
+  @Query(value = "select count(l.letter_id) from letter l join member m on m.member_id = l.sender_id "
+      + "where l.receiver_id = :memberId and l.is_read = false and m.member_status = \"MEMBER_ACTIVE\"", nativeQuery = true)
   Long countByIsReadAndReceiver(@Param("memberId") long memberId);
 
-  // 특정 멤버가 보낸 편지 리스트
-  @Query("select l from Letter l join l.sender s where s.memberId = :memberId order by l.createdAt desc ")
-  Set<Letter> findSentLettersByMember(@Param("memberId") long memberId);
+  @Query(value = "select count(l.letter_id) from letter l join member m on m.member_id = l.sender_id "
+      + "where l.receiver_id = :memberId and l.is_read = false "
+      + "and m.member_status = \"MEMBER_ACTIVE\" and m.member_id not in (:blockIdList)", nativeQuery = true)
+  Long countByIsReadAndReceiverAndBlock(@Param("memberId") long memberId, @Param("blockIdList")List<Long> blockIdList);
 
-  // 특정 멤버가 받은 편지 리스트
-  @Query("select l from Letter l join l.receiver r where r.memberId = :memberId")
-  Set<Letter> findReceivedLettersByMember(@Param("memberId") long memberId);
+  // 편지를 주고 받은 회원 조회
+  @Query(value = "select b.member_id, b.name, b.location, b.profile, b.birthday, b.member_status, "
+      + "l.created_at, l.receiver_id, "
+      + "0 in (select q.is_read from letter q where q.receiver_id = a.member_id and q.sender_id = b.member_id) as is_read "
+      + "from member a "
+      + "join letter l on l.receiver_id = a.member_id or l.sender_id = a.member_id "
+      + "join member b on (b.member_id = l.receiver_id or l.sender_id = b.member_id) and b.member_id != a.member_id "
+      + "where a.member_id = :memberId and b.member_status = \"MEMBER_ACTIVE\" "
+      + "group by b.member_id order by l.created_at desc",
+      countQuery = "select count(b.member_id) from member a join letter l on l.receiver_id = a.member_id or l.sender_id = a.member_id "
+          + "join member b on (b.member_id = l.receiver_id or b.member_id = l.sender_id) and b.member_id != a.member_id "
+          + "where a.member_id = :memberId and b.member_status = \"MEMBER_ACTIVE\" "
+          + "group by b.member_id", nativeQuery = true)
+  Page<MemberLetterInterface> findAllMemberLetterByMemberId(@Param("memberId") Long memberId, Pageable pageable);
 
-  @Query("select l from Letter l "
-      + "join l.receiver r join l.sender s "
-      + "where (r.memberId = :targetId and s.memberId = :memberId) or (r.memberId = :memberId and s.memberId = :targetId)"
-      + "order by l.createdAt")
-  Page<Letter> findLastLetterByMember(@Param("targetId") long targetId, @Param("memberId") long memberId, Pageable pageable);
 }

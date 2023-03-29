@@ -6,33 +6,40 @@ import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.lang.Nullable;
 
 
 public class VocabDto {
 
 
   @Getter
+  @Builder
   @ToString
+  @NoArgsConstructor
+  @AllArgsConstructor
   public static class Post {
+
     @NotNull
     private String word;
-    @Setter
+    private String targetNation;
     private String meaning;
-    @Setter
-    private String nation;
-    @Setter
-    private long memberId;
+
   }
 
+  @NoArgsConstructor
   @AllArgsConstructor
+  @Builder
   @Getter
   public static class Patch {
 
     @Setter
     private long vocabId;
     private String word;
+    @Nullable
+    private String nation;
     private String meaning;
   }
 

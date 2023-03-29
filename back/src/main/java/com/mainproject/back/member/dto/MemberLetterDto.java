@@ -1,6 +1,7 @@
 package com.mainproject.back.member.dto;
 
 import com.mainproject.back.letter.dto.LetterSimpleDto;
+import com.mainproject.back.member.entity.Member;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +16,9 @@ public class MemberLetterDto {
   private String name;
   private String location;
   private String profile;
+  private String birthday;
+  private Member.MemberStatus memberStatus;
+  private Boolean isRead;
   private LetterSimpleDto lastLetter;
 
   @Override

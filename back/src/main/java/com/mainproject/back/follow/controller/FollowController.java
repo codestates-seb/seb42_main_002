@@ -5,13 +5,17 @@ import com.mainproject.back.follow.dto.FollowDto;
 import com.mainproject.back.follow.entity.Follow;
 import com.mainproject.back.follow.mapper.FollowMapper;
 import com.mainproject.back.follow.service.FollowService;
-import com.mainproject.back.member.dto.MemberSearchDto;
+import com.mainproject.back.member.dto.FollowMemberInterface;
+import com.mainproject.back.member.dto.MemberLetterDto;
 import com.mainproject.back.member.entity.Member;
+import com.mainproject.back.member.service.MemberConvertService;
 import com.mainproject.back.member.service.MemberService;
 import com.mainproject.back.util.UriCreator;
+import com.mainproject.back.util.Util;
 import java.net.URI;
 import java.security.Principal;
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -22,15 +26,15 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/follows")
+@RequestMapping("/users/me/follows")
 @Validated
 @RequiredArgsConstructor
 @Slf4j
@@ -40,12 +44,14 @@ public class FollowController {
 
   private final FollowMapper followMapper;
   private final MemberService memberService;
+  private final MemberConvertService memberConvertService;
 
   @PostMapping
   public ResponseEntity postFollow(@Valid @RequestBody FollowDto.Post requestBody,
       Principal principal) {
+    log.info("## 팔로우 요청");
 
-    Member follower = memberService.findMemberByEmail(principal.getName());
+    Member follower = memberService.findMemberByEmail(Util.checkPrincipal(principal));
     Member following = memberService.findMember(requestBody.getFollowingId());
 
     Follow follow = new Follow();
@@ -60,7 +66,8 @@ public class FollowController {
   @GetMapping("/follower")
   public ResponseEntity getFollower(@PageableDefault(sort = "follow_id") Pageable pageable,
       Principal principal) {
-    Member currentMember = memberService.findMemberByEmail(principal.getName());
+    log.info("## 팔로워 조회");
+    Member currentMember = memberService.findMemberByEmail(Util.checkPrincipal(principal));
 
     Page<Follow> followPage = followService.findFollower(currentMember.getMemberId(), pageable);
 
@@ -71,22 +78,25 @@ public class FollowController {
 
   }
 
-  @GetMapping("/following")
-  public ResponseEntity getFollowing(@PageableDefault(sort = "follow_id") Pageable pageable,
+  @GetMapping
+  public ResponseEntity getFollowing(@PageableDefault Pageable pageable,
       Principal principal) {
-    Member currentMember = memberService.findMemberByEmail(principal.getName());
+    log.info("## 팔로잉 조회");
+    long memberId = memberService.findMemberIdByEmail(Util.checkPrincipal(principal));
 
-    Page<Follow> followPage = followService.findFollowing(currentMember.getMemberId(), pageable);
+    Page<FollowMemberInterface> memberLetterPage = followService.findFollowing(memberId, pageable);
 
-    Page<MemberSearchDto> responses = memberService.convertToResponseDto(followPage);
+    Page<MemberLetterDto> responses = memberConvertService.memberLetterToFollowMemberPage(memberLetterPage);
 
     return ResponseEntity.ok().body(responses);
 
   }
 
-  @DeleteMapping("/{follow-id}")
-  public ResponseEntity deleteBlock(@PathVariable("follow-id") long followId) {
-    followService.deleteFollow(followId);
+  @DeleteMapping(params = "target")
+  public ResponseEntity deleteBlock(@RequestParam("target") @Positive long followingId,
+      Principal principal) {
+    log.info("## 팔로우 삭제");
+    followService.deleteFollow(followingId, memberService.findMemberIdByEmail(Util.checkPrincipal(principal)));
     return ResponseEntity.noContent().build();
   }
 }

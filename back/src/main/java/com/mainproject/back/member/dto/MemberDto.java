@@ -10,12 +10,14 @@ import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 public class MemberDto {
 
   @Getter
   @AllArgsConstructor
+  @NoArgsConstructor
   @Builder
   public static class Post {
 
@@ -25,7 +27,7 @@ public class MemberDto {
     @Email
     private String email;
     @NotNull
-    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*\\W).{8,20}$", message = "최소 8자 이상 20자 이하 영문,특수문자혼용")
+    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*\\W).{8,20}$", message = "최소 8자 이상 20자 이하 영문, 특수문자혼용")
     private String password;
     @NotNull
     @Pattern(regexp = "^(19[0-9][0-9]|20\\d{2})-(0[0-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$")
@@ -46,8 +48,11 @@ public class MemberDto {
     private String location;
     private String birthday;
     private String profile;
+    private String introduce;
     @Setter
     private boolean isFriend;
+    @Setter
+    private boolean isBlock;
     private List<MemberLanguageDto> language;
     private List<TagSimpleDto> tag;
     private Member.MemberStatus memberStatus;
@@ -56,6 +61,7 @@ public class MemberDto {
   @Getter
   @Builder
   @AllArgsConstructor
+  @NoArgsConstructor
   public static class Patch {
 
     @Setter
@@ -64,6 +70,7 @@ public class MemberDto {
     private String introduce;
     private String profile;
     private String location;
+    private String gender;
     private List<MemberLanguageDto> language;
     private List<String> tag;
     private Member.MemberStatus memberStatus;

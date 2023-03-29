@@ -16,16 +16,18 @@ public interface VocabMapper {
 
   Vocabulary vocabPatchToVocab(VocabDto.Patch requestBody);
 
+  VocabDto.Response vocabToResponse(Vocabulary vocabulary);
+
   default Page<VocabDto.Response> pageVocabToPageVocabResponsePage(Page<Vocabulary> vocabPage) {
     return vocabPage.map(this::vocabToVocabResponse);
   }
 
   default VocabDto.Response vocabToVocabResponse(Vocabulary vocab) {
-    VocabDto.Response response =VocabDto.Response
+    VocabDto.Response response = VocabDto.Response
         .builder()
         .vocabId(vocab.getVocabId())
         .member(MemberSimpleDto.builder().memberId(vocab.getMember().getMemberId())
-            .name(vocab.getMember().getName()).build())
+            .name(vocab.getMember().getName()).memberStatus(vocab.getMember().getMemberStatus()).build())
         .word(vocab.getWord())
         .createdAt(vocab.getCreatedAt())
         .meaning(vocab.getMeaning())
