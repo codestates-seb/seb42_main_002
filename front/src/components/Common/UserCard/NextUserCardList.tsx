@@ -1,5 +1,10 @@
-import React, { isValidElement } from 'react';
-import { RecoilValueReadOnly, useRecoilState, useRecoilValue } from 'recoil';
+import React, { isValidElement, useEffect } from 'react';
+import {
+  RecoilValueReadOnly,
+  useRecoilRefresher_UNSTABLE,
+  useRecoilState,
+  useRecoilValue,
+} from 'recoil';
 import useInfiniteScroll from '../../../hooks/useInfiniteScroll';
 import { pageNationState } from '../../../recoil/atoms/pagination';
 import Empty from '../Empty/Empty';
@@ -35,6 +40,11 @@ const NextUserCardList = ({
 }: NextUserCardListProps) => {
   const data: DataType = useRecoilValue(selector);
   const [pagination, setPagination] = useRecoilState(pageNationState);
+  const refresh = useRecoilRefresher_UNSTABLE(selector);
+
+  useEffect(() => {
+    refresh();
+  }, []);
 
   const sentinelRef = useInfiniteScroll(async () => {
     if (data.isStop) {
