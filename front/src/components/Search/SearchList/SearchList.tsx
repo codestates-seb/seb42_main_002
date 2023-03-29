@@ -77,7 +77,8 @@ const SearchList = () => {
 
   const onClickHandler = (
     event: React.MouseEvent<Element, MouseEvent>,
-    name: string
+    name: string,
+    memberId: number
   ) => {
     event.stopPropagation();
     // 작성할 사람 이름 저장
@@ -85,14 +86,15 @@ const SearchList = () => {
     setNewLetter((prev) => ({
       ...prev,
       receiver: name,
+      memberId,
     }));
   };
 
-  const ChildrenButtonComponent = ({ name }: any) => {
+  const ChildrenButtonComponent = ({ name, memberId }: any) => {
     return (
       <button
         onClick={(event) => {
-          onClickHandler(event, name);
+          onClickHandler(event, name, memberId);
         }}
         className={styles.button}
       >
@@ -118,7 +120,7 @@ const SearchList = () => {
           date={null}
           onClick={moveProfileHandler}
         >
-          <ChildrenButtonComponent name={user.name} />
+          <ChildrenButtonComponent name={user.name} memberId={user.memberId} />
         </UserCard>
       ))}
       {/* 새로 불러오는 List */}
