@@ -8,6 +8,9 @@ import { useSetRecoilState } from 'recoil';
 import { deleteVocaState } from '../../../recoil/atoms/voca';
 import { useEffect, useState } from 'react';
 import { useRef } from 'react';
+import classNames from 'classnames';
+import Button from '../../Common/Button/Button';
+import { MdArrowDropDown, MdArrowDropUp } from 'react-icons/md';
 
 type VocaCardProps = {
   word: string;
@@ -27,57 +30,68 @@ const VocaCard = ({
   onDelete,
 }: VocaCardProps) => {
   const setDeleteVocaIdx = useSetRecoilState(deleteVocaState);
-  const [isClick, setIsClick] = useState(false);
+  const [isExtend, setIsExtend] = useState(false);
   const scrollRef: any = useRef(null);
 
   useEffect(() => {
-    if (!isClick) {
+    if (!isExtend) {
       scrollRef.current.scrollTop = 0;
     }
-  }, [isClick]);
+  }, [isExtend]);
 
   const onClickHandler = () => {
-    setIsClick(!isClick);
+    setIsExtend(!isExtend);
   };
 
   return (
     <li
-      className={styles.card}
-      onClick={onClickHandler}
+      className={classNames(styles.card, styles.is_required_extend)}
       onKeyUp={(event) => {
         event.preventDefault();
       }}
       role="presentation"
     >
-      {/* Word */}
-      <div className={styles.word}>{word}</div>
-      {/* Meaning */}
-      <div
-        className={isClick ? styles.meaning : styles.meaning_beforeclick}
-        ref={scrollRef}
-      >
-        {meaning}
+      <div className={styles.card_inner}>
+        {/* Word */}
+        <div className={styles.word}>{word}</div>
+        {/* Meaning */}
+        <div className={styles.meaning}>
+          <p ref={scrollRef}>{!isExtend && meaning}</p>
+          <div className={styles.btn_more}>
+            <Button
+              size="sm"
+              variant="default"
+              color={!isExtend ? 'primary' : 'secondary'}
+              icon={!isExtend ? <MdArrowDropDown /> : <MdArrowDropUp />}
+              iconBtn
+              onClick={onClickHandler}
+            >
+              자세히보기
+            </Button>
+          </div>
+        </div>
+        {/* 버튼들 */}
+        <div className={styles.buttons}>
+          {/* 수정 */}
+          <button
+            className={styles.button}
+            onClick={onEdit.bind(null, { word, meaning, vocabId, nation })}
+          >
+            <BiEdit size="1.125rem" />
+          </button>
+          {/* 삭제 */}
+          <button
+            className={styles.button}
+            onClick={() => {
+              onDelete();
+              setDeleteVocaIdx(vocabId);
+            }}
+          >
+            <FiTrash2 size="1.125rem" />
+          </button>
+        </div>
       </div>
-      {/* 버튼들 */}
-      <div className={styles.buttons}>
-        {/* 수정 */}
-        <button
-          className={styles.button}
-          onClick={onEdit.bind(null, { word, meaning, vocabId, nation })}
-        >
-          <BiEdit size="1.125rem" />
-        </button>
-        {/* 삭제 */}
-        <button
-          className={styles.button}
-          onClick={() => {
-            onDelete();
-            setDeleteVocaIdx(vocabId);
-          }}
-        >
-          <FiTrash2 size="1.125rem" />
-        </button>
-      </div>
+      {isExtend && <div className={styles.meaning_extend}>{meaning}</div>}
     </li>
   );
 };
