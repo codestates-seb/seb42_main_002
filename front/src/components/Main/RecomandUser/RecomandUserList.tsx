@@ -3,11 +3,17 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import RecomandUserListItem from './RecomandUserListItem';
 import Button from '../../Common/Button/Button';
 import styles from './RecomandUserList.module.scss';
-import { useRecoilValue } from 'recoil';
+import { useRecoilRefresher_UNSTABLE, useRecoilValue } from 'recoil';
 import { recomandUserSelector } from '../../../recoil/selectors/user/user';
+import { useEffect } from 'react';
 
 const RecomandUserList = () => {
   const recomandUserList = useRecoilValue(recomandUserSelector);
+  const reset = useRecoilRefresher_UNSTABLE(recomandUserSelector);
+
+  useEffect(() => {
+    reset();
+  }, []);
 
   if (!recomandUserList.length) {
     return (
