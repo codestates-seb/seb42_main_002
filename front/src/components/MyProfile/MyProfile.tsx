@@ -301,7 +301,7 @@ const MyProfile = () => {
                               id="birthDay"
                               name="birthDay"
                               type="text"
-                              pattern="^(19[0-9][0-9]|20\d{2})-(0[0-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$"
+                              pattern="^(19[0-9][0-9]|20[0-1][0-9])-(0[0-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$"
                               placeholder="ex. 1989-12-24"
                               value={userInfo.birthday || ''}
                               required
