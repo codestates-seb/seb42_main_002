@@ -110,6 +110,7 @@ const LetterUserList = () => {
             addRecentData={addRecentData}
             empty={emptyProps}
             endText="마지막 스크롤 입니다."
+            date
           >
             <ChildrenButtonComponent />
           </NextUserCardList>

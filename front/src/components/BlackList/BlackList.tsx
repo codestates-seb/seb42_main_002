@@ -91,7 +91,7 @@ const BlackList = () => {
       {isAlertOpen && (
         <AlertModal
           labelClose="닫기"
-          labelSubmit="삭제"
+          labelSubmit="취소"
           onClose={() => {
             setIsAlertOpen(false);
           }}

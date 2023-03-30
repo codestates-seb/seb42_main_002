@@ -124,7 +124,7 @@ const Following = () => {
               <UserCard
                 key={user.memberId}
                 {...user}
-                date={user.lastLetter?.createdAt}
+                date={null}
                 onClick={moveProfileHandler}
               >
                 {/* UserCard에 사용할 아이콘을 children으로 전달 */}
