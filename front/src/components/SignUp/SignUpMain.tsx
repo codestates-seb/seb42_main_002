@@ -326,6 +326,8 @@ const SignUpMain = (): JSX.Element => {
           isError={isError.birthday}
           errorText={errorText.birthday}
           validation={signupValidation}
+          dateMax="2020-01-01"
+          dateMin="1900-01-01"
         >
           <BsCalendar2Date className={styles.icon} />
         </InputForm>
