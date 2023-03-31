@@ -60,6 +60,7 @@ public class MemberConvertService {
     Optional.ofNullable(memberPatchDto.getTag()).ifPresent((tags) -> getMemberTag(member, tags));
     Optional.ofNullable(memberPatchDto.getLanguage())
         .ifPresent((languages) -> getMemberLanguage(member, languages));
+    Optional.ofNullable(memberPatchDto.getBirthDay()).ifPresent(member::setBirthday);
     return member;
   }
 
