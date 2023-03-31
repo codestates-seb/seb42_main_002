@@ -68,6 +68,7 @@ public class MemberDto {
     private long memberId;
     private String name;
     private String introduce;
+    private String birthDay;
     private String profile;
     private String location;
     private String gender;
