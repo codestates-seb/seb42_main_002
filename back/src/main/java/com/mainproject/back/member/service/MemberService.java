@@ -60,6 +60,7 @@ public class MemberService {
         .ifPresent(findMember::setName);
     Optional.ofNullable(member.getIntroduce())
         .ifPresent(findMember::setIntroduce);
+    Optional.ofNullable(member.getBirthday()).ifPresent(findMember::setBirthday);
     Optional.ofNullable(member.getLocation()).ifPresent(findMember::setLocation);
     Optional.ofNullable(member.getProfile())
         .ifPresent(findMember::setProfile);
