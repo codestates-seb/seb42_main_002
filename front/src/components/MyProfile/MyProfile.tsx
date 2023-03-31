@@ -264,8 +264,9 @@ const MyProfile = () => {
                               id="name"
                               name="name"
                               type="text"
-                              placeholder="홍길동"
+                              placeholder="ex. 홍길동"
                               value={userInfo.name}
+                              required
                             />
                           </InfoGroup.Content>
                         </InfoGroup>
@@ -300,9 +301,10 @@ const MyProfile = () => {
                               id="birthDay"
                               name="birthDay"
                               type="text"
-                              pattern="^\d{4}-\d{2}-\d{2}$"
-                              placeholder="1989-12-24"
+                              pattern="^(19[0-9][0-9]|20[0-1][0-9])-(0[0-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$"
+                              placeholder="ex. 1989-12-24"
                               value={userInfo.birthday || ''}
+                              required
                             />
                           </InfoGroup.Content>
                         </InfoGroup>

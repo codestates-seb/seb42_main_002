@@ -22,6 +22,7 @@ type NextUserCardListProps = {
     icon?: React.ReactNode;
     children?: React.ReactNode;
   };
+  date?: boolean;
 };
 
 type DataType = {
@@ -37,6 +38,7 @@ const NextUserCardList = ({
   endText,
   addRecentData,
   empty,
+  date,
 }: NextUserCardListProps) => {
   const data: DataType = useRecoilValue(selector);
   const [pagination, setPagination] = useRecoilState(pageNationState);
@@ -75,7 +77,7 @@ const NextUserCardList = ({
           location={user.location}
           profile={user.profile}
           birthday={user.birthday}
-          date={user.birthday}
+          date={date ? user.lastLetter.createdAt : null}
           onClick={onClick}
           memberStatus={user.memberStatus}
         >

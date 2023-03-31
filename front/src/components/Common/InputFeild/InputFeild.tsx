@@ -8,6 +8,7 @@ type InputFeildProps = {
   pattern?: string;
   placeholder?: string;
   disabled?: boolean;
+  required?: boolean;
 };
 
 const InputFeild = ({
@@ -18,6 +19,7 @@ const InputFeild = ({
   placeholder,
   pattern,
   disabled,
+  required,
 }: InputFeildProps) => {
   return (
     <div className={styles.inputFeild}>
@@ -29,6 +31,7 @@ const InputFeild = ({
         placeholder={placeholder}
         pattern={pattern}
         disabled={disabled}
+        required={required}
       />
     </div>
   );

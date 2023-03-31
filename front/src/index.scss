@@ -137,6 +137,14 @@ button {
   height: 1px;
   margin: -1px;
 }
+
+input[type='text'],
+textarea {
+  &::placeholder {
+    color: #dcdcdc;
+  }
+}
+
 .inner_container {
   @include container;
 }

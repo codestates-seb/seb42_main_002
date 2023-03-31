@@ -105,7 +105,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const logout = () => {
     resetState();
-    navigate('/', { replace: true });
+    window.location.replace('/');
   };
 
   const getToken = () => {

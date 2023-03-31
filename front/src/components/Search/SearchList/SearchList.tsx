@@ -3,9 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { RiEmotionSadLine } from 'react-icons/ri';
 import UserCard from '../../Common/UserCard/UserCard';
-import LetterStatusIcon from '../../Common/LetterStatusIcon/LetterStatusIcon';
 import {
-  newLetterState,
   searchUserListState,
   selectedSearchLangTagState,
   selectedSearchTagState,
@@ -21,7 +19,6 @@ import styles from './SearchList.module.scss';
 const SearchList = () => {
   const navigate = useNavigate();
   const userInfo = useRecoilValue(userState);
-  const setNewLetter = useSetRecoilState(newLetterState);
   const setPagination = useSetRecoilState(pageNationState);
   const [searchLangTags, setSearchLangTags] = useRecoilState(
     selectedSearchLangTagState
@@ -75,34 +72,6 @@ const SearchList = () => {
     navigate(`/profile/${id}`);
   };
 
-  const onClickHandler = (
-    event: React.MouseEvent<Element, MouseEvent>,
-    name: string,
-    memberId: number
-  ) => {
-    event.stopPropagation();
-    // 작성할 사람 이름 저장
-    navigate('/newletter');
-    setNewLetter((prev) => ({
-      ...prev,
-      receiver: name,
-      memberId,
-    }));
-  };
-
-  const ChildrenButtonComponent = ({ name, memberId }: any) => {
-    return (
-      <button
-        onClick={(event) => {
-          onClickHandler(event, name, memberId);
-        }}
-        className={styles.button}
-      >
-        <LetterStatusIcon status={'SENT'} isRead />
-      </button>
-    );
-  };
-
   const emptyProps = {
     title: '일치하는 유저가 없어요!',
     icon: <RiEmotionSadLine className={styles.icon} size={'6rem'} />,
@@ -119,9 +88,7 @@ const SearchList = () => {
           profile={user.profile}
           date={null}
           onClick={moveProfileHandler}
-        >
-          <ChildrenButtonComponent name={user.name} memberId={user.memberId} />
-        </UserCard>
+        ></UserCard>
       ))}
       {/* 새로 불러오는 List */}
       <Suspense fallback={<InnerSpinner size="sm" />}>
@@ -131,9 +98,7 @@ const SearchList = () => {
           empty={emptyProps}
           endText="마지막 스크롤 입니다."
           onClick={moveProfileHandler}
-        >
-          <ChildrenButtonComponent />
-        </NextUserCardList>
+        ></NextUserCardList>
       </Suspense>
     </ul>
   );
