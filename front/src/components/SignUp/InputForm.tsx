@@ -10,6 +10,8 @@ type InputFormType = {
   errorText?: string;
   validation?: any;
   passwordProps?: any;
+  dateMax?: string;
+  dateMin?: string;
 };
 
 export default function InputForm({
@@ -22,6 +24,8 @@ export default function InputForm({
   errorText,
   validation,
   passwordProps,
+  dateMax,
+  dateMin,
 }: InputFormType) {
   const onBlurHandler = (e: any) => {
     if (validation) {
@@ -70,6 +74,8 @@ export default function InputForm({
         onChange={onchangeHandler}
         onBlur={onBlurHandler}
         type={htmlfor}
+        max={dateMax}
+        min={dateMin}
         id={htmlfor}
         placeholder={placeholder}
         name={name}

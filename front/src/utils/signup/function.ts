@@ -68,7 +68,13 @@ export const birthdayValidation = (
       if (parseInt(result) > 2019) {
         return {
           isErrorBirthday: true,
-          birthdayErrorText: '2020년 이상은 가입할수 없습니다.',
+          birthdayErrorText: '2020년생 이상은 가입할수 없습니다.',
+        };
+      }
+      if (parseInt(result) <= 1900) {
+        return {
+          isErrorBirthday: true,
+          birthdayErrorText: '1900년생 이하는 가입할수 없습니다.',
         };
       } else {
         return {
